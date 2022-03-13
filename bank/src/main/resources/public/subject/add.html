@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>题库添加</title>
+</head>
+<body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    //题目类型改变事件
+    function onSubjectTypeChange(obj)
+    {
+        var type = obj.options[obj.options.selectedIndex].value
+        $("div.editor").hide()
+        $("div."+type+"Editor").show()
+    }
+</script>
+选择题目类型:
+<select onchange="onSubjectTypeChange(this)">
+    <option value ="singleChoice">单选题</option>
+    <option value ="multipleChoice">多选题</option>
+    <option value="completion">填空题</option>
+    <option value="judgment">判断题</option>
+    <option value="nounParsing">名词解析</option>
+    <option value="essayQuestion">论述题</option>
+    <option value="calculationProblem">计算题</option>
+    <option value="entryProblem">分录题</option>
+    <option value ="dataItems">资料题</option>
+    <option value ="matching">连线题</option>
+    <option value="voteTopic">投票题</option>
+    <option value="rankingQuestion">排序题</option>
+    <option value="clozeTest">完型填空</option>
+    <option value="readComprehension">阅读理解</option>
+    <option value="comprehensiveQuestion">综合题</option>
+    <option value="oralTopic">口语题</option>
+    <option value="listeningQuestion">听力题</option>
+    <option value="programProblem">程序题</option>
+</select>
+<br/>
+<div>
+    <!--单选题面板-->
+    <div class="editor singleChoiceEditor">
+        <script>
+            var singleChoiceItemCount=4
+            function onAddSingleChoiceItem()
+            {
+                var html="<div class='singleChoiceItem'>\n"+
+                    String.fromCharCode(65+singleChoiceItemCount)+
+                    ". <textarea name='options' type='text' style='width: 500px; height: 18px'></textarea>\n" +
+                    "<br/>\n" +
+                    "</div>"
+                $("div.singleChoiceItems").append(html)
+                html="<option value='"+(singleChoiceItemCount+1)+"'>"
+                    + String.fromCharCode(65+singleChoiceItemCount)
+                    + "</option>"
+                $("#singleChoiceAnswer").append(html)
+                singleChoiceItemCount++;
+            }
+            function onDeleteSingleChoiceItem()
+            {
+                if(singleChoiceItemCount==1){
+
+                }else{
+                    $("div.singleChoiceItem").eq(-1).remove()
+                    $("#singleChoiceAnswer").children().eq(-1).remove()
+                    singleChoiceItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("singleChoiceDate").value=time;
+            })
+        </script>
+        <div id="singleChoiceEditor" onchange="alert('11')"></div>
+        <button onclick="onAddSingleChoiceItem()">添加选项</button>
+        <button onclick="onDeleteSingleChoiceItem()">删除选项</button>
+        <form method="post" action="/bank/addSubject/singleChoice">
+            <input type="hidden" id="singleChoiceDescription" name="description" value="">
+            设置选项:
+            <br/>
+            <div class="singleChoiceItems">
+                <div class="singleChoiceItem">
+                    A. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="singleChoiceItem">
+                    B. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="singleChoiceItem">
+                    C. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="singleChoiceItem">
+                    D. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="singleChoiceCourseId">
+                <select id="singleChoiceCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="singleChoiceDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="singleChoiceRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <select id="singleChoiceAnswer" name="answer">
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option value="3">C</option>
+                <option value="4">D</option>
+            </select>
+            <br/>
+            设置题目时间:
+            <input id="singleChoiceDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--多选题面板-->
+    <div class="editor multipleChoiceEditor" hidden="hidden">
+        <script>
+            var multipleChoiceItemCount=4
+            function onAddMultipleChoiceItem()
+            {
+                var html="<div class='multipleChoiceItem'>\n"+
+                    String.fromCharCode(65+multipleChoiceItemCount)+
+                    ". <textarea name='options' type='text' style='width: 500px; height: 18px'></textarea>\n" +
+                    "<br/>\n" +
+                    "</div>"
+                $("div.multipleChoiceItems").append(html)
+                // <input class="multipleChoiceAnswer" type="checkbox" name="answer" value="1">A
+                html="<div class='multipleChoiceAnswer' style='display: inline-block'>\n"+
+                    "<input type='checkbox' name='answers' value='"+(multipleChoiceItemCount+1)+"'>"
+                    + String.fromCharCode(65+multipleChoiceItemCount)+
+                    "<br/>\n"+
+                    "</div>"
+                $("div.multipleChoiceAnswers").append(html)
+                multipleChoiceItemCount++;
+            }
+            function onDeleteMultipleChoiceItem()
+            {
+                if(multipleChoiceItemCount==1){
+
+                }else{
+                    $("div.multipleChoiceItem").eq(-1).remove()
+                    $("div.multipleChoiceAnswer").eq(-1).remove()
+                    multipleChoiceItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("multipleChoiceDate").value=time;
+            })
+        </script>
+        <div id="multipleChoiceEditor" onchange="alert('11')"></div>
+        <button onclick="onAddMultipleChoiceItem()">添加选项</button>
+        <button onclick="onDeleteMultipleChoiceItem()">删除选项</button>
+        <form method="post" action="/bank/addSubject/multipleChoice">
+            <input type="hidden" id="multipleChoiceDescription" name="description" value="">
+            设置选项:
+            <br/>
+            <div class="multipleChoiceItems">
+                <div class="multipleChoiceItem">
+                    A. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="multipleChoiceItem">
+                    B. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="multipleChoiceItem">
+                    C. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="multipleChoiceItem">
+                    D. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="multipleChoiceCourseId">
+                <select id="multipleChoiceCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="multipleChoiceDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="multipleChoiceRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="multipleChoiceAnswers" >
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="1">A
+                    <br/>
+                </div>
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="2">B
+                    <br/>
+                </div>
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="3">C
+                    <br/>
+                </div>
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="4">D
+                    <br/>
+                </div>
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="multipleChoiceDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--填空题面板-->
+    <div class="editor completionEditor" hidden="hidden">
+        <script>
+            var completionItemCount=1
+            function onAddCompletionItem()
+            {
+                html="<div class='completionAnswer'>\n"+
+                    (completionItemCount+1)+". "+
+                    "<textarea name='options' type='text' style='width: 300px; height: 18px'></textarea>"+
+                    "<br/>\n"+
+                    "</div>"
+                $("div.completionAnswers").append(html)
+                completionItemCount++;
+            }
+            function onDeleteCompletionItem()
+            {
+                if (completionItemCount==1){
+
+                }else {
+                    $("div.completionAnswer").eq(-1).remove()
+                    completionItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("completionDate").value=time;
+            })
+        </script>
+        <div id="completionEditor" onchange="alert('11')"></div>
+        <button onclick="onAddCompletionItem()">添加答案</button>
+        <button onclick="onDeleteCompletionItem()">删除答案</button>
+        <form method="post" action="/bank/addSubject/completion">
+            <input type="hidden" id="completionDescription" name="description" value="">
+            题目所属分组：
+            <div class="completionCourseId">
+                <select id="completionCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="completionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="completionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="completionAnswers" >
+                <div class="completionAnswer">
+                    1. <textarea name="options" type="text" style="width: 300px; height: 18px"></textarea>
+                    <br/>
+                </div>
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="completionDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--判断题面板-->
+    <div class="editor judgmentEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("judgmentDate").value=time;
+            })
+        </script>
+        <div id="judgmentEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/judgment">
+            <input type="hidden" id="judgmentDescription" name="description" value="">
+            设置选项:
+            <br/>
+            <div class="judgmentItems">
+                <div class="judgmentItem">
+                    A.<input name="options" type="text" style="width: 500px" value="正确">
+                    <br/>
+                </div>
+                <div class="judgmentItem">
+                    B.<input name="options" type="text" style="width: 500px" value="错误">
+                    <br/>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="judgmentCourseId">
+                <select id="judgmentCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="judgmentDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="judgmentRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <select id="judgmentAnswer" name="answer">
+                <option value="1">A</option>
+                <option value="2">B</option>
+            </select>
+            <br/>
+            设置题目时间:
+            <input id="judgmentDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--名词解析题面板-->
+<!--    答案部分-->
+    <div class="editor nounParsingEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("nounParsingDate").value=time;
+            })
+        </script>
+        <div id="nounParsingEditor" onchange="alert('11')"></div>
+<!--        <div id="nounParsingAnswer" onchange="alert('11')"></div>-->
+        <form method="post" action="/bank/addSubject/nounParsing">
+            <input type="hidden" id="nounParsingDescription" name="description" value="">
+
+            题目所属分组：
+            <div class="nounParsingCourseId">
+                <select id="nounParsingCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="nounParsingDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="nounParsingRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="nounParsingAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="nounParsingAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="nounParsingDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--计算题面板-->
+    <div class="editor calculationProblemEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("calculationProblemDate").value=time;
+            })
+        </script>
+        <div id="calculationProblemEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/calculationProblem">
+            <input type="hidden" id="calculationProblemDescription" name="description" value="">
+            题目所属分组：
+            <div class="calculationProblemCourseId">
+                <select id="calculationProblemCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="calculationProblemDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="calculationProblemRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="calculationProblemAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="calculationProblemAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="calculationProblemDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--分录题面板-->
+    <div class="editor entryProblemEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("entryProblemDate").value=time;
+            })
+        </script>
+        <div id="entryProblemEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/entryProblem">
+            <input type="hidden" id="entryProblemDescription" name="description" value="">
+            题目所属分组：
+            <div class="entryProblemCourseId">
+                <select id="entryProblemCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="entryProblemDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="entryProblemRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="entryProblemAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="entryProblemAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="entryProblemDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--论述题面板-->
+    <div class="editor essayQuestionEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("essayQuestionDate").value=time;
+            })
+        </script>
+        <div id="essayQuestionEditor" onchange="alert('11')"></div>
+
+        <form method="post" action="/bank/addSubject/essayQuestion">
+            <input type="hidden" id="essayQuestionDescription" name="description" value="">
+            题目所属分组：
+            <div class="essayQuestionCourseId">
+                <select id="essayQuestionCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="essayQuestionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="essayQuestionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="essayQuestionAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="essayQuestionAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="essayQuestionDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--资料题面板-->
+    <div class="editor dataItemsEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("dataItemsDate").value=time;
+            })
+        </script>
+        <div id="dataItemsEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/dataItems">
+            <input type="hidden" id="dataItemsDescription" name="description" value="">
+            题目所属分组：
+            <div class="dataItemsCourseId">
+                <select id="dataItemsCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="dataItemsDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="dataItemsRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="dataItemsAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="dataItemsAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="dataItemsDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--排序题面板-->
+    <div class="editor rankingQuestionEditor" hidden="hidden">
+        <script>
+            var rankingQuestionItemCount=4
+            function onAddRankingQuestionItem()
+            {
+                var html="<div class='rankingQuestionItem'>\n"+
+                    String.fromCharCode(65+rankingQuestionItemCount)+
+                    ". <textarea name='options' type='text' style='width: 500px; height: 18px'></textarea>\n" +
+                    "<br/>\n" +
+                    "</div>"
+                $("div.rankingQuestionItems").append(html)
+                rankingQuestionItemCount++;
+            }
+            function onDeleteRankingQuestionItem()
+            {
+                if(rankingQuestionItemCount==1){
+
+                }else{
+                    $("div.rankingQuestionItem").eq(-1).remove()
+                    rankingQuestionItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("rankingQuestionDate").value=time;
+            })
+        </script>
+        <div id="rankingQuestionEditor" onchange="alert('11')"></div>
+        <button onclick="onAddRankingQuestionItem()">添加选项</button>
+        <button onclick="onDeleteRankingQuestionItem()">删除选项</button>
+        <form method="post" action="/bank/addSubject/rankingQuestion">
+            <input type="hidden" id="rankingQuestionDescription" name="description" value="">
+            设置选项:
+            <br/>
+            <div class="rankingQuestionItems">
+                <div class="rankingQuestionItem">
+                    A. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="rankingQuestionItem">
+                    B. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="rankingQuestionItem">
+                    C. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="rankingQuestionItem">
+                    D. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="rankingQuestionCourseId">
+                <select id="rankingQuestionCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="rankingQuestionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="rankingQuestionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="rankingQuestionAnswer">
+                <input type="text" name="answer">
+                <br/>
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="rankingQuestionDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--投票题面板-->
+    <div class="editor voteTopicEditor" hidden="hidden">
+        <script>
+            var voteTopicItemCount=4
+            function onAddVoteTopicItem()
+            {
+                var html="<div class='voteTopicItem'>\n"+
+                    String.fromCharCode(65+voteTopicItemCount)+
+                    ". <textarea name='options' type='text' style='width: 500px; height: 18px'></textarea>\n" +
+                    "<br/>\n" +
+                    "</div>"
+                $("div.voteTopicItems").append(html)
+                voteTopicItemCount++;
+            }
+            function onDeleteVoteTopicItem()
+            {
+                if(voteTopicItemCount==1){
+
+                }else{
+                    $("div.voteTopicItem").eq(-1).remove()
+                    voteTopicItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("voteTopicDate").value=time;
+            })
+        </script>
+        <div id="voteTopicEditor" onchange="alert('11')"></div>
+        <button onclick="onAddVoteTopicItem()">添加选项</button>
+        <button onclick="onDeleteVoteTopicItem()">删除选项</button>
+        <form method="post" action="/bank/addSubject/voteTopic">
+            <input type="hidden" id="voteTopicDescription" name="description" value="">
+            设置选项:
+            <br/>
+            <div class="voteTopicItems">
+                <div class="voteTopicItem">
+                    A. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="voteTopicItem">
+                    B. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="voteTopicItem">
+                    C. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+                <div class="voteTopicItem">
+                    D. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                    <br/>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="voteTopicCourseId">
+                <select id="voteTopicCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="voteTopicDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="voteTopicRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="voteTopicDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--完型填空面板-->
+    <div class="editor clozeTestEditor" hidden="hidden">
+        <script>
+            var clozeTestItemCount=10
+            function onAddClozeTestItem()
+            {
+                html="<div class='clozeTestTopic'>\n"+
+                    (clozeTestItemCount+1)+". "+
+                    "A.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "B.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "C.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "D.<textarea name='options' type='text' style='height: 18px'></textarea>"+
+                    "\n"+
+                    "</div>"
+                $("div.clozeTestTopics").append(html)
+                html="<div class='clozeTestAnswer'>\n"+
+                    (clozeTestItemCount+1)+". "+
+                    "<select name='answers'>\n"+
+                    "<option value='1'>A</option>\n" +
+                    "<option value='2'>B</option>\n" +
+                    "<option value='3'>C</option>\n" +
+                    "<option value='4'>D</option>"+
+                    "\n"+
+                    "</select>"+
+                    "<br/>"+
+                    "</div>"
+                $("div.clozeTestAnswers").append(html)
+                clozeTestItemCount++;
+            }
+            function onDeleteClozeTestItem()
+            {
+                if (clozeTestItemCount==1){
+                }else {
+                    $("div.clozeTestTopic").eq(-1).remove()
+                    $("div.clozeTestAnswer").eq(-1).remove()
+                    clozeTestItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("clozeTestDate").value=time;
+            })
+        </script>
+        <div id="clozeTestEditor" onchange="alert('11')"></div>
+        <button onclick="onAddClozeTestItem()">添加题目</button>
+        <button onclick="onDeleteClozeTestItem()">删除题目</button>
+        <form method="post" action="/bank/addSubject/clozeTest">
+            <input type="hidden" id="clozeTestDescription" name="description" value="">
+            题目：
+            <div class="clozeTestTopics">
+                <div class="clozeTestTopic">
+                    1. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    2. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    3. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    4. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    5. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    6. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    7. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    8. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    9. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="clozeTestTopic">
+                    10. A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="clozeTestCourseId">
+                <select id="clozeTestCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="clozeTestDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="clozeTestRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="clozeTestAnswers" >
+                <div class="clozeTestAnswer">
+                    1.
+                    <select name="answers">
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">C</option>
+                    <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    2.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    3.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    4.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    5.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    6.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    7.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    8.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    9.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="clozeTestAnswer">
+                    10.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="clozeTestDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--阅读理解面板-->
+    <div class="editor readComprehensionEditor" hidden="hidden">
+        <script>
+            var readComprehensionItemCount=4
+            function onAddReadComprehensionItem()
+            {
+                html="<div class='readComprehensionTopic'>\n"+
+                    (readComprehensionItemCount+1)+
+                    ". 题目：<textarea name='options' type='text' style='width: 800px;height: 18px'></textarea>"+
+                    "</br>"+
+                    "A.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "B.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "C.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "D.<textarea name='options' type='text' style='height: 18px'></textarea>"+
+                    "\n"+
+                    "</div>"
+                $("div.readComprehensionTopics").append(html)
+                html="<div class='readComprehensionAnswer'>\n"+
+                    (readComprehensionItemCount+1)+". "+
+                    "<select name='answers'>\n"+
+                    "<option value='1'>A</option>\n" +
+                    "<option value='2'>B</option>\n" +
+                    "<option value='3'>C</option>\n" +
+                    "<option value='4'>D</option>"+
+                    "\n"+
+                    "</select>"+
+                    "<br/>"+
+                    "</div>"
+                $("div.readComprehensionAnswers").append(html)
+                readComprehensionItemCount++;
+            }
+            function onDeleteReadComprehensionItem()
+            {
+                if (readComprehensionItemCount==1){
+                }else {
+                    $("div.readComprehensionTopic").eq(-1).remove()
+                    $("div.readComprehensionAnswer").eq(-1).remove()
+                    readComprehensionItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("readComprehensionDate").value=time;
+            })
+        </script>
+        <div id="readComprehensionEditor" onchange="alert('11')"></div>
+        <button onclick="onAddReadComprehensionItem()">添加题目</button>
+        <button onclick="onDeleteReadComprehensionItem()">删除题目</button>
+        <form method="post" action="/bank/addSubject/readComprehension">
+            <input type="hidden" id="readComprehensionDescription" name="description" value="">
+            题目：
+            <div class="readComprehensionTopics">
+                <div class="readComprehensionTopic">
+                    1. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="readComprehensionTopic">
+                    2. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="readComprehensionTopic">
+                    3. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="readComprehensionTopic">
+                    4. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="readComprehensionCourseId">
+                <select id="readComprehensionCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="readComprehensionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="readComprehensionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="readComprehensionAnswers" >
+                <div class="readComprehensionAnswer">
+                    1.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="readComprehensionAnswer">
+                    2.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="readComprehensionAnswer">
+                    3.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="readComprehensionAnswer">
+                    4.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="readComprehensionDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--听力题面板-->
+    <div class="editor listeningQuestionEditor" hidden="hidden">
+        <script>
+            var listeningQuestionItemCount=4
+            function onAddListeningQuestionItem()
+            {
+                html="<div class='listeningQuestionTopic'>\n"+
+                    (listeningQuestionItemCount+1)+
+                    ". 题目：<textarea name='options' type='text' style='width: 800px;height: 18px'></textarea>"+
+                    "</br>"+
+                    "A.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "B.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "C.<textarea name='options' type='text' style='height: 18px'></textarea> " +
+                    "D.<textarea name='options' type='text' style='height: 18px'></textarea>"+
+                    "\n"+
+                    "</div>"
+                $("div.listeningQuestionTopics").append(html)
+                html="<div class='listeningQuestionAnswer'>\n"+
+                    (listeningQuestionItemCount+1)+". "+
+                    "<select name='answers'>\n"+
+                    "<option value='1'>A</option>\n" +
+                    "<option value='2'>B</option>\n" +
+                    "<option value='3'>C</option>\n" +
+                    "<option value='4'>D</option>"+
+                    "\n"+
+                    "</select>"+
+                    "<br/>"+
+                    "</div>"
+                $("div.listeningQuestionAnswers").append(html)
+                listeningQuestionItemCount++;
+            }
+            function onDeleteListeningQuestionItem()
+            {
+                if (listeningQuestionItemCount==1){
+                }else {
+                    $("div.listeningQuestionTopic").eq(-1).remove()
+                    $("div.listeningQuestionAnswer").eq(-1).remove()
+                    listeningQuestionItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("listeningQuestionDate").value=time;
+            })
+        </script>
+        <div id="listeningQuestionEditor" onchange="alert('11')"></div>
+        <button onclick="onAddListeningQuestionItem()">添加题目</button>
+        <button onclick="onDeleteListeningQuestionItem()">删除题目</button>
+        <form method="post" action="/bank/addSubject/listeningQuestion">
+            <input type="hidden" id="listeningQuestionDescription" name="description" value="">
+            题目：
+            <div class="listeningQuestionTopics">
+                <div class="listeningQuestionTopic">
+                    1. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="listeningQuestionTopic">
+                    2. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="listeningQuestionTopic">
+                    3. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="listeningQuestionTopic">
+                    4. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+            </div>
+            题目所属分组：
+            <div class="listeningQuestionCourseId">
+                <select id="listeningQuestionCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="listeningQuestionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="listeningQuestionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="listeningQuestionAnswers" >
+                <div class="listeningQuestionAnswer">
+                    1.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="listeningQuestionAnswer">
+                    2.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="listeningQuestionAnswer">
+                    3.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="listeningQuestionAnswer">
+                    4.
+                    <select name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="listeningQuestionDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--综合题面板-->
+    <div class="editor comprehensiveQuestionEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("comprehensiveQuestionDate").value=time;
+            })
+        </script>
+        <div id="comprehensiveQuestionEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/comprehensiveQuestion">
+            <input type="hidden" id="comprehensiveQuestionDescription" name="description" value="">
+            题目所属分组：
+            <div class="comprehensiveQuestionCourseId">
+                <select id="comprehensiveQuestionCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="comprehensiveQuestionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="comprehensiveQuestionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="comprehensiveQuestionAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="comprehensiveQuestionAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="comprehensiveQuestionDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--口语题面板-->
+    <div class="editor oralTopicEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("oralTopicDate").value=time;
+            })
+        </script>
+        <div id="oralTopicEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/oralTopic">
+            <input type="hidden" id="oralTopicDescription" name="description" value="">
+            题目所属分组：
+            <div class="oralTopicCourseId">
+                <select id="oralTopicCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="oralTopicDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="oralTopicRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置题目时间:
+            <input id="oralTopicDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--程序题面板-->
+    <div class="editor programProblemEditor" hidden="hidden">
+        <script>
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                console.log(time);
+                document.getElementById("programProblemDate").value=time;
+            })
+        </script>
+<!--        private String prepositionCode="null";//前置代码-->
+<!--        private String postCode="null";//后置代码-->
+        <div id="programProblemEditor" onchange="alert('11')"></div>
+        <form method="post" action="/bank/addSubject/programProblem">
+            <input type="hidden" id="programProblemDescription" name="description" value="">
+            请输入题目前置代码（若没有可忽略）:
+            <div id="prepositionCodeEditor" onchange="alert('11')"></div>
+            <input type="hidden" id="prepositionCodeDescription" name="prepositionCode" value="">
+            请输入题目后置代码（若没有可忽略）:
+            <div id="postCodeEditor" onchange="alert('11')"></div>
+            <input type="hidden" id="postCodeDescription" name="postCode" value="">
+            题目所属分组：
+            <div class="programProblemCourseId">
+                <select id="programProblemCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="programProblemDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="programProblemRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div id="programProblemAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="programProblemAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="programProblemDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--连线题面板-->
+    <div class="editor matchingEditor" hidden="hidden">
+        <script>
+            var matchingLeftItemCount=3
+            var matchingRightItemCount=3
+            function onAddMatchingLeftItem()
+            {
+
+                html="<div class='matchingLeftItem'>\n"+
+                    (matchingLeftItemCount+1)+". "+
+                    "<textarea type='text' name='optionsLeft' style='width: 400px;height: 18px'></textarea>"+
+                    "\n"+
+                    "</div>"
+                $("div.matchingLeftItems").append(html)
+                html="<div class='matchingAnswer'>\n"+
+                    (matchingLeftItemCount+1)+". "
+                for (let i=1;i<=matchingRightItemCount;i++){
+                    html = html+"<div class='"+i+"' style='display: inline-block'>"+
+                        "<input type='checkbox' name='answer' value='"+i+
+                        "'>"+String.fromCharCode(65+i-1)+
+                        "\n"+"</div>\n"+
+                        "<input type='hidden' name='answer' value='0'>"
+                }
+                html = html+"</div>"
+                $("div.matchingAnswers").append(html)
+                matchingLeftItemCount++;
+            }
+            function onDeleteMatchingLeftItem()
+            {
+                if (matchingLeftItemCount==1){
+                }else {
+                    $("div.matchingLeftItem").eq(-1).remove()
+                    $("div.matchingAnswer").eq(-1).remove()
+                    matchingLeftItemCount--;
+                }
+            }
+            function onAddMatchingRightItem()
+            {
+                html="<div class='matchingRightItem'>\n"+
+                    String.fromCharCode(matchingRightItemCount+65)+". "+
+                    "<textarea type='text' name='optionsRight' style='width: 400px;height: 18px'></textarea>"+
+                    "\n"+
+                    "</div>"
+                $("div.matchingRightItems").append(html)
+                html="<div class='"+(matchingRightItemCount+1)+"' style='display: inline-block'>"+
+                    "<input type='checkbox' name='answer' value='"+(matchingRightItemCount+1)+
+                    "'>"+String.fromCharCode(65+matchingRightItemCount)+
+                    "\n"+"</div>\n"
+                $("div.matchingAnswer").append(html)
+                matchingRightItemCount++;
+            }
+            function onDeleteMatchingRightItem()
+            {
+                if (matchingRightItemCount==1){
+                }else {
+                    $("div.matchingRightItem").eq(-1).remove()
+                    var deleteOptions = "div."+matchingRightItemCount
+                    $(deleteOptions).remove()
+                    matchingRightItemCount--;
+                }
+            }
+            jQuery(function (){
+                var t = new Date();
+                var year = t.getFullYear();
+                var month = t.getMonth()+1;
+                if (month<10){
+                    month = '0'+month
+                }
+                var day = t.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var time = year+"-"+month+"-"+day;
+                document.getElementById("matchingDate").value=time;
+            })
+        </script>
+        <div id="matchingEditor" onchange="alert('11')"></div>
+        <button onclick="onAddMatchingLeftItem()">添加第一组选项</button>
+        <button onclick="onDeleteMatchingLeftItem()">删除第一组选项</button>
+        <button onclick="onAddMatchingRightItem()">添加第二组选项</button>
+        <button onclick="onDeleteMatchingRightItem()">删除第二组选项</button>
+        <form method="post" action="/bank/addSubject/matching">
+            <input type="hidden" id="matchingDescription" name="description" value="">
+            设置选项:
+            <br/>
+            <div class="matchingLeftItems" style="display: inline-block">
+                <div class="matchingLeftItem">
+                    1. <textarea type="text" name="optionsLeft" style="width: 400px;height: 18px"></textarea>
+                </div>
+                <div class="matchingLeftItem">
+                    2. <textarea type="text" name="optionsLeft" style="width: 400px;height: 18px"></textarea>
+                </div>
+                <div class="matchingLeftItem">
+                    3. <textarea type="text" name="optionsLeft" style="width: 400px;height: 18px"></textarea>
+                </div>
+            </div>
+            <div class="matchingRightItems" style="display: inline-block">
+                <div class="matchingRightItem">
+                    A. <textarea type="text" name="optionsRight" style="width: 400px;height: 18px"></textarea>
+                </div>
+                <div class="matchingRightItem">
+                    B. <textarea type="text" name="optionsRight" style="width: 400px;height: 18px"></textarea>
+                </div>
+                <div class="matchingRightItem">
+                    C. <textarea type="text" name="optionsRight" style="width: 400px;height: 18px"></textarea>
+                </div>
+            </div>
+            </br>
+            题目所属分组：
+            <div class="matchingCourseId">
+                <select id="matchingCourseId" name="courseID">
+                    <option value="-1">-1</option>
+                </select>
+            </div>
+            题目难度星级:
+            <div class="difficulty">
+                <select id="matchingDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            题目建议分值：
+            <div class="matchingRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+            设置答案:
+            <div class="matchingAnswers">
+                <div class="matchingAnswer">
+                    1.
+                    <div class="1" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="1">A
+                    </div>
+                    <div class="2" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="2">B
+                    </div>
+                    <div class="3" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="3">C
+                    </div>
+                </div>
+                <input type="hidden" name="answer" value="0">
+                <div class="matchingAnswer">
+                    2.
+                    <div class="1" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="1">A
+                    </div>
+                    <div class="2" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="2">B
+                    </div>
+                    <div class="3" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="3">C
+                    </div>
+                </div>
+                <input type="hidden" name="answer" value="0">
+                <div class="matchingAnswer">
+                    3.
+                    <div class="1" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="1">A
+                    </div>
+                    <div class="2" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="2">B
+                    </div>
+                    <div class="3" style="display: inline-block">
+                        <input type="checkbox" name="answer" value="3">C
+                    </div>
+                </div>
+                <input type="hidden" name="answer" value="0">
+            </div>
+            <br/>
+            设置题目时间:
+            <input id="matchingDate" name="date" type="date"/>
+            <br/>
+            <input type="submit" value="提交至题库">
+        </form>
+    </div>
+    <!--更多面板待开发...-->
+</div>
+<script type="application/javascript">
+    //注册富文本编辑框
+    const E = window.wangEditor
+    const singleChoiceEditor = new E('#singleChoiceEditor')
+    const multipleChoiceEditor = new E("#multipleChoiceEditor")
+    const completionEditor = new E("#completionEditor")
+    const judgmentEditor = new E("#judgmentEditor")
+    const nounParsingEditor = new E("#nounParsingEditor")
+    const calculationProblemEditor = new E("#calculationProblemEditor")
+    const entryProblemEditor = new E("#entryProblemEditor")
+    const essayQuestionEditor = new E("#essayQuestionEditor")
+    const dataItemsEditor = new E('#dataItemsEditor')
+    const matchingEditor = new E("#matchingEditor")
+    const voteTopicEditor = new E("#voteTopicEditor")
+    const rankingQuestionEditor = new E("#rankingQuestionEditor")
+    const clozeTestEditor = new E("#clozeTestEditor")
+    const readComprehensionEditor = new E("#readComprehensionEditor")
+    const comprehensiveQuestionEditor = new E("#comprehensiveQuestionEditor")
+    const oralTopicEditor = new E("#oralTopicEditor")
+    const listeningQuestionEditor = new E("#listeningQuestionEditor")
+    const programProblemEditor = new E("#programProblemEditor")
+    //答案部分
+    const nounParsingAnswer = new E("#nounParsingAnswer")
+    const calculationProblemAnswer = new E("#calculationProblemAnswer")
+    const entryProblemAnswer = new E("#entryProblemAnswer")
+    const essayQuestionAnswer = new E("#essayQuestionAnswer")
+    const dataItemsAnswer = new E("#dataItemsAnswer")
+    const comprehensiveQuestionAnswer = new E("#comprehensiveQuestionAnswer")
+    const programProblemAnswer = new E("#programProblemAnswer")
+    //前后置代码
+    const prepositionCodeEditor = new E("#prepositionCodeEditor")
+    const postCodeEditor = new E("#postCodeEditor")
+
+    const editors = [];
+    const answers = [];
+    const pre = [];
+    const post = [];
+    editors.push(singleChoiceEditor)
+    editors.push(multipleChoiceEditor)
+    editors.push(completionEditor)
+    editors.push(judgmentEditor)
+    editors.push(nounParsingEditor)
+    editors.push(calculationProblemEditor)
+    editors.push(entryProblemEditor)
+    editors.push(essayQuestionEditor)
+    editors.push(dataItemsEditor)
+    editors.push(matchingEditor)
+    editors.push(voteTopicEditor)
+    editors.push(rankingQuestionEditor)
+    editors.push(clozeTestEditor)
+    editors.push(readComprehensionEditor)
+    editors.push(comprehensiveQuestionEditor)
+    editors.push(oralTopicEditor)
+    editors.push(listeningQuestionEditor)
+    editors.push(programProblemEditor)
+    answers.push(nounParsingAnswer)
+    answers.push(calculationProblemAnswer)
+    answers.push(entryProblemAnswer)
+    answers.push(essayQuestionAnswer)
+    answers.push(dataItemsAnswer)
+    answers.push(comprehensiveQuestionAnswer)
+    answers.push(programProblemAnswer)
+    pre.push(prepositionCodeEditor)
+    post.push(postCodeEditor)
+    const syncParams = ["#singleChoiceDescription","#multipleChoiceDescription",
+        "#completionDescription","#judgmentDescription","#nounParsingDescription",
+        "#calculationProblemDescription","#entryProblemDescription","#essayQuestionDescription",
+        "#dataItemsDescription","#matchingDescription","#voteTopicDescription",
+        "#rankingQuestionDescription","#clozeTestDescription","#readComprehensionDescription",
+        "#comprehensiveQuestionDescription","#oralTopicDescription","#listeningQuestionDescription",
+        "#programProblemDescription"]
+    const answerParams = ["#nounParsingAnswerDescription","#calculationProblemAnswerDescription",
+                    "#entryProblemAnswerDescription","#essayQuestionAnswerDescription",
+                    "#dataItemsAnswerDescription","#comprehensiveQuestionAnswerDescription",
+                    "#programProblemAnswerDescription"]
+    const codeParams = ["#prepositionCodeDescription","#postCodeDescription"]
+    const length = editors.length;
+    for(let i=0; i<length; i++)
+    {
+        editors[i].config.placeholder = '请输入题目描述'
+        editors[i].config.uploadImgServer = '/upload-img'
+        editors[i].config.uploadFileName = 'file';
+        editors[i].config.uploadImgMaxSize=2*1024*1024
+        editors[i].config.uploadVideoServer = '/upload-video'
+        editors[i].config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
+        editors[i].config.onchange=function (newHtml)
+        {
+            //$(syncParams[i]).get(0).setAttribute('value',newHtml)
+            $(syncParams[i]).val(newHtml)
+        }
+        editors[i].create()
+    }
+
+    const length_answer = answers.length;
+    for(let i=0; i<length_answer; i++)
+    {
+        answers[i].config.placeholder = '请输入答案描述'
+        answers[i].config.uploadImgServer = '/upload-img'
+        answers[i].config.uploadFileName = 'file';
+        answers[i].config.uploadImgMaxSize=2*1024*1024
+        answers[i].config.uploadVideoServer = '/upload-video'
+        answers[i].config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
+        answers[i].config.onchange=function (newHtml)
+        {
+            $(answerParams[i]).val(newHtml)
+        }
+        answers[i].create()
+    }
+    //前置代码
+    prepositionCodeEditor.config.placeholder = ''
+    prepositionCodeEditor.config.uploadImgServer = '/upload-img'
+    prepositionCodeEditor.config.uploadFileName = 'file';
+    prepositionCodeEditor.config.uploadImgMaxSize=2*1024*1024
+    prepositionCodeEditor.config.uploadVideoServer = '/upload-video'
+    prepositionCodeEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
+    prepositionCodeEditor.config.onchange=function (newHtml)
+    {
+        $(codeParams[0]).val(newHtml)
+    }
+    prepositionCodeEditor.create()
+    //后置代码
+    postCodeEditor.config.placeholder = ''
+    postCodeEditor.config.uploadImgServer = '/upload-img'
+    postCodeEditor.config.uploadFileName = 'file';
+    postCodeEditor.config.uploadImgMaxSize=2*1024*1024
+    postCodeEditor.config.uploadVideoServer = '/upload-video'
+    postCodeEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
+    postCodeEditor.config.onchange=function (newHtml)
+    {
+        $(codeParams[1]).val(newHtml)
+    }
+    postCodeEditor.create()
+
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>排序题添加</title>
+</head>
+<body>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<!--排序题面板-->
+<div class="editor rankingQuestionEditor" hidden="hidden">
+    <script>
+        var rankingQuestionItemCount=4
+        function onAddRankingQuestionItem()
+        {
+            var html="<div class='rankingQuestionItem'>\n"+
+                String.fromCharCode(65+rankingQuestionItemCount)+
+                ". <textarea name='options' type='text' style='width: 500px; height: 18px'></textarea>\n" +
+                "<br/>\n" +
+                "</div>"
+            $("div.rankingQuestionItems").append(html)
+            rankingQuestionItemCount++;
+        }
+        function onDeleteRankingQuestionItem()
+        {
+            if(rankingQuestionItemCount==1){
+
+            }else{
+                $("div.rankingQuestionItem").eq(-1).remove()
+                rankingQuestionItemCount--;
+            }
+        }
+        jQuery(function (){
+            var t = new Date();
+            var year = t.getFullYear();
+            var month = t.getMonth()+1;
+            if (month<10){
+                month = '0'+month
+            }
+            var day = t.getDate();
+            if(day<10){
+                day = '0'+day;
+            }
+            var time = year+"-"+month+"-"+day;
+            console.log(time);
+            document.getElementById("rankingQuestionDate").value=time;
+        })
+    </script>
+    <div id="rankingQuestionEditor" onchange="alert('11')"></div>
+    <button onclick="onAddRankingQuestionItem()">添加选项</button>
+    <button onclick="onDeleteRankingQuestionItem()">删除选项</button>
+    <form id="subject">
+        <input type="hidden" id="rankingQuestionDescription" name="description" value="">
+        设置选项:
+        <br/>
+        <div class="rankingQuestionItems">
+            <div class="rankingQuestionItem">
+                A. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                <br/>
+            </div>
+            <div class="rankingQuestionItem">
+                B. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                <br/>
+            </div>
+            <div class="rankingQuestionItem">
+                C. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                <br/>
+            </div>
+            <div class="rankingQuestionItem">
+                D. <textarea name="options" type="text" style="width: 500px; height: 18px"></textarea>
+                <br/>
+            </div>
+        </div>
+        题目所属分组：
+        <div class="rankingQuestionCourseId">
+            <div style="display: inline-block">所属课程：</div>
+            <div style="display: inline-block">
+                <div>
+                    <select id="courseID" name="courseID"></select>
+                </div>
+            </div>
+            <div style="display: inline-block">所属知识点：</div>
+            <div style="display: inline-block" id="class2ndID">
+                <div class="class2ndID">
+                    <select>
+
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        题目难度星级:
+        <div class="difficulty">
+            <select id="rankingQuestionDifficulty" name="difficulty">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        题目建议分值：
+        <div class="rankingQuestionRecommendScore">
+            <input name="recommendScore" type="text">
+        </div>
+        设置答案:
+        <div class="rankingQuestionAnswer">
+            <input type="text" name="answer">
+            <br/>
+        </div>
+        <br/>
+        设置题目时间:
+        <input id="rankingQuestionDate" name="date" type="date"/>
+        <br/>
+        <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
+    </form>
+</div>
+<script>
+    function submitSubject(){
+        var form = jQuery("#subject").serialize()
+        jQuery.post("/bank/addSubject/rankingQuestion",form,function (rst){
+            if (rst =="添加成功"){
+                alert("添加成功!")
+            }else{
+                alert("添加失败!")
+            }
+        })
+    }
+    //初始化课程信息
+    function init(){
+        jQuery.get("/bank/classify/findAllCourse",function (rst){
+            var trs = ''
+            var superId = rst[0].id;
+            for (var i=0;i<rst.length;i++){
+                var u = rst[i];
+                trs +=`
+                    <option value="${u.id}">${u.classifyName}</option>
+                `
+            }
+            $("#courseID").append(trs);
+            jQuery.get("/bank/classify/findAllKnowledge",function (rst2){
+                var trs2 = ''
+                $("div.class2ndID").remove();
+                trs2 += `<div class="class2ndID">
+                    <select name="class2ndID">
+                    `
+                for (var i=0;i<rst2.length;i++){
+                    var u = rst2[i];
+                    if(superId == u.superClassId){
+                        trs2 += `<option value="${u.id}">${u.classifyName}</option>`
+                    }else{
+
+                    }
+                }
+                trs2 += `</select>
+                </div>`
+                $("#class2ndID").append(trs2);
+            })
+        })
+    }
+    jQuery(function (){
+        init();
+    })
+    //监听选择的课程，呈现相应的知识点信息
+    $(() => {
+        $('#courseID').change(() => {
+            $("div.class2ndID").remove();
+            jQuery.get("/bank/classify/findAllKnowledge",function (rst){
+                var trs = ""
+                trs += `<div class="class2ndID">
+                    <select name="class2ndID">
+                    `
+                var superId = $("#courseID").val()
+                for (var i=0;i<rst.length;i++){
+                    var u = rst[i];
+                    if(superId == u.superClassId){
+                        trs += `<option value="${u.id}">${u.classifyName}</option>`
+                    }else{
+
+                    }
+                }
+                trs += `</select>
+                </div>`
+                $("#class2ndID").append(trs);
+            })
+        })
+    })
+
+</script>
+<script>
+    const E = window.wangEditor
+    const rankingQuestionEditor = new E("#rankingQuestionEditor")
+    rankingQuestionEditor.config.placeholder = '请输入题目描述'
+    rankingQuestionEditor.config.uploadImgServer = '/upload-img'
+    rankingQuestionEditor.config.uploadFileName = 'file';
+    rankingQuestionEditor.config.uploadImgMaxSize=2*1024*1024
+    rankingQuestionEditor.config.uploadVideoServer = '/upload-video'
+    rankingQuestionEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
+    rankingQuestionEditor.config.onchange=function (newHtml)
+    {
+        $("#rankingQuestionDescription").val(newHtml)
+    }
+    rankingQuestionEditor.create()
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://42.192.123.219:3306/auth?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: Mixed2022.
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1902/eureka
+
+my:
+  sign-key: Mixed2022.
+
+server:
+  port: 1901
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: httptrace
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

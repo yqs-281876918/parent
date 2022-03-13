@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    username: root
+    password: Mixed2022.
+    url: jdbc:mysql://42.192.123.219:3306/verify?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      host: 42.192.123.219
+      port: 27017
+      database: mixed
+      username: root
+      password: Mixed2022.
+      authentication-database: admin
+  application:
+    name: verify-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1902/eureka
+server:
+  port: 1905
+  servlet:
+    context-path: /verify
+security:
+  oauth2:
+    client:
+      client-id: all-client
+      client-secret: all-client-secret
+      user-authorization-uri: http://auth-service/oauth/authorize
+      access-token-uri: http://auth-service/oauth/token
+    resource:
+      jwt:
+        key-uri: http://auth-service/oauth/token_key
+        key-value: Mixed2022.

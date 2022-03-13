@@ -1,0 +1,42 @@
+server:
+  port: 1900
+  servlet:
+    context-path: /gateway
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: bank-route
+          uri: lb://bank-service
+          predicates:
+            - Path=/bank/**
+        - id: login-route
+          uri: lb://login-service
+          predicates:
+            - Path=/login/**
+        - id: verify-route
+          uri: lb://verify-service
+          predicates:
+            - Path=/verify/**
+        - id: classify-route
+          uri: lb://classify-service
+          predicates:
+            - Path=/classify/**
+        - id: paper-route
+          uri: lb://paper-service
+          predicates:
+            - Path=/paper/**
+
+  main:
+    web-application-type: reactive
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1902/eureka
+security:
+  oauth2:
+    client:
+      client-id: all-client
+      client-secret: all-client-secret

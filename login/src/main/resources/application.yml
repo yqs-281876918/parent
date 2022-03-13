@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: login-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1902/eureka
+server:
+  port: 1904
+  servlet:
+    context-path: /login
+security:
+  oauth2:
+    client:
+      client-id: all-client
+      client-secret: all-client-secret

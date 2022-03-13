@@ -1,0 +1,63 @@
+body{
+    background-image:url(../images/hai.jpg)
+}
+form{
+    margin-top:100px;
+    margin-right: 200px;
+}
+form.style{
+    text-align: center;
+
+}
+.outer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width:400px;
+    padding: 40px;
+    background:rgba(0,0,0,.8);
+    box-sizing:border-box;
+    box-shadow:0 15px 25px rgba(0,0,0,.5);
+    border-radius: 10px;/*登录窗口边角圆滑*/
+}
+.login{
+    position:relative;
+    width:400px;
+    height:300px;
+    margin:200px auto;
+}
+h2{text-align: center;}
+.title{
+    color:white;font-size: 20px;
+}
+.content{
+    text-align:left;
+    padding:25px ;
+    color: white;
+}/*整体边框*/
+input[type=text]{
+    width: 100%;
+    padding: 10px 0;
+    font-side:20px;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom:30px;/*输入框设置*/
+    border:none;
+    border-bottom:1px solid #fff;
+    outline:none;
+    background:transparent;
+}/*表单设置*/
+#denglu{
+    text-align:center;
+    padding:10px;
+}/*登陆居中*/
+
+input[type=submit] {
+    padding: 4px 15px; color: #02262c; background-color: #eeeeee;
+    border: 1px solid rgb(0, 0, 0); cursor: pointer;border-radius: 5px;
+}/*登陆样式*/
+input[type=submit].big {font-size: 12px; padding: 7px 20px}/*边框变大*/
+.reminder{
+    color: white;
+}

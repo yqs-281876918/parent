@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: test-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1902/eureka
+server:
+  port: 190
+  servlet:
+    context-path: /test
+security:
+  oauth2:
+    client:
+      client-id: all-client
+      client-secret: all-client-secret
+      user-authorization-uri: http://auth-service/oauth/authorize
+      access-token-uri: http://auth-service/oauth/token
+    resource:
+      jwt:
+        key-uri: http://auth-service/oauth/token_key
+        key-value: Mixed2022.
