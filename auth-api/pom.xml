@@ -7,17 +7,18 @@
         <artifactId>parent</artifactId>
         <version>0.0.1</version>
     </parent>
-    <artifactId>classify-api</artifactId>
+    <artifactId>auth-api</artifactId>
     <version>0.0.1</version>
-    <name>classify-api</name>
-    <description>API for Classify</description>
+    <name>auth-api</name>
+    <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
         </dependency>
     </dependencies>
 

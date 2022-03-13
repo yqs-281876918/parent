@@ -32,8 +32,13 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mixed.exam.classify</groupId>
+            <groupId>org.mixed.exam</groupId>
             <artifactId>classify-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mixed.exam</groupId>
+            <artifactId>auth-api</artifactId>
             <version>0.0.1</version>
         </dependency>
     </dependencies>

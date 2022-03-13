@@ -7,7 +7,6 @@
         <artifactId>parent</artifactId>
         <version>0.0.1</version>
     </parent>
-    <groupId>org.mixed.exam.bank</groupId>
     <artifactId>bank-api</artifactId>
     <version>0.0.1</version>
     <name>bank-api</name>
