@@ -11,6 +11,7 @@
 <!--    https://mvnrepository.com/-->
     <modules>
         <module>auth</module>
+        <module>auth-api</module>
         <module>bank</module>
         <module>bank-api</module>
         <module>gateway</module>
