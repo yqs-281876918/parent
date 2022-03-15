@@ -1,10 +1,10 @@
 package org.mixed.exam.bank.controller;
 
 import lombok.Data;
+import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.bank.pojo.po.*;
 import org.mixed.exam.bank.service.AddSubjectService;
-import org.mixed.exam.classify.api.pojo.Classification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

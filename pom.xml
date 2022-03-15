@@ -19,8 +19,6 @@
         <module>registry</module>
         <module>test</module>
         <module>verify</module>
-        <module>classify</module>
-        <module>classify-api</module>
 		<module>paper</module>
         <module>student</module>
         <module>admin</module>

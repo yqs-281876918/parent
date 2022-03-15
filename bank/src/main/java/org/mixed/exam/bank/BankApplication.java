@@ -1,6 +1,6 @@
 package org.mixed.exam.bank;
 
-import org.mixed.exam.classify.api.client.ClassifyClient;
+import org.mixed.exam.admin.api.client.ClassifyClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
