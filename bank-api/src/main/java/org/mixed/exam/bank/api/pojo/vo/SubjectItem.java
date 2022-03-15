@@ -1,11 +1,13 @@
 package org.mixed.exam.bank.api.pojo.vo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.mixed.exam.bank.api.pojo.po.Question;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class SubjectItem
 {
     private String id;
