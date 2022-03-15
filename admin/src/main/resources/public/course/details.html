@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>课程分类管理</title>
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<!--添加课程的模态框-->
+<div class="modal fade" id="addCourseDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加课程提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addCourseDialogForm">
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">课程名:</label>
+                        <div class="col-8">
+                            <input type="text" id="classifyName" name="classifyName"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doAddCourse()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加课程知识点的模态框-->
+<div class="modal fade" id="addKnowledgeDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加课程知识点提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addKnowledgeDialogForm">
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">课程名:</label>
+                        <div class="col-8">
+                            <select id="courseData" name="superClassId"
+                                    class="form-control">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">课程知识点名:</label>
+                        <div class="col-8">
+                            <input type="text" id="knowledgeName" name="classifyName"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doAddKnowledge()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-primary" onclick="showAddCourseDialog()">添加课程</button>
+<button type="button" class="btn btn-primary" onclick="showAddKnowledgeDialog()">添加知识点</button>
+<div class="accordion" id="accordionExample">
+
+</div>
+
+<script>
+    function showAddCourseDialog(){
+        jQuery("#addCourseDialog").modal('show');
+    }
+    function doAddCourse(){
+        var form = jQuery("#addCourseDialogForm").serialize()
+        jQuery("#addCourseDialog").modal('hide');
+        jQuery.post("/admin/classify/addClassify",form,function (rst){
+            if(rst=='添加成功'){
+                alert("添加成功!")
+            }else{
+                alert("添加失败!")
+            }
+        })
+    }
+    function showAddKnowledgeDialog(){
+        jQuery.post("/admin/classify/findAllCourse",function (rst){
+            // console.log(rst);
+            var trs = '';
+            // var arrs = rst.list;
+            for (var i=0;i<rst.length;i++){
+                var u = rst[i];
+                trs += `<option name="superClassId" value="${u.id}">${u.classifyName}</option>`
+            }
+            jQuery("#courseData").html(trs);
+        })
+        jQuery("#addKnowledgeDialog").modal('show');
+    }
+    function doAddKnowledge(){
+        var form = jQuery("#addKnowledgeDialogForm").serialize()
+        jQuery("#addKnowledgeDialog").modal('hide');
+        jQuery.post("/admin/classify/addClassify",form,function (rst){
+            if(rst=='添加成功'){
+                alert("添加成功!")
+            }else{
+                alert("添加失败!")
+            }
+        })
+    }
+</script>
+<script>
+    function init(){
+        jQuery.post("/admin/classify/findAllCourse",function (rst){
+            var trs = '';
+            for(var i=0;i<rst.length;i++){
+                var u=rst[i];
+                trs +=`
+<div class="card">
+    <div class="card-header" id="heading${u.id}">
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.id}" aria-expanded="false" aria-controls="collapse${u.id}">
+                <div>
+                    ${u.classifyName}
+                </div>
+            </button>
+        </h2>
+    </div>
+    <div id="collapse${u.id}" class="collapse" aria-labelledby="heading${u.id}" data-parent="#accordionExample">
+        <div class="card-body" id="${u.id}">
+
+        </div>
+    </div>
+</div>
+                `
+            }
+            $("div.accordion").append(trs);
+        })
+        jQuery.post("/admin/classify/findAllKnowledge",function (rst){
+            var trs = '';
+            for (var i=0;i<rst.length;i++){
+                var u = rst[i];
+                trs = `
+<div class="container" id="container${u.id}">
+          <div class="card">
+            <div class="card-header" id="heading${u.id}">
+              <h3 class="mb-0">
+                <button class="btn btn-link btn-none text-left" type="button" data-toggle="collapse" data-target="#collapse${u.id}" aria-expanded="false" aria-controls="collapse${u.id}">
+                  ${u.classifyName}
+                </button>
+              </h3>
+            </div>
+            <div id="collapse${u.id}" class="collapse" aria-labelledby="heading${u.id}" data-parent="#container${u.id}">
+              <div class="card-body" id="${u.id}">
+
+              </div>
+            </div>
+          </div>
+</div>
+                `
+                var location = "#"+u.superClassId;
+                $(location).append(trs);
+            }
+        })
+        jQuery.post("/admin/classify/findAllSubject",function (rst){
+            var trs = '';
+            for(var i=0; i<rst.length; i++){
+                var u= rst[i];
+                trs = `
+<div id="${u.id}">
+    ${u.type}&nbsp&nbsp&nbsp&nbsp难度级别：${u.difficulty}&nbsp&nbsp&nbsp&nbsp ${u.introduction}
+</div>
+                `
+                var location = "#"+u.class2ndID;
+                $(location).append(trs);
+            }
+        })
+    }
+    jQuery(function (){
+        init();
+    })
+</script>
+
+</body>
+</html>

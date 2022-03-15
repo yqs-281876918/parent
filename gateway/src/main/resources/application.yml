@@ -28,7 +28,18 @@ spring:
           uri: lb://paper-service
           predicates:
             - Path=/paper/**
-
+        - id: admin-route
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
+        - id: teacher-route
+          uri: lb://teacher-service
+          predicates:
+            - Path=/teacher/**
+        - id: student-route
+          uri: lb://student-service
+          predicates:
+            - Path=/student/**
   main:
     web-application-type: reactive
 eureka:
