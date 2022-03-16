@@ -3,8 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <title>智能组卷</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/format.js"></script>
 </head>
 <body>
+<script>
+    var subject_types=["singleChoiceQuestion", "multipleChoiceQuestion","completion","judgment","nounParsing",
+        "calculationProblem","entryProblem","essayQuestion","dataItems","rankingQuestion","voteTopic",
+        "clozeTest","readComprehension","listeningQuestion","comprehensiveQuestion","oralTopic",
+        "programProblem","matching"]
+    var tpye_count_map={}
+    var paper={}
+    $(function (){
+        $.get("/admin/classify/findAllCourse",function (objs) {
+            var ul = $('#course_selector')
+            var length=objs.length
+            for(var i=0;i<length;i++)
+            {
+                var li = '<li><div onclick="onSelectCourse(\'{0}\')">{1}</div></li>'
+                ul.append(li.format(objs[i].id,objs[i].classifyName))
+            }
+        })
+    })
+    function onSelectCourse(id) {
+        paper.courseID=id
+    }
+</script>
+<script>
+    function step(from,to) {
+        $('div.step'+from).hide()
+        $('div.step'+to).show()
+        if(from===2&&to===3)
+        {
+            paper.foreWord=$('#foreWord').val()
+        }
+        if(from===3&&to===4)
+        {
+            var length=subject_types.length;
+            for(var i=0;i<length;i++)
+            {
+                var type=subject_types[i]
+                $.get("/bank/api/subject/count",{"type":type,"courseID":paper.courseID},function (rst){
 
+                })
+            }
+        }
+    }
+</script>
+<div class="container">
+    <div class="step1" class="row">
+        <div class="col-md-6">
+            <h4>请选择需要组卷的学课</h4>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group" style="display: inline">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">数学
+                    <span class="caret"></span>
+                </button>
+                <ul id="course_selector" class="dropdown-menu" role="menu">
+                    <li></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="step(1,2)">下一步</button>
+        </div>
+    </div>
+    <div class="step2" hidden="hidden" class="row">
+        <div class="col-md-12">
+            <h3>请设置试卷前言</h3>
+        </div>
+        <div class="col-md-12">
+            <textarea id="foreWord" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="step2" hidden="hidden" class="row">
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(2,1)">上一步</button>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(2,3)">下一步</button>
+        </div>
+    </div>
+    <div class="step3" hidden="hidden" class="row">
+        <div class="col-md-12">
+            <h3>请设置试卷题型分布</h3>
+        </div>
+        <div class="col-md-6">
+            <h6>该学科存在的题型:</h6>
+            <ul class="list-group">
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h6>已分配的题型:</h6>
+            <ul class="list-group">
+            </ul>
+        </div>
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(3,2)">上一步</button>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(3,4)">下一步</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

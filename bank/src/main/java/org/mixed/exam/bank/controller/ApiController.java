@@ -58,4 +58,11 @@ public class ApiController {
     {
         return subjectDao.pass(id,type);
     }
+
+    @ResponseBody
+    @GetMapping("api/subject/count")
+    public Integer getCountByType(@RequestParam("type") String type,@RequestParam("courseID") String courseID)
+    {
+        return subjectDao.getCountByType(type,courseID);
+    }
 }
