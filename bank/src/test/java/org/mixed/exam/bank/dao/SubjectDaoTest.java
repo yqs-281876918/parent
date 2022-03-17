@@ -15,4 +15,9 @@ public class SubjectDaoTest {
     void saveSubject()
     {
     }
+    @Test
+    public void getSubjects()
+    {
+        System.out.println(subjectDao.getSubjects("singleChoiceQuestion",true,null,null,null,null,"yqs"));
+    }
 }

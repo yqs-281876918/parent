@@ -1,8 +1,12 @@
 package org.mixed.exam.paper.service;
 
+import org.mixed.exam.bank.api.client.SubjectClient;
+import org.mixed.exam.bank.api.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.api.pojo.po.Question;
+import org.mixed.exam.bank.api.util.SubjectUtil;
 import org.mixed.exam.paper.pojo.dto.IntelligentParam;
 import org.mixed.exam.paper.pojo.po.Paper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -11,7 +15,8 @@ import java.util.*;
 public class IntelligentService
 {
     private IntelligentParam param;
-
+    @Autowired
+    private SubjectClient subjectClient;
     //随机数生成器
     private static Random random = new Random(System.currentTimeMillis());
     private int getRandomInt(int lower,int upper)
@@ -25,12 +30,12 @@ public class IntelligentService
     }
 
     //初始化种群
-    private void initIndividual(List<Individual> individuals,int geneLength,int size)
+    private void initIndividual(List<Individual> individuals,List<Question> subjects,IntelligentParam param,int size)
     {
-        for(int i=0;i<size;i++)
-        {
-            individuals.add(getRandomIndividual(geneLength));
-        }
+//        for(int i=0;i<size;i++)
+//        {
+//            individuals.add(getRandomIndividual(geneLength));
+//        }
     }
 
     //随机生成个体
@@ -55,28 +60,28 @@ public class IntelligentService
     //评估适应度
     private void evaluate(List<Individual> individuals)
     {
-        for (Individual individual : individuals)
-        {
-            individual.fitness=1;
-            //评估题目数量
-            int subjectCount=0;
-            for(int i=0;i<individual.length;i++)
-            {
-                if(individual.getGene(i)==1)
-                {
-                    subjectCount++;
-                }
-            }
-            if(subjectCount==param.getSubjectCount())
-            {
-                individual.fitness*=100;
-            }
-            else
-            {
-                int deviation= (int) Math.ceil(((double)Math.abs(subjectCount-param.getSubjectCount())/param.getSubjectCount()*100.0));
-                individual.fitness*=normpdfInt(deviation);
-            }
-        }
+//        for (Individual individual : individuals)
+//        {
+//            individual.fitness=1;
+//            //评估题目数量
+//            int subjectCount=0;
+//            for(int i=0;i<individual.length;i++)
+//            {
+//                if(individual.getGene(i)==1)
+//                {
+//                    subjectCount++;
+//                }
+//            }
+//            if(subjectCount==param.getSubjectCount())
+//            {
+//                individual.fitness*=100;
+//            }
+//            else
+//            {
+//                int deviation= (int) Math.ceil(((double)Math.abs(subjectCount-param.getSubjectCount())/param.getSubjectCount()*100.0));
+//                individual.fitness*=normpdfInt(deviation);
+//            }
+//        }
     }
 
     //计算平均适应度
@@ -189,12 +194,10 @@ public class IntelligentService
     private static int INIT_INDIVIDUAL_SIZE=50;
     //构建试卷
     public Paper build(IntelligentParam param) {
-        Scanner scanner = new Scanner(System.in);
         this.param=param;
         List<Question> subjects = getSubjects(param.getCourseID());
         List<Individual> individuals = new ArrayList<>();
-        //initIndividual(individuals, param.getSubjectCount(), INIT_INDIVIDUAL_SIZE);
-        initIndividual(individuals, subjects.size(), INIT_INDIVIDUAL_SIZE);
+        initIndividual(individuals,subjects,param, INIT_INDIVIDUAL_SIZE);
         for(int generation=1;generation<=50;generation++)
         {
             evaluate(individuals);
@@ -214,12 +217,9 @@ public class IntelligentService
 
     private List<Question> getSubjects(int courseID)
     {
-        List<Question> subjects=new ArrayList<>();
-        for(int i=0;i<500;i++)
-        {
-            subjects.add(new Question());
-        }
-        return subjects;
+        List<SubjectJson> subjectJsons = subjectClient.getSubjects(
+                null,null,null,null,String.valueOf(courseID),null,null);
+        return SubjectUtil.jsons2Subjects(subjectJsons);
     }
 }
 class Individual implements Comparable<Individual>

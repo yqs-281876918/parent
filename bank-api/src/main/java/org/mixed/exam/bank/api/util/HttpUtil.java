@@ -1,4 +1,4 @@
-package org.mixed.exam.bank.util;
+package org.mixed.exam.bank.api.util;
 
 public class HttpUtil
 {
