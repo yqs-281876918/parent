@@ -73,9 +73,42 @@
     </form>
 </div>
 <script>
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
     function submitSubject(){
-        var form = jQuery("#subject").serialize()
-        jQuery.post("/bank/addSubject/essayQuestion",form,function (rst){
+        var form = jQuery("#subject").serializeObject();
+        var introduction = form.description;
+        var msg = introduction.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&#39;/g,"\'").replace(/&quot;/g,"\"").replace(/<\/?.+?>/g,"")
+        if (msg.length>15){
+            msg = msg.slice(0,15)
+            msg = msg + "..."
+        }else{
+
+        }
+        var param={
+            "difficulty":form.difficulty,
+            "date":form.date,
+            "courseID":form.courseID,
+            "class2ndID":form.class2ndID,
+            "recommendScore":form.recommendScore,
+            "introduction":msg,
+            "description":form.description,
+            "answer":form.answer
+        };
+        jQuery.post("/bank/addSubject/essayQuestion",param,function (rst){
             if (rst =="添加成功"){
                 alert("添加成功!")
             }else{
