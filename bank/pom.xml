@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>org.mixed.exam</groupId>
-            <artifactId>classify-api</artifactId>
+            <artifactId>admin-api</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>

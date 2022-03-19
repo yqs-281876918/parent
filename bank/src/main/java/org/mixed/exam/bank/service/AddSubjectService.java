@@ -1,9 +1,9 @@
 package org.mixed.exam.bank.service;
 
+import org.mixed.exam.admin.api.client.ClassifyClient;
+import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.dao.SubjectDao;
 import org.mixed.exam.bank.pojo.po.*;
-import org.mixed.exam.classify.api.client.ClassifyClient;
-import org.mixed.exam.classify.api.pojo.Classification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

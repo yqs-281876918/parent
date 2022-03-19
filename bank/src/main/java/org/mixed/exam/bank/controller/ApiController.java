@@ -5,6 +5,7 @@ import org.mixed.exam.bank.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.pojo.vo.SubjectItem;
 import org.mixed.exam.bank.service.SubjectItemService;
+import org.mixed.exam.bank.util.HttpUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,8 +30,7 @@ public class ApiController {
         List<? extends Question> subjects = subjectDao.getSubjectsByType(type);
         List<SubjectJson> jsons = new ArrayList<>();
         for (Question q : subjects) {
-            String jsonString = SubjectUtil.subject2Json(q);
-            jsons.add(new SubjectJson(q.getType(), jsonString));
+            jsons.add(SubjectUtil.subject2Json(q));
         }
         return jsons;
     }
@@ -48,8 +48,7 @@ public class ApiController {
     @GetMapping("api/subject/id")
     public SubjectJson getSubjectByID(@RequestParam("id") String id, @RequestParam("type") String type) {
         Question q = subjectDao.getSubjectsByID(id, type);
-        String jsonString = SubjectUtil.subject2Json(subjectDao.getSubjectsByID(id, type));
-        return new SubjectJson(q.getType(), jsonString);
+        return SubjectUtil.subject2Json(q);
     }
 
     @ResponseBody
@@ -57,5 +56,48 @@ public class ApiController {
     public Integer passSubject(@RequestParam("id")String id,@RequestParam("type")String type)
     {
         return subjectDao.pass(id,type);
+    }
+
+    @ResponseBody
+    @GetMapping("api/subject/count")
+    public Integer getCountByType(@RequestParam("type") String type,@RequestParam("courseID") String courseID)
+    {
+        return subjectDao.getCountByType(type,courseID);
+    }
+
+    @ResponseBody
+    @GetMapping("api/subject/typeList")
+    public List<String> getTypeList(@RequestParam("language")String language)
+    {
+        if(language.equals("chn"))
+        {
+            return SubjectUtil.getTypeListCHN();
+        }
+        else if(language.equals("en"))
+        {
+            return SubjectUtil.getTypeList();
+        }
+        return new ArrayList<>();
+    }
+    @ResponseBody
+    @GetMapping("api/subjects")
+    public List<SubjectJson> getSubjects(@RequestParam(value = "type",defaultValue = HttpUtil.NULL_STRING_VALUE)String type,
+                                     @RequestParam(value = "open",defaultValue = HttpUtil.NULL_STRING_VALUE)String open,
+                                     @RequestParam(value = "isExamined",defaultValue = HttpUtil.NULL_STRING_VALUE)String isExamined,
+                                     @RequestParam(value = "difficulty",defaultValue = HttpUtil.NULL_STRING_VALUE)String difficulty,
+                                     @RequestParam(value = "courseID",defaultValue = HttpUtil.NULL_STRING_VALUE)String courseID,
+                                     @RequestParam(value = "class2ndID",defaultValue = HttpUtil.NULL_STRING_VALUE)String class2ndID,
+                                     @RequestParam(value = "creator",defaultValue = HttpUtil.NULL_STRING_VALUE)String creator)
+    {
+        String _type = type.equals(HttpUtil.NULL_STRING_VALUE) ?null:type;
+        Boolean _open = open.equals(HttpUtil.NULL_STRING_VALUE) ?null:Boolean.valueOf(open);
+        Boolean _isExamined = open.equals(HttpUtil.NULL_STRING_VALUE) ?null:Boolean.valueOf(isExamined);
+        Integer _difficulty = difficulty.equals(HttpUtil.NULL_STRING_VALUE)?null:Integer.valueOf(difficulty);
+        String _courseID = courseID.equals(HttpUtil.NULL_STRING_VALUE) ?null:courseID;
+        String _class2ndID = class2ndID.equals(HttpUtil.NULL_STRING_VALUE) ?null:class2ndID;
+        String _creator = creator.equals(HttpUtil.NULL_STRING_VALUE) ?null:creator;
+        return SubjectUtil.subjects2Json2(
+                subjectDao.getSubjects(_type,_open,_isExamined,_difficulty,_courseID,_class2ndID,_creator));
+        //return SubjectUtil.subjects2Json2(subjectDao.getSubject(courseID));
     }
 }

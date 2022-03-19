@@ -1,16 +1,13 @@
 package org.mixed.exam.bank.util;
 
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.mixed.exam.bank.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.pojo.po.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,6 +39,17 @@ public class SubjectUtil
                 "clozeTest","readComprehension","listeningQuestion","comprehensiveQuestion","oralTopic",
                 "programProblem","matching");
         return typeList;
+    }
+    private static List<String> typeListCHN;
+    public static List<String> getTypeListCHN()
+    {
+        if(typeListCHN!=null)
+        {
+            return typeListCHN;
+        }
+        typeListCHN=Arrays.asList("单选题","多选题","填空题","判断题","名词解析","计算题","分录题","论述题","资料题","排序题","投票题",
+                "完形填空","阅读理解","听力题","综合题","口语题","程序题","连线题");
+        return typeListCHN;
     }
     public static Class<? extends Question> getClassByType(String type)
     {
@@ -87,15 +95,17 @@ public class SubjectUtil
                 return Question.class;
         }
     }
-    public static String subject2Json(Question q)
+    public static SubjectJson subject2Json(Question q)
     {
-        String json="{}";
+        SubjectJson subjectJson = new SubjectJson();
+        subjectJson.setType(q.getType());
         try {
-            json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(q);
+            String json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(q);
+            subjectJson.setJson(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }finally {
-            return json;
+            return subjectJson;
         }
     }
     public static Question json2Subject(SubjectJson subjectJson)
@@ -105,5 +115,23 @@ public class SubjectUtil
         } catch (IOException e) {
             return null;
         }
+    }
+    public static List<SubjectJson> subjects2Json2(List<Question> subjects)
+    {
+        List<SubjectJson> jsons = new ArrayList<>();
+        for(Question q : subjects)
+        {
+            jsons.add(subject2Json(q));
+        }
+        return jsons;
+    }
+    public static List<Question> jsons2Subjects(List<SubjectJson> subjectJsons)
+    {
+        List<Question> subjects=new ArrayList<>();
+        for(SubjectJson json : subjectJsons)
+        {
+            subjects.add(json2Subject(json));
+        }
+        return subjects;
     }
 }

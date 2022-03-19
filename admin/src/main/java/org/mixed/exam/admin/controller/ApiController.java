@@ -1,5 +1,6 @@
 package org.mixed.exam.admin.controller;
 
+import org.mixed.exam.admin.dao.ClassifyDao;
 import org.mixed.exam.admin.pojo.Classification;
 import org.mixed.exam.admin.service.ClassifyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class ApiController
     @Autowired
     private ClassifyService classifyService;
 
+    @Autowired
+    private ClassifyDao classifyDao;
     @ResponseBody
     @GetMapping("api/course/all")
     public List<Classification> findAllCourse(){
@@ -26,5 +29,12 @@ public class ApiController
     @GetMapping("api/knowledge/all")
     public List<Classification> findAllKnowledge(){
         return classifyService.findAllKnowledge();
+    }
+
+    @ResponseBody
+    @GetMapping("api/knowledge")
+    public List<Classification> findKnowledge(String courseID)
+    {
+        return classifyDao.findKnowledge(courseID);
     }
 }

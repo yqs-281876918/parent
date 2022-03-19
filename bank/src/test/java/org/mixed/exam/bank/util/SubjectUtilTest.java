@@ -12,13 +12,13 @@ public class SubjectUtilTest {
     @Test
     public void getTypeList()
     {
-        SingleChoiceQuestion question = new SingleChoiceQuestion();
-        question.setType("single");
-        question.setDescription("okok");
-        question.setIsExamined(true);
-        String json = SubjectUtil.subject2Json(question);
-        System.out.println(json);
-        Question q = SubjectUtil.json2Subject(new SubjectJson("singleChoiceQuestion",json));
-        System.out.println(q);
+//        SingleChoiceQuestion question = new SingleChoiceQuestion();
+//        question.setType("single");
+//        question.setDescription("okok");
+//        question.setIsExamined(true);
+//        String json = SubjectUtil.subject2Json(question);
+//        System.out.println(json);
+//        Question q = SubjectUtil.json2Subject(new SubjectJson("singleChoiceQuestion",json));
+//        System.out.println(q);
     }
 }
