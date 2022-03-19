@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷编辑</title>
+</head>
+<body onload="init()">
+<div name="container">
+    <form>
+        <div>简介：<input id="foreWord"></div>
+        <div>
+            课程：
+            <input id="course" list="courselist">
+            <datalist id="courselist">
+            </datalist>
+        </div>
+        <div name="question">
+            问题选择：
+        </div>
+        <div>难度：<input id="difficulty"></div>
+        <div>
+            开放：
+            <input type="text" id="open" list="openlist">
+            <datalist id="openlist">
+                <option>是</option>
+                <option>否</option>
+            </datalist>
+        </div>
+        <div><input type="submit"></div>
+    </form>
+
+</div>
+</body>
+<script>
+    function init(){
+        jQuery.get("/bank/classify/findAllCourse",function (rst){
+            var trs = ''
+            var superId = rst[0].id;
+            for (var i=0;i<rst.length;i++){
+                var u = rst[i];
+                trs +=`
+                    <option value="${u.id}">${u.classifyName}</option>
+                `
+            }
+            $("#courselist").append(trs);
+
+        })
+    }
+</script>
+</html>
