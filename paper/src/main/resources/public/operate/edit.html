@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>试卷编辑</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <body onload="init()">
 <div name="container">
@@ -14,17 +15,15 @@
             <datalist id="courselist">
             </datalist>
         </div>
-        <div name="question">
-            问题选择：
+        题目：
+        <div id="question">
+
         </div>
         <div>难度：<input id="difficulty"></div>
         <div>
             开放：
-            <input type="text" id="open" list="openlist">
-            <datalist id="openlist">
-                <option>是</option>
-                <option>否</option>
-            </datalist>
+            <input type="radio" id="open" name="open" value="true">是
+            <input type="radio" id="close" name="open" value="false">否
         </div>
         <div><input type="submit"></div>
     </form>
@@ -33,6 +32,46 @@
 </body>
 <script>
     function init(){
+        var loc=location.href;
+        var n1 = loc.length;
+        var n2 = loc.indexOf('=');
+        var txt = decodeURI(loc.substr(n2+1,n1-n2));
+        var parm1={
+            "id":txt
+        }
+        jQuery.post("/paper/papercontrol/showOne",parm1,function (rst) {
+            $("input[id=foreWord]").val(rst.foreWord);
+            $("input[id=course]").val(rst.course);
+            $("input[id=difficulty]").val(rst.difficulty);
+            var o=rst.open;
+            if(o==true){
+                $("input[id=open]").attr("checked",true);
+            }else{
+                $("input[id=close]").attr("checked",true);
+            }
+            var que="";
+            var tmp=rst.subjectIDs;
+            for(var i=0;i<tmp.length;i++){
+                que=que+`<table>`;
+                for(var j=0;j<tmp[i].length;j++){
+                    var parm={
+                        "id":tmp[i][j];
+                    };
+                    jQuery.post("/paper/papercontrol/getquestion",parm1,function (rst) {
+                        //题目显示
+                        que=que+`
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        `;
+                    })
+
+                }
+                que=que+`</table>`;
+            }
+            jQuery("#question").html(que);
+        })
         jQuery.get("/bank/classify/findAllCourse",function (rst){
             var trs = ''
             var superId = rst[0].id;

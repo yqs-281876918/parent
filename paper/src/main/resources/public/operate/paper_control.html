@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>试卷管理</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <body onload="getallpaper()">
-<div name="data">
+<div id="data">
 
 </div>
 
 
 
 
-<div><button onclick="manual(teacherid)">添加新试卷</button></div>
+<div><button onclick="manual()">添加新试卷</button></div>
 </body>
 <script>
     function getallpaper() {
-        var sen="<table>";
-        jQuery.post("paper/getAll",parm,function (rst) {
-            alert(rst);
-            for(var i=0;i<rst.length,i++){
+        //var sen="<table>";
+        var sen="";
+        var parm={};
+        jQuery.post("/paper/papercontrol/getAll",parm,function (rst) {
+            var rst1=rst.list;
+            //alert("rstlength="+rst.length);
+            for(var i=0;i<rst.length;i++){
                 var uu=rst[i];
-                sen=sen+"<table>" +
-                    "<tr>${uu.foreWord}</tr>" +
-                    "<tr><td>学科：${uu.courseID}</td><td><button onclick=\"copypaper(${uu.id})\">复制</button></td></tr>" +
-                    "<tr><td>开放：${uu.open}</td><td><button onclick=\"sealed(${uu.id})\">封存</button></td></tr>" +
-                    "<tr><td>难度：${uu.difficulty}</td><td><button onclick=\"deletepaper(${uu.id})\">删除</button></td></tr>" +
-                    "<tr><td>时间：${uu.date}</td><td<button onclick=\"pushpaper(${uu.id})\">发布</button>></td></tr>" +
-                    "<tr><td>管理：${uu.creator}</td><td><button onclick=\"assign(${uu.id})\">分配教师</button></td></tr>" +
-                    "</table>"
+                sen=sen+`<table onclick="showpaper('${uu.id}')">
+                    <tr><td>'${uu.foreWord}'</td></tr>
+                    <tr><td>学科：'${uu.courseID}'</td><td><button onclick=\"copypaper('${uu.id}')\">复制</button></td></tr>
+                    <tr><td>开放：'${uu.open}'</td><td><button onclick=\"sealed('${uu.id}')\">封存</button></td></tr>
+                    <tr><td>难度：'${uu.difficulty}'</td><td><button onclick=\"deletepaper('${uu.id}')\">删除</button></td></tr>
+                    <tr><td>时间：'${uu.date}'</td><td><button onclick=\"pushpaper('${uu.id}')\">发布</button></td></tr>
+                    <tr><td>管理：'${uu.creator}'</td><td><button onclick=\"assign('${uu.id}')\">分配教师</button></td></tr>
+                    </table>`
             }
-            sen=sen+"</table>";
+            //sen=sen+"</table>";
+            jQuery("#data").html(sen);
         })
+
     }
 </script>
 <script>
@@ -39,9 +45,10 @@
         var parm={
             "id":id
         }
-        jQuery.post("",parm,function (rst) {
+        jQuery.post("/paper/papercontrol/sealed",parm,function (rst) {
             alert(rst);
         })
+        location.reload(true);
     }
 </script>
 <script>
@@ -49,9 +56,10 @@
         var parm={
             "id":id
         }
-        jQuery.post("",parm,function (rst) {
+        jQuery.post("/paper/papercontrol/copy",parm,function (rst) {
             alert(rst);
         })
+        location.reload(true);
     }
 </script>
 <script>
@@ -59,7 +67,7 @@
         var parm={
             "id":id
         }
-        jQuery.post("",parm,function (rst) {
+        jQuery.post("/paper/papercontrol/push",parm,function (rst) {
             alert(rst);
         })
     }
@@ -69,9 +77,10 @@
         var parm={
             "id":id
         }
-        jQuery.post("",parm,function (rst) {
+        jQuery.post("/paper/papercontrol/delete",parm,function (rst) {
             alert(rst);
         })
+        location.reload(true);
     }
 </script>
 <script>
@@ -79,24 +88,19 @@
         var parm={
             "id":id
         }
-        jQuery.post("",parm,function (rst) {
+        jQuery.post("/paper/papercontrol/assign",parm,function (rst) {
             alert(rst);
         })
     }
 </script>
 <script>
     function showpaper(id) {
-        var parm={
-            "id":id
-        }
-        jQuery.post("",parm,function (rst) {
-            alert(rst);
-        })
+        location.href="edit.html?"+'id='+encodeURI(id);
     }
 </script>
 <script>
-    function manual(teacherid) {
-        //跳转edit，编辑空对象
+    function manual() {
+        location.href="../create/artificial.html";
     }
 </script>
 <body>

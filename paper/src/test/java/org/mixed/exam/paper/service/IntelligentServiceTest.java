@@ -48,7 +48,7 @@ public class IntelligentServiceTest {
     {
         IntelligentService service = new IntelligentService();
         IntelligentParam param =new IntelligentParam();
-        param.setSubjectCount(30);
+        //param.setSubjectCount(30);
         service.build(param);
     }
 }
