@@ -1,6 +1,11 @@
 spring:
   application:
     name: teacher-service
+  datasource:
+    url: jdbc:mysql://42.192.123.219:3306/auth?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: Mixed2022.
+    driver-class-name: com.mysql.cj.jdbc.Driver
 eureka:
   client:
     service-url:
