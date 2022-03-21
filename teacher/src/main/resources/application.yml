@@ -1,4 +1,12 @@
 spring:
+  thymeleaf:
+    prefix: classpath:/private/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
   application:
     name: teacher-service
   datasource:

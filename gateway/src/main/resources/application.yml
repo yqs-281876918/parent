@@ -7,9 +7,14 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      filter:
+        secure-headers:
+          disable: x-frame-options
       routes:
         - id: bank-route
           uri: lb://bank-service
+          filters:
+            - SetResponseHeader=X-Frame-Options, SAMEORIGIN
           predicates:
             - Path=/bank/**
         - id: login-route
@@ -18,28 +23,38 @@ spring:
             - Path=/login/**
         - id: verify-route
           uri: lb://verify-service
+          filters:
+            - SetResponseHeader=X-Frame-Options, SAMEORIGIN
           predicates:
             - Path=/verify/**
-        - id: classify-route
-          uri: lb://classify-service
-          predicates:
-            - Path=/classify/**
         - id: paper-route
           uri: lb://paper-service
+          filters:
+            - SetResponseHeader=X-Frame-Options, SAMEORIGIN
           predicates:
             - Path=/paper/**
         - id: admin-route
           uri: lb://admin-service
+          filters:
+            - SetResponseHeader=X-Frame-Options, SAMEORIGIN
           predicates:
             - Path=/admin/**
         - id: teacher-route
           uri: lb://teacher-service
+          filters:
+            - SetResponseHeader=X-Frame-Options, SAMEORIGIN
           predicates:
             - Path=/teacher/**
         - id: student-route
           uri: lb://student-service
+          filters:
+            - SetResponseHeader=X-Frame-Options, SAMEORIGIN
           predicates:
             - Path=/student/**
+#        - id: setresponseheader_route
+#            uri: lb://gateway-service
+#            filters:
+#              - SetResponseHeader=X-Response-Red, Blue
   main:
     web-application-type: reactive
 eureka:
