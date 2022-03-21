@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>发布考试</title>
@@ -10,9 +10,31 @@
 <body>
 <div class="container">
     <div class="row">
-        <select class="form-control course" id="course_selector">
-            <option>11</option>
-        </select>
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <caption>试卷列表</caption>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>前言</th>
+                    <th>难度</th>
+                    <th>创建时间</th>
+                    <th>创建人</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item,itemStat : ${items}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.foreWord}"></td>
+                    <td th:text="${item.difficulty}"></td>
+                    <td th:text="${item.date}"></td>
+                    <td th:text="${item.creator}"></td>
+                    <td><a href="">发布</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

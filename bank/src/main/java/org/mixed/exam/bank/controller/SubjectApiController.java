@@ -21,7 +21,7 @@ import java.util.List;
 
 @Controller
 @PreAuthorize("hasAnyRole('ROLE_adm,ROLE_tea2')")
-public class ApiController {
+public class SubjectApiController {
     @Autowired
     private SubjectDao subjectDao;
 
