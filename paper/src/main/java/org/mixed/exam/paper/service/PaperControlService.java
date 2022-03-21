@@ -31,6 +31,7 @@ public class PaperControlService {
     //预览
     public Paper showOne(String id){
         return paperDao.getOne(id);
+
     }
     //编辑
     public Paper edit(String id){
@@ -39,10 +40,19 @@ public class PaperControlService {
     //复制
     public void copy(String id){
         Paper p=paperDao.getOne(id);
+        Paper n=new Paper();
         String str=p.getForeWord();
         str="(副本)"+str;
-        p.setForeWord(str);
-        paperDao.savePaper(p);
+        n.setForeWord(str);
+        n.setCorrectCount(p.getCorrectCount());
+        n.setCourseID(p.getCourseID());
+        n.setCreator(p.getCreator());
+        n.setDate(p.getDate());
+        n.setDifficulty(p.getDifficulty());
+        n.setOpen(p.getOpen());
+        n.setRespondentCount(p.getRespondentCount());
+        n.setSubjectIDs(p.getSubjectIDs());
+        paperDao.savePaper(n);
     }
     //发布考试
     public int push(String id){
@@ -51,6 +61,7 @@ public class PaperControlService {
     //删除
     public void delete(String id){
         paperDao.deletePaper(id);
+        
     }
     //分配教师
     public int assign(String id){

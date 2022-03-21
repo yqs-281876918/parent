@@ -48,7 +48,7 @@ public class PaperDao {
     //删除试卷
     public void deletePaper(String id){
         Query query=new Query(Criteria.where("id").is(id));
-        mongoTemplate.remove(query, VariableOperators.Map.class,"paper");
+        mongoTemplate.remove(query, Paper.class,"paper");
     }
     //分配教师
     public int assign(String id){
