@@ -40,7 +40,7 @@
         var parm1={
             "id":txt
         }
-        jQuery.post("/paper/papercontrol/showOne",parm1,function (rst) {
+        jQuery.post("/bank/papercontrol/showOne",parm1,function (rst) {
             $("input[id=foreWord]").val(rst.foreWord);
             $("input[id=course]").val(rst.courseID);
             $("input[id=difficulty]").val(rst.difficulty);
@@ -107,7 +107,7 @@
             "open":open,
             "difficulty":form.difficulty
         }
-        jQuery.post("/paper/edit/getfrom",parm,function (rst) {
+        jQuery.post("/bank/edit/getfrom",parm,function (rst) {
             location.href="paper_control.html";
         })
     }

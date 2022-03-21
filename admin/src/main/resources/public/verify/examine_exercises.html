@@ -79,7 +79,7 @@
             "id":"6207b3a80875141b0f368672",
             "type":"singleChoiceQuestion"
         };
-        jQuery.post("/verify/examineExercises/repeatCheck",form,function (rst) {
+        jQuery.post("/admin/examineExercises/repeatCheck",form,function (rst) {
             var u=rst;
             alert(JSON.stringify(rst));
             if(rst==""){
@@ -98,7 +98,7 @@
             "id":"6207b3a80875141b0f368672",
             "type":"singleChoiceQuestion"
         };
-        jQuery.post("/verify/examineExercises/wordCheck",form,function (rst) {
+        jQuery.post("/admin/examineExercises/wordCheck",form,function (rst) {
             alert(rst);
             window.sessionStorage.setItem("WordCheck",rst);
             init();
@@ -116,7 +116,7 @@
                 "id":"6207b3a80875141b0f368672",
                 "type":"singleChoiceQuestion"
             }
-            jQuery.post("/verify/examineExercises/pass",parm,function (rst) {
+            jQuery.post("/admin/examineExercises/pass",parm,function (rst) {
                 alert(rst);
             })
         }else{

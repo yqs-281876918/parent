@@ -28,7 +28,7 @@
         var parm={
             "word":b
         };
-        jQuery.post("/verify/banWords/addWord",parm,function (rst) {
+        jQuery.post("/admin/banWords/addWord",parm,function (rst) {
             if(rst==1){
                 alert("状态："+rst+" 添加成功");
                 serchWord(b);
@@ -48,7 +48,7 @@
         var parm={
             "word":word
         };
-        jQuery.post("/verify/banWords/deleteWord",parm,function (rst) {
+        jQuery.post("/admin/banWords/deleteWord",parm,function (rst) {
             if(rst==1){
                 alert("状态："+rst+" 删除成功");
             }else if(rst==0){
@@ -67,7 +67,7 @@
         var parm={
             "word":b
         };
-        jQuery.get("/verify/banWords/serchWord",parm,function (rst) {
+        jQuery.get("/admin/banWords/serchWord",parm,function (rst) {
             alert(rst);
             var ar=rst;
             var sw="<div>";
@@ -90,7 +90,7 @@
             "id":id,
             "word":word
         }
-        jQuery.post("/verify/banWords/changeWord",parm2,function (rst) {
+        jQuery.post("/admin/banWords/changeWord",parm2,function (rst) {
             if(rst==1){
                 alert("状态："+rst+" 修改成功");
             }else if(rst==0){
