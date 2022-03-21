@@ -46,8 +46,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:1902/eureka
-security:
-  oauth2:
-    client:
-      client-id: all-client
-      client-secret: all-client-secret
+#security:
+#  oauth2:
+#    client:
+#      client-id: all-client
+#      client-secret: all-client-secret

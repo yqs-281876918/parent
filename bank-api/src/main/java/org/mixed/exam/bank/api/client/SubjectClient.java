@@ -31,15 +31,15 @@ public interface SubjectClient
     Integer passSubject(@RequestParam("id")String id,@RequestParam("type")String type);
 
     @ResponseBody
-    @GetMapping("api/subject/count")
+    @GetMapping("bank/api/subject/count")
     Integer getCountByType(@RequestParam("type") String type,@RequestParam("courseID") String courseID);
 
     @ResponseBody
-    @GetMapping("api/subject/typeList")
+    @GetMapping("bank/api/subject/typeList")
     List<String> getTypeList(@RequestParam("language")String language);
 
     @ResponseBody
-    @GetMapping("api/subjects")
+    @GetMapping("bank/api/subjects")
     List<SubjectJson> getSubjects(@RequestParam(value = "type",defaultValue = HttpUtil.NULL_STRING_VALUE)String type,
                                         @RequestParam(value = "open",defaultValue = HttpUtil.NULL_STRING_VALUE)String open,
                                         @RequestParam(value = "isExamined",defaultValue = HttpUtil.NULL_STRING_VALUE)String isExamined,

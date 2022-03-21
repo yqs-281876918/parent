@@ -9,6 +9,11 @@
 
 <body>
 
+<script>
+    function gotoReg() {
+        window.location='/login/reg';
+    }
+</script>
 <form class="style" action="sign_in" method="post">
     <div class="outer">
         <div class="title">
@@ -22,9 +27,10 @@
         </div>
         <div class="content" id="denglu">
             <input type="submit" class="big" name="submit" value="登陆" />
+            <input type="button" value="注册" onclick="gotoReg()">
         </div>
         <p class="reminder">
-            <input hidden="hidden" type="checkbox" name="remember-me" />一天之内免登录(暂时失效)
+            <input hidden="hidden" type="checkbox" name="remember-me" />(5小时内免登录)
         </p>
     </div>
 
