@@ -19,4 +19,4 @@ security:
     resource:
       jwt:
         key-uri: http://auth-service/oauth/token_key
-        key-value: Mixed2022.
+        key-value: OhxVMm5Fjr%S!fq^Ss%O9JcMmo&iHM@q0h&FacVE
