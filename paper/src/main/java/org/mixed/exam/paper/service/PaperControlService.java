@@ -61,7 +61,6 @@ public class PaperControlService {
     //删除
     public void delete(String id){
         paperDao.deletePaper(id);
-        
     }
     //分配教师
     public int assign(String id){

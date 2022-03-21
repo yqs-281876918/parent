@@ -7,25 +7,24 @@
 </head>
 <body onload="init()">
 <div name="container">
-    <form>
-        <div>简介：<input id="foreWord"></div>
+    <form id="paperform">
+
+        <div>简介：<input id="foreWord" name="foreWord"></div>
         <div>
             课程：
-            <input id="course" list="courselist">
-            <datalist id="courselist">
-            </datalist>
+            <input id="course" name="course">
         </div>
         题目：
-        <div id="question">
+        <div id="question" name="question">
 
         </div>
-        <div>难度：<input id="difficulty"></div>
+        <div>难度：<input id="difficulty" name="difficulty"></div>
         <div>
             开放：
             <input type="radio" id="open" name="open" value="true">是
             <input type="radio" id="close" name="open" value="false">否
         </div>
-        <div><input type="submit"></div>
+        <div id="subbutton"></div>
     </form>
 
 </div>
@@ -36,12 +35,14 @@
         var n1 = loc.length;
         var n2 = loc.indexOf('=');
         var txt = decodeURI(loc.substr(n2+1,n1-n2));
+        var t=`<button type="button" onclick="submitPaper('`+txt+`')">提交</button>`;
+        jQuery("#subbutton").html(t);
         var parm1={
             "id":txt
         }
         jQuery.post("/paper/papercontrol/showOne",parm1,function (rst) {
             $("input[id=foreWord]").val(rst.foreWord);
-            $("input[id=course]").val(rst.course);
+            $("input[id=course]").val(rst.courseID);
             $("input[id=difficulty]").val(rst.difficulty);
             var o=rst.open;
             if(o==true){
@@ -55,39 +56,62 @@
                 que=que+`<table>`;
                 for(var j=0;j<tmp[i].length;j++){
                     var parm={
-                        "id":tmp[i][j];
+                        "id":tmp[i][j]
                     };
-                    jQuery.post("/paper/papercontrol/getquestion",parm1,function (rst) {
-                        //题目显示
-                        que=que+`
+                    // jQuery.post("/paper/papercontrol/getquestion",parm1,function (rst) {
+                    //     //题目显示
+                    //     que=que+`
+                    //     <tr>
+                    //         <td></td>
+                    //     </tr>
+                    //     `;
+                    // })
+                    que=que+`
                         <tr>
-                            <td></td>
-                            <td></td>
+                            <td>'${tmp[i][j]}'</td>
                         </tr>
                         `;
-                    })
-
                 }
                 que=que+`</table>`;
             }
             jQuery("#question").html(que);
         })
-        jQuery.get("/bank/classify/findAllCourse",function (rst){
-            var trs = ''
-            var superId = rst[0].id;
-            for (var i=0;i<rst.length;i++){
-                var u = rst[i];
-                trs +=`
-                    <option value="${u.id}">${u.classifyName}</option>
-                `
-            }
-            $("#courselist").append(trs);
 
+    }
+</script>
+<script>
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
+    function submitPaper(id) {
+        var form=$('#paperform').serializeObject();
+        var open = $("input[name='open']:checked").val();
+        var parm={
+            "id":id,
+            "foreWord":form.foreWord,
+            "subjectIDs":form.question,
+            "courseID":form.course,
+            "open":open,
+            "difficulty":form.difficulty
+        }
+        jQuery.post("/paper/edit/getfrom",parm,function (rst) {
+            location.href="paper_control.html";
         })
     }
 </script>
-    <title>Title</title>
-</head>
 <body>
 
 </body>

@@ -25,13 +25,13 @@
             //alert("rstlength="+rst.length);
             for(var i=0;i<rst.length;i++){
                 var uu=rst[i];
-                sen=sen+`<table onclick="showpaper('${uu.id}')">
-                    <tr><td>'${uu.foreWord}'</td></tr>
-                    <tr><td>学科：'${uu.courseID}'</td><td><button onclick=\"copypaper('${uu.id}')\">复制</button></td></tr>
-                    <tr><td>开放：'${uu.open}'</td><td><button onclick=\"sealed('${uu.id}')\">封存</button></td></tr>
-                    <tr><td>难度：'${uu.difficulty}'</td><td><button onclick=\"deletepaper('${uu.id}')\">删除</button></td></tr>
-                    <tr><td>时间：'${uu.date}'</td><td><button onclick=\"pushpaper('${uu.id}')\">发布</button></td></tr>
-                    <tr><td>管理：'${uu.creator}'</td><td><button onclick=\"assign('${uu.id}')\">分配教师</button></td></tr>
+                sen=sen+`<table>
+                    <tr onclick="showpaper('${uu.id}')"><td>'${uu.foreWord}'</td></tr>
+                    <tr><td onclick="showpaper('${uu.id}')">学科：'${uu.courseID}'</td><td><button onclick=\"copypaper('${uu.id}')\">复制</button></td></tr>
+                    <tr><td onclick="showpaper('${uu.id}')">开放：'${uu.open}'</td><td><button onclick=\"sealed('${uu.id}')\">封存</button></td></tr>
+                    <tr><td onclick="showpaper('${uu.id}')">难度：'${uu.difficulty}'</td><td><button onclick=\"deletepaper('${uu.id}')\">删除</button></td></tr>
+                    <tr><td onclick="showpaper('${uu.id}')">时间：'${uu.date}'</td><td><button onclick=\"pushpaper('${uu.id}')\">发布</button></td></tr>
+                    <tr><td onclick="showpaper('${uu.id}')">管理：'${uu.creator}'</td><td><button onclick=\"assign('${uu.id}')\">分配教师</button></td></tr>
                     </table>`
             }
             //sen=sen+"</table>";
@@ -46,9 +46,8 @@
             "id":id
         }
         jQuery.post("/paper/papercontrol/sealed",parm,function (rst) {
-            alert(rst);
+            location.reload();
         })
-        location.reload(true);
     }
 </script>
 <script>
@@ -57,9 +56,9 @@
             "id":id
         }
         jQuery.post("/paper/papercontrol/copy",parm,function (rst) {
-            alert(rst);
+            location.reload();
         })
-        location.reload(true);
+
     }
 </script>
 <script>
@@ -69,6 +68,7 @@
         }
         jQuery.post("/paper/papercontrol/push",parm,function (rst) {
             alert(rst);
+            location.reload();
         })
     }
 </script>
@@ -78,9 +78,8 @@
             "id":id
         }
         jQuery.post("/paper/papercontrol/delete",parm,function (rst) {
-            alert(rst);
+            location.reload();
         })
-        location.reload(true);
     }
 </script>
 <script>
