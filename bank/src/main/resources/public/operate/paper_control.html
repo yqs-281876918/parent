@@ -20,7 +20,7 @@
         //var sen="<table>";
         var sen="";
         var parm={};
-        jQuery.post("/paper/papercontrol/getAll",parm,function (rst) {
+        jQuery.post("/bank/papercontrol/getAll",parm,function (rst) {
             var rst1=rst.list;
             //alert("rstlength="+rst.length);
             for(var i=0;i<rst.length;i++){
@@ -45,7 +45,7 @@
         var parm={
             "id":id
         }
-        jQuery.post("/paper/papercontrol/sealed",parm,function (rst) {
+        jQuery.post("/bank/papercontrol/sealed",parm,function (rst) {
             location.reload();
         })
     }
@@ -55,7 +55,7 @@
         var parm={
             "id":id
         }
-        jQuery.post("/paper/papercontrol/copy",parm,function (rst) {
+        jQuery.post("/bank/papercontrol/copy",parm,function (rst) {
             location.reload();
         })
 
@@ -66,7 +66,7 @@
         var parm={
             "id":id
         }
-        jQuery.post("/paper/papercontrol/push",parm,function (rst) {
+        jQuery.post("/bank/papercontrol/push",parm,function (rst) {
             alert(rst);
             location.reload();
         })
@@ -77,7 +77,7 @@
         var parm={
             "id":id
         }
-        jQuery.post("/paper/papercontrol/delete",parm,function (rst) {
+        jQuery.post("/bank/papercontrol/delete",parm,function (rst) {
             location.reload();
         })
     }
@@ -87,7 +87,7 @@
         var parm={
             "id":id
         }
-        jQuery.post("/paper/papercontrol/assign",parm,function (rst) {
+        jQuery.post("/bank/papercontrol/assign",parm,function (rst) {
             alert(rst);
         })
     }

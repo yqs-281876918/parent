@@ -54,7 +54,7 @@ public class InvitationCode {
 
     }
 
-    public static String genInviteCode(long id) {
+    public static String getInviteCode(long id) {
         int key = (int) (id % 36);
         char[] cs = new char[6];
         cs[0] = INDEX.charAt(key);

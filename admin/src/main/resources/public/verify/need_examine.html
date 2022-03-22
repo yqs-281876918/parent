@@ -70,7 +70,7 @@
 <script>
     function init() {
         var param = {};
-        jQuery.post("/verify/needExamine/findAll", param, function (rst) {
+        jQuery.post("/admin/needExamine/findAll", param, function (rst) {
             var arrs = rst.list;
             var trs = "";
             for (var i = 0; i < arrs.length; i++) {
@@ -135,7 +135,7 @@
         var param={
             "id":id
         };
-        jQuery.post("/verify/needExamine/findSubject",param,function (rst) {
+        jQuery.post("/admin/needExamine/findSubject",param,function (rst) {
             var ar = rst;
             var uu;
             for (var i = 0; i < 1; i++) {//ar.length
