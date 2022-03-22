@@ -8,4 +8,7 @@
     <select id="selectMaxCno" resultType="java.lang.Integer">
 
     </select>
+    <select id="getClasses" resultType="org.mixed.exam.teacher.pojo.po.Class">
+        select * from class where creator=#{creator}
+    </select>
 </mapper>

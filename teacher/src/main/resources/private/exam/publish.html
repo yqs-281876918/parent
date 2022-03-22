@@ -15,8 +15,8 @@
         const index = obj.selectedIndex;
         let classID = obj.options[index].value;
         let className = obj.text;
-        let option="<option value='{0}'>{1}</option>"
-        $('#class-list').append(option.format(classID,className));
+        let li="<li value='{0}'>{1}<button >-</button></li>"
+        $('#class-list').append(li.format(classID,className));
     }
 </script>
 <div class="container">
@@ -57,8 +57,8 @@
             <span>考试对象</span>
         </div>
         <div class="col-md-6">
-            <select th:each="" class="form-control course" onchange="addClass(this)">
-                <option th:each="" th:value=""></option>
+            <select class="form-control course" onchange="addClass(this)">
+                <option th:each="class,state : ${classes}" th:value="${class.cno}" th:text="${class.cname}"></option>
             </select>
         </div>
         <div class="col-md-12">

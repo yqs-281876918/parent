@@ -27,7 +27,6 @@ public class RouteController
     public String paper_list(Model model)
     {
         List<PaperItem> items = paperClient.items();
-        System.out.println(items);
         model.addAttribute("items",items);
         return "exam/paper_list.html";
     }
@@ -35,9 +34,11 @@ public class RouteController
     public String publish(Model model, @CookieValue("token")String jwt, @PathVariable("paperID")String paperID)
     {
         String teaName= AuthUtil.parseUsername(jwt);
-        List<Class> classes=null;
+        List<Class> classes=classMapper.getClasses(teaName);
         model.addAttribute("paperID",paperID);
         model.addAttribute("classes",classes);
+        System.out.println(classes);
+        System.out.println(paperID);
         return "exam/publish.html";
     }
 }
