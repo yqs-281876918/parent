@@ -1,318 +1,621 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>个人中心</title>
-    <link href="/teacher/assets/css/bootstrap.css" rel="stylesheet" />
-    <link href="/teacher/assets/css/font-awesome.css" rel="stylesheet" />
-    <link href="/teacher/assets/css/custom-styles.css" rel="stylesheet" />
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-</head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<body>
-<div id="wrapper">
-    <nav class="navbar navbar-default top-navbar" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand"><i class="fa fa-comments"></i> <strong>教师中心</strong></a>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Neon Admin Panel">
+    <meta name="author" content="">
+
+    <title>个人中心</title>
+
+
+    <link rel="stylesheet" href="/teacher/assets/css/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="/teacher/assets/css/entypo.css">
+    <link rel="stylesheet" href="/teacher/assets/css/css.css">
+    <link rel="stylesheet" href="/teacher/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/teacher/assets/css/neon-core.css">
+    <link rel="stylesheet" href="/teacher/assets/css/neon-theme.css">
+    <link rel="stylesheet" href="/teacher/assets/css/neon-forms.css">
+    <link rel="stylesheet" href="/teacher/assets/css/custom.css">
+
+    <script src="/teacher/assets/js/jquery-1.11.0.min.js"></script>
+
+    <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+<body class="page-body  page-fade gray" data-url="http://neon.dev">
+
+<div class="page-container"><!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+
+    <div class="sidebar-menu">
+
+
+        <header class="logo-env">
+
+            <!-- logo -->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="/teacher/assets/picture/logo@2x.png" width="120" alt="">
+                </a>
+            </div>
+
+            <!-- logo collapse icon -->
+
+            <div class="sidebar-collapse">
+                <a href="#" class="sidebar-collapse-icon with-animation"><!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+                    <i class="entypo-menu"></i>
+                </a>
+            </div>
+
+
+
+            <!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
+            <div class="sidebar-mobile-menu visible-xs">
+                <a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
+                    <i class="entypo-menu"></i>
+                </a>
+            </div>
+
+        </header>
+
+
+
+
+
+
+        <ul id="main-menu" class="">
+            <!-- add class "multiple-expanded" to allow multiple submenus to open -->
+            <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
+            <!-- Search Bar -->
+            <li id="search">
+                <form method="get" action="">
+                    <input type="text" name="q" class="search-input" placeholder="Search something...">
+                    <button type="submit">
+                        <i class="entypo-search"></i>
+                    </button>
+                </form>
+            </li>
+            <li>
+                <a href="/teacher/exam/paper_list" target="main">
+                    <i class="entypo-monitor"></i>
+                    <span>发布考试</span>
+                </a>
+            </li>
+            <li>
+                <a href="ui-panels.html">
+                    <i class="entypo-newspaper"></i>
+                    <span>UI Elements</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="ui-panels.html">
+                            <span>Panels</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-tiles.html">
+                            <span>Tiles</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-buttons.html">
+                            <span>Buttons</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-typography.html">
+                            <span>Typography</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-tabs-accordions.html">
+                            <span>Tabs &amp; Accordions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-tooltips-popovers.html">
+                            <span>Tooltips &amp; Popovers</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-navbars.html">
+                            <span>Navbars</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-breadcrumbs.html">
+                            <span>Breadcrumbs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-badges-labels.html">
+                            <span>Badges &amp; Labels</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-progress-bars.html">
+                            <span>Progress Bars</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-modals.html">
+                            <span>Modals</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-blockquotes.html">
+                            <span>Blockquotes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-alerts.html">
+                            <span>Alerts</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-pagination.html">
+                            <span>Pagination</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="mailbox.html">
+                    <i class="entypo-mail"></i>
+                    <span>Mailbox</span>
+                    <span class="badge badge-secondary">8</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="mailbox.html">
+                            <i class="entypo-inbox"></i>
+                            <span>Inbox</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailbox-compose.html">
+                            <i class="entypo-pencil"></i>
+                            <span>Compose Message</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mailbox-message.html">
+                            <i class="entypo-attach"></i>
+                            <span>View Message</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="forms-main.html">
+                    <i class="entypo-doc-text"></i>
+                    <span>Forms</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="forms-main.html">
+                            <span>Basic Elements</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-advanced.html">
+                            <span>Advanced Plugins</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-wizard.html">
+                            <span>Form Wizard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-validation.html">
+                            <span>Data Validation</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-masks.html">
+                            <span>Input Masks</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-sliders.html">
+                            <span>Sliders</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-file-upload.html">
+                            <span>File Upload</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-wysiwyg.html">
+                            <span>Editors</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="tables-main.html">
+                    <i class="entypo-window"></i>
+                    <span>Tables</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="tables-main.html">
+                            <span>Basic Tables</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tables-datatable.html">
+                            <span>Data Tables</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="extra-icons.html">
+                    <i class="entypo-bag"></i>
+                    <span>Extra</span>
+                    <span class="badge badge-info badge-roundless">New Items</span>
+                </a>
+                <ul>
+                    <li>
+                        <a href="extra-icons.html">
+                            <span>Icons</span>
+                            <span class="badge badge-success">3</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="extra-icons.html">
+                                    <span>Font Awesome</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="extra-icons-entypo.html">
+                                    <span>Entypo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="extra-icons-glyphicons.html">
+                                    <span>Glyph Icons</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="extra-portlets.html">
+                            <span>Portlets</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-google-maps.html">
+                            <span>Maps</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="extra-google-maps.html">
+                                    <span>Google Maps</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="extra-vector-maps.html">
+                                    <span>Vector Maps</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="extra-chat-api.html">
+                            <span>Chat API</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-calendar.html">
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-notes.html">
+                            <span>Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-lockscreen.html">
+                            <span>Lockscreen</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-login.html">
+                            <span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-register.html">
+                            <span>Register</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-invoice.html">
+                            <span>Invoice</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-members.html">
+                            <span>Members</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-gallery.html">
+                            <span>Gallery</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="extra-gallery.html">
+                                    <span>Albums</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="extra-gallery-single.html">
+                                    <span>Single Album</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="extra-profile.html">
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-404.html">
+                            <span>404 Page</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-blank-page.html">
+                            <span>Blank Page</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-timeline.html">
+                            <span>Timeline</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-comments.html">
+                            <span>Comments</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-timeline-centered.html">
+                            <span>Timeline Centered</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-tocify.html">
+                            <span>Tocify</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ui-notifications.html">
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-new-post.html">
+                            <span>New Post</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-settings.html">
+                            <span>Settings</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-scrollbox.html">
+                            <span>Scrollbox</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-image-crop.html">
+                            <span>Image Crop</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-search.html">
+                            <span>Search Page</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-language-selector.html">
+                            <span>Language Selector</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-nestable.html">
+                            <span>Nestable Lists</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-file-tree.html">
+                            <span>File Tree</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="extra-load-progress.html">
+                            <span>Load Progress</span>
+                            <span class="badge badge-secondary badge-roundless">New</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="charts.html">
+                    <i class="entypo-chart-bar"></i>
+                    <span>Charts</span>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+    <div class="main-content" style="height: 100%">
+        <iframe src="/teacher/exam/paper_list" name="main" height="700px" width="100%"></iframe>
+    </div>
+
+
+    <div id="chat" class="fixed" data-current-user="Art Ramadani" data-order-by-status="1" data-max-chat-history="25">
+
+        <div class="chat-inner">
+
+
+            <h2 class="chat-header">
+                <a href="#" class="chat-close" data-animate="1"><i class="entypo-cancel"></i></a>
+
+                <i class="entypo-users"></i>
+                Chat
+                <span class="badge badge-success is-hidden">0</span>
+            </h2>
+
+
+            <div class="chat-group" id="group-1">
+                <strong>Favorites</strong>
+
+                <a href="#" id="sample-user-123" data-conversation-history="#sample_history"><span class="user-status is-online"></span> <em>Catherine J. Watkins</em></a>
+                <a href="#"><span class="user-status is-online"></span> <em>Nicholas R. Walker</em></a>
+                <a href="#"><span class="user-status is-busy"></span> <em>Susan J. Best</em></a>
+                <a href="#"><span class="user-status is-offline"></span> <em>Brandon S. Young</em></a>
+                <a href="#"><span class="user-status is-idle"></span> <em>Fernando G. Olson</em></a>
+            </div>
+
+
+            <div class="chat-group" id="group-2">
+                <strong>Work</strong>
+
+                <a href="#"><span class="user-status is-offline"></span> <em>Robert J. Garcia</em></a>
+                <a href="#" data-conversation-history="#sample_history_2"><span class="user-status is-offline"></span> <em>Daniel A. Pena</em></a>
+                <a href="#"><span class="user-status is-busy"></span> <em>Rodrigo E. Lozano</em></a>
+            </div>
+
+
+            <div class="chat-group" id="group-3">
+                <strong>Social</strong>
+
+                <a href="#"><span class="user-status is-busy"></span> <em>Velma G. Pearson</em></a>
+                <a href="#"><span class="user-status is-offline"></span> <em>Margaret R. Dedmon</em></a>
+                <a href="#"><span class="user-status is-online"></span> <em>Kathleen M. Canales</em></a>
+                <a href="#"><span class="user-status is-offline"></span> <em>Tracy J. Rodriguez</em></a>
+            </div>
+
         </div>
 
-        <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-messages">
-                    <li>
-                        <a href="#">
-                            <div>
-                                <strong>John Doe</strong>
-                                <span class="pull-right text-muted">
-                                        <em>Today</em>
-                                    </span>
-                            </div>
-                            <div>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s...</div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <strong>John Smith</strong>
-                                <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                            </div>
-                            <div>Lorem Ipsum has been the industry's standard dummy text ever since an kwilnw...</div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <strong>John Smith</strong>
-                                <span class="pull-right text-muted">
-                                        <em>Yesterday</em>
-                                    </span>
-                            </div>
-                            <div>Lorem Ipsum has been the industry's standard dummy text ever since the...</div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a class="text-center" href="#">
-                            <strong>Read All Messages</strong>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-messages -->
-            </li>
-            <!-- /.dropdown -->
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-tasks">
-                    <li>
-                        <a href="#">
-                            <div>
-                                <p>
-                                    <strong>Task 1</strong>
-                                    <span class="pull-right text-muted">60% Complete</span>
-                                </p>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                        <span class="sr-only">60% Complete (success)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <p>
-                                    <strong>Task 2</strong>
-                                    <span class="pull-right text-muted">28% Complete</span>
-                                </p>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100" style="width: 28%">
-                                        <span class="sr-only">28% Complete</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <p>
-                                    <strong>Task 3</strong>
-                                    <span class="pull-right text-muted">60% Complete</span>
-                                </p>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-                                        <span class="sr-only">60% Complete (warning)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <p>
-                                    <strong>Task 4</strong>
-                                    <span class="pull-right text-muted">85% Complete</span>
-                                </p>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%">
-                                        <span class="sr-only">85% Complete (danger)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a class="text-center" href="#">
-                            <strong>See All Tasks</strong>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-tasks -->
-            </li>
-            <!-- /.dropdown -->
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-alerts">
-                    <li>
-                        <a href="#">
-                            <div>
-                                <i class="fa fa-comment fa-fw"></i> New Comment
-                                <span class="pull-right text-muted small">4 min</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                <span class="pull-right text-muted small">12 min</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                <span class="pull-right text-muted small">4 min</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <i class="fa fa-tasks fa-fw"></i> New Task
-                                <span class="pull-right text-muted small">4 min</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#">
-                            <div>
-                                <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                <span class="pull-right text-muted small">4 min</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a class="text-center" href="#">
-                            <strong>See All Alerts</strong>
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-alerts -->
-            </li>
-            <!-- /.dropdown -->
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                    </li>
-                </ul>
-                <!-- /.dropdown-user -->
-            </li>
-            <!-- /.dropdown -->
-        </ul>
-    </nav>
-    <!--/. NAV TOP  -->
-    <nav class="navbar-default navbar-side" role="navigation">
-        <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
-        <div class="sidebar-collapse">
-            <ul class="nav" id="main-menu">
-                <li>
-                    <a class="active-menu"><i class="fa fa-dashboard"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="/teacher/exam/publish" target="main"><i class="fa fa-desktop"></i>发布考试</a>
-                </li>
-                <li>
-                    <a href="chart.html"><i class="fa fa-bar-chart-o"></i> Charts</a>
-                </li>
-                <li>
-                    <a href="tab-panel.html"><i class="fa fa-qrcode"></i> Tabs & Panels</a>
-                </li>
+        <!-- conversation template -->
+        <div class="chat-conversation">
 
-                <li>
-                    <a href="table.html"><i class="fa fa-table"></i> Responsive Tables</a>
-                </li>
-                <li>
-                    <a href="form.html"><i class="fa fa-edit"></i> Forms </a>
-                </li>
+            <div class="conversation-header">
+                <a href="#" class="conversation-close"><i class="entypo-cancel"></i></a>
 
+                <span class="user-status"></span>
+                <span class="display-name"></span>
+                <small></small>
+            </div>
 
-                <li>
-                    <a href="#"><i class="fa fa-sitemap"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
-                        <li>
-                            <a href="#">Second Level Link</a>
-                        </li>
-                        <li>
-                            <a href="#">Second Level Link</a>
-                        </li>
-                        <li>
-                            <a href="#">Second Level Link<span class="fa arrow"></span></a>
-                            <ul class="nav nav-third-level">
-                                <li>
-                                    <a href="#">Third Level Link</a>
-                                </li>
-                                <li>
-                                    <a href="#">Third Level Link</a>
-                                </li>
-                                <li>
-                                    <a href="#">Third Level Link</a>
-                                </li>
-
-                            </ul>
-
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="empty.html" target="main"><i class="fa fa-fw fa-file"></i> Empty Page</a>
-                </li>
+            <ul class="conversation-body">
             </ul>
 
-        </div>
-
-    </nav>
-    <!-- /. NAV SIDE  -->
-    <div id="page-wrapper">
-        <div id="page-inner">
-            <div id="right">
-                <iframe src="/teacher/exam/publish"
-                        width="100%" height="100%"
-                        frameborder="no"
-                        name="main"></iframe>
+            <div class="chat-textarea">
+                <textarea class="form-control autogrow" placeholder="Type your message"></textarea>
             </div>
-        </div>
-        <!-- /. PAGE INNER  -->
-    </div>
-    <!-- /. PAGE WRAPPER  -->
-</div>
-<script src="/teacher/assets/js/jquery-1.10.2.js"></script>
-<script src="/teacher/assets/js/bootstrap.min.js"></script>
-<script src="/teacher/assets/js/jquery.metisMenu.js"></script>
-<script src="/teacher/assets/js/custom-scripts.js"></script>
-</body>
 
+        </div>
+
+    </div>
+
+
+    <!-- Chat Histories -->
+    <ul class="chat-history" id="sample_history">
+        <li>
+            <span class="user">Art Ramadani</span>
+            <p>Are you here?</p>
+            <span class="time">09:00</span>
+        </li>
+
+        <li class="opponent">
+            <span class="user">Catherine J. Watkins</span>
+            <p>This message is pre-queued.</p>
+            <span class="time">09:25</span>
+        </li>
+
+        <li class="opponent">
+            <span class="user">Catherine J. Watkins</span>
+            <p>Whohoo!</p>
+            <span class="time">09:26</span>
+        </li>
+
+        <li class="opponent unread">
+            <span class="user">Catherine J. Watkins</span>
+            <p>Do you like it?</p>
+            <span class="time">09:27</span>
+        </li>
+    </ul>
+
+
+
+
+    <!-- Chat Histories -->
+    <ul class="chat-history" id="sample_history_2">
+        <li class="opponent unread">
+            <span class="user">Daniel A. Pena</span>
+            <p>I am going out.</p>
+            <span class="time">08:21</span>
+        </li>
+
+        <li class="opponent unread">
+            <span class="user">Daniel A. Pena</span>
+            <p>Call me when you see this message.</p>
+            <span class="time">08:27</span>
+        </li>
+    </ul>
+</div>
+
+
+
+<link rel="stylesheet" href="/teacher/assets/css/jquery-jvectormap-1.2.2.css">
+<link rel="stylesheet" href="/teacher/assets/css/rickshaw.min.css">
+
+<!-- Bottom Scripts -->
+<script src="/teacher/assets/js/main-gsap.js"></script>
+<script src="/teacher/assets/js/jquery-ui-1.10.3.minimal.min.js"></script>
+<script src="/teacher/assets/js/bootstrap.js"></script>
+<script src="/teacher/assets/js/joinable.js"></script>
+<script src="/teacher/assets/js/resizeable.js"></script>
+<script src="/teacher/assets/js/neon-api.js"></script>
+<script src="/teacher/assets/js/jquery-jvectormap-1.2.2.min.js"></script>
+<script src="/teacher/assets/js/jquery-jvectormap-europe-merc-en.js"></script>
+<script src="/teacher/assets/js/jquery.sparkline.min.js"></script>
+<script src="/teacher/assets/js/d3.v3.js"></script>
+<script src="/teacher/assets/js/rickshaw.min.js"></script>
+<script src="/teacher/assets/js/raphael-min.js"></script>
+<script src="/teacher/assets/js/morris.min.js"></script>
+<script src="/teacher/assets/js/toastr.js"></script>
+<script src="/teacher/assets/js/fullcalendar.min.js"></script>
+<script src="/teacher/assets/js/neon-chat.js"></script>
+<script src="/teacher/assets/js/neon-custom.js"></script>
+<script src="/teacher/assets/js/neon-demo.js"></script>
+
+</body>
 </html>

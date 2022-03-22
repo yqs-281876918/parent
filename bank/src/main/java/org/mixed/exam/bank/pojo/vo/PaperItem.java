@@ -17,9 +17,9 @@ public class PaperItem
     public PaperItem(Paper paper)
     {
         this.id=paper.getId();
-        this.foreWord=this.getForeWord();
-        this.difficulty=this.getDifficulty();
-        this.date=this.getDate();
-        this.creator=this.getCreator();
+        this.foreWord=paper.getForeWord();
+        this.difficulty=paper.getDifficulty();
+        this.date=paper.getDate();
+        this.creator=paper.getCreator();
     }
 }

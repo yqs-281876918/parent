@@ -6,34 +6,71 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/teacher/assets/js/format.js"></script>
 </head>
 <body>
+<script>
+    function addClass (obj){}
+    {
+        const index = obj.selectedIndex;
+        let classID = obj.options[index].value;
+        let className = obj.text;
+        let option="<option value='{0}'>{1}</option>"
+        $('#class-list').append(option.format(classID,className));
+    }
+</script>
 <div class="container">
     <div class="row">
+        <div class="col-md-6">
+            <span>开始时间</span>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="xxxx-xx-xx xx:xx:xx">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span>答题时长</span>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="单位:分钟">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span>迟到时间</span>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="开考多久关闭进入 单位:分钟">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span>限时提交</span>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="允许提前多久提交试卷 单位:分钟">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <span>考试对象</span>
+        </div>
+        <div class="col-md-6">
+            <select th:each="" class="form-control course" onchange="addClass(this)">
+                <option th:each="" th:value=""></option>
+            </select>
+        </div>
         <div class="col-md-12">
-            <table class="table table-striped">
-                <caption>试卷列表</caption>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>前言</th>
-                    <th>难度</th>
-                    <th>创建时间</th>
-                    <th>创建人</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="item,itemStat : ${items}">
-                    <td th:text="${item.id}"></td>
-                    <td th:text="${item.foreWord}"></td>
-                    <td th:text="${item.difficulty}"></td>
-                    <td th:text="${item.date}"></td>
-                    <td th:text="${item.creator}"></td>
-                    <td><a href="">发布</a></td>
-                </tr>
-                </tbody>
-            </table>
+            <ul class="list-group" id="class-list">
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11">
+        </div>
+        <div class="col-md-1">
+            <button class="btn-success"><a href="/teacher/exam/paper_list" target="_self">返回</a></button>
         </div>
     </div>
 </div>

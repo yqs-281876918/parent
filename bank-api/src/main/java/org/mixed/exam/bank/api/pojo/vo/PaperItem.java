@@ -1,11 +1,13 @@
 package org.mixed.exam.bank.api.pojo.vo;
 
 import lombok.Data;
+import lombok.ToString;
 import org.mixed.exam.bank.api.pojo.po.Paper;
 
 import java.util.Date;
 
 @Data
+@ToString
 public class PaperItem
 {
     private String id;
@@ -17,9 +19,9 @@ public class PaperItem
     public PaperItem(Paper paper)
     {
         this.id=paper.getId();
-        this.foreWord=this.getForeWord();
-        this.difficulty=this.getDifficulty();
-        this.date=this.getDate();
-        this.creator=this.getCreator();
+        this.foreWord=paper.getForeWord();
+        this.difficulty=paper.getDifficulty();
+        this.date=paper.getDate();
+        this.creator=paper.getCreator();
     }
 }
