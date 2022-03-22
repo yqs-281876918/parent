@@ -13,7 +13,7 @@ eureka:
       defaultZone: http://127.0.0.1:1902/eureka
 
 my:
-  sign-key: Mixed2022.
+  sign-key: OhxVMm5Fjr%S!fq^Ss%O9JcMmo&iHM@q0h&FacVE
 
 server:
   port: 1901

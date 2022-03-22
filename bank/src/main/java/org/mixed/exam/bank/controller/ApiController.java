@@ -4,6 +4,7 @@ import org.mixed.exam.bank.dao.SubjectDao;
 import org.mixed.exam.bank.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.pojo.vo.SubjectItem;
+import org.mixed.exam.bank.service.QuerySubjectService;
 import org.mixed.exam.bank.service.SubjectItemService;
 import org.mixed.exam.bank.util.HttpUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
@@ -24,6 +25,8 @@ public class ApiController {
     @Autowired
     private SubjectDao subjectDao;
 
+    @Autowired
+    private QuerySubjectService querySubjectService;
     @ResponseBody
     @GetMapping("api/subjects/type")
     public List<SubjectJson> subjects(@RequestParam("type") String type) {
@@ -97,7 +100,7 @@ public class ApiController {
         String _class2ndID = class2ndID.equals(HttpUtil.NULL_STRING_VALUE) ?null:class2ndID;
         String _creator = creator.equals(HttpUtil.NULL_STRING_VALUE) ?null:creator;
         return SubjectUtil.subjects2Json2(
-                subjectDao.getSubjects(_type,_open,_isExamined,_difficulty,_courseID,_class2ndID,_creator));
+                querySubjectService.getSubjects(_type,_open,_isExamined,_difficulty,_courseID,_class2ndID,_creator));
         //return SubjectUtil.subjects2Json2(subjectDao.getSubject(courseID));
     }
 }

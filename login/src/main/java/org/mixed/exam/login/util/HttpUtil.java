@@ -6,6 +6,8 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,5 +54,19 @@ public class HttpUtil
             }
         }
         return "redirect:http://"+hostPort+"/"+path;
+    }
+    public static Cookie getCookie(HttpServletRequest request,String name)
+    {
+        Cookie[] cookies = request.getCookies();
+        Cookie cookie = null;
+        for(int i=0;i<cookies.length;i++)
+        {
+            if(cookies[i].getName().equals(name))
+            {
+                cookie = cookies[i];
+                break;
+            }
+        }
+        return cookie;
     }
 }
