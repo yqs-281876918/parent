@@ -6,7 +6,7 @@
         VALUES (#{cname},#{invitation},#{creator});
     </insert>
     <select id="selectMaxCno" resultType="java.lang.Integer">
-
+        select max(cno) from class
     </select>
     <select id="getClasses" resultType="org.mixed.exam.teacher.pojo.po.Class">
         select * from class where creator=#{creator}

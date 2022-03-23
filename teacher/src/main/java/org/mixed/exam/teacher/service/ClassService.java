@@ -13,4 +13,8 @@ public class ClassService {
     public int addClass(Class clazz){
         return classMapper.addClass(clazz);
     }
+    //找到最大的班级id
+    public int selectMaxCno(){
+        return classMapper.selectMaxCno();
+    }
 }
