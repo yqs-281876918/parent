@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 public class ClassController {
@@ -41,4 +42,17 @@ public class ClassController {
         }
     }
     //展示班级列表
+    @RequestMapping("/class/getAllClass")
+    public List<Class> getAllClass(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        String creator = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String jwt = cookie.getValue();
+                String userName = AuthUtil.parseUsername(jwt);
+                creator = userName;
+            }
+        }
+        return classService.getAllClass(creator);
+    }
 }

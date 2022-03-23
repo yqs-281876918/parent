@@ -67,9 +67,47 @@
 </div>
 <!-- 添加成功模态框结束 -->
 <button type="button" class="btn btn-success" onclick="showAddClassDialog()">添加新的班级</button>
+<!--<div class="card">-->
+<!--    <div class="card-header">-->
+<!--        Featured-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--        <h5 class="card-title">Special title treatment</h5>-->
+<!--        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
+<!--        <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--    </div>-->
+<!--</div>-->
+<div id="container">
+
+</div>
 
 
-
+<script>
+    function init(){
+        jQuery.post("/teacher/class/getAllClass",function (rst){
+            var trs='';
+            for (var i=0;i<rst.length;i++){
+                var u = rst[i];
+                trs = `
+<div class="card">
+    <div class="card-header">
+        <input type="hidden" value="${u.cno}">
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">${u.cname}</h5>
+        <p class="card-text">班级邀请码：${u.invitation}</p>
+        <a href="#" class="btn btn-primary">班级详情</a>
+    </div>
+</div>
+`
+                $("#container").val(trs);
+            }
+        })
+    }
+    jQuery(function (){
+        init();
+    })
+</script>
 <script>
     function showAddClassDialog(){
         jQuery("#addClassDialog").modal('show');
