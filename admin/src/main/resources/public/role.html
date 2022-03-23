@@ -51,7 +51,9 @@
 <body>
 <div id="container">
     <div id="top">
-        <button type="button" class="btn btn-danger btn-lg">删除</button>
+        <button type="button"
+                class="btn btn-outline-warning btn-danger"
+                onclick="showDeleteDialog()">删除</button>
     </div>
     <div id="middle">
         <form id="Form">
@@ -62,7 +64,7 @@
                         <input type="checkbox" id="chAll"
                                 onclick="selectAll(this.checked)">
                     </td>
-                    <td >用户ID</td>
+                    <td >用户名</td>
                     <td >用户真实名称</td>
                     <td >用户角色</td>
                     <td >管理员操作</td>
