@@ -18,11 +18,13 @@ public class ClassController {
 //    private InvitationCode invitationCode;
     @Autowired
     private ClassService classService;
-
+    //添加班级
     @RequestMapping("/class/addClass")
     public String addClass(Class clazz,
                         HttpServletRequest request){
-        String invitation = InvitationCode.getInviteCode(clazz.getCno());
+        long cno = classService.selectMaxCno()+1;
+        clazz.setCno(cno);
+        String invitation = InvitationCode.getInviteCode(cno);
         clazz.setInvitation(invitation);
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
@@ -38,4 +40,5 @@ public class ClassController {
             return null;
         }
     }
+    //展示班级列表
 }
