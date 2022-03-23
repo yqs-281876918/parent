@@ -1,11 +1,13 @@
 package org.mixed.exam.admin;
 
 import org.mixed.exam.bank.api.client.SubjectClient;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@MapperScan(value = "org.mixed.exam.admin.mapper")
 @EnableFeignClients(clients = {SubjectClient.class})
 public class AdminApplication {
 

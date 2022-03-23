@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>role</title>
+    <!-- 新 Bootstrap4 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style type="text/css">
+        #top{
+            padding: 10px 20px 10px 20px;
+            text-align: right;
+        }
+        #page_div #left{
+            float:left;
+        }
+        #page_div #right{
+            float:right;
+        }
+    </style>
+</head>
+<!-- 删除的提示框 -->
+<div class="modal" id="delMulDialog" tabindex="-1">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-warning" role="alert">
+                您确定要删除选中项吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doDeleteMul()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 批量删除模态框结束 -->
+<body>
+<div id="container">
+    <div id="top">
+        <button type="button" class="btn btn-danger btn-lg">删除</button>
+    </div>
+    <div id="middle">
+        <form id="Form">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <td>
+                        <input type="checkbox" id="chAll"
+                                onclick="selectAll(this.checked)">
+                    </td>
+                    <td >用户ID</td>
+                    <td >用户真实名称</td>
+                    <td >用户角色</td>
+                    <td >管理员操作</td>
+                </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <div id="page_div">
+                            <div id="left">
+                                <span id="pageNum"></span>/<span id="pages"></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span id="total"></span>
+                            </div>
+                            <div id="right">
+                                <ul class="pagination">
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">上一页</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="#" class="page-link">下一页</a>
+                                    </li>
+                                    <li class="page-item active">
+
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </td>
+                </tr>
+                </tfoot>
+
+            </table>
+
+        </form>
+
+    </div>
+
+</div>
+<script>
+    function selectAll(f) {
+        //找页面控件名为input的并且name=users的控制
+        //设置控件的属性 checked=f
+        jQuery("input[name='users']").prop("checked",f);
+    }
+</script>
+<!--showDeleteDialog-->
+<script>
+
+    function showDeleteDialog() {
+        var arrs=jQuery("input[name='users']:checked").length;
+        if(arrs>0){
+            jQuery("#delMulDialog").modal('show');
+        }else{
+            alert("您还未选择所要删除的用户");
+        }
+
+    }
+
+</script>
+<script>
+    var pageNum=1;//当前页
+    var pageSize=10;//每页条数
+    var pages=0;//总页数
+    function init() {
+        var param={
+            "pageNum":pageNum,
+            "pageSize":pageSize,
+            "userName":window.sessionStorage.getItem("username")
+        };
+        jQuery.post("Role/findAll",param,function (rst) {
+            pageNums=rst.pages;
+            jQuery("#pages").html(pageNums);
+            jQuery("#pageNum").html(pageNum);
+            jQuery("#totalnum").html(rst.total);
+            //1、查询查询的数据
+            var arrs=rst.list;
+            var trs="";
+            for(var i=0;i<arrs.length;i++) {
+
+                //获取每一行对应的用户对象
+                var u=arrs[i];
+                //循环一次一行数据
+                //使用反引号,用于定义模板
+
+                trs+=`
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="users" value="${u.username}">
+                        </td>
+                        <td onclick="gotorole('${u.username}')">${u.realName}</td>
+                        <td onclick="gotorole('${u.username}')">${u.role}</td>
+                        <td>
+                            <a href="#">删除</a>
+                            <a href="#">编辑</a>
+                        </td>
+                    </tr>
+                    `;
+            }
+            //把根据数据构建的行添加到表格
+            jQuery("#data").html(trs);
+
+            var nums=rst.navigatepageNums;
+            var nav=`
+        <ul class="pagination">
+                             <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum-1})">上一页</a>
+                                </li>
+                                `;
+            for(var i=0;i<nums.length;i++){
+                nav+=`
+            <li class="page-item ${pageNum==nums[i]?'active':''}">
+                                    <a href="#" class="page-link">${nums[i]}</a>
+                                </li>
+
+            `;
+            }
+
+            nav+=`
+                                <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum+1})">下一页</a>
+                                </li>
+                            </ul>
+        `;
+            jQuery("#right").html(nav);
+
+        })
+        jQuery(function () {
+            init();
+        })
+    }
+
+
+</script>
+<!--判断页面是否越界-->
+<script>
+
+    function pageUtil(num) {
+        if(num<=1){
+            num=1;
+        }
+        if(num>=pageNums){
+            num=pageNums;
+        }
+        pageNum=num;
+        init();
+    }
+
+</script>
+
+<script>
+    function doDeleteMul() {
+        jQuery("#delMulDialog").modal('hide');
+        //获取选择的复选框中的值
+        var form=jQuery("#Form").serialize();
+        jQuery.post("Role/updateMul",form,function (rst) {
+            if(rst>0)
+            {
+                alert("删除成功!");
+                pageNum=1;
+                init();
+            }else{
+                alert("删除失败!");
+            }
+        })
+    }
+
+</script>
+
+<script>
+    function gotorole(username){
+        var param={
+            "username":username
+        };
+        //向后台发送请求ajax
+        jQuery.post("Role/findAll",param,function(rst){
+            var ar=rst;
+            var uu;
+
+            for(var i=0;i<1;i++){
+                uu=ar[i];
+                var realName=uu.realName;
+                var role=uu.role;
+                var param2={"username":username,"realName":realName,"role":role};
+                window.sessionStorage.setItem("username",param2.username);
+                window.sessionStorage.setItem("realName",param2.realName);
+                window.sessionStorage.setItem("role",param2.role);
+            }
+        })
+    }
+</script>
+</body>
+</html>
