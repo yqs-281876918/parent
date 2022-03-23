@@ -18,8 +18,6 @@
         <module>login</module>
         <module>registry</module>
         <module>test</module>
-        <module>verify</module>
-		<module>paper</module>
         <module>student</module>
         <module>admin</module>
         <module>teacher</module>

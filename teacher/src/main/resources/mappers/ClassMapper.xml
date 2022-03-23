@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mixed.exam.teacher.dao.ClassMapper">
+    <insert id="addClass" parameterType="org.mixed.exam.teacher.pojo.po.Class">
+        insert into class (cname, invitation, creator)
+        VALUES (#{cname},#{invitation},#{creator});
+    </insert>
+    <select id="selectMaxCno" resultType="java.lang.Integer">
+        select max(cno) from class
+    </select>
+    <select id="getClasses" resultType="org.mixed.exam.teacher.pojo.po.Class">
+        select * from class where creator=#{creator}
+    </select>
+</mapper>

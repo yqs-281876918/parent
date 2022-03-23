@@ -3,6 +3,7 @@ package org.mixed.exam.gateway.filter;
 import com.netflix.ribbon.proxy.annotation.Http;
 import io.jsonwebtoken.Jwts;
 import io.netty.handler.codec.http.HttpUtil;
+import org.mixed.exam.auth.api.AuthUtil;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -20,7 +21,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Set;
 
-@Order(-2)
 @Component
 public class TokenFilter implements GlobalFilter {
     @Override
@@ -50,18 +50,19 @@ public class TokenFilter implements GlobalFilter {
         if(tokenCookie != null)
         {
             HttpCookie finalTokenCookie = tokenCookie;
-            ServerHttpRequest shr= exchange.getRequest().mutate().headers(httpHeaders -> {
-                httpHeaders.add("Authorization","bearer "+ finalTokenCookie.getValue());
-            }).build();
-            return chain.filter(exchange.mutate().request(shr).build());
+            String jwt=finalTokenCookie.getValue();
+            if(!AuthUtil.checkIsExp(jwt))
+            {
+                ServerHttpRequest shr= exchange.getRequest().mutate().headers(httpHeaders -> {
+                    httpHeaders.add("Authorization","bearer "+ jwt);
+                }).build();
+                return chain.filter(exchange.mutate().request(shr).build());
+            }
         }
-        else
-        {
-            //重定向
-            ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(HttpStatus.SEE_OTHER);
-            response.getHeaders().set(HttpHeaders.LOCATION, "/login/login.html");
-            return response.setComplete();
-        }
+        //重定向
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.SEE_OTHER);
+        response.getHeaders().set(HttpHeaders.LOCATION, "/login/sign_in");
+        return response.setComplete();
     }
 }

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷编辑</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body onload="init()">
+<div name="container">
+    <form id="paperform">
+
+        <div>简介：<input id="foreWord" name="foreWord"></div>
+        <div>
+            课程：
+            <input id="course" name="course">
+        </div>
+        题目：
+        <div id="question" name="question">
+
+        </div>
+        <div>难度：<input id="difficulty" name="difficulty"></div>
+        <div>
+            开放：
+            <input type="radio" id="open" name="open" value="true">是
+            <input type="radio" id="close" name="open" value="false">否
+        </div>
+        <div id="subbutton"></div>
+    </form>
+
+</div>
+</body>
+<script>
+    function init(){
+        var loc=location.href;
+        var n1 = loc.length;
+        var n2 = loc.indexOf('=');
+        var txt = decodeURI(loc.substr(n2+1,n1-n2));
+        var t=`<button type="button" onclick="submitPaper('`+txt+`')">提交</button>`;
+        jQuery("#subbutton").html(t);
+        var parm1={
+            "id":txt
+        }
+        jQuery.post("/bank/papercontrol/showOne",parm1,function (rst) {
+            $("input[id=foreWord]").val(rst.foreWord);
+            $("input[id=course]").val(rst.courseID);
+            $("input[id=difficulty]").val(rst.difficulty);
+            var o=rst.open;
+            if(o==true){
+                $("input[id=open]").attr("checked",true);
+            }else{
+                $("input[id=close]").attr("checked",true);
+            }
+            var que="";
+            var tmp=rst.subjectIDs;
+            for(var i=0;i<tmp.length;i++){
+                que=que+`<table>`;
+                for(var j=0;j<tmp[i].length;j++){
+                    var parm={
+                        "id":tmp[i][j]
+                    };
+                    // jQuery.post("/paper/papercontrol/getquestion",parm1,function (rst) {
+                    //     //题目显示
+                    //     que=que+`
+                    //     <tr>
+                    //         <td></td>
+                    //     </tr>
+                    //     `;
+                    // })
+                    que=que+`
+                        <tr>
+                            <td>'${tmp[i][j]}'</td>
+                        </tr>
+                        `;
+                }
+                que=que+`</table>`;
+            }
+            jQuery("#question").html(que);
+        })
+
+    }
+</script>
+<script>
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
+    function submitPaper(id) {
+        var form=$('#paperform').serializeObject();
+        var open = $("input[name='open']:checked").val();
+        var parm={
+            "id":id,
+            "foreWord":form.foreWord,
+            "subjectIDs":form.question,
+            "courseID":form.course,
+            "open":open,
+            "difficulty":form.difficulty
+        }
+        jQuery.post("/bank/edit/getfrom",parm,function (rst) {
+            location.href="paper_control.html";
+        })
+    }
+</script>
+<body>
+
+</body>
+</html>

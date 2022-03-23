@@ -150,6 +150,11 @@ class ChineseWriting
         return q;
     }
 }
+class AncientAppreciation
+{
+    private String[] creators=new String[]{"yqs","qlh","yk","zyn","zhx"};
+
+}
 //private String id;//题目主键id
 //private Boolean isExamined=false;//是否审核通过
 //private Boolean open=true;//题目是否开放
