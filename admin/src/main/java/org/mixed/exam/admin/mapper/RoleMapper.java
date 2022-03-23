@@ -5,12 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Mapper
 public interface RoleMapper {
     //查找
     List<users> findAll(String user);
     //删除
     int updateMul(String[] users);
+
 
 
 

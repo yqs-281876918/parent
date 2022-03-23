@@ -20,6 +20,8 @@ public class RoleService {
         PageHelper.startPage(pageNum,pageSize);
         //查询需要的数据
         List<users> users= rolemapper.findAll(user);
+        //users表示页面中呈现的数据
+        //4表示页码个数
         page=new PageInfo<>(users,4);
         return page;
     }

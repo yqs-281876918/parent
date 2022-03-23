@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@MapperScan(value = "org.mixed.exam.admin.mapper")
 @EnableFeignClients(clients = {SubjectClient.class})
 public class AdminApplication {
 

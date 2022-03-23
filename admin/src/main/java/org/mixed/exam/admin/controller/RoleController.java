@@ -17,7 +17,7 @@ public class RoleController {
 
     @RequestMapping("/findAll")
     public PageInfo<users> findAll(int pageNum, int pageSize, HttpServletRequest request){
-        String user=request.getParameter("username");
+        String user=request.getParameter("userName");
         PageInfo<users> page=null;
         page=roleService.findAll(pageNum,pageSize,user);
         return page;
