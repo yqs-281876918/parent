@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的测试</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <caption>试卷列表</caption>
+                <thead>
+                <tr>
+                    <th>开始时间</th>
+                    <th>测试时长</th>
+                    <th>允许迟到时间</th>
+                    <th>测试说明</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item,status : ${exams}">
+                    <td th:text="${item.startTime}"></td>
+                    <td th:text="${item.testTime}"></td>
+                    <td th:text="${item.lateTime}"></td>
+                    <td th:text="${item.introduce}"></td>
+                    <td><a th:href="@{'stuExam?id='+${item.id}}">加入测试</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

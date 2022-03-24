@@ -47,4 +47,7 @@ public interface SubjectClient
                                         @RequestParam(value = "courseID",defaultValue = HttpUtil.NULL_STRING_VALUE)String courseID,
                                         @RequestParam(value = "class2ndID",defaultValue = HttpUtil.NULL_STRING_VALUE)String class2ndID,
                                         @RequestParam(value = "creator",defaultValue = HttpUtil.NULL_STRING_VALUE)String creator);
+    @ResponseBody
+    @GetMapping("bank/subject/json")
+    String getSubjectByID(@RequestParam("id") String id);
 }

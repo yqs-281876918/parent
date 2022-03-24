@@ -60,10 +60,14 @@ public class LoginController
         }
         List<String> authorities = AuthUtil.parseAuthorities(token);
         String authority=authorities.get(0);
+        String userName=AuthUtil.parseUsername(token);
         switch (authority)
         {
             case "ROLE_adm":
                 return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/admin/index.html");
+            case "ROLE_tea1":
+            case "ROLE_tea2":
+                return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/teacher/personal/"+userName);
             default:
                 return "";
         }

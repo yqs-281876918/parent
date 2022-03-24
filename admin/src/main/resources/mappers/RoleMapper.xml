@@ -6,13 +6,12 @@
 
     </update>
 
-    <select id="findAll"
+    <select id="findAll" parameterType="String"
             resultType="org.mixed.exam.admin.pojo.dto.usersDto">
-
         SELECT
-            users.username,users.realName,users.role
+            username,realName,role
         from users
         WHERE username=#{0}
-        order by time desc
+
     </select>
 </mapper>

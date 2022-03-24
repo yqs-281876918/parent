@@ -13,4 +13,5 @@ public class Exam
     private Integer submitTime;
     private String classID;
     private String[] antiSettings;
+    private String introduce;
 }
