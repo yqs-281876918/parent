@@ -4,17 +4,17 @@ import org.mixed.exam.admin.pojo.po.users;
 
 public class usersDto extends users {
     private String username;
-    private String RealName;
+    private String realName;
     private String role;
 
 
     public String getRealName() {
-        return RealName;
+        return realName;
     }
 
 
     public void setRealName(String realName) {
-        RealName = realName;
+        this.realName = realName;
     }
 
 
