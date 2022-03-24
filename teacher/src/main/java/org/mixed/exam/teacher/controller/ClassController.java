@@ -55,4 +55,9 @@ public class ClassController {
         }
         return classService.getAllClass(creator);
     }
+    //删除班级
+    @RequestMapping("/class/deleteClass")
+    public int deleteClass(Long cno){
+        return classService.deleteClass(cno);
+    }
 }

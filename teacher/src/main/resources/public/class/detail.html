@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>我的班级</title>
+    <style>
+        #delete{
+            padding: 10px 20px;
+            text-align: right;
+            float: right;
+        }
+    </style>
 </head>
 <body>
 <!-- 新 Bootstrap4 核心 CSS 文件 -->
@@ -66,21 +73,35 @@
     </div>
 </div>
 <!-- 添加成功模态框结束 -->
+<!-- 删除班级的提示框 -->
+<div class="modal fade" id="deleteClassDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">删除提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteCno" value="">
+                <p>您确定要删除班级【<span id="class"></span>】吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doDeleteClass()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除班级模态框结束 -->
+<!-- 主界面内容 -->
 <button type="button" class="btn btn-success" onclick="showAddClassDialog()">添加新的班级</button>
-<!--<div class="card">-->
-<!--    <div class="card-header">-->
-<!--        Featured-->
-<!--    </div>-->
-<!--    <div class="card-body">-->
-<!--        <h5 class="card-title">Special title treatment</h5>-->
-<!--        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
-<!--        <a href="#" class="btn btn-primary">Go somewhere</a>-->
-<!--    </div>-->
-<!--</div>-->
 <div id="container">
 
 </div>
-
 
 <script>
     function init(){
@@ -88,13 +109,19 @@
             var trs='';
             for (var i=0;i<rst.length;i++){
                 var u = rst[i];
+                console.log(u)
                 trs = `
 <div class="card">
     <div class="card-header">
         <input type="hidden" value="${u.cno}">
     </div>
     <div class="card-body">
-        <h5 class="card-title">${u.cname}</h5>
+        <div style="display: inline-block">
+            <h5 class="card-title">${u.cname}</h5>
+        </div>
+        <div id="delete" style="display: inline-block">
+            <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">删除班级</a>
+        </div>
         <p class="card-text">班级邀请码：${u.invitation}</p>
         <a href="#" class="btn btn-primary">班级详情</a>
     </div>
@@ -109,6 +136,7 @@
     })
 </script>
 <script>
+    //添加班级
     function showAddClassDialog(){
         jQuery("#addClassDialog").modal('show');
     }
@@ -123,6 +151,29 @@
                 jQuery("#addSuccessDialog").modal('show');
             }else{
                 alert('添加失败!')
+            }
+        })
+    }
+</script>
+<script>
+    //删除班级
+    var deleteCno;
+    function showDeleteClassDialog(cno,cname){
+        console.log(cno)
+        console.log(cname)
+        jQuery("#class").html(cname)
+        jQuery("#deleteCno").html(cno)
+        deleteCno =cno
+        jQuery("#deleteClassDialog").modal('show');
+    }
+    function doDeleteClass(){
+        console.log(deleteCno)
+        jQuery("#deleteClassDialog").modal('hide')
+        jQuery.post("/teacher/class/deleteClass",{'cno':deleteCno},function (rst){
+            if (rst>0){
+                alert("删除成功！")
+            }else{
+                alert("删除失败！")
             }
         })
     }
