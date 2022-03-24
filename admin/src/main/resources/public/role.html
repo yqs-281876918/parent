@@ -105,17 +105,7 @@
                                 共<span id="totalnum"></span>条
                             </div>
                             <div id="right">
-                                <ul class="pagination">
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">上一页</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">下一页</a>
-                                    </li>
-                                    <li class="page-item active">
 
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </td>
@@ -141,7 +131,7 @@
         var param={
             "pageNum":pageNum,
             "pageSize":pageSize,
-            //"username":window.sessionStorage.getItem("username")
+            "username":window.sessionStorage.getItem("username")
         };
         jQuery.post("/admin/Role/findAll",param,function (rst) {
             pageNums=rst.pages;
@@ -164,8 +154,8 @@
                         <td>
                             <input type="checkbox" name="users" value="${u.username}">
                         </td>
-                        <td>${u.realName}</td>
-                        <td>${u.role}</td>
+                        <td onclick="gotorole('${u.username}')">${u.realName}</td>
+                        <td onclick="gotorole('${u.username}'))">${u.role}</td>
                         <td>
                             <a href="#">删除</a>
                             <a href="#">编辑</a>
@@ -285,9 +275,5 @@
     }
 
 </script>
-
-
-
-
 </body>
 </html>
