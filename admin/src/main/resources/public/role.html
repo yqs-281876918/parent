@@ -114,7 +114,6 @@
                                     </li>
                                     <li class="page-item active">
 
-
                                     </li>
                                 </ul>
                             </div>
@@ -149,20 +148,21 @@
 
 </script>
 <script>
-    var pageNum=1;//当前页
-    var pageSize=10;//每页条数
-    var pages=0;//总页数
+    var pageNum=1;
+    var pageSize=10;
+    var pageNums=0;
     function init() {
         var param={
             "pageNum":pageNum,
             "pageSize":pageSize,
-            "userName":window.sessionStorage.getItem("userName")
+            "username":window.sessionStorage.getItem("username")
         };
-        jQuery.post("Role/findAll",param,function (rst) {
+        jQuery.post("/admin/role/findAll",param,function (rst) {
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
             jQuery("#pageNum").html(pageNum);
             jQuery("#totalnum").html(rst.total);
+            //alert(rst);
             //1、查询查询的数据
             var arrs=rst.list;
             var trs="";
@@ -245,7 +245,7 @@
         jQuery("#delMulDialog").modal('hide');
         //获取选择的复选框中的值
         var form=jQuery("#Form").serialize();
-        jQuery.post("Role/updateMul",form,function (rst) {
+        jQuery.post("/admin/Role/updateMul",form,function (rst) {
             if(rst>0)
             {
                 alert("删除成功!");
@@ -265,12 +265,13 @@
             "username":username
         };
         //向后台发送请求ajax
-        jQuery.post("Role/findAll",param,function(rst){
+        jQuery.post("/admin/Role/findAll",param,function(rst){
             var ar=rst;
             var uu;
 
             for(var i=0;i<1;i++){
                 uu=ar[i];
+                var username=uu.username;
                 var realName=uu.realName;
                 var role=uu.role;
                 var param2={"username":username,"realName":realName,"role":role};

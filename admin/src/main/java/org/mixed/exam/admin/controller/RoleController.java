@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/Role")
+@RequestMapping("/admin/Role")
 public class RoleController {
     @Resource
     private RoleService roleService;
