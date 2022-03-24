@@ -103,4 +103,10 @@ public class SubjectApiController {
                 querySubjectService.getSubjects(_type,_open,_isExamined,_difficulty,_courseID,_class2ndID,_creator));
         //return SubjectUtil.subjects2Json2(subjectDao.getSubject(courseID));
     }
+    @ResponseBody
+    @GetMapping("subject/json")
+    public String getSubjectByID(@RequestParam("id") String id)
+    {
+        return subjectDao.getSubjectByID(id);
+    }
 }

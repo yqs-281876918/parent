@@ -20,4 +20,8 @@ public class SubjectDaoTest {
     {
         System.out.println(subjectDao.getSubjects("singleChoiceQuestion",true,null,null,null,null,"yqs"));
     }
+    @Test void test()
+    {
+        System.out.println(subjectDao.getSubjectByID("6207b3a80875141b0f368672"));
+    }
 }
