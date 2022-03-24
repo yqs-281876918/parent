@@ -7,7 +7,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="init()">
 <style type="text/css">
     a.hand:hover   {cursor:hand}
 </style>
@@ -44,7 +44,6 @@
 </style>
 
 
-
 <!-- 删除的提示框 -->
 <div class="modal" id="delMulDialog" tabindex="-1">
     <div class="modal-dialog ">
@@ -67,7 +66,8 @@
         </div>
     </div>
 </div>
-<!-- 批量删除模态框结束 -->
+<!-- 删除模态框结束 -->
+
 
 <div id="container">
     <div id="top">
@@ -83,12 +83,12 @@
                 <tr id="tabletitle" class="unselectable table-bordered">
                     <td>
                         <input type="checkbox" id="chAll"
-                                onclick="selectAll(this.checked)">
+                               onclick="selectAll(this.checked)">
                     </td>
                     <td>序号</td>
                     <td >用户真实名称</td>
                     <td >用户角色</td>
-                    <td >管理员操作</td>
+                    <td >操作</td>
                 </tr>
                 </thead>
 
@@ -133,20 +133,6 @@
         jQuery("input[name='users']").prop("checked",f);
     }
 </script>
-<!--showDeleteDialog-->
-<script>
-
-    function showDeleteDialog() {
-        var arrs=jQuery("input[name='users']:checked").length;
-        if(arrs>0){
-            jQuery("#delMulDialog").modal('show');
-        }else{
-            alert("您还未选择所要删除的用户");
-        }
-
-    }
-
-</script>
 <script>
     var pageNum=1;
     var pageSize=10;
@@ -155,9 +141,9 @@
         var param={
             "pageNum":pageNum,
             "pageSize":pageSize,
-            "username":window.sessionStorage.getItem("username")
+            //"username":window.sessionStorage.getItem("username")
         };
-        jQuery.post("/admin/role/findAll",param,function (rst) {
+        jQuery.post("/admin/Role/findAll",param,function (rst) {
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
             jQuery("#pageNum").html(pageNum);
@@ -165,7 +151,7 @@
             //alert(rst);
             //1、查询查询的数据
             var arrs=rst.list;
-            var trs="";
+            var trs="<div>get trs</div>";
             for(var i=0;i<arrs.length;i++) {
 
                 //获取每一行对应的用户对象
@@ -178,8 +164,8 @@
                         <td>
                             <input type="checkbox" name="users" value="${u.username}">
                         </td>
-                        <td onclick="gotorole('${u.username}')">${u.realName}</td>
-                        <td onclick="gotorole('${u.username}')">${u.role}</td>
+                        <td>${u.realName}</td>
+                        <td>${u.role}</td>
                         <td>
                             <a href="#">删除</a>
                             <a href="#">编辑</a>
@@ -217,45 +203,11 @@
             jQuery("#right").html(nav);
 
         })
-        jQuery(function () {
-            init();
-        })
+
     }
-
-
-</script>
-<!--判断页面是否越界-->
-<script>
-
-    function pageUtil(num) {
-        if(num<=1){
-            num=1;
-        }
-        if(num>=pageNums){
-            num=pageNums;
-        }
-        pageNum=num;
+    jQuery(function () {
         init();
-    }
-
-</script>
-
-<script>
-    function doDeleteMul() {
-        jQuery("#delMulDialog").modal('hide');
-        //获取选择的复选框中的值
-        var form=jQuery("#Form").serialize();
-        jQuery.post("/admin/Role/updateMul",form,function (rst) {
-            if(rst>0)
-            {
-                alert("删除成功!");
-                pageNum=1;
-                init();
-            }else{
-                alert("删除失败!");
-            }
-        })
-    }
+    })
 
 </script>
 
@@ -278,9 +230,64 @@
                 window.sessionStorage.setItem("username",param2.username);
                 window.sessionStorage.setItem("realName",param2.realName);
                 window.sessionStorage.setItem("role",param2.role);
+                console.log(uu.username);
+                console.log(uu.role);
+
             }
         })
     }
 </script>
+
+
+<!--showDeleteDialog-->
+<script>
+
+    function showDeleteDialog() {
+        var arrs=jQuery("input[name='users']:checked").length;
+        if(arrs>0){
+            jQuery("#delMulDialog").modal('show');
+        }else{
+            alert("您还未选择所要删除的用户");
+        }
+    }
+</script>
+<script>
+    function doDeleteMul() {
+        jQuery("#delMulDialog").modal('hide');
+        //获取选择的复选框中的值
+        var form=jQuery("#Form").serialize();
+        jQuery.post("/admin/Role/updateMul",form,function (rst) {
+            if(rst>0)
+            {
+                alert("删除成功!");
+                pageNum=1;
+                init();
+            }else{
+                alert("删除失败!");
+            }
+        })
+    }
+
+</script>
+
+<!--判断页面是否越界-->
+<script>
+
+    function pageUtil(num) {
+        if(num<=1){
+            num=1;
+        }
+        if(num>=pageNums){
+            num=pageNums;
+        }
+        pageNum=num;
+        init();
+    }
+
+</script>
+
+
+
+
 </body>
 </html>

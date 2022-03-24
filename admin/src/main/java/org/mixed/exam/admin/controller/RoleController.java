@@ -10,14 +10,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/admin/Role")
+@RequestMapping("/Role")
 public class RoleController {
     @Resource
     private RoleService roleService;
 
     @RequestMapping("/findAll")
     public PageInfo<users> findAll(int pageNum, int pageSize, HttpServletRequest request){
-        String user=request.getParameter("userName");
+        String user=request.getParameter("username");
         PageInfo<users> page=null;
         page=roleService.findAll(pageNum,pageSize,user);
         return page;
