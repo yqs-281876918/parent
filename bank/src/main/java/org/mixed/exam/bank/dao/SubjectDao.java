@@ -1,6 +1,8 @@
 package org.mixed.exam.bank.dao;
 
+import lombok.Data;
 import org.checkerframework.checker.units.qual.C;
+import org.mixed.exam.bank.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.util.HttpUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
@@ -20,6 +22,18 @@ public class SubjectDao
     private static String DOCUMENT_NAME="subjects";
     @Autowired
     private MongoTemplate mongoTemplate;
+    public String getSubjectByID(String id)
+    {
+        SubjectType type = mongoTemplate.findById(id,SubjectType.class,DOCUMENT_NAME);
+        Question q = mongoTemplate.findById(id,SubjectUtil.getClassByType(type.getType()),DOCUMENT_NAME);
+        SubjectJson sj=SubjectUtil.subject2Json(q);
+        return sj.getJson();
+    }
+    @Data
+    private class SubjectType
+    {
+        private String type;
+    }
     //存储一个题目
     public void saveSubject(Question question)
     {

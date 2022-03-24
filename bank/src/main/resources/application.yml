@@ -35,3 +35,5 @@ security:
         key-value: OhxVMm5Fjr%S!fq^Ss%O9JcMmo&iHM@q0h&FacVE
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+logging:
+  level.org.mixed.exam.bank.dao: debug
