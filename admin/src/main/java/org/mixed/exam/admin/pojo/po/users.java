@@ -3,7 +3,18 @@ package org.mixed.exam.admin.pojo.po;
 public class users {
     private String username;
     private String realName;
+    private String password;
     private String role;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
 
     public String getRealName() {
         return realName;

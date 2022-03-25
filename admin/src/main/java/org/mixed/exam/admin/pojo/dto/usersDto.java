@@ -6,6 +6,14 @@ public class usersDto extends users {
     private String username;
     private String realName;
     private String role;
+    private String password;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 
     public String getRealName() {

@@ -1,13 +1,23 @@
 package org.mixed.exam.admin.controller;
 
+import com.ctc.wstx.util.StringUtil;
 import com.github.pagehelper.PageInfo;
+import net.sf.jsqlparser.Model;
 import org.mixed.exam.admin.pojo.dto.usersDto;
 import org.mixed.exam.admin.pojo.po.users;
 import org.mixed.exam.admin.service.RoleService;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/Role")
@@ -46,6 +56,8 @@ public class RoleController {
         row=roleService.Insert(dto);
         return row;
     }
+
+
 
 
 }

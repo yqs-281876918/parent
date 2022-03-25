@@ -41,6 +41,9 @@
     #tablebottom{
         background-color: #fff9ed;
     }
+    #search{
+        padding: 10px 20px;
+    }
 </style>
 <!-- 删除的提示框 -->
 <div class="modal fade" id="delDialog" tabindex="-1">
@@ -193,14 +196,25 @@
                 <button type="button" class="btn btn-secondary"
                         data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary"
-                        onclick="doAdd()">确定</button>
+                        id="btn">确定</button>
             </div>
         </div>
     </div>
 </div>
 <!-- 添加模态框结束 -->
+
+
 <div id="container">
     <div id="top">
+        <!-- 搜索框 -->
+        <form class="navbar-form navbar-left" role="role">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="请输入用户名进行搜索">
+                <button type="submit" class="btn btn-default " onclick="search()">搜索</button>
+                <input type="text" name="keyword" id="keyword" placeholder="Search" onkeydown="enter-search()"/>
+            </div>
+
+        </form>
         <button type="button"
                 class="btn btn-outline-warning btn-danger"
                 onclick="showDeleteMulDialog()">删除</button>
@@ -427,7 +441,6 @@
 </script>
 
 <script>
-
     //修改操作
     function showEditDialog(username,realName,role)
     {
@@ -436,7 +449,6 @@
         jQuery("#role").val(role);
         jQuery("#editDialog").modal('show');
     }
-
     function doEdit()
     {
         //前提：
@@ -456,38 +468,63 @@
     }
 </script>
 <script>
-
     //添加操作
-    function showAddDialog(username,realName,password,role)
+    function showAddDialog()
     {
-        jQuery("#add-name").val(username);
-        jQuery("#add-realName").val(realName);
-        jQuery("#add-password").val(password);
-        jQuery("#add-role").val(password);
         jQuery("#addDialog").modal('show');
     }
-
-    function doAdd()
-    {
-        var username=jQuery("#add-name").val();
-        var realName=jQuery("#add-realName").val();
-        var role=jQuery("#add-role").val();
-        var password=jQuery("#add-password").val();
-        //2.name属性的值必须与后台dto中的属性同名
-        jQuery.post("/admin/Role/Insert",{
-            "username":username,
-            "realName":realName,
-            "password":password,
-            "role":role},function (rst) {
-            if(rst>0)
-            {
-                alert("添加成功!");
-                jQuery("#addDialog").modal('hide');
-                init();
-            }else{
-                alert("添加失败!");
+    function check(){
+        var str=document.getElementById("add-name").value;
+        if(str.length<1){
+            alert("请输入用户名");
+            document.getElementById("add-name").focus();
+            return false;
+        }
+        str=document.getElementById("add-realName").value;
+        if(str.length<1){
+            alert("请输入真实姓名");
+            document.getElementById("add-realName").focus();
+            return false;
+        }
+        str=document.getElementById("add-password").value;
+        if(str.length<1){
+            alert("请输入密码");
+            document.getElementById("add-password").focus();
+            return false;
+        }
+        str=document.getElementById("add-role").value;
+        if(str.length<1){
+            alert("请选择用户身份");
+            document.getElementById("add-role").focus();
+            return false;
+        }
+        return true;
+    }
+    $("#btn").on("click",function () {
+        if (check()) {
+            var data = {
+                "username": $("#add-name").val(),
+                "realName": $("#add-realName").val(),
+                "password": $("#add-password").val(),
+                "role": $("#add-role").val()
             }
-        })
+            jQuery.post("/admin/Role/Insert", data, function (rst) {
+                console.log(rst);
+                if (rst == 1) {
+                    alert("添加成功");
+                    jQuery("#addDialog").modal('hide');
+                    init();
+                } else {
+                    alert("添加失败");
+                }
+            });
+        }
+    })
+
+</script>
+<script>
+    function search(){
+
     }
 </script>
 
