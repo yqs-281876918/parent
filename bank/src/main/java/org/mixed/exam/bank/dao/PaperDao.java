@@ -1,5 +1,6 @@
 package org.mixed.exam.bank.dao;
 
+import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.pojo.po.Paper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -50,6 +51,20 @@ public class PaperDao {
     //分配教师
     public int assign(String id){
         return 0;
+    }
+    //取所有课程名
+    public List<Classification> getAllCourse(){
+        Query query = Query.query(Criteria.where("superClassId").is(""));
+        return mongoTemplate.find(query, Classification.class,"classifications");
+    }
+    //根据课程id取
+    public Classification getCourse(String id) {
+        return mongoTemplate.findById(id,Classification.class,"classifications");
+    }
+    //根据课程名取
+    public List<Classification> getCourseid(String course) {
+        Query query = Query.query(Criteria.where("classifyName").is(course));
+        return mongoTemplate.find(query,Classification.class,"classifications");
     }
 
 }

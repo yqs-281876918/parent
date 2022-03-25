@@ -3,81 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>试卷编辑</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body onload="init()">
 <div name="container">
     <form id="paperform">
+        <div class="form-group">
+            <label for="foreWord">简介：</label>
+            <input type="text" class="form-control" id="foreWord">
+        </div>
+        <div class="form-group">
+            <label for="course">课程：</label>
+            <select class="form-control" id="course">
 
-        <div>简介：<input id="foreWord" name="foreWord"></div>
-        <div>
-            课程：
-            <input id="course" name="course">
+            </select>
         </div>
-        题目：
-        <div id="question" name="question">
+        <div class="form-group">
+            <label for="question">题目：</label>
+            <div id="question">
 
+            </div>
         </div>
-        <div>难度：<input id="difficulty" name="difficulty"></div>
-        <div>
-            开放：
-            <input type="radio" id="open" name="open" value="true">是
-            <input type="radio" id="close" name="open" value="false">否
+        <div class="form-group">
+            <label for="difficulty">难度：</label>
+            <select class="form-control" id="difficulty">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+            </select>
         </div>
-        <div id="subbutton"></div>
+        <div class="form-group">
+            <label for="isopen">开放：</label>
+            <select class="form-control" id="isopen">
+                <option id="open">是</option>
+                <option id="close">否</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Example textarea</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
     </form>
+    <div id="subbutton"></div>
 
 </div>
 </body>
 <script>
+    /*var questionids=null;
     function init(){
         var loc=location.href;
         var n1 = loc.length;
         var n2 = loc.indexOf('=');
         var txt = decodeURI(loc.substr(n2+1,n1-n2));
-        var t=`<button type="button" onclick="submitPaper('`+txt+`')">提交</button>`;
+        var t=`<button type="button" class="btn btn-light" onclick="submitPaper('`+txt+`')">提交</button>`;
         jQuery("#subbutton").html(t);
         var parm1={
             "id":txt
         }
         jQuery.post("/bank/papercontrol/showOne",parm1,function (rst) {
             $("input[id=foreWord]").val(rst.foreWord);
-            $("input[id=course]").val(rst.courseID);
-            $("input[id=difficulty]").val(rst.difficulty);
-            var o=rst.open;
-            if(o==true){
-                $("input[id=open]").attr("checked",true);
-            }else{
-                $("input[id=close]").attr("checked",true);
+            var parm2={
+                "courseID":rst.courseID
             }
-            var que="";
-            var tmp=rst.subjectIDs;
-            for(var i=0;i<tmp.length;i++){
-                que=que+`<table>`;
-                for(var j=0;j<tmp[i].length;j++){
-                    var parm={
-                        "id":tmp[i][j]
-                    };
-                    // jQuery.post("/paper/papercontrol/getquestion",parm1,function (rst) {
-                    //     //题目显示
-                    //     que=que+`
-                    //     <tr>
-                    //         <td></td>
-                    //     </tr>
-                    //     `;
-                    // })
-                    que=que+`
+            jQuery.post("/bank/edit/getCourse",parm2,function (rst1) {
+                $("select[id=course]").val(rst1.classifyName);
+
+                $("select[id=difficulty]").val(rst.difficulty);
+                var o=rst.open;
+                if(o==true){
+                    $("select[id=isopen]").val("是");
+                }else{
+                    $("select[id=isopen]").val("否");
+                }
+                var que="";
+                questionids=rst.subjectIDs;
+                var tmp=rst.subjectIDs;
+                for(var i=0;i<tmp.length;i++){
+                    que=que+`<table>`;
+                    for(var j=0;j<tmp[i].length;j++){
+                        var parm={
+                            "id":tmp[i][j]
+                        };
+                        que=que+`
                         <tr>
                             <td>'${tmp[i][j]}'</td>
                         </tr>
                         `;
+                    }
+                    que=que+`</table>`;
                 }
-                que=que+`</table>`;
-            }
-            jQuery("#question").html(que);
-        })
+                jQuery("#question").html(que);
+            })
 
-    }
+        })
+        jQuery.post("/bank/edit/getAllCourse",function (rst) {
+            var coursein="";
+            for(var i=0;i<rst.length;i++){
+                coursein=coursein+`<option>${rst[i].classifyName}</option>`;
+            }
+            jQuery("#course").html(coursein);
+        })
+    }*/
 </script>
 <script>
     $.fn.serializeObject = function() {
@@ -97,20 +132,135 @@
     }
 
     function submitPaper(id) {
-        var form=$('#paperform').serializeObject();
-        var open = $("input[name='open']:checked").val();
+        var foreWord=$('#foreWord').val();
+        var course = $("#course").val();
+        var isopen=$("#isopen").val();
+        var difficulty=$("#difficulty").val();
         var parm={
             "id":id,
-            "foreWord":form.foreWord,
-            "subjectIDs":form.question,
-            "courseID":form.course,
-            "open":open,
-            "difficulty":form.difficulty
+            "foreWord":foreWord,
+            "subjectIDs[][]":questionids,
+            "courseID":course,
+            "open":isopen,
+            "difficulty":difficulty
         }
         jQuery.post("/bank/edit/getfrom",parm,function (rst) {
             location.href="paper_control.html";
         })
     }
+</script>
+<script>
+    var questionids=null;
+    function init(){
+        var loc=location.href;
+        var n1 = loc.length;
+        var n2 = loc.indexOf('=');
+        var txt = decodeURI(loc.substr(n2+1,n1-n2));
+        var t=`<button type="button" class="btn btn-light" onclick="submitPaper('`+txt+`')">提交</button>`;
+        jQuery("#subbutton").html(t);
+        var parm1={
+            "id":txt
+        }
+        jQuery.post("/bank/papercontrol/showOne",parm1,function (rst) {
+            $("input[id=foreWord]").val(rst.foreWord);
+            var parm2={
+                "courseID":rst.courseID
+            }
+            jQuery.post("/bank/edit/getCourse",parm2,function (rst1) {
+                $("select[id=course]").val(rst1.classifyName);
+
+                $("select[id=difficulty]").val(rst.difficulty);
+                var o=rst.open;
+                if(o==true){
+                    $("select[id=isopen]").val("是");
+                }else{
+                    $("select[id=isopen]").val("否");
+                }
+                var que=`<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">`;
+                questionids=rst.subjectIDs;
+                var tmp=rst.subjectIDs;
+                var que2=`<div class="tab-content" id="pills-tabContent">`;
+                for(var i=0;i<tmp.length;i++){
+                    var questiontable=`<table><tr>
+                                        <td>学科</td>
+                                        <td>简介</td>
+                                        <td>难度</td>
+                                        <td>分值</td>
+                                        <td></td>
+                                        </tr>`;
+                    var t;//记录type
+                    var parm3={
+                        "id":tmp[i][0]
+                    }
+                    jQuery.ajax({
+                        type:'get',
+                        url:"/bank/subject/json",
+                        data:parm3,
+                        async:false,//false代表只有在等待ajax执行完毕后才执行window.open('http://www.phpernote.com')语句
+                        success:function (rst1){
+                            rst1 = eval('('+rst1+')');
+                            que=que+`
+                        <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-${rst1.type}${i}-tab" data-toggle="pill" href="#pills-${rst1.type}${i}" role="tab" aria-controls="pills-${rst1.type}${i}" aria-selected="true">${rst1.type}</a>
+                        </li>`;
+
+                            que2=que2+`<div class="tab-pane fade show active" id="pills-${rst1.type}${i}" role="tabpanel" aria-labelledby="pills-${rst1.type}${i}-tab"><div id="${rst1.type}${i}">麻了</div></div>`;
+
+                        //
+
+                            for (var j=0;j<tmp[i].length;j++){
+                                var parm4={
+                                    "id":tmp[i][j]
+                                }
+                                jQuery.ajax({
+                                    type:'get',
+                                    url:"/bank/subject/json",
+                                    data:parm4,
+                                    async:false,//false代表只有在等待ajax执行完毕后才执行window.open('http://www.phpernote.com')语句
+                                    success:function (rst2){
+                                        rst2 = eval('('+rst2+')');
+                                        t=rst2.type;
+                                        questiontable+=`<tr>
+                                    <td>${rst2.courseID}</td>
+                                    <td>${rst2.introduction}</td>
+                                    <td>${rst2.difficulty}</td>
+                                    <td>${rst2.recommendScore}</td>
+                                    <td><button>移除</button><button>修改</button></td>
+                                    </tr>`;
+                                    }
+                                });
+                            }
+                            questiontable+=`
+                                   <button>添加题目</button>
+                                   </table>`;
+                            var temp=t+i;
+                            alert(questiontable);
+                            jQuery("#singleChoiceQuestion0").html(questiontable);
+
+                        //
+
+
+                        }
+                    });
+
+                }
+                que2=que2+`</div>`;
+                que=que+"</ul>";
+                que=que+que2;
+
+                jQuery("#question").html(que);
+            })
+
+        })
+        jQuery.post("/bank/edit/getAllCourse",function (rst) {
+            var coursein="";
+            for(var i=0;i<rst.length;i++){
+                coursein=coursein+`<option>${rst[i].classifyName}</option>`;
+            }
+            jQuery("#course").html(coursein);
+        })
+    }
+
 </script>
 <body>
 
