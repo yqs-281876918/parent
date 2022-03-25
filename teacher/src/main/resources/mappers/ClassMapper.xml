@@ -2,9 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.mixed.exam.teacher.dao.ClassMapper">
     <insert id="addClass" parameterType="org.mixed.exam.teacher.pojo.po.Class">
-        insert into class (cname, invitation, creator)
-        VALUES (#{cname},#{invitation},#{creator});
+        insert into class (cno,cname, invitation, creator)
+        VALUES (#{cno},#{cname},#{invitation},#{creator});
     </insert>
+    <delete id="deleteClass" parameterType="java.lang.Long">
+        delete from class
+        where cno=#{cno}
+    </delete>
     <select id="selectMaxCno" resultType="java.lang.Integer">
         select max(cno) from class
     </select>

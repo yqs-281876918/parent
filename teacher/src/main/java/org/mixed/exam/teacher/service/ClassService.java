@@ -23,4 +23,8 @@ public class ClassService {
     public List<Class> getAllClass(String creator){
         return classMapper.getClasses(creator);
     }
+    //删除班级
+    public int deleteClass(long cno){
+        return classMapper.deleteClass(cno);
+    }
 }

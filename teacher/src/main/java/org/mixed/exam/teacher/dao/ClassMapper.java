@@ -2,6 +2,7 @@ package org.mixed.exam.teacher.dao;
 
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.mixed.exam.teacher.pojo.po.Class;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,6 @@ public interface ClassMapper {
     int selectMaxCno();
     //获取班级列表
     List<Class> getClasses(String creator);
+    //删除班级
+    int deleteClass(@Param("cno") long cno);
 }
