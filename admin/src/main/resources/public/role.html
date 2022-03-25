@@ -120,10 +120,10 @@
                         <div class="col-8">
                             <select id="role" name="role"
                                     class="form-control">
-                                <option value="1">管理员</option>
-                                <option value="2">教师</option>
-                                <option value="3">高级教师</option>
-                                <option value="4">学生</option>
+                                <option value="adm">管理员</option>
+                                <option value="tea1">普通教师</option>
+                                <option value="tea2">高级教师</option>
+                                <option value="stu">学生</option>
                             </select>
                         </div>
                     </div>
@@ -140,7 +140,65 @@
     </div>
 </div>
 <!-- 修改模态框结束 -->
+<!-- 添加的提示框 -->
+<div class="modal fade" id="addDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加用户</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addDialogForm">
+                    <input type="hidden" name="adduserName" id="adduserName">
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户姓名:</label>
+                        <div class="col-8">
+                            <input type="text" id="add-name" name="add-name"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户真实姓名:</label>
+                        <div class="col-8">
+                            <input type="text" name="add-realName" id="add-realName"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户密码:</label>
+                        <div class="col-8">
+                            <input type="text" name="add-password" id="add-password"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户角色:</label>
+                        <div class="col-8">
+                            <select id="add-role" name="add-role"
+                                    class="form-control">
+                                <option value="adm">管理员</option>
+                                <option value="tea1">普通教师</option>
+                                <option value="tea2">高级教师</option>
+                                <option value="stu">学生</option>
+                            </select>
+                        </div>
+                    </div>
 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doAdd()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加模态框结束 -->
 <div id="container">
     <div id="top">
         <button type="button"
@@ -400,21 +458,27 @@
 <script>
 
     //添加操作
-    function showAddDialog(username,realName,role)
+    function showAddDialog(username,realName,password,role)
     {
-        jQuery("#username").val(username);
-        jQuery("#realName").val(realName);
-        jQuery("#role").val(role);
+        jQuery("#add-name").val(username);
+        jQuery("#add-realName").val(realName);
+        jQuery("#add-password").val(password);
+        jQuery("#add-role").val(password);
         jQuery("#addDialog").modal('show');
     }
 
     function doAdd()
     {
-        //前提：
-        //1.表单控件必须提供name属性
+        var username=jQuery("#add-name").val();
+        var realName=jQuery("#add-realName").val();
+        var role=jQuery("#add-role").val();
+        var password=jQuery("#add-password").val();
         //2.name属性的值必须与后台dto中的属性同名
-        var form=jQuery("#addDialogForm").serialize();
-        jQuery.post("/admin/Role/insert",form,function (rst) {
+        jQuery.post("/admin/Role/Insert",{
+            "username":username,
+            "realName":realName,
+            "password":password,
+            "role":role},function (rst) {
             if(rst>0)
             {
                 alert("添加成功!");

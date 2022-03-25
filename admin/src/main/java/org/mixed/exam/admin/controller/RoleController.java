@@ -29,15 +29,21 @@ public class RoleController {
         return row;
     }
     @RequestMapping("/update")
-    public int update(String[] users){
+    public int update(String username){
         int row=0;
-        row=roleService.Update((users));
+        row=roleService.Update(username);
         return row;
     }
     @RequestMapping("/updateInfo")
     public int updateInfo(usersDto dto){
         int row=0;
         row=roleService.UpdateInfo(dto);
+        return row;
+    }
+    @RequestMapping("/Insert")
+    public int Insert(usersDto dto){
+        int row=0;
+        row=roleService.Insert(dto);
         return row;
     }
 

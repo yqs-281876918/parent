@@ -32,15 +32,20 @@ public class RoleService {
         row=rolemapper.updateMul(users);
         return row;
     }
-
-    public int Update(String[] users){
+    //单一选择删除
+    public int Update(String username){
         int row=0;
-        row=rolemapper.update(users);
+        row=rolemapper.update(username);
         return row;
     }
     public int UpdateInfo(usersDto dto){
         int row=0;
         row=rolemapper.UpdateInfo(dto);
+        return row;
+    }
+    public int Insert(usersDto dto){
+        int row=0;
+        row=rolemapper.Insert(dto);
         return row;
     }
 }

@@ -13,9 +13,11 @@ public interface RoleMapper {
     //批量删除
     int updateMul(String[] users);
     //单个删除
-    int update(String[] users);
+    int update(String username);
     //编辑
     int UpdateInfo(usersDto dto);
+    //添加
+    int Insert(usersDto dto);
 
 
 
