@@ -3,6 +3,7 @@ package org.mixed.exam.admin.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.admin.mapper.RoleMapper;
+import org.mixed.exam.admin.pojo.dto.usersDto;
 import org.mixed.exam.admin.pojo.po.users;
 import org.springframework.stereotype.Service;
 
@@ -32,4 +33,14 @@ public class RoleService {
         return row;
     }
 
+    public int Update(String[] users){
+        int row=0;
+        row=rolemapper.update(users);
+        return row;
+    }
+    public int UpdateInfo(usersDto dto){
+        int row=0;
+        row=rolemapper.UpdateInfo(dto);
+        return row;
+    }
 }

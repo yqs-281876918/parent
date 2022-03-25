@@ -42,9 +42,30 @@
         background-color: #fff9ed;
     }
 </style>
-
-
 <!-- 删除的提示框 -->
+<div class="modal fade" id="delDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>您确定要删除【<span id="delUserName"></span>】吗?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doDelete()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除模态框结束 -->
+
+<!-- 批量选择删除的提示框 -->
 <div class="modal" id="delMulDialog" tabindex="-1">
     <div class="modal-dialog ">
         <div class="modal-content">
@@ -67,13 +88,67 @@
     </div>
 </div>
 <!-- 删除模态框结束 -->
+<!-- 修改的提示框 -->
+<div class="modal fade" id="editDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">编辑</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editDialogForm">
+                    <input type="hidden" name="userName" id="userName1">
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户姓名:</label>
+                        <div class="col-8">
+                            <input type="text" id="username" name="username"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户真实姓名:</label>
+                        <div class="col-8">
+                            <input type="text" name="realName" id="realName"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户角色:</label>
+                        <div class="col-8">
+                            <select id="role" name="role"
+                                    class="form-control">
+                                <option value="1">管理员</option>
+                                <option value="2">教师</option>
+                                <option value="3">高级教师</option>
+                                <option value="4">学生</option>
+                            </select>
+                        </div>
+                    </div>
 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doEdit()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 修改模态框结束 -->
 
 <div id="container">
     <div id="top">
         <button type="button"
                 class="btn btn-outline-warning btn-danger"
-                onclick="showDeleteDialog()">删除</button>
+                onclick="showDeleteMulDialog()">删除</button>
+        <button type="button"
+                class="btn btn-outline-warning btn-danger"
+                onclick="showAddDialog()">添加</button>
     </div>
 
     <div id="middle">
@@ -85,10 +160,10 @@
                         <input type="checkbox" id="chAll"
                                onclick="selectAll(this.checked)">
                     </td>
-                    <td>序号</td>
-                    <td >用户真实名称</td>
-                    <td >用户角色</td>
-                    <td >操作</td>
+                    <td>用户名</td>
+                    <td>用户真实名称</td>
+                    <td>用户角色</td>
+                    <td>管理员操作</td>
                 </tr>
                 </thead>
 
@@ -140,11 +215,12 @@
             //alert(rst);
             //1、查询查询的数据
             var arrs=rst.list;
-            var trs="<div>get trs</div>";
+            var trs="";
             for(var i=0;i<arrs.length;i++) {
 
                 //获取每一行对应的用户对象
                 var u=arrs[i];
+
                 //循环一次一行数据
                 //使用反引号,用于定义模板
 
@@ -153,16 +229,22 @@
                         <td>
                             <input type="checkbox" name="users" value="${u.username}">
                         </td>
+                        <td>${u.username}</td>
                         <td onclick="gotorole('${u.username}')">${u.realName}</td>
                         <td onclick="gotorole('${u.username}'))">${u.role}</td>
                         <td>
-                            <a href="#">删除</a>
-                            <a href="#">编辑</a>
+                            <a href="#"
+                            onclick="showDeleteDialog('${u.username}')">删除</a>
+                        <a href="#"
+                            onclick="showEditDialog('${u.username}','${u.realName}',
+                            '${u.role}')">编辑</a>
                         </td>
                     </tr>
                     `;
+
             }
             //把根据数据构建的行添加到表格
+
             jQuery("#data").html(trs);
 
             var nums=rst.navigatepageNums;
@@ -227,11 +309,10 @@
     }
 </script>
 
-
-<!--showDeleteDialog-->
+<!--showDeleteMulDialog-->
 <script>
 
-    function showDeleteDialog() {
+    function showDeleteMulDialog() {
         var arrs=jQuery("input[name='users']:checked").length;
         if(arrs>0){
             jQuery("#delMulDialog").modal('show');
@@ -259,6 +340,93 @@
 
 </script>
 
+
+<script>
+    //存放用户的username
+    var username;
+    function showDeleteDialog(username,) {
+        name=username;
+        //给模态框中的span赋值
+        jQuery("#delUserName").html(name);
+        jQuery("#delDialog").modal('show');
+    }
+    function doDelete() {
+        jQuery.post("/admin/Role/update",{"username":name},function (rst) {
+            jQuery("#delDialog").modal('hide');
+
+            if(rst>0)
+            {
+                alert("删除成功!");
+                //设置显示数据的页面为第一页
+                pageNum=1;
+                //读取数据
+                init();
+            }else{
+                alert("删除失败!");
+            }
+        })
+    }
+</script>
+
+<script>
+
+    //修改操作
+    function showEditDialog(username,realName,role)
+    {
+        jQuery("#username").val(username);
+        jQuery("#realName").val(realName);
+        jQuery("#role").val(role);
+        jQuery("#editDialog").modal('show');
+    }
+
+    function doEdit()
+    {
+        //前提：
+        //1.表单控件必须提供name属性
+        //2.name属性的值必须与后台dto中的属性同名
+        var form=jQuery("#editDialogForm").serialize();
+        jQuery.post("/admin/Role/updateInfo",form,function (rst) {
+            if(rst>0)
+            {
+                alert("修改成功!");
+                jQuery("#editDialog").modal('hide');
+                init();
+            }else{
+                alert("修改失败!");
+            }
+        })
+    }
+</script>
+<script>
+
+    //添加操作
+    function showAddDialog(username,realName,role)
+    {
+        jQuery("#username").val(username);
+        jQuery("#realName").val(realName);
+        jQuery("#role").val(role);
+        jQuery("#addDialog").modal('show');
+    }
+
+    function doAdd()
+    {
+        //前提：
+        //1.表单控件必须提供name属性
+        //2.name属性的值必须与后台dto中的属性同名
+        var form=jQuery("#addDialogForm").serialize();
+        jQuery.post("/admin/Role/insert",form,function (rst) {
+            if(rst>0)
+            {
+                alert("添加成功!");
+                jQuery("#addDialog").modal('hide');
+                init();
+            }else{
+                alert("添加失败!");
+            }
+        })
+    }
+</script>
+
 <!--判断页面是否越界-->
 <script>
 
@@ -274,5 +442,6 @@
     }
 
 </script>
+
 </body>
 </html>
