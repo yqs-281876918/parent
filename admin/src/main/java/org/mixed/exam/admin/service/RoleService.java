@@ -48,4 +48,15 @@ public class RoleService {
         row=rolemapper.Insert(dto);
         return row;
     }
+    public PageInfo<users> Search(int pageNum, int pageSize,usersDto dto){
+        PageInfo<users> page=null;
+        //设置分页
+        PageHelper.startPage(pageNum,pageSize);
+        //查询需要的数据
+        List<users> users= rolemapper.Search();
+        //users表示页面中呈现的数据
+        //4表示页码个数
+        page=new PageInfo<>(users,4);
+        return page;
+    }
 }

@@ -18,7 +18,8 @@ public interface RoleMapper {
     int UpdateInfo(usersDto dto);
     //添加
     int Insert(usersDto dto);
-
+    //搜索
+    List<users> Search();
 
 
 }

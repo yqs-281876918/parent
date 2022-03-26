@@ -56,6 +56,13 @@ public class RoleController {
         row=roleService.Insert(dto);
         return row;
     }
+    @RequestMapping("/Search")
+    public PageInfo<users> Search(int pageNum, int pageSize,usersDto dto){
+        PageInfo<users> page=null;
+        page=roleService.Search(pageNum,pageSize,dto);
+        return page;
+    }
+
 
 
 
