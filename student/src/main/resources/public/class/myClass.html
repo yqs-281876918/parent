@@ -20,10 +20,103 @@
 <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
 <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- 添加新班级的提示框 -->
+<div class="modal fade" id="addClassDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">加入班级</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addClassDialogForm">
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">班级邀请码: </label>
+                        <div class="col-8">
+                            <input type="text" id="invitation" name="invitation"
+                                   class="form-control">
+                        </div>
+                    </div>
 
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doAddClass()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加新班级模态框结束 -->
 <!-- 主界面内容 -->
 <div id="add">
     <button type="button" class="btn btn-success" onclick="showAddClassDialog()">加入班级</button>
 </div>
+<div id="container">
+
+</div>
+
+
+<script>
+    function init(){
+
+    }
+</script>
+<script>
+    function ClearForm(id) {
+        var objId = document.getElementById(id);
+        if (objId == undefined) {
+            return;
+        }
+        for (var i = 0; i < objId.elements.length; i++) {
+            if (objId.elements[i].type == "text") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "password") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "radio") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "checkbox") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "select-one") {
+                objId.elements[i].options[0].selected = true;
+            }
+            else if (objId.elements[i].type == "select-multiple") {
+                for (var j = 0; j < objId.elements[i].options.length; j++) {
+                    objId.elements[i].options[j].selected = false;
+                }
+            }
+            else if (objId.elements[i].type == "textarea") {
+                objId.elements[i].value = "";
+            }
+        }
+    }
+    function showAddClassDialog(){
+        ClearForm("addClassDialogForm")
+        jQuery("#addClassDialog").modal('show');
+    }
+    function doAddClass(){
+        var form = jQuery("#addClassDialogForm").serialize()
+        jQuery("#addClassDialog").modal('hide')
+        jQuery.post("/student/class/choose",form,function (rst){
+            if (rst == "未找到班级"){
+                alert("未找到班级，请检查班级邀请码是否输入正确！")
+            }else{
+                if (rst == "添加成功"){
+                    alert("加入班级成功！")
+                }else{
+                    alert("加入班级失败！请检查是否已加入过该班级！")
+                }
+            }
+        })
+    }
+</script>
 </body>
 </html>

@@ -12,7 +12,15 @@ public class ChooseClass {
   private String sname;
   private long cno;
   private String data;
+  private Class clazz;
 
+  public Class getClazz() {
+    return clazz;
+  }
+
+  public void setClazz(Class clazz) {
+    this.clazz = clazz;
+  }
 
   public String getSname() {
     return sname;

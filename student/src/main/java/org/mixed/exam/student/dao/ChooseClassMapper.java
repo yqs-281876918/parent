@@ -12,4 +12,6 @@ public interface ChooseClassMapper {
     int addChooseClass(ChooseClass chooseClass);
     //根据邀请码得到班级号
     long getCnoByInvitation(@Param("invitation") String invitation);
+    //学生加入的所有班级信息
+    ChooseClass selectAllClass(@Param("sname") String sname);
 }
