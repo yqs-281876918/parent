@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>名词解析题添加</title>
+    <link rel="stylesheet" href="../../css/Question.css">
+
 </head>
 <body>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 <!--名词解析题面板-->
-<div class="editor nounParsingEditor">
+<div class="editor nounParsingEditor outer">
     <script>
         jQuery(function (){
             var t = new Date();
@@ -27,32 +29,42 @@
             document.getElementById("nounParsingDate").value=time;
         })
     </script>
+    <div class="upper">
+        <div class="title">
+            <span class="tip"> 题干  </span>
+        </div>
     <div id="nounParsingEditor" onchange="alert('11')"></div>
     <!--        <div id="nounParsingAnswer" onchange="alert('11')"></div>-->
     <form id="subject">
         <input type="hidden" id="nounParsingDescription" name="description" value="">
-
+     </div>
+    <div class="inner">
+        <span class="title2">题目属性 </span>
+        <div class="line"></div>
+        <div class="classify">
         题目所属分组：
         <div class="nounParsingCourseId">
             <div style="display: inline-block">所属课程：</div>
             <div style="display: inline-block">
                 <div>
-                    <select id="courseID" name="courseID"></select>
+                    <select class="button2" id="courseID" name="courseID"></select>
                 </div>
             </div>
-            <div style="display: inline-block">所属知识点：</div>
+            <div style="display: inline-block" >所属知识点：</div>
             <div style="display: inline-block" id="class2ndID">
                 <div class="class2ndID">
-                    <select>
+                    <select  class="button2">
 
                     </select>
                 </div>
             </div>
-
         </div>
-        题目难度星级:
+        </div>
+        <div class="star">
+            题目难度星级:
+            <div class="line"></div>
         <div class="difficulty">
-            <select id="nounParsingDifficulty" name="difficulty">
+            <select class="button2" id="nounParsingDifficulty" name="difficulty">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -60,10 +72,15 @@
                 <option value="5">5</option>
             </select>
         </div>
+        </div>
+        <div class="score">
         题目建议分值：
+            <div class="line"></div>
         <div class="nounParsingRecommendScore">
             <input name="recommendScore" type="text">
         </div>
+        </div>
+        <div class="answer">
         设置答案:
         <div id="nounParsingAnswer" onchange="alert('111')"></div>
         <input type="hidden" id="nounParsingAnswerDescription" name="answer" value="">
@@ -71,8 +88,11 @@
         设置题目时间:
         <input id="nounParsingDate" name="date" type="date"/>
         <br/>
+            <div class="submit">
         <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
+            </div>
     </form>
+</div>
 </div>
 <script>
     function submitSubject(){
@@ -174,5 +194,5 @@
     }
     nounParsingAnswer.create()
 </script>
-</body>
+ </body>
 </html>

@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>完型填空添加</title>
+    <link rel="stylesheet" href="../../css/Question.css">
 </head>
 <body>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!--完型填空面板-->
-<div class="editor clozeTestEditor">
+<div class="editor clozeTestEditor outer">
     <script>
         var clozeTestItemCount=10
         function onAddClozeTestItem()
@@ -24,7 +25,7 @@
             $("div.clozeTestTopics").append(html)
             html="<div class='clozeTestAnswer'>\n"+
                 (clozeTestItemCount+1)+". "+
-                "<select name='answers'>\n"+
+                "<select name='answers'class=\"button2\">\n"+
                 "<option value='1'>A</option>\n" +
                 "<option value='2'>B</option>\n" +
                 "<option value='3'>C</option>\n" +
@@ -61,6 +62,10 @@
             document.getElementById("clozeTestDate").value=time;
         })
     </script>
+    <div class="upper">
+        <div class="title">
+            <span class="tip"> 题干  </span>
+        </div>
     <div id="clozeTestEditor" onchange="alert('11')"></div>
     <button onclick="onAddClozeTestItem()">添加题目</button>
     <button onclick="onDeleteClozeTestItem()">删除题目</button>
@@ -129,27 +134,35 @@
                 D.<textarea name="options" type="text" style="height: 18px"></textarea>
             </div>
         </div>
-        题目所属分组：
+      </div>
+    <div class="inner">
+        <span class="title2">题目属性 </span>
+        <div class="line"></div>
+        <div class="classify"> 题目所属分组：
+            <div class="line"></div>
         <div class="clozeTestCourseId">
             <div style="display: inline-block">所属课程：</div>
             <div style="display: inline-block">
                 <div>
-                    <select id="courseID" name="courseID"></select>
+                    <select class="button2" id="courseID" name="courseID"></select>
                 </div>
             </div>
             <div style="display: inline-block">所属知识点：</div>
             <div style="display: inline-block" id="class2ndID">
                 <div class="class2ndID">
-                    <select>
+                    <select class="button2">
 
                     </select>
                 </div>
             </div>
-
         </div>
+        </div>
+
+        <div class="star">
         题目难度星级:
+        <div class="line"></div>
         <div class="difficulty">
-            <select id="clozeTestDifficulty" name="difficulty">
+            <select id="clozeTestDifficulty" class="button2" name="difficulty">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -157,15 +170,20 @@
                 <option value="5">5</option>
             </select>
         </div>
+        </div>
+        <div class="score">
         题目建议分值：
+            <div class="line"></div>
         <div class="clozeTestRecommendScore">
             <input name="recommendScore" type="text">
         </div>
+        </div>
+        <div class="answer">
         设置答案:
         <div class="clozeTestAnswers" >
             <div class="clozeTestAnswer">
                 1.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -175,7 +193,7 @@
             </div>
             <div class="clozeTestAnswer">
                 2.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -185,7 +203,7 @@
             </div>
             <div class="clozeTestAnswer">
                 3.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -195,7 +213,7 @@
             </div>
             <div class="clozeTestAnswer">
                 4.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -205,7 +223,7 @@
             </div>
             <div class="clozeTestAnswer">
                 5.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -215,7 +233,7 @@
             </div>
             <div class="clozeTestAnswer">
                 6.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -225,7 +243,7 @@
             </div>
             <div class="clozeTestAnswer">
                 7.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -235,7 +253,7 @@
             </div>
             <div class="clozeTestAnswer">
                 8.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -245,7 +263,7 @@
             </div>
             <div class="clozeTestAnswer">
                 9.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -255,7 +273,7 @@
             </div>
             <div class="clozeTestAnswer">
                 10.
-                <select name="answers">
+                <select name="answers"class="button2">
                     <option value="1">A</option>
                     <option value="2">B</option>
                     <option value="3">C</option>
@@ -266,10 +284,12 @@
         </div>
         <br/>
         设置题目时间:
-        <input id="clozeTestDate" name="date" type="date"/>
+        <input class="button2" id="clozeTestDate" name="date" type="date"/>
         <br/>
         <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
     </form>
+        </div>
+</div>
 </div>
 <script>
     function submitSubject(){

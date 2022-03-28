@@ -1,0 +1,124 @@
+.title
+{
+    padding: 5px 14px;
+    background: #A9B3BF;
+    font-size: 15px;
+    margin-right: 12px;
+    color: #fff;
+    display: inline-block;
+    box-sizing:border-box;
+    box-shadow:0 15px 25px rgba(0,0,0,.5);
+    background:rgba(0,0,0,.8);
+}
+.outer {
+    padding: 40px;
+
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgb(0 0 0 / 50%);
+    border-radius: 10px;
+    width:1000px;
+    margin-left: 200px;
+    margin-right: 40px;
+    margin-top: 40px;
+
+}
+.button
+{
+    padding: 5px 14px;
+    background: #A9B3BF;
+    font-size: 12px;
+    margin-right: 12px;
+    color: #fff;
+    display: inline-block;
+    box-sizing:border-box;
+    box-shadow:0 15px 25px rgba(0,0,0,.5);
+    background:rgba(0,0,0,.8);
+}
+.text{
+    border: black 1px;
+}
+.inner {
+    background: #fff;
+    padding: 16px 0 13px 0;
+    font-size: 16px;
+    position: relative;
+
+    padding: 40px;
+    background:#f1f1f1;
+    box-sizing:border-box;
+    color: #434e5c;
+
+
+}
+.classify
+{
+    padding: 16px 10px 6px 53px;
+    position: relative;
+    color: #434e5c;
+
+}
+
+.star
+{
+    padding: 16px 10px 6px 53px;
+    position: relative;
+    color: #434e5c;
+}
+.score {
+    padding: 16px 10px 6px 53px;
+    position: relative;
+    color: #434e5c;
+
+}
+.answer{
+
+    padding: 16px 10px 6px 53px;
+    position: relative;
+    color: #434e5c;
+
+}
+.upper{
+    background: #fff;
+    padding: 16px 0 13px 0;
+    font-size: 16px;
+    position: relative;
+
+    padding: 40px;
+    background:#dcdcdc;
+    box-sizing:border-box;
+}
+.line{
+    width: 100%;
+    height: 1px;
+    border-top: solid  1px;
+
+}
+.title2
+{
+
+    padding: 5px 14px;
+    background: #A9B3BF;
+    font-size: 15px;
+    margin-right: 12px;
+    color: #fff;
+    display: inline-block;
+    box-sizing:border-box;
+    box-shadow:0 15px 25px rgba(0,0,0,.5);
+    background:rgba(0,0,0,.8);
+}
+.button2{
+    margin: 0 10px 10px 0;
+    padding: 0 10px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 4px;
+
+}
+
+.submit
+{
+    text-align: center;
+    color: #434e5c;
+}
