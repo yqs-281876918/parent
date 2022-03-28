@@ -3,6 +3,8 @@ package org.mixed.exam.student.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mixed.exam.auth.api.po.Users;
+
 
 @Data
 @AllArgsConstructor
@@ -13,7 +15,15 @@ public class Class {
   private String cname;
   private String invitation;
   private String creator;
+  private Users users;
 
+  public Users getUsers() {
+    return users;
+  }
+
+  public void setUsers(Users users) {
+    this.users = users;
+  }
 
   public long getCno() {
     return cno;

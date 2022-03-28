@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <title>我的班级</title>
     <style>
-        #delete,#add{
+        #delete{
             padding: 10px 20px;
             text-align: right;
             float: right;
+        }
+        #add{
+            padding: 10px 20px;
+            text-align: right;
+            /*float: right;*/
         }
     </style>
 </head>
@@ -52,19 +57,92 @@
     </div>
 </div>
 <!-- 添加新班级模态框结束 -->
+<!-- 删除班级的提示框 -->
+<div class="modal fade" id="deleteClassDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">退出班级</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteCno" value="">
+                <p>您确定要退出班级【<span id="class"></span>】吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doDeleteClass()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除班级模态框结束 -->
 <!-- 主界面内容 -->
 <div id="add">
     <button type="button" class="btn btn-success" onclick="showAddClassDialog()">加入班级</button>
 </div>
 <div id="container">
-
+<!--    <div class="card" id="${u.cno}">-->
+<!--        <div class="card-header">-->
+<!--            <input type="hidden" value="${u.cno}">-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--            <div style="display: inline-block">-->
+<!--                <h5 class="card-title">${u.cname}</h5>-->
+<!--            </div>-->
+<!--            <div id="delete" style="display: inline-block">-->
+<!--                <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">删除班级</a>-->
+<!--            </div>-->
+<!--            <p class="card-text">班级邀请码：${u.invitation}</p>-->
+<!--            <a href="#" class="btn btn-primary">班级详情</a>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 
 
 <script>
     function init(){
-
+        jQuery.post("/student/class/findAll",function (rst){
+            var trs = ''
+            for (var i=0;i<rst.length;i++){
+                console.log(rst[i])
+                var chooseClass = rst[i]
+                var clazz = chooseClass.clazz
+                var users = clazz.users
+                var creator = clazz.creator
+                if (users.realName!=""){
+                    creator = users.realName
+                }
+                trs +=`
+    <div class="card" id="${chooseClass.cno}">
+        <div class="card-header">
+            <input type="hidden" value="${chooseClass.cno}">
+        </div>
+        <div class="card-body">
+            <div style="display: inline-block">
+                <h5 class="card-title"><a href="#">${clazz.cname}</a></h5>
+            </div>
+            <div id="delete" style="display: inline-block">
+                <a href="#" class="btn btn-danger"
+                onclick="showDeleteClassDialog('${chooseClass.cno}','${chooseClass.sname}')">删除班级</a>
+            </div>
+            <p class="card-text">班级创建者：${creator}</p>
+            <p class="card-text">班级邀请码：${clazz.invitation}</p>
+            <p class="card-text">加入班级时间：${chooseClass.data}</p>
+        </div>
+    </div>
+                `
+            }
+            jQuery("#container").html(trs)
+        })
     }
+    jQuery(function (){
+        init();
+    })
 </script>
 <script>
     function ClearForm(id) {
@@ -114,6 +192,27 @@
                 }else{
                     alert("加入班级失败！请检查是否已加入过该班级！")
                 }
+            }
+        })
+    }
+</script>
+<script>
+    var deleteCno
+    var deleteSname
+    function showDeleteClassDialog(cno,sname){
+        deleteCno = cno
+        deleteSname = sname
+        jQuery("#deleteClassDialog").modal('show')
+    }
+    function doDeleteClass(){
+        jQuery("#deleteClassDialog").modal('hide')
+        jQuery.post("/student/class/quit",{'cno':deleteCno,'sname':deleteSname},function (rst){
+            if (rst>0){
+                var deleteCard = "#"+deleteCno
+                $(deleteCard).remove()
+                alert("退出班级成功")
+            }else{
+                alert("退出班级失败！请检查是否已退出该班级！")
             }
         })
     }
