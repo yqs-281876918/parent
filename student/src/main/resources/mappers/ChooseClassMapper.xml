@@ -5,13 +5,42 @@
         insert into chooseClass
         values (#{sname},#{cno},#{data})
     </insert>
-    <select id="getCnoByInvitation" resultType="java.lang.Long"  parameterType="java.lang.String">
+    <delete id="quitClass">
+        delete from chooseClass
+        where cno = #{cno} AND sname = #{sname}
+    </delete>
+    <select id="getCnoByInvitation" resultType="org.mixed.exam.student.pojo.po.Class"
+            parameterType="java.lang.String">
         select cno
         from class
         where invitation=#{invitation}
     </select>
 
-    <select id="selectAllClass" resultType="org.mixed.exam.student.pojo.po.ChooseClass">
-
+    <resultMap id="chooseClassMap" type="org.mixed.exam.student.pojo.po.ChooseClass">
+        <id column="sname" property="sname"/>
+        <id property="cno" column="cno"/>
+        <result property="data" column="data"/>
+        <association property="clazz" resultMap="usersMap"/>
+<!--        <association property="clazz"-->
+<!--                     javaType="org.mixed.exam.student.pojo.po.Class">-->
+<!--            <id property="cno" column="cno"/>-->
+<!--            <result property="cname" column="cname"/>-->
+<!--        </association>-->
+    </resultMap>
+    <resultMap id="usersMap" type="org.mixed.exam.student.pojo.po.Class">
+        <id property="cno" column="cno"/>
+        <result property="cname" column="cname"/>
+        <result property="creator" column="creator"/>
+        <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
+            <id property="username" column="username"/>
+            <result property="realName" column="realName"/>
+        </association>
+    </resultMap>
+    <select id="selectAllClass" resultMap="chooseClassMap"
+            parameterType="java.lang.String">
+        select sname,data,chooseClass.cno,cname,invitation,creator,realName
+        from chooseClass,class,users
+        where sname=#{sname} AND chooseClass.cno=class.cno
+          AND class.creator=users.username
     </select>
 </mapper>

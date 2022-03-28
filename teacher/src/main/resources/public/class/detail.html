@@ -109,9 +109,8 @@
             var trs='';
             for (var i=0;i<rst.length;i++){
                 var u = rst[i];
-                console.log(u)
-                trs = `
-<div class="card">
+                trs += `
+<div class="card" id="${u.cno}">
     <div class="card-header">
         <input type="hidden" value="${u.cno}">
     </div>
@@ -120,15 +119,15 @@
             <h5 class="card-title">${u.cname}</h5>
         </div>
         <div id="delete" style="display: inline-block">
-            <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">删除班级</a>
+            <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">退出班级</a>
         </div>
         <p class="card-text">班级邀请码：${u.invitation}</p>
         <a href="#" class="btn btn-primary">班级详情</a>
     </div>
 </div>
 `
-                $("#container").append(trs);
             }
+            $("#container").html(trs)
         })
     }
     jQuery(function (){
@@ -149,6 +148,7 @@
             if (rst.length==6){
                 jQuery("#invitation").html(rst)
                 jQuery("#addSuccessDialog").modal('show');
+                init();
             }else{
                 alert('添加失败!')
             }
@@ -159,18 +159,17 @@
     //删除班级
     var deleteCno;
     function showDeleteClassDialog(cno,cname){
-        console.log(cno)
-        console.log(cname)
         jQuery("#class").html(cname)
         jQuery("#deleteCno").html(cno)
         deleteCno =cno
         jQuery("#deleteClassDialog").modal('show');
     }
     function doDeleteClass(){
-        console.log(deleteCno)
         jQuery("#deleteClassDialog").modal('hide')
         jQuery.post("/teacher/class/deleteClass",{'cno':deleteCno},function (rst){
             if (rst>0){
+                var deleteCard = "#"+deleteCno
+                $(deleteCard).remove()
                 alert("删除成功！")
             }else{
                 alert("删除失败！")

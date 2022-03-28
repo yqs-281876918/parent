@@ -13,6 +13,7 @@ public class ChooseClass {
   private long cno;
   private String data;
   private Class clazz;
+  private int studentSum;
 
   public Class getClazz() {
     return clazz;
