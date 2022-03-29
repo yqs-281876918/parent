@@ -20,8 +20,9 @@
         <module>test</module>
         <module>student</module>
         <module>admin</module>
-        <module>teacher</module>
         <module>admin-api</module>
+        <module>teacher</module>
+        <module>res</module>
     </modules>
 
     <groupId>org.mixed.exam</groupId>
