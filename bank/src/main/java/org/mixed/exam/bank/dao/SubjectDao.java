@@ -2,19 +2,23 @@ package org.mixed.exam.bank.dao;
 
 import lombok.Data;
 import org.checkerframework.checker.units.qual.C;
+import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.util.HttpUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class SubjectDao
@@ -76,6 +80,24 @@ public class SubjectDao
     {
         Query query = Query.query(Criteria.where("courseID").is(courseID).and("type").is(type));
         return (int)mongoTemplate.count(query,DOCUMENT_NAME);
+    }
+
+    //根据课程id取课程
+    public Classification getCourse(String id) {
+        return mongoTemplate.findById(id,Classification.class,"classifications");
+    }
+
+    //根据课程名取课程
+    public String getCourseByName(String course) {
+        Query query = Query.query(Criteria.where("classifyName").is(course));
+        return mongoTemplate.find(query,Classification.class,"classifications").get(0).getId();
+    }
+
+    //根据题型类型和学科查询所有题目基本信息
+    public List<Question> getQuestionByType(String course,String type){
+        String courseID=getCourseByName(course);
+        Query query = Query.query(Criteria.where("courseID").is(courseID).and("type").is(type));
+        return mongoTemplate.find(query,Question.class,"subjects");
     }
 
     public List<Question> getSubjects(String type, Boolean open, Boolean isExamined, Integer difficulty,

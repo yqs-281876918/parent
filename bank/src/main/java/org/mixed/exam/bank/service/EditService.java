@@ -2,7 +2,9 @@ package org.mixed.exam.bank.service;
 
 import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.dao.PaperDao;
+import org.mixed.exam.bank.dao.SubjectDao;
 import org.mixed.exam.bank.pojo.po.Paper;
+import org.mixed.exam.bank.pojo.po.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 public class EditService {
     @Autowired
     private PaperDao paperDao;
+    @Autowired
+    private SubjectDao subjectDao;
 
     public void getFrom(String id,
                         String foreWord,
@@ -35,5 +39,9 @@ public class EditService {
 
     public Classification getCourse(String id) {
         return paperDao.getCourse(id);
+    }
+
+    public List<Question> getQuestions(String course, String type) {
+        return subjectDao.getQuestionByType(course,type);
     }
 }
