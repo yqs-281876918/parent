@@ -6,6 +6,7 @@ import org.mixed.exam.bank.api.client.PaperClient;
 import org.mixed.exam.bank.api.client.SubjectClient;
 import org.mixed.exam.bank.api.pojo.po.Exam;
 import org.mixed.exam.bank.api.pojo.po.Paper;
+import org.mixed.exam.student.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class RouteController
@@ -39,15 +41,15 @@ public class RouteController
         Exam exam = examClient.getByID(examId);
         Paper paper = paperClient.getByID(exam.getPaperID());
         List<List<String>> subjectIDs=paper.getSubjectIDs();
-        List<String> subjectJsons=new ArrayList<>();
+        List<Map<String,Object>> subjectsMap=new ArrayList<>();
         for(List<String> ls : subjectIDs)
         {
             for(String id : ls)
             {
-                subjectJsons.add(subjectClient.getSubjectByID(id));
+                subjectsMap.add(StringUtil.jsonToMap(subjectClient.getSubjectByID(id)));
             }
         }
-        model.addAttribute("subjects",subjectJsons);
+        model.addAttribute("subjects",subjectsMap);
         model.addAttribute("paper",paper);
         return "exam/stuExam.html";
     }
