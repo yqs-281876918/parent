@@ -1,0 +1,10 @@
+server:
+  port: 1905
+  servlet:
+    context-path: /res
+  application:
+    name: res-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:1902/eureka

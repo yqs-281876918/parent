@@ -21,11 +21,12 @@
                 </div>
             </div>
             <div th:each="json,status : ${subjects}" class="row">
-                <div class="col-md-12">
+                <div th:if="${json.tpye} eq singleChoiceQuestion" class="col-md-12">
                     <a th:name="${status.index+1}"></a>
                     <span th:text="${json}"></span>
                 </div>
             </div>
+
         </div>
         <div class="col-md-3">
             <div class="row">
@@ -34,6 +35,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 </body>
