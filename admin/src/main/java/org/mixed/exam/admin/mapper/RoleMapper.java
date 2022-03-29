@@ -19,7 +19,7 @@ public interface RoleMapper {
     //添加
     int Insert(usersDto dto);
     //搜索
-    List<users> Search();
+    List<users> Search(usersDto dto);
 
 
 }
