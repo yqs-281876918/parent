@@ -69,7 +69,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="deleteCno" value="">
-                <p>您确定要退出班级【<span id="class"></span>】吗？</p>
+                <p>您确定要退出班级【<span id="className"></span>】吗？</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
@@ -109,7 +109,6 @@
         jQuery.post("/student/class/findAll",function (rst){
             var trs = ''
             for (var i=0;i<rst.length;i++){
-                console.log(rst[i])
                 var chooseClass = rst[i]
                 var clazz = chooseClass.clazz
                 var users = clazz.users
@@ -124,11 +123,16 @@
         </div>
         <div class="card-body">
             <div style="display: inline-block">
-                <h5 class="card-title"><a href="#">${clazz.cname}</a></h5>
+                <h5 class="card-title">
+                    <a href="#" onclick="goClassDetail('${chooseClass.cno}','${clazz.invitation}',
+                    '${creator}','${clazz.cname}')">
+                    ${clazz.cname}</a>
+                </h5>
             </div>
             <div id="delete" style="display: inline-block">
                 <a href="#" class="btn btn-danger"
-                onclick="showDeleteClassDialog('${chooseClass.cno}','${chooseClass.sname}')">删除班级</a>
+                onclick="showDeleteClassDialog('${chooseClass.cno}','${chooseClass.sname}','${clazz.cname}')">
+                退出班级</a>
             </div>
             <p class="card-text">班级创建者：${creator}</p>
             <p class="card-text">班级邀请码：${clazz.invitation}</p>
@@ -189,6 +193,7 @@
             }else{
                 if (rst == "添加成功"){
                     alert("加入班级成功！")
+                    init()
                 }else{
                     alert("加入班级失败！请检查是否已加入过该班级！")
                 }
@@ -199,9 +204,10 @@
 <script>
     var deleteCno
     var deleteSname
-    function showDeleteClassDialog(cno,sname){
+    function showDeleteClassDialog(cno,sname,cname){
         deleteCno = cno
         deleteSname = sname
+        $("#className").html(cname)
         jQuery("#deleteClassDialog").modal('show')
     }
     function doDeleteClass(){
@@ -215,6 +221,15 @@
                 alert("退出班级失败！请检查是否已退出该班级！")
             }
         })
+    }
+</script>
+<script>
+    function goClassDetail(cno,invitation,creator,cname){
+        sessionStorage.setItem("cno",cno);
+        sessionStorage.setItem("invitation",invitation)
+        sessionStorage.setItem("creator",creator)
+        sessionStorage.setItem("cname",cname)
+        location.href="classDetail.html"
     }
 </script>
 </body>

@@ -1,5 +1,7 @@
 package org.mixed.exam.student.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.mixed.exam.student.dao.ChooseClassMapper;
 import org.mixed.exam.student.pojo.po.ChooseClass;
 import org.mixed.exam.student.pojo.po.Class;
@@ -27,5 +29,13 @@ public class ChooseClassService {
     //学生退出班级
     public int quitClass(long cno ,String sname){
         return chooseClassMapper.quitClass(cno,sname);
+    }
+    //学生进入班级详情页
+    public PageInfo<ChooseClass> getClassDetail(int pageNum,int pageSize,long cno){
+        PageInfo<ChooseClass> pageInfo = null;
+        PageHelper.startPage(pageNum,pageSize);
+        List<ChooseClass> chooseClassList = chooseClassMapper.getClassDetail(cno);
+        pageInfo=new PageInfo<>(chooseClassList,5);
+        return pageInfo;
     }
 }

@@ -21,15 +21,11 @@
         <id property="cno" column="cno"/>
         <result property="data" column="data"/>
         <association property="clazz" resultMap="usersMap"/>
-<!--        <association property="clazz"-->
-<!--                     javaType="org.mixed.exam.student.pojo.po.Class">-->
-<!--            <id property="cno" column="cno"/>-->
-<!--            <result property="cname" column="cname"/>-->
-<!--        </association>-->
     </resultMap>
     <resultMap id="usersMap" type="org.mixed.exam.student.pojo.po.Class">
         <id property="cno" column="cno"/>
         <result property="cname" column="cname"/>
+        <result property="invitation" column="invitation"/>
         <result property="creator" column="creator"/>
         <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
             <id property="username" column="username"/>
@@ -42,5 +38,25 @@
         from chooseClass,class,users
         where sname=#{sname} AND chooseClass.cno=class.cno
           AND class.creator=users.username
+    </select>
+    <select id="getCountStudent" resultType="java.lang.Long"
+            parameterType="java.lang.Long">
+        select count(cno)
+        from chooseClass
+        where cno=#{cno}
+    </select>
+    <resultMap id="chooseStudentDetail" type="org.mixed.exam.student.pojo.po.ChooseClass">
+        <id property="sname" column="sname"/>
+        <id property="cno" column="cno"/>
+        <result property="data" column="data"/>
+        <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
+            <id property="username" column="username"/>
+            <result property="realName" column="realName"/>
+        </association>
+    </resultMap>
+    <select id="getClassDetail" resultMap="chooseStudentDetail">
+        select sname, data, realName
+        from chooseClass,users
+        where cno = #{cno} AND sname = users.username
     </select>
 </mapper>

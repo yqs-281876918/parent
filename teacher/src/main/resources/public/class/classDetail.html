@@ -37,30 +37,53 @@
 <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
 <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<!-- 退出班级的提示框 -->
-<div class="modal fade" id="quitClassDialog" tabindex="-1">
+<!-- 删除班级的提示框 -->
+<div class="modal fade" id="deleteClassDialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">退出班级</h5>
+                <h5 class="modal-title">删除班级</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="deleteCno" value="">
-                <p>您确定要退出班级【<span id="quitClassName"></span>】吗？</p>
+                <p>您确定要删除班级【<span id="deleteClassName"></span>】吗？</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
                         data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary"
-                        onclick="quitClass()">确定</button>
+                        onclick="deleteClass()">确定</button>
             </div>
         </div>
     </div>
 </div>
-<!-- 退出班级模态框结束 -->
+<!-- 删除班级模态框结束 -->
+<!-- 删除学生的提示框 -->
+<div class="modal fade" id="deleteStudentDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">删除学生</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>您确定要删除学生【<span id="deleteStudentName"></span>】吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="deleteStudent()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除学生模态框结束 -->
 <div id="wrap">
     <div id="test-con">
         <div id="bj-inner">
@@ -73,7 +96,7 @@
                             <span class="start">班级邀请码：<span class="sdate" id="invitation"></span></span>
                         </div>
                         <a href="javascript:void(0)" class="libj clsTest" >该班级测试</a>
-                        <a href="javascript:void(0)" class="libj outCls" onclick="showQuitClassDialog()">退出班级</a>
+                        <a href="javascript:void(0)" class="libj outCls" onclick="showDeleteClassDialog()">删除班级</a>
                     </div>
                     <div class="bj-message detail-bj">
                         <table cellpadding="0" cellspacing="0">
@@ -94,6 +117,7 @@
                         <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">加入时间</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
                         <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">性别</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
                         <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">邮箱</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">操作</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
                         <div class="clear"></div>
                     </tr>
                     </thead>
@@ -149,7 +173,7 @@
             "pageSize":pageSize,
             "cno":cno
         };
-        jQuery.post("/student/class/detail",param,function (rst){
+        jQuery.post("/teacher/class/detail",param,function (rst){
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
             jQuery("#pageNum").html(pageNum);
@@ -160,6 +184,7 @@
             trs = ''
             for (var i=0;i<studentArrs.length;i++){
                 var s = studentArrs[i];
+                console.log(s.users.realName)
                 trs += `
 <tr>
     <td style="cursor:default;">&nbsp;${i+1}&nbsp;</td>
@@ -168,6 +193,9 @@
     <td style="cursor:default;">${s.data}</td>
     <td style="cursor:default;" class="student"></td>
     <td style="cursor:default;"></td>
+    <td style="cursor:default;">
+        <a href="#" onclick="showDeleteStudentDialog('${s.sname}','${s.users.realName}')">删除学生</a>
+    </td>
 </tr>
                 `
             }
@@ -220,20 +248,49 @@
     }
 </script>
 <script>
-    function showQuitClassDialog(){
+    function showDeleteClassDialog(){
         var cname = sessionStorage.getItem("cname")
-        $("#quitClassName").html(cname)
-        $("#quitClassDialog").modal('show')
+        $("#deleteClassName").html(cname)
+        $("#deleteClassDialog").modal('show')
     }
-    function quitClass(){
-        $("#quitClassDialog").modal('hide')
+    function deleteClass(){
+        $("#deleteClassDialog").modal('hide')
         var deleteCno = sessionStorage.getItem("cno")
-        jQuery.post("/student/class/quitInDetail",{'cno':deleteCno},function (rst){
+        jQuery.post("/teacher/class/deleteClass",{'cno':deleteCno},function (rst){
             if (rst>0){
-                alert("退出班级成功")
-                location.href="myClass.html"
+                alert("删除班级成功")
+                location.href="detail.html"
             }else{
-                alert("退出班级失败！请检查是否已退出该班级！")
+                alert("删除班级失败！请检查是否已删除该班级！")
+            }
+        })
+    }
+</script>
+<script>
+    var deleteStudent = {
+        "cno": 0,
+        "sname": ''
+    };
+    function showDeleteStudentDialog(sname,realName){
+        var deleteCno = sessionStorage.getItem("cno")
+        var deleteStudentName = sname;
+        if (realName!=""){
+            deleteStudentName = realName
+        }
+        deleteStudent.cno=deleteCno
+        deleteStudent.sname=sname
+        $("#deleteStudentName").html(deleteStudentName)
+        $("#deleteStudentDialog").modal('show')
+    }
+    function deleteStudent(){
+        $("#deleteStudentDialog").modal('hide')
+        jQuery.post("/teacher/class/deleteStudent",deleteStudent,function (rst){
+            if (rst>0){
+                alert("成功移除该同学！")
+                init()
+            }
+            else{
+                alert("移除失败！请检查该同学是否还在班级内！")
             }
         })
     }

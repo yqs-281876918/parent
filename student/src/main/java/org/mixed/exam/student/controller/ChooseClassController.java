@@ -1,6 +1,7 @@
 package org.mixed.exam.student.controller;
 
 
+import com.github.pagehelper.PageInfo;
 import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.student.pojo.po.ChooseClass;
 import org.mixed.exam.student.pojo.po.Class;
@@ -72,5 +73,23 @@ public class ChooseClassController {
     @RequestMapping("/class/quit")
     public int quitClass(long cno,String sname){
         return classService.quitClass(cno,sname);
+    }
+    @RequestMapping("/class/quitInDetail")
+    public int quitClassInDetail(long cno,HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        String sname = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String jwt = cookie.getValue();
+                String userName = AuthUtil.parseUsername(jwt);
+                sname = userName;
+            }
+        }
+        return classService.quitClass(cno,sname);
+    }
+    //班级详情所有学生
+    @RequestMapping("/class/detail")
+    public PageInfo<ChooseClass> getClassDetail(int pageNum, int pageSize, long cno){
+        return classService.getClassDetail(pageNum,pageSize,cno);
     }
 }

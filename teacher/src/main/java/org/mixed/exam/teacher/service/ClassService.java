@@ -1,6 +1,9 @@
 package org.mixed.exam.teacher.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.mixed.exam.teacher.dao.ClassMapper;
+import org.mixed.exam.teacher.pojo.po.ChooseClass;
 import org.mixed.exam.teacher.pojo.po.Class;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +29,17 @@ public class ClassService {
     //删除班级
     public int deleteClass(long cno){
         return classMapper.deleteClass(cno);
+    }
+    //老师进入班级详情页
+    public PageInfo<ChooseClass> getClassDetail(int pageNum, int pageSize, long cno){
+        PageInfo<ChooseClass> pageInfo = null;
+        PageHelper.startPage(pageNum,pageSize);
+        List<ChooseClass> chooseClassList = classMapper.getClassDetail(cno);
+        pageInfo=new PageInfo<>(chooseClassList,5);
+        return pageInfo;
+    }
+    //删除某学生
+    public int deleteStudent(ChooseClass chooseClass){
+        return classMapper.deleteStudent(chooseClass);
     }
 }

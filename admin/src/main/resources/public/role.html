@@ -202,7 +202,7 @@
     </div>
 </div>
 <!-- 添加模态框结束 -->
-<!--尝试删除-->
+<!--搜索模态框开始-->
 <div class="modal fade" id="searchDialog" tabindex="-1" >
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -219,7 +219,7 @@
                             <span class="input-group-text" id="basic-addon1">用户名</span>
                         </div>
                         <div class="row-8">
-                            <input type="text" name="userName" class="form-control" placeholder="请输入用户名" aria-label="Username" aria-describedby="basic-addon1">
+                            <input type="text" id="name" name="userName" class="form-control" placeholder="请输入用户名" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                         <div>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -228,7 +228,7 @@
                             <span class="input-group-text" id="basic-addon2">真实姓名</span>
                         </div>
                         <div class="row-8">
-                            <input type="text" name="userRealName" class="form-control" placeholder="请输入用户真实姓名" aria-label="Username" aria-describedby="basic-addon1">
+                            <input id="rn" type="text" name="userRealName" class="form-control" placeholder="请输入用户真实姓名" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="input-group mb-3">
@@ -236,7 +236,7 @@
                             <span class="input-group-text row-4" id="basic-addon3">用户角色</span>
                         </div>
                         <div class="row-8">
-                            <select name="userRole"
+                            <select id="sle" name="userRole"
                                     class="form-control">
                                 <option name="userRole" value="adm">管理员</option>
                                 <option name="userRole" value="tea1">高级教师</option>
@@ -257,10 +257,7 @@
         </div>
     </div>
 </div>
-
-
-
-
+<!--搜索模态框结束-->
 
 <div id="container">
     <div id="top">
@@ -572,25 +569,84 @@
     }
     $("#search-btn").on("click",function () {
         var data = {
-            "username": $("#basic-addon1").val(),
-            "realName": $("#basic-addon2").val(),
-            "role": $("#basic-addon3").val(),
+            "username": $("#name").val(),
+            "realName": $("#rn").val(),
+            "role": $("#sle").val(),
             "pageNum":pageNum,
             "pageSize":pageSize,
         }
         jQuery.post("/admin/Role/Search", data, function (rst) {
+            pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
-            jQuery("#pageNum").html(pageNum);
-            jQuery("#totalnum").html(rst.total);
-            console.log(username);
-            if (rst > 1) {
-                alert("查询成功");
+            jQuery("#pageNum").html(data.pageNum);
+            jQuery("#totals").html(rst.total);
+
+            if (rst.list.length > 0) {
                 jQuery("#searchDialog").modal('hide');
-                init();
+                
+                var arrs=rst.list;
+                var trs="";
+                for(var i=0;i<arrs.length;i++) {
+
+                    //获取每一行对应的用户对象
+                    var u=arrs[i];
+
+                    //循环一次一行数据
+                    //使用反引号,用于定义模板
+
+                    trs+=`
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="users" value="${u.username}">
+                        </td>
+                        <td>${u.username}</td>
+                        <td onclick="gotorole('${u.username}')">${u.realName}</td>
+                        <td onclick="gotorole('${u.username}'))">${u.role}</td>
+                        <td>
+                            <a href="#"
+                            onclick="showDeleteDialog('${u.username}')">删除</a>
+                        <a href="#"
+                            onclick="showEditDialog('${u.username}','${u.realName}',
+                            '${u.role}')">编辑</a>
+                        </td>
+                    </tr>
+                    `;
+
+                }
+                //把根据数据构建的行添加到表格
+
+                jQuery("#data").html(trs);
+
+                var nums=rst.navigatepageNums;
+                var nav=`
+        <ul class="pagination">
+                             <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum-1})">上一页</a>
+                                </li>
+                                `;
+                for(var i=0;i<nums.length;i++){
+                    nav+=`
+            <li class="page-item ${pageNum==nums[i]?'active':''}">
+                                    <a href="#" class="page-link">${nums[i]}</a>
+                                </li>
+
+            `;
+                }
+
+                nav+=`
+                                <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum+1})">下一页</a>
+                                </li>
+                            </ul>
+        `;
+                jQuery("#right").html(nav);
             } else {
                 alert("该用户不存在");
                 jQuery("#searchDialog").modal('hide');
             }
+
         });
     })
 </script>

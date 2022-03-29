@@ -119,10 +119,12 @@
             <h5 class="card-title">${u.cname}</h5>
         </div>
         <div id="delete" style="display: inline-block">
-            <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">退出班级</a>
+            <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">删除班级</a>
         </div>
         <p class="card-text">班级邀请码：${u.invitation}</p>
-        <a href="#" class="btn btn-primary">班级详情</a>
+        <a href="#" class="btn btn-primary"
+        onclick="goClassDetail('${u.cno}','${u.cname}','${u.invitation}','${u.creator}')">
+        班级详情</a>
     </div>
 </div>
 `
@@ -135,8 +137,40 @@
     })
 </script>
 <script>
+    function ClearForm(id) {
+        var objId = document.getElementById(id);
+        if (objId == undefined) {
+            return;
+        }
+        for (var i = 0; i < objId.elements.length; i++) {
+            if (objId.elements[i].type == "text") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "password") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "radio") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "checkbox") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "select-one") {
+                objId.elements[i].options[0].selected = true;
+            }
+            else if (objId.elements[i].type == "select-multiple") {
+                for (var j = 0; j < objId.elements[i].options.length; j++) {
+                    objId.elements[i].options[j].selected = false;
+                }
+            }
+            else if (objId.elements[i].type == "textarea") {
+                objId.elements[i].value = "";
+            }
+        }
+    }
     //添加班级
     function showAddClassDialog(){
+        ClearForm("addClassDialogForm")
         jQuery("#addClassDialog").modal('show');
     }
     function doAddClass(){
@@ -175,6 +209,15 @@
                 alert("删除失败！")
             }
         })
+    }
+</script>
+<script>
+    function goClassDetail(cno,cname,invitation,creator){
+        sessionStorage.setItem("cno",cno)
+        sessionStorage.setItem("cname",cname)
+        sessionStorage.setItem("invitation",invitation)
+        sessionStorage.setItem("creator",creator)
+        location.href="classDetail.html"
     }
 </script>
 </body>
