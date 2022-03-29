@@ -54,6 +54,12 @@
             <artifactId>auth-api</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.2.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

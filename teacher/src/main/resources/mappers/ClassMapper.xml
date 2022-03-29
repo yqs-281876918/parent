@@ -9,11 +9,29 @@
         delete from class
         where cno=#{cno}
     </delete>
+    <delete id="deleteStudent" parameterType="org.mixed.exam.teacher.pojo.po.ChooseClass">
+        delete from chooseClass
+        where cno=#{cno} AND sname=#{sname}
+    </delete>
     <select id="selectMaxCno" resultType="java.lang.Integer">
         select max(cno) from class
     </select>
     <select id="getClasses" resultType="org.mixed.exam.teacher.pojo.po.Class">
         select * from class where creator=#{creator}
+    </select>
+    <resultMap id="chooseStudentDetail" type="org.mixed.exam.teacher.pojo.po.ChooseClass">
+        <id property="sname" column="sname"/>
+        <id property="cno" column="cno"/>
+        <result property="data" column="data"/>
+        <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
+            <id property="username" column="username"/>
+            <result property="realName" column="realName"/>
+        </association>
+    </resultMap>
+    <select id="getClassDetail" resultMap="chooseStudentDetail">
+        select sname, data, realName
+        from chooseClass,users
+        where cno = #{cno} AND sname = users.username
     </select>
 
 </mapper>

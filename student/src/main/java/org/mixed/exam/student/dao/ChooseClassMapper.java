@@ -19,4 +19,8 @@ public interface ChooseClassMapper {
     List<ChooseClass> selectAllClass(@Param("sname") String sname);
     //学生退出班级
     int quitClass(long cno,String sname);
+    //班级总人数
+    long getCountStudent(long cno);
+    //班级人员信息详情
+    List<ChooseClass> getClassDetail(long cno);
 }

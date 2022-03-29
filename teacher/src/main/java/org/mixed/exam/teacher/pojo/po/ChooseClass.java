@@ -3,6 +3,7 @@ package org.mixed.exam.teacher.pojo.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mixed.exam.auth.api.po.Users;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +14,24 @@ public class ChooseClass {
   private long cno;
   private String data;
   private Class clazz;
+  private long studentSum;
+  private Users users;
+
+  public long getStudentSum() {
+    return studentSum;
+  }
+
+  public void setStudentSum(long studentSum) {
+    this.studentSum = studentSum;
+  }
+
+  public Users getUsers() {
+    return users;
+  }
+
+  public void setUsers(Users users) {
+    this.users = users;
+  }
 
   public Class getClazz() {
     return clazz;
