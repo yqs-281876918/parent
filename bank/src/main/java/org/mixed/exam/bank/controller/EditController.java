@@ -3,6 +3,7 @@ package org.mixed.exam.bank.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import org.mixed.exam.admin.api.pojo.Classification;
+import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.service.EditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,6 @@ public class EditController {
         }else {
             System.out.println("是否开放 error");
         }
-
     }
 
     @ResponseBody
@@ -57,6 +57,12 @@ public class EditController {
         return editService.getCourse(id);
     }
 
+    @ResponseBody
+    @PostMapping("/edit/getQuestions")
+    public List<Question> getQuestions(@RequestParam("course") String course,
+                                       @RequestParam("type") String type) {
+        return editService.getQuestions(course,type);
+    }
 //    @ResponseBody
 //    @PostMapping("/edit/getQuestion")
 //    public Classification getQuestion(@RequestParam("id") String id) {
