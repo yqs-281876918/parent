@@ -107,21 +107,35 @@
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户姓名:</label>
                         <div class="col-8">
-                            <input type="text" id="username" name="username"
+                            <input type="text" id="edit-username" name="username"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户真实姓名:</label>
                         <div class="col-8">
-                            <input type="text" name="realName" id="realName"
+                            <input type="text" name="realName" id="edit-realName"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户邮箱:</label>
+                        <div class="col-8">
+                            <input type="text" name="email" id="edit-email"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户联系方式:</label>
+                        <div class="col-8">
+                            <input type="text" name="telephone" id="edit-telephone"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户角色:</label>
                         <div class="col-8">
-                            <select id="role" name="role"
+                            <select id="edit-role" name="role-edit"
                                     class="form-control">
                                 <option value="adm">管理员</option>
                                 <option value="tea1">普通教师</option>
@@ -155,7 +169,7 @@
             </div>
             <div class="modal-body">
                 <form id="addDialogForm">
-                    <input type="hidden" name="adduserName" id="adduserName">
+                    <input type="hidden" name="adduserName" id="add-userName">
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户姓名:</label>
                         <div class="col-8">
@@ -178,6 +192,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">用户邮箱:</label>
+                        <div class="col-8">
+                            <input type="text" name="add-email" id="add-email"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">联系方式:</label>
+                        <div class="col-8">
+                            <input type="text" name="add-telephone" id="add-telephone"
+                                   class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户角色:</label>
                         <div class="col-8">
                             <select id="add-role" name="add-role"
@@ -196,12 +224,13 @@
                 <button type="button" class="btn btn-secondary"
                         data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary"
-                        id="btn">确定</button>
+                        id="btn-add">确定</button>
             </div>
         </div>
     </div>
 </div>
 <!-- 添加模态框结束 -->
+
 <!--搜索模态框开始-->
 <div class="modal fade" id="searchDialog" tabindex="-1" >
     <div class="modal-dialog modal-dialog-centered">
@@ -280,8 +309,10 @@
                                onclick="selectAll(this.checked)">
                     </td>
                     <td>用户名</td>
-                    <td>用户真实名称</td>
+                    <td>真实名称</td>
                     <td>用户角色</td>
+                    <td>邮箱</td>
+                    <td>联系方式</td>
                     <td>管理员操作</td>
                 </tr>
                 </thead>
@@ -291,7 +322,7 @@
 
                 <tfoot>
                 <tr id="tablebottom" class="table-bordered">
-                    <td colspan="5">
+                    <td colspan="7">
                         <div id="page_div">
                             <div id="right">
                             </div>
@@ -345,12 +376,15 @@
                         <td>${u.username}</td>
                         <td onclick="gotorole('${u.username}')">${u.realName}</td>
                         <td onclick="gotorole('${u.username}'))">${u.role}</td>
+                        <td onclick="gotorole('${u.username}'))">${u.email}</td>
+                        <td onclick="gotorole('${u.username}'))">${u.telephone}</td>
+
                         <td>
                             <a href="#"
                             onclick="showDeleteDialog('${u.username}')">删除</a>
                         <a href="#"
                             onclick="showEditDialog('${u.username}','${u.realName}',
-                            '${u.role}')">编辑</a>
+                            '${u.role}','${u.email}','${u.telephone}')">编辑</a>
                         </td>
                     </tr>
                     `;
@@ -410,12 +444,17 @@
                 var username=uu.username;
                 var realName=uu.realName;
                 var role=uu.role;
-                var param2={"username":username,"realName":realName,"role":role};
+                var email=uu.email;
+                var telephone=uu.telephone;
+
+                var param2={"username":username,"realName":realName,"role":role,"email":email,"telephone":telephone};
                 window.sessionStorage.setItem("username",param2.username);
                 window.sessionStorage.setItem("realName",param2.realName);
                 window.sessionStorage.setItem("role",param2.role);
-                console.log(uu.username);
-                console.log(uu.role);
+                window.sessionStorage.setItem("email",param2.email);
+                window.sessionStorage.setItem("telephone",param2.telephone);
+                //console.log(uu.username);
+                //console.log(uu.role);
 
             }
         })
@@ -453,7 +492,7 @@
 
 </script>
 
-
+<!--删除-->
 <script>
     //存放用户的username
     var username;
@@ -480,14 +519,16 @@
         })
     }
 </script>
-
+<!--修改-->
 <script>
     //修改操作
-    function showEditDialog(username,realName,role)
+    function showEditDialog(username,realName,role,email,telephone)
     {
-        jQuery("#username").val(username);
-        jQuery("#realName").val(realName);
-        jQuery("#role").val(role);
+        jQuery("#edit-username").val(username);
+        jQuery("#edit-realName").val(realName);
+        jQuery("#edit-role").val(role);
+        jQuery("#edit-email").val(email);
+        jQuery("#edit-telephone").val(telephone);
         jQuery("#editDialog").modal('show');
     }
     function doEdit()
@@ -496,7 +537,9 @@
         //1.表单控件必须提供name属性
         //2.name属性的值必须与后台dto中的属性同名
         var form=jQuery("#editDialogForm").serialize();
+        console.log(form);
         jQuery.post("/admin/Role/updateInfo",form,function (rst) {
+            console.log(rst);
             if(rst>0)
             {
                 alert("修改成功!");
@@ -508,6 +551,7 @@
         })
     }
 </script>
+<!--添加-->
 <script>
     //添加操作
     function showAddDialog()
@@ -533,6 +577,18 @@
             document.getElementById("add-password").focus();
             return false;
         }
+        str=document.getElementById("add-email").value;
+        if(str.length<1){
+            alert("请输入可使用的邮箱");
+            document.getElementById("add-email").focus();
+            return false;
+        }
+        str=document.getElementById("add-telephone").value;
+        if(str.length<1){
+            alert("请输入可使用的手机号码");
+            document.getElementById("add-telephone").focus();
+            return false;
+        }
         str=document.getElementById("add-role").value;
         if(str.length<1){
             alert("请选择用户身份");
@@ -541,16 +597,19 @@
         }
         return true;
     }
-    $("#btn").on("click",function () {
+    $("#btn-add").on("click",function () {
         if (check()) {
             var data = {
                 "username": $("#add-name").val(),
                 "realName": $("#add-realName").val(),
                 "password": $("#add-password").val(),
-                "role": $("#add-role").val()
+                "role": $("#add-role").val(),
+                "email":$("#add-email").val(),
+                "telephone":$("#add-telephone").val()
             }
+            console.log(data);
             jQuery.post("/admin/Role/Insert", data, function (rst) {
-                console.log(rst);
+                //console.log(rst);
                 if (rst == 1) {
                     alert("添加成功");
                     jQuery("#addDialog").modal('hide');
@@ -561,8 +620,8 @@
             });
         }
     })
-
 </script>
+<!--搜索功能-->
 <script>
     function showSearchDialog(){
         jQuery("#searchDialog").modal('show');
@@ -602,12 +661,13 @@
                         <td>${u.username}</td>
                         <td onclick="gotorole('${u.username}')">${u.realName}</td>
                         <td onclick="gotorole('${u.username}'))">${u.role}</td>
-                        <td>
+                        <td onclick="gotorole('${u.username}'))">${u.email}</td>
+                        <td onclick="gotorole('${u.username}'))">${u.telephone}</td>
                             <a href="#"
                             onclick="showDeleteDialog('${u.username}')">删除</a>
                         <a href="#"
                             onclick="showEditDialog('${u.username}','${u.realName}',
-                            '${u.role}')">编辑</a>
+                            '${u.role}','${u.email}','${u.telephone}')">编辑</a>
                         </td>
                     </tr>
                     `;
@@ -642,7 +702,9 @@
                             </ul>
         `;
                 jQuery("#right").html(nav);
-            } else {
+            }
+
+            else if(rst.list.length == 0) {
                 alert("该用户不存在");
                 jQuery("#searchDialog").modal('hide');
             }

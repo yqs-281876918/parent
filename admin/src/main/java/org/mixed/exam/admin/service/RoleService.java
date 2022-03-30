@@ -38,6 +38,7 @@ public class RoleService {
         row=rolemapper.update(username);
         return row;
     }
+    //编辑
     public int UpdateInfo(usersDto dto){
         int row=0;
         row=rolemapper.UpdateInfo(dto);
