@@ -2,6 +2,7 @@ package org.mixed.exam.bank.util;
 
 import lombok.Data;
 import org.mixed.exam.bank.pojo.po.Question;
+import org.mixed.exam.bank.pojo.po.ReadComprehension;
 import org.mixed.exam.bank.pojo.po.SingleChoiceQuestion;
 
 import javax.management.Query;
@@ -11,6 +12,7 @@ import java.util.*;
 
 public class SubjectGenerator {
     public static ChineseWrongCharacter CHINESE_WRONG_CHARACTER = new ChineseWrongCharacter();
+    public static ChineseReadComprehension CHINESE_READ_COMPREHENSION=new ChineseReadComprehension();
 }
 @Data
 class ChineseWrongCharacter
@@ -51,7 +53,37 @@ class ChineseWrongCharacter
 }
 class ChineseReadComprehension
 {
+    private String[] creators=new String[]{"yqs","qlh","yk","zyn","zhx"};
 
+    public ReadComprehension randomRC()
+    {
+        ReadComprehension q = new ReadComprehension();
+        q.setType("readComprehension");
+        q.setDifficulty((int)(Math.random()*5)+1);
+        Date date_2000=null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            date_2000 = sdf.parse("2000-01-01 00:00:00");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+        Date date_now=new Date();
+        long date_between=date_now.getTime()-date_2000.getTime();
+        Date date_random=new Date();
+        date_random.setTime(date_2000.getTime()+(long) (Math.random()*date_between));
+        q.setDate(date_random);
+        q.setCourseID("622dbb040913ed05f6402c8b");//语文
+        q.setClass2ndID("62304bf274a387398923fe3b");//错词辨析
+        q.setRespondentCount((int)(Math.random()*100));
+        q.setCorrectCount((int)(Math.random()*q.getRespondentCount()));
+        q.setIntroduction("这是语文阅读理解题目"+System.currentTimeMillis());
+        q.setCreator(creators[(int)(Math.random()*5)]);
+        q.setDescription("这是阅读理解题目"+System.currentTimeMillis());
+        q.setOptions(Arrays.asList("第一题","第二题","第三题","第四题"));
+        q.setAnswers(Arrays.asList("第一题答案","第二题答案","第三题答案","第四题答案"));
+        return q;
+    }
 }
 //private String id;//题目主键id
 //private Boolean isExamined=false;//是否审核通过

@@ -22,9 +22,13 @@ public class SubjectGeneratorTest
     }
     private void generate()
     {
+//        for(int i=0;i<15;i++)
+//        {
+//            subjectDao.saveSubject(SubjectGenerator.CHINESE_WRONG_CHARACTER.randomSCQ());
+//        }
         for(int i=0;i<15;i++)
         {
-            subjectDao.saveSubject(SubjectGenerator.CHINESE_WRONG_CHARACTER.randomSCQ());
+            subjectDao.saveSubject(SubjectGenerator.CHINESE_READ_COMPREHENSION.randomRC());
         }
     }
     private void renderBaseInfo(Question q)
