@@ -107,35 +107,35 @@
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户姓名:</label>
                         <div class="col-8">
-                            <input type="text" id="edit-username" name="username"
+                            <input type="text" id="edit-username" name="edit-username"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户真实姓名:</label>
                         <div class="col-8">
-                            <input type="text" name="realName" id="edit-realName"
+                            <input type="text" name="edit-realName" id="edit-realName"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户邮箱:</label>
                         <div class="col-8">
-                            <input type="text" name="email" id="edit-email"
+                            <input type="text" name="edit-email" id="edit-email"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户联系方式:</label>
                         <div class="col-8">
-                            <input type="text" name="telephone" id="edit-telephone"
+                            <input type="text" name="edit-telephone" id="edit-telephone"
                                    class="form-control">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户角色:</label>
                         <div class="col-8">
-                            <select id="edit-role" name="role-edit"
+                            <select id="edit-role" name="edit-role"
                                     class="form-control">
                                 <option value="adm">管理员</option>
                                 <option value="tea1">普通教师</option>
@@ -169,7 +169,7 @@
             </div>
             <div class="modal-body">
                 <form id="addDialogForm">
-                    <input type="hidden" name="adduserName" id="add-userName">
+                    <input type="hidden" name="add-userName" id="add-userName">
                     <div class="form-group row">
                         <label class="col-form-label col-3 text-right">用户姓名:</label>
                         <div class="col-8">
@@ -533,12 +533,15 @@
     }
     function doEdit()
     {
-        //前提：
-        //1.表单控件必须提供name属性
-        //2.name属性的值必须与后台dto中的属性同名
-        var form=jQuery("#editDialogForm").serialize();
-        console.log(form);
-        jQuery.post("/admin/Role/updateInfo",form,function (rst) {
+        var data = {
+            "username": $("#edit-username").val(),
+            "realName": $("#edit-realName").val(),
+            "role": $("#edit-role").val(),
+            "email":$("#edit-email").val(),
+            "telephone":$("#edit-telephone").val()
+        }
+        console.log(data);
+        jQuery.post("/admin/Role/updateInfo",data,function (rst) {
             console.log(rst);
             if(rst>0)
             {

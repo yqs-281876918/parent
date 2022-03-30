@@ -6,7 +6,7 @@ public class users {
     private String password;
     private String role;
     private String email;
-    private int telephone;
+    private String telephone;
 
 
     public String getEmail() {
@@ -15,14 +15,6 @@ public class users {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(int telephone) {
-        this.telephone = telephone;
     }
 
 
@@ -34,7 +26,13 @@ public class users {
         this.password = password;
     }
 
+    public String getTelephone() {
+        return telephone;
+    }
 
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
 
     public String getRealName() {
         return realName;

@@ -8,7 +8,7 @@ public class usersDto extends users {
     private String role;
     private String password;
     private String email;
-    private int telephone;
+    private String telephone;
 
 
     @Override
@@ -21,17 +21,16 @@ public class usersDto extends users {
         this.email = email;
     }
 
+
     @Override
-    public int getTelephone() {
+    public String getTelephone() {
         return telephone;
     }
 
     @Override
-    public void setTelephone(int telephone) {
+    public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-
-
 
     public String getPassword() {
         return password;
