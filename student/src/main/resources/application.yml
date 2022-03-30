@@ -1,6 +1,21 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
+  thymeleaf:
+    prefix: classpath:/private/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
   application:
     name: student-service
+  datasource:
+    url: jdbc:mysql://42.192.123.219:3306/auth?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: Mixed2022.
+    driver-class-name: com.mysql.cj.jdbc.Driver
 eureka:
   client:
     service-url:
@@ -19,4 +34,9 @@ security:
     resource:
       jwt:
         key-uri: http://auth-service/oauth/token_key
-        key-value: Mixed2022.
+        key-value: OhxVMm5Fjr%S!fq^Ss%O9JcMmo&iHM@q0h&FacVE
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+logging:
+  level.org.mixed.exam.student.dao: debug

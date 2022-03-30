@@ -38,4 +38,8 @@ public class Question
         }
         return (double)correctCount/respondentCount;
     }
+    @Override
+    public boolean equals(Object q) {
+        return this.id.equals(((Question)q).getId());
+    }
 }

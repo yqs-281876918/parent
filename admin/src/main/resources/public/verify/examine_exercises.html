@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>审核题目</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body onload="init()">
+<dialog id="deleteDialog">
+    deleteDialog
+</dialog>
+    <div id="container">
+        <input type="text" name="subject"value="题目：倒霉搜房那佛王者">
+
+        </input>
+        <div id="sameQuestion" name="sameQuestion">
+
+        </div>
+        <table>
+            <tr>
+                <td><a>错误检查</a></td>
+                <td><a>敏感词汇检测</a></td>
+                <td><a>题目重复检测</a></td>
+            </tr>
+            <tr>
+                <td>
+                    <form id="errorcheck">
+                        <input type="radio" name="error_check" value="1">通过
+                        <input type="radio" name="error_check" value="0">未通过
+                    </form>
+                </td>
+
+                <td>
+                    <span id="wordcheck"></span>
+                    <button onclick="WordsCheck()">自动检测</button>
+                </td>
+                <td>
+                    <span id="repeatcheck"></span>
+                    <button onclick="RepeatCheck()">自动检测</button>
+                </td>
+
+            </tr>
+        </table>
+        <div>
+            <button onclick="Pass()">通过</button>
+            <button onclick="Fail()">不通过</button>
+        </div>
+    </div>
+</body>
+<script>
+    function init() {
+        var WordCheck=window.sessionStorage.getItem("WordCheck");
+        var RepeatCheck=window.sessionStorage.getItem("RepeatCheck");
+        var a;
+        var b;
+        if(WordCheck==null){
+            a="未检测";
+        }else if (WordCheck=="true"){
+            a="通过";
+        }else if(WordCheck=="false"){
+            a="未通过";
+        }
+        if(RepeatCheck==null){
+            b="未检测";
+        }else if (RepeatCheck=="true"){
+            b="通过";
+        }else if(RepeatCheck=="false"){
+            b="未通过";
+        }
+        jQuery("#wordcheck").html(a);
+        jQuery("#repeatcheck").html(b);
+    }
+</script>
+<script>
+    function RepeatCheck() {
+        // window.sessionStorage.setItem("RepeatCheck",true);
+        // init();
+        form={
+            "id":"6207b3a80875141b0f368672",
+            "type":"singleChoiceQuestion"
+        };
+        jQuery.post("/admin/examineExercises/repeatCheck",form,function (rst) {
+            var u=rst;
+            alert(JSON.stringify(rst));
+            if(rst==""){
+                window.sessionStorage.setItem("RepeatCheck",true);
+            }else{
+                window.sessionStorage.setItem("RepeatCheck",false);
+                alert("重复题目："+rst.id);
+            }
+            init();
+        })
+    }
+</script>
+<script>
+    function WordsCheck() {
+        form={
+            "id":"6207b3a80875141b0f368672",
+            "type":"singleChoiceQuestion"
+        };
+        jQuery.post("/admin/examineExercises/wordCheck",form,function (rst) {
+            alert(rst);
+            window.sessionStorage.setItem("WordCheck",rst);
+            init();
+        })
+    }
+</script>
+<script>
+    function Pass() {
+        var WordCheck=window.sessionStorage.getItem("WordCheck");
+        var RepeatCheck=window.sessionStorage.getItem("RepeatCheck");
+        if(WordCheck=="true"&&RepeatCheck=="true"&&$("input[name='error_check']:checked").val()==1){
+            alert("pass");
+            //将审核字段改为通过审核
+            var parm={
+                "id":"6207b3a80875141b0f368672",
+                "type":"singleChoiceQuestion"
+            }
+            jQuery.post("/admin/examineExercises/pass",parm,function (rst) {
+                alert(rst);
+            })
+        }else{
+            alert("本题还未通过全部检测");
+            //弹框
+        }
+    }
+</script>
+<script>
+    function Fail() {
+        var WordCheck=window.sessionStorage.getItem("WordCheck");
+        var RepeatCheck=window.sessionStorage.getItem("RepeatCheck");
+        if(WordCheck=="true"&&RepeatCheck=="true"&&$("input[name='error_check']:checked").val()==1){
+            var reason = prompt("驳回原因","");
+            alert(reason);
+            //有唔驳回原因可调 有的话就加个数据库给传给teacher 没有就去掉原因
+        }else{
+            alert("failed");
+            //驳回
+        }
+    }
+</script>
+</html>

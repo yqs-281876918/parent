@@ -442,7 +442,6 @@
                 if(j==len-1)
                     last=j;
             }
-
             let s;
             answer = answer + (questions) + "、";
             for (let k = begin; k < last; k++) {
@@ -472,24 +471,6 @@
 
 </div>
 
-<!-- 连线题 -->
-<body>
-<div id="container">
-    <div id="left_side"></div>
-    <div id="right_side"></div>
-</div>
-</body>
-<div id="matching_answer_info"></div>
-<style>
-    #left_side{
-        background: #ccffff;
-        float: left;
-    }
-    #right_side{
-        background: #ffcccc;
-        float: left;
-    }
-</style>
 <!-- 单选题  -->
 <div id="single_options_info" style="border: 1px solid black"></div>
 <div id="single_answer_info" ></div>
@@ -534,6 +515,24 @@
 <!-- 程序题 -->
 <div id="programProblem_answer_info"></div>
 
+<!-- 连线题 -->
+<body>
+<div id="container">
+    <div id="left_side"></div>
+    <div id="right_side"></br></div>
+</div>
+</body>
+<style>
+    #left_side{
+        background: #ccffff;
+        float: left;
+    }
+    #right_side{
+        background: #ffcccc;
+        float: left;
+    }
+</style>
+<div id="matching_answer_info"></div>
 
 
 <hr />

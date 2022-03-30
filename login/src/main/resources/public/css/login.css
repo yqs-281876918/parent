@@ -55,6 +55,12 @@ input[type=submit] {
     border: 1px solid rgb(0, 0, 0); cursor: pointer;border-radius: 5px;
 }/*登陆样式*/
 input[type=submit].big {font-size: 12px; padding: 7px 20px}/*边框变大*/
+
+input[type=button] {
+    padding: 4px 15px; color: #02262c; background-color: #eeeeee;
+    border: 1px solid rgb(0, 0, 0); cursor: pointer;border-radius: 5px;
+}/*登陆样式*/
+input[type=button] {font-size: 12px; padding: 7px 20px}/*边框变大*/
 .reminder{
     color: white;
 }

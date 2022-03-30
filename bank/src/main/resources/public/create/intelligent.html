@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能组卷</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/format.js"></script>
+</head>
+<body>
+<script>
+    let subject_types = [];
+    let subject_types_chn = [];
+    let type_count = [];
+    let paper = {};
+    let type_distribution=[]
+    $(function (){
+        $.ajax({url:"/bank/api/subject/typeList",data:{"language":"en"},
+            type:"GET",async:false,
+            success:function (list){
+                subject_types=list
+            }})
+        $.ajax({url:"/bank/api/subject/typeList",data:{"language":"chn"},
+            type:"GET",async:false,
+            success:function (list){
+                subject_types_chn=list
+            }})
+        $.get("/admin/classify/findAllCourse",function (objs) {
+            if(objs==null||objs.length===0)
+            {
+                return
+            }
+            const ul = $('#course_selector');
+            const length = objs.length;
+            paper.courseID=objs[0].id
+            for(let i=0; i<length; i++)
+            {
+                const option = "<option value='{0}'>{1}</option>";
+                ul.append(option.format(objs[i].id,objs[i].classifyName))
+            }
+        })
+    })
+    function onSelectCourse(obj) {
+        const index = obj.selectedIndex;
+        paper.courseID = obj.options[index].value;
+    }
+</script>
+<script>
+    function step(from,to) {
+        $('div.step'+from).hide()
+        $('div.step'+to).show()
+        if(from===2&&to===3)
+        {
+            paper.foreWord=$('#foreWord').val()
+            var length=subject_types.length;
+            var ul=$('#type-list-group')
+            for(var i=0;i<length;i++)
+            {
+                var type=subject_types[i]
+                const _i=i;
+                $.ajax({url:"/bank/api/subject/count",data:{"type":type,"courseID":paper.courseID},
+                    success:function (rst){
+                        type_count[_i]=rst
+                        var li="<li class=\"list-group-item\">{0}(数量:{1})" +
+                            "<button onclick='addType({2})' class='pull-right btn-success'>+</button></li>"
+                        ul.append(li.format(subject_types_chn[_i],rst,_i))
+                    },async:true})
+            }
+        }
+        if(from===3&&to===4)
+        {
+            updateKeys()
+        }
+    }
+</script>
+<script>
+    function addType(index) {
+        type_distribution.push([index,0])
+        flushType()
+    }
+    function deleteType(index){
+        type_distribution.splice(index,1)
+        flushType()
+    }
+    function flushType() {
+        $('ul.distribution').empty()
+        let length=type_distribution.length;
+        let li = "<li class='list-group-item'><button onclick='deleteType({7})' class='btn-danger'>x</button>{0}" +
+            "<button class='btn-warning pull-right' onclick='sinkItem({1})'>↓</button>" +
+            "<button class='btn-success pull-right' onclick='floatItem({2})'>↑</button>"+
+            "<button class='btn-default pull-right' onclick='addCount({3})'>+</button>" +
+            "<div id='typeCount{4}' class='pull-right'>{5}题</div>" +
+            "<button class='btn-info pull-right' onclick='subCount({6})'>-</button>" +
+            "</li>"
+        for(let i=0;i<length;i++)
+        {
+            $('ul.distribution').append(li.format(subject_types_chn[type_distribution[i][0]],
+                i,i,i,i,type_distribution[i][1],i,i))
+        }
+    }
+    function floatItem(index) {
+        if(index===0)
+        {
+            return;
+        }
+        let temp=type_distribution[index-1]
+        type_distribution[index-1]=type_distribution[index]
+        type_distribution[index]=temp
+        flushType()
+    }
+    function sinkItem(index){
+        if(index===type_distribution.length-1)
+        {
+            return;
+        }
+        let temp=type_distribution[index+1]
+        type_distribution[index+1]=type_distribution[index]
+        type_distribution[index]=temp
+        flushType()
+    }
+    function addCount(index) {
+        if(type_distribution[index][1]<type_count[type_distribution[index][0]])
+            type_distribution[index][1]++
+        flushType()
+    }
+    function subCount(index) {
+        if(type_distribution[index][1]===0)
+        {
+            return;
+        }
+        type_distribution[index][1]--
+        flushType()
+    }
+</script>
+<script>
+    let keys=[]
+    function updateKeys() {
+        $.ajax({url:"/admin/api/knowledge",data:{"courseID":paper.courseID},success:function (list) {
+                keys=list
+                let li="<li class='list-group-item'><input type='checkbox'><label>{0}</label></li>"
+                let ul=$("ul.keys")
+                ul.empty()
+                for(let i=0;i<keys.length;i++)
+                {
+                    ul.append(li.format(keys[i].classifyName))
+                }
+            }})
+    }
+</script>
+<div class="container">
+    <div class="step1 row">
+        <div class="col-md-12">
+            <h4>请选择需要组卷的学课</h4>
+        </div>
+        <div class="col-md-12">
+            <select class="form-control course" onchange="onSelectCourse(this)" id="course_selector">
+            </select>
+            <button type="button" class="btn btn-primary" onclick="step(1,2)">下一步</button>
+        </div>
+    </div>
+    <div class="step2 row" hidden="hidden">
+        <div class="col-md-12">
+            <h3>请设置试卷前言</h3>
+        </div>
+        <div class="col-md-12">
+            <textarea id="foreWord" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="step2 row" hidden="hidden">
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(2,1)">上一步</button>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(2,3)">下一步</button>
+        </div>
+    </div>
+    <div class="step3 row" hidden="hidden">
+        <div class="col-md-12">
+            <h3>请设置试卷题型分布</h3>
+        </div>
+        <div class="col-md-6">
+            <h6>该学科存在的题型:</h6>
+            <ul id="type-list-group" class="list-group">
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h6>已分配的题型:</h6>
+            <ul class="list-group distribution">
+            </ul>
+        </div>
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(3,2)">上一步</button>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(3,4)">下一步</button>
+        </div>
+    </div>
+    <div class="step4 row" hidden>
+        <div class="col-md-12">
+            <h3>更多设置</h3>
+        </div>
+        <div class="col-md-6">
+            <label>预期平均分(百分制):</label>
+            <input type="text" class="form-control" placeholder="用1~100表示" value="80">
+        </div>
+        <div class="col-md-6">
+            <label>试卷总分</label>
+            <input type="text" class="form-control" placeholder="用1~100表示" value="100">
+        </div>
+        <div class="col-md-12">
+            <label>知识点涵盖面</label>
+            <ul class="list-group keys">
+            </ul>
+        </div>
+        <div class="col-md-10">
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-primary" onclick="step(4,3)">上一步</button>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-success">开始组卷</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

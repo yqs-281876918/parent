@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.mixed.exam.student.dao.ChooseClassMapper">
+    <insert id="addChooseClass" parameterType="org.mixed.exam.student.pojo.po.ChooseClass">
+        insert into chooseClass
+        values (#{sname},#{cno},#{data})
+    </insert>
+    <delete id="quitClass">
+        delete from chooseClass
+        where cno = #{cno} AND sname = #{sname}
+    </delete>
+    <select id="getCnoByInvitation" resultType="org.mixed.exam.student.pojo.po.Class"
+            parameterType="java.lang.String">
+        select cno
+        from class
+        where invitation=#{invitation}
+    </select>
+
+    <resultMap id="chooseClassMap" type="org.mixed.exam.student.pojo.po.ChooseClass">
+        <id column="sname" property="sname"/>
+        <id property="cno" column="cno"/>
+        <result property="data" column="data"/>
+        <association property="clazz" resultMap="usersMap"/>
+    </resultMap>
+    <resultMap id="usersMap" type="org.mixed.exam.student.pojo.po.Class">
+        <id property="cno" column="cno"/>
+        <result property="cname" column="cname"/>
+        <result property="invitation" column="invitation"/>
+        <result property="creator" column="creator"/>
+        <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
+            <id property="username" column="username"/>
+            <result property="realName" column="realName"/>
+        </association>
+    </resultMap>
+    <select id="selectAllClass" resultMap="chooseClassMap"
+            parameterType="java.lang.String">
+        select sname,data,chooseClass.cno,cname,invitation,creator,realName
+        from chooseClass,class,users
+        where sname=#{sname} AND chooseClass.cno=class.cno
+          AND class.creator=users.username
+    </select>
+    <select id="getCountStudent" resultType="java.lang.Long"
+            parameterType="java.lang.Long">
+        select count(cno)
+        from chooseClass
+        where cno=#{cno}
+    </select>
+    <resultMap id="chooseStudentDetail" type="org.mixed.exam.student.pojo.po.ChooseClass">
+        <id property="sname" column="sname"/>
+        <id property="cno" column="cno"/>
+        <result property="data" column="data"/>
+        <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
+            <id property="username" column="username"/>
+            <result property="realName" column="realName"/>
+        </association>
+    </resultMap>
+    <select id="getClassDetail" resultMap="chooseStudentDetail">
+        select sname, data, realName
+        from chooseClass,users
+        where cno = #{cno} AND sname = users.username
+    </select>
+</mapper>

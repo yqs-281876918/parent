@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>我的班级</title>
+    <style>
+        #delete{
+            padding: 10px 20px;
+            text-align: right;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<!-- 新 Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- 添加新班级的提示框 -->
+<div class="modal fade" id="addClassDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加新班级</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addClassDialogForm">
+                    <div class="form-group row">
+                        <label class="col-form-label col-3 text-right">班级名: </label>
+                        <div class="col-8">
+                            <input type="text" id="cname" name="cname"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doAddClass()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加新班级模态框结束 -->
+<!-- 添加成功的提示框 -->
+<div class="modal fade" id="addSuccessDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">添加提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>您成功创建班级【<span id="className"></span>】!</p>
+                <p>请使用邀请码【<span id="invitation"></span>】来邀请同学加入班级吧</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加成功模态框结束 -->
+<!-- 删除班级的提示框 -->
+<div class="modal fade" id="deleteClassDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">删除提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteCno" value="">
+                <p>您确定要删除班级【<span id="class"></span>】吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doDeleteClass()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除班级模态框结束 -->
+<!-- 主界面内容 -->
+<button type="button" class="btn btn-success" onclick="showAddClassDialog()">添加新的班级</button>
+<div id="container">
+
+</div>
+
+<script>
+    function init(){
+        jQuery.post("/teacher/class/getAllClass",function (rst){
+            var trs='';
+            for (var i=0;i<rst.length;i++){
+                var u = rst[i];
+                trs += `
+<div class="card" id="${u.cno}">
+    <div class="card-header">
+        <input type="hidden" value="${u.cno}">
+    </div>
+    <div class="card-body">
+        <div style="display: inline-block">
+            <h5 class="card-title">${u.cname}</h5>
+        </div>
+        <div id="delete" style="display: inline-block">
+            <a href="#" class="btn btn-danger" onclick="showDeleteClassDialog('${u.cno}','${u.cname}')">删除班级</a>
+        </div>
+        <p class="card-text">班级邀请码：${u.invitation}</p>
+        <a href="#" class="btn btn-primary"
+        onclick="goClassDetail('${u.cno}','${u.cname}','${u.invitation}','${u.creator}')">
+        班级详情</a>
+    </div>
+</div>
+`
+            }
+            $("#container").html(trs)
+        })
+    }
+    jQuery(function (){
+        init();
+    })
+</script>
+<script>
+    function ClearForm(id) {
+        var objId = document.getElementById(id);
+        if (objId == undefined) {
+            return;
+        }
+        for (var i = 0; i < objId.elements.length; i++) {
+            if (objId.elements[i].type == "text") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "password") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "radio") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "checkbox") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "select-one") {
+                objId.elements[i].options[0].selected = true;
+            }
+            else if (objId.elements[i].type == "select-multiple") {
+                for (var j = 0; j < objId.elements[i].options.length; j++) {
+                    objId.elements[i].options[j].selected = false;
+                }
+            }
+            else if (objId.elements[i].type == "textarea") {
+                objId.elements[i].value = "";
+            }
+        }
+    }
+    //添加班级
+    function showAddClassDialog(){
+        ClearForm("addClassDialogForm")
+        jQuery("#addClassDialog").modal('show');
+    }
+    function doAddClass(){
+        jQuery("#addClassDialog").modal('hide');
+        var form = jQuery("#addClassDialogForm").serialize();
+        var cname = jQuery("#cname").val()
+        jQuery("#className").html(cname)
+        jQuery.post("/teacher/class/addClass",form,function (rst){
+            if (rst.length==6){
+                jQuery("#invitation").html(rst)
+                jQuery("#addSuccessDialog").modal('show');
+                init();
+            }else{
+                alert('添加失败!')
+            }
+        })
+    }
+</script>
+<script>
+    //删除班级
+    var deleteCno;
+    function showDeleteClassDialog(cno,cname){
+        jQuery("#class").html(cname)
+        jQuery("#deleteCno").html(cno)
+        deleteCno =cno
+        jQuery("#deleteClassDialog").modal('show');
+    }
+    function doDeleteClass(){
+        jQuery("#deleteClassDialog").modal('hide')
+        jQuery.post("/teacher/class/deleteClass",{'cno':deleteCno},function (rst){
+            if (rst>0){
+                var deleteCard = "#"+deleteCno
+                $(deleteCard).remove()
+                alert("删除成功！")
+            }else{
+                alert("删除失败！")
+            }
+        })
+    }
+</script>
+<script>
+    function goClassDetail(cno,cname,invitation,creator){
+        sessionStorage.setItem("cno",cno)
+        sessionStorage.setItem("cname",cname)
+        sessionStorage.setItem("invitation",invitation)
+        sessionStorage.setItem("creator",creator)
+        location.href="classDetail.html"
+    }
+</script>
+</body>
+</html>

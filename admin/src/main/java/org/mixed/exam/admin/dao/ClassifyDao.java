@@ -12,22 +12,26 @@ import java.util.List;
 
 @Repository
 public class ClassifyDao {
+    private static String DOCUMENT_NAME="classifications";
     @Autowired
     private MongoTemplate mongoTemplate;
     //添加一个分类
     public void saveClassify(Classification classification){
-        mongoTemplate.save(classification,"classifications");
+        mongoTemplate.save(classification,DOCUMENT_NAME);
     }
     //查找所有的课程信息
     public List<Classification> findAllCourse(){
         Query query = new Query(Criteria.where("superClassId").is(""));
-        List<Classification> classifications = mongoTemplate.find(query,Classification.class,"classifications");
-        return classifications;
+        return mongoTemplate.find(query,Classification.class,DOCUMENT_NAME);
     }
     //查找所有的课程知识点信息
     public List<Classification> findAllKnowledge(){
         Query query = new Query(Criteria.where("superClassId").ne(""));
-        List<Classification> classifications = mongoTemplate.find(query,Classification.class,"classifications");
-        return classifications;
+        return mongoTemplate.find(query,Classification.class,DOCUMENT_NAME);
+    }
+    public List<Classification> findKnowledge(String courseID)
+    {
+        Query query = new Query(Criteria.where("superClassId").is(courseID));
+        return mongoTemplate.find(query,Classification.class,DOCUMENT_NAME);
     }
 }

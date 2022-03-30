@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试说明</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script th:inline="javascript">
+
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12">
+                    <a name="0"></a>
+                    <div>前言</div>
+                    <span th:text="${paper.foreWord}"></span>
+                </div>
+            </div>
+            <div th:each="json,status : ${subjects}" class="row">
+                <!-- 如果是单选题 -->
+                <div th:if="${json.type} eq singleChoiceQuestion" class="col-md-12">
+                    <hr/>
+                    <span th:text="@{'第'+${status.index+1}+'题'}"></span>
+                    <br/>
+                    <a th:name="${status.index+1}"></a>
+                    <span th:text="${json.description}"></span>
+                </div>
+                <!-- 如果是多选题 -->
+                <div th:if="${json.type} eq multipleChoiceQuestion" class="col-md-12">
+                    多选题。。。
+                </div>
+                <!-- 待拓展 -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div></div>
+            <div class="col-md-3">
+                <a href="#0">前言</a>
+            </div>
+            <div class="col-md-3" th:each="json,status : ${subjects}">
+                <a th:href="@{'#'+${status.index}}" th:text="${status.index}"></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

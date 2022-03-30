@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷编辑</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body onload="init()">
+<div name="container">
+    <form id="paperform">
+        <div class="form-group">
+            <label for="foreWord">简介：</label>
+            <input type="text" class="form-control" id="foreWord">
+        </div>
+        <div class="form-group">
+            <label for="course">课程：</label>
+            <select class="form-control" id="course" onchange="courseChange()">
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="question">题目：</label>
+            <div id="question">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="difficulty">难度：</label>
+            <select class="form-control" id="difficulty">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="isopen">开放：</label>
+            <select class="form-control" id="isopen">
+                <option id="open">是</option>
+                <option id="close">否</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="foreWord">总分值：</label>
+            <div class="form-control" id="totalpoint"></div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Example textarea</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+    </form>
+    <div id="subbutton"></div>
+
+</div>
+</body>
+<script>
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [ o[this.name] ];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
+    function submitPaper(id) {
+        var foreWord=$('#foreWord').val();
+        var course = $("#course").val();
+        var isopen=$("#isopen").val();
+        var difficulty=$("#difficulty").val();
+        var parm={
+            "id":id,
+            "foreWord":foreWord,
+            "subjectIDs[][]":questionids,
+            "courseID":course,
+            "open":isopen,
+            "difficulty":difficulty
+        }
+        jQuery.post("/bank/edit/getfrom",parm,function (rst) {
+            location.href="paper_control.html";
+        })
+    }
+</script>
+<script>
+    var questionids=null;
+    function init(){
+        var loc=location.href;
+        var n1 = loc.length;
+        var n2 = loc.indexOf('=');
+        var txt = decodeURI(loc.substr(n2+1,n1-n2));
+        var t=`<button type="button" class="btn btn-light" onclick="submitPaper('`+txt+`')">提交</button>`;
+        jQuery("#subbutton").html(t);
+        jQuery.ajax({async : false,url: "/bank/edit/getAllCourse",success:function (rst) {
+            var coursein="";
+            for(var i=0;i<rst.length;i++){
+                coursein=coursein+`<option value="${rst[i].classifyName}">${rst[i].classifyName}</option>`;
+            }
+            jQuery("#course").html(coursein);
+        },method:'post'})
+        var parm1={
+            "id":txt
+        }
+        jQuery.post("/bank/papercontrol/showOne",parm1,function (rst) {
+            $("input[id=foreWord]").val(rst.foreWord);
+            var parm2={
+                "courseID":rst.courseID
+            }
+            jQuery.post("/bank/edit/getCourse",parm2,function (rst1) {
+                $("select[id=course]").val(rst1.classifyName);
+                $("select[id=difficulty]").val(rst.difficulty);
+                var o=rst.open;
+                if(o==true){
+                    $("select[id=isopen]").val("是");
+                }else{
+                    $("select[id=isopen]").val("否");
+                }
+                var que=`<div class="accordion" id="accordionExample">`;
+                questionids=rst.subjectIDs;
+                var tmp=questionids;
+                var totalpoint=0;
+                for(var i=0;i<tmp.length;i++){
+                    var questiontable=`<table class="table">
+                                        <thead class="thead-dark"><tr>
+                                        <th scope="col">学科</th>
+                                        <th scope="col">简介</th>
+                                        <th scope="col">难度</th>
+                                        <th scope="col">分值</th>
+                                        <th scope="col"></th>
+                                        </tr></thead>
+                                        <tbody>`;
+                    var t;//记录type
+                    for (var j=0;j<tmp[i].length;j++){
+                        var parm4={
+                            "id":tmp[i][j]
+                        }
+                        jQuery.ajax({
+                            type:'get',
+                            url:"/bank/subject/json",
+                            data:parm4,
+                            async:false,//false代表只有在等待ajax执行完毕后才执行window.open('http://www.phpernote.com')语句
+                            success:function (rst2){
+                                rst2 = eval('('+rst2+')');
+                                t=rst2.type;
+                                //取出各个题目所属课程名
+                                var coursename=null;
+                                var parm5={
+                                    "courseID":rst2.courseID
+                                }
+                                jQuery.ajax({
+                                    type:'post',
+                                    url:"/bank/edit/getCourse",
+                                    data:parm5,
+                                    async:false,
+                                    success:function (r) {
+                                        if(r.classifyName!=undefined){
+                                            coursename=r.classifyName;
+                                        }else{
+                                            coursename="暂无课程信息";
+                                        }
+                                    }
+                                })
+                                questiontable+=`<tr id="${i}${j}">
+                                    <td>${coursename}</td>
+                                    <td>${rst2.introduction}</td>
+                                    <td>${rst2.difficulty}</td>
+                                    <td>${rst2.recommendScore}</td>
+                                    <td><!--button type="button" class="btn btn-light">修改分值</button-->
+                                    <button type="button" class="btn btn-light" onclick="deleteQuestion(${i},${j})">移除</button></td>
+                                    </tr>`;
+                                totalpoint=totalpoint+rst2.recommendScore;
+                            }
+                        });
+                    }
+                    questiontable+=`
+                                   <tr>
+                                   <td><button type="button" class="btn btn-light">添加题目</button></td>
+                                   <td><button type="button" class="btn btn-light">删除大题</button></td>
+                                   </tr>
+                                   </tbody>
+                                   </table>`;
+                    var parm3={
+                        "id":tmp[i][0]
+                    }
+                    jQuery.ajax({
+                        type:'get',
+                        url:"/bank/subject/json",
+                        data:parm3,
+                        async:false,//false代表只有在等待ajax执行完毕后才执行window.open('http://www.phpernote.com')语句
+                        success:function (rst1){
+                            rst1 = eval('('+rst1+')');
+                            que=que+`
+                        <div class="card" id="${i}">
+                            <div class="card-header" id="heading${i}">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse${i}" aria-expanded="true" aria-controls="collapse${i}">
+                                        ${rst1.type}(${tmp[i].length})
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapse${i}" class="collapse" aria-labelledby="heading${i}" data-parent="#accordionExample">
+                                <div class="card-body" id="${i}">
+                                ${questiontable}
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        }
+                    });
+                }
+                que=que+`<button type="button" id="here" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">添加大题</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">选择题目</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="questionType" class="col-form-label">题目类型</label>
+                                                <select class="form-control" id="questionType" onchange="selectChange()">
+                                                    <option value="singleChoiceQuestion">单选题</option>
+                                                    <option value="multipleChoiceQuestion">多选题</option>
+                                                    <option value="completion">填空题</option>
+                                                    <option value="judgment">判断题</option>
+                                                    <option value="nounParsing">名词解析</option>
+                                                    <option value="essayQuestion">论述题</option>
+                                                    <option value="calculationProblem">计算题</option>
+                                                    <option value="entryProblem">分录题</option>
+                                                    <option value="dataItems">资料题</option>
+                                                    <option value="matching">连线题</option>
+                                                    <option value="voteTopic">投票题</option>
+                                                    <option value="rankingQuestion">排序题</option>
+                                                    <option value="clozeTest">完形填空</option>
+                                                    <option value="readComprehension">阅读理解</option>
+                                                    <option value="comprehensiveQuestion">综合题</option>
+                                                    <option value="oralTopic">口语题</option>
+                                                    <option value="listeningQuestion">听力题</option>
+                                                    <option value="programProblem">程序题</option>
+                                                </select>
+                                            </div>
+<!--                                            <div class="form-group">-->
+<!--                                                <label for="chooseQuestion" class="col-form-label">题目：</label>-->
+<!--                                                <div class="form-control" id="chooseQuestion"></div>-->
+
+                                            <div>
+                                                <label>题目：</label>
+                                                <div id="chooseQuestion"></div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-primary" onclick="submitAdd()">确定</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>`;
+                var lis=`<table class="table">
+                                        <thead class="thead-dark"><tr>
+                                        <th scope="col">学科</th>
+                                        <th scope="col">简介</th>
+                                        <th scope="col">难度</th>
+                                        <th scope="col">分值</th>
+                                        <th scope="col"></th>
+                                        </tr></thead>
+                                        <tbody>`;
+                $.ajax(
+                    {
+                        type:'post',
+                        url:'/bank/edit/getQuestions',
+                        data:{
+                            'course':$('#course').val(),
+                            'type':'singleChoiceQuestion'
+                        },
+                        success:function (q) {
+                            for(var a=0;a<q.length;a++){
+                                lis+=`<tr id="${q[a].id}">
+                                    <td><input name="addquestion" type="checkbox" value="${q[a].id}" /></td>
+                                    <td>${$('#course').val()}</td>
+                                    <td>${q[a].introduction}</td>
+                                    <td>${q[a].difficulty}</td>
+                                    <td>${q[a].recommendScore}</td>
+                                    <td><!--button type="button" class="btn btn-light">修改分值</button-->
+                                    <!--button type="button" class="btn btn-light" onclick="deleteQuestion(${i},${j})">移除</button--></td>
+                                    </tr>`;
+                            }
+                            lis+=`
+                                   <tr>
+<!--                                   <td><button type="button" class="btn btn-light">添加题目</button></td>-->
+<!--                                   <td><button type="button" class="btn btn-light">删除大题</button></td>-->
+                                   </tr>
+                                   </tbody>
+                                   </table>`;
+                            jQuery('#chooseQuestion').html(lis);
+                        }
+                    }
+                )
+                jQuery("#totalpoint").html(totalpoint);
+                jQuery("#question").html(que);
+            })
+        })
+    }
+</script>
+<script>
+    function deleteQuestion(i,j) {
+        questionids[i].splice(j,1);
+        console.log(questionids);
+        $("#"+i+j).remove();
+
+    }
+</script>
+<script>
+    function selectChange(){
+        var list=`<table class="table">
+                                        <thead class="thead-dark"><tr>
+                                        <th scope="col"></th>
+                                        <th scope="col">学科</th>
+                                        <th scope="col">简介</th>
+                                        <th scope="col">难度</th>
+                                        <th scope="col">分值</th>
+                                        <th scope="col"></th>
+                                        </tr></thead>
+                                        <tbody>`;
+        $.ajax(
+            {
+                type:'post',
+                url:'/bank/edit/getQuestions',
+                data:{
+                    'course':$("#course option:selected").val(),
+                    'type':$("#questionType option:selected").val()
+                },
+                success:function (q) {
+                    for(var a=0;a<q.length;a++){
+                        list+=`<tr id="${q[a].id}">
+                                    <td><input name="addquestion" type="checkbox" value="${q[a].id}" /></td>
+                                    <td>${$('#course').val()}</td>
+                                    <td>${q[a].introduction}</td>
+                                    <td>${q[a].difficulty}</td>
+                                    <td>${q[a].recommendScore}</td>
+                                    <td>
+                                    </td>
+                                    </tr>`;
+                    }
+                    list+=`
+                                   <tr>
+<!--                                   <td><button type="button" class="btn btn-light">添加题目</button></td>-->
+<!--                                   <td><button type="button" class="btn btn-light">删除大题</button></td>-->
+                                   </tr>
+                                   </tbody>
+                                   </table>`;
+                    jQuery('#chooseQuestion').html(list);
+                }
+            }
+        )
+    }
+</script>
+<script>
+    function courseChange() {
+        selectChange();
+    }
+</script>
+<script>
+    function submitAdd() {
+        var chk_value =[];
+        var type=$('#questionType option:selected').val();
+        var queslist=`<table class="table">
+                                        <thead class="thead-dark"><tr>
+                                        <th scope="col">学科</th>
+                                        <th scope="col">简介</th>
+                                        <th scope="col">难度</th>
+                                        <th scope="col">分值</th>
+                                        <th scope="col"></th>
+                                        </tr></thead>
+                                        <tbody>`;
+        var count=0;
+        $('input[name="addquestion"]:checked').each(function(){
+            chk_value.push($(this).val());
+            jQuery.ajax({
+                type:'get',
+                url:"/bank/subject/json",
+                data:{'id':$(this).val()},
+                async:false,//false代表只有在等待ajax执行完毕后才执行window.open('http://www.phpernote.com')语句
+                success:function (r1){
+                    r1 = eval('('+r1+')');
+                    queslist+=`<tr id="${questionids.length}${count}">
+                                    <td>${$('#course').val()}</td>
+                                    <td>${r1.introduction}</td>
+                                    <td>${r1.difficulty}</td>
+                                    <td>${r1.recommendScore}</td>
+                                    <td><!--button type="button" class="btn btn-light">修改分值</button-->
+                                    <button type="button" class="btn btn-light" onclick="deleteQuestion(${questionids.length},${count})">移除</button></td>
+                                </tr>`;
+                }
+            });
+            count++;
+        });
+        queslist+=`<tr>
+                       <td><button type="button" class="btn btn-light">添加题目</button></td>
+                       <td><button type="button" class="btn btn-light">删除大题</button></td>
+                   </tr>
+               </tbody>
+           </table>`;
+        questionids.push(chk_value);
+        console.log(questionids);
+        var str=`<div class="card" id="${questionids.length-1}">
+                    <div class="card-header" id="heading${questionids.length-1}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#collapse${questionids.length-1}"
+                                    aria-expanded="true"
+                                    aria-controls="collapse${questionids.length-1}">
+                                ${type}(${chk_value.length})
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapse${questionids.length-1}"
+                         class="collapse"
+                         aria-labelledby="heading${questionids.length-1}"
+                         data-parent="#accordionExample">
+                        <div class="card-body" id="${questionids.length-1}">
+                        ${queslist}
+                        </div>
+                    </div>
+                </div>`;
+        $(function(){
+            var index=questionids.length-2;
+            if(index!=-1){
+                $("#"+index).after(str);
+            }else{
+                $("#here").before(str);
+            }
+        });
+        $('input[name="addquestion"]:checked').prop('checked', false);
+        $('#exampleModal').modal('hide');
+    }
+</script>
+</html>
