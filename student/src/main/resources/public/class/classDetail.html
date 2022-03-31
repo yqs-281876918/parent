@@ -72,7 +72,7 @@
                         <div class="bj-date">
                             <span class="start">班级邀请码：<span class="sdate" id="invitation"></span></span>
                         </div>
-                        <a href="javascript:void(0)" class="libj clsTest" >该班级测试</a>
+                        <a href="javascript:void(0)" class="libj clsTest" onclick="goExamList()">该班级测试</a>
                         <a href="javascript:void(0)" class="libj outCls" onclick="showQuitClassDialog()">退出班级</a>
                     </div>
                     <div class="bj-message detail-bj">
@@ -236,6 +236,11 @@
                 alert("退出班级失败！请检查是否已退出该班级！")
             }
         })
+    }
+</script>
+<script>
+    function goExamList(){
+        window.location.href='../exam/list';
     }
 </script>
 </body>

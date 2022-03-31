@@ -35,9 +35,9 @@
         </div>
     <div id="nounParsingEditor" onchange="alert('11')"></div>
     <!--        <div id="nounParsingAnswer" onchange="alert('11')"></div>-->
+    </div>
     <form id="subject">
         <input type="hidden" id="nounParsingDescription" name="description" value="">
-     </div>
     <div class="inner">
         <span class="title2">题目属性 </span>
         <div class="line"></div>
@@ -82,15 +82,17 @@
         </div>
         <div class="answer">
         设置答案:
-        <div id="nounParsingAnswer" onchange="alert('111')"></div>
-        <input type="hidden" id="nounParsingAnswerDescription" name="answer" value="">
-        <br/>
-        设置题目时间:
-        <input id="nounParsingDate" name="date" type="date"/>
-        <br/>
-            <div class="submit">
-        <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
-            </div>
+            <div id="nounParsingAnswer" onchange="alert('111')"></div>
+            <input type="hidden" id="nounParsingAnswerDescription" name="answer" value="">
+            <br/>
+            设置题目时间:
+            <input id="nounParsingDate" name="date" type="date"/>
+            <br/>
+                <div class="submit">
+            <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
+                </div>
+        </div>
+    </div>
     </form>
 </div>
 </div>
@@ -227,5 +229,6 @@
     }
     nounParsingAnswer.create()
 </script>
- </body>
+</div>
+</body>
 </html>

@@ -7,8 +7,9 @@ import org.springframework.data.annotation.Id;
 public class Exam
 {
     @Id
-    private String id;
+    private Integer id;
     private String paperID;
+    private String examName;
     private Integer testTime;
     private Long startTime;
     private Integer lateTime;

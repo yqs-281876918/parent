@@ -23,7 +23,6 @@
                 day = '0' + day;
             }
             var time = year + "-" + month + "-" + day;
-            console.log(time);
             document.getElementById("programProblemDate").value = time;
         })
     </script>
@@ -34,16 +33,16 @@
             <span class="tip"> 题干  </span>
         </div>
         <div id="programProblemEditor" onchange="alert('11')"></div>
-        <form id="subject">
 
-            <input type="hidden" id="programProblemDescription" name="description" value="">
-            <span class="title"> 前置代码  </span>
-            <div id="prepositionCodeEditor" onchange="alert('11')"></div>
-            <input type="hidden" id="prepositionCodeDescription" name="prepositionCode" value="">
-            <span class="title"> 后置代码  </span>
-            <div id="postCodeEditor" onchange="alert('11')"></div>
-            <input type="hidden" id="postCodeDescription" name="postCode" value="">
+        <span class="title"> 前置代码  </span>
+        <div id="prepositionCodeEditor" onchange="alert('11')"></div>
+        <span class="title"> 后置代码  </span>
+        <div id="postCodeEditor" onchange="alert('11')"></div>
     </div>
+    <form id="subject">
+        <input type="hidden" id="programProblemDescription" name="description" value="">
+        <input type="hidden" id="prepositionCodeDescription" name="prepositionCode" value="">
+        <input type="hidden" id="postCodeDescription" name="postCode" value="">
     <div class="inner">
         <span class="title2">题目属性 </span>
         <div class="line"></div>
@@ -98,13 +97,49 @@
         <div class="submit">
             <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
         </div>
-        </form>
+    </form>
     </div>
  </div>
 <script>
-    function submitSubject() {
-        var form = jQuery("#subject").serialize()
-        jQuery.post("/bank/addSubject/programProblem", form, function (rst) {
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+    function submitSubject(){
+        var form = jQuery("#subject").serializeObject();
+        var introduction = form.description;
+        var msg = introduction.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&#39;/g,"\'").replace(/&quot;/g,"\"").replace(/<\/?.+?>/g,"")
+        if (msg.length>15){
+            msg = msg.slice(0,15)
+            msg = msg + "..."
+        }else{
+
+        }
+        var param={
+            "difficulty":form.difficulty,
+            "date":form.date,
+            "courseID":form.courseID,
+            "class2ndID":form.class2ndID,
+            "recommendScore":form.recommendScore,
+            "introduction":msg,
+            "description":form.description,
+            "prepositionCode":form.prepositionCode,
+            "postCode":form.postCode,
+            "answer":form.answer
+        };
+        console.log(param)
+        jQuery.post("/bank/addSubject/programProblem", param, function (rst) {
             if (rst == "添加成功") {
                 alert("添加成功!")
             } else {
@@ -212,7 +247,7 @@
     prepositionCodeEditor.config.uploadVideoServer = '/upload-video'
     prepositionCodeEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
     prepositionCodeEditor.config.onchange = function (newHtml) {
-        $(codeParams[0]).val(newHtml)
+        $("#prepositionCodeDescription").val(newHtml)
     }
     prepositionCodeEditor.create()
     //后置代码
@@ -223,9 +258,10 @@
     postCodeEditor.config.uploadVideoServer = '/upload-video'
     postCodeEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
     postCodeEditor.config.onchange = function (newHtml) {
-        $(codeParams[1]).val(newHtml)
+        $("#postCodeDescription").val(newHtml)
     }
     postCodeEditor.create()
 </script>
+</div>
 </body>
 </html>
