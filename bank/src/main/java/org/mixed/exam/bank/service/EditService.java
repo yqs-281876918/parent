@@ -44,4 +44,8 @@ public class EditService {
     public List<Question> getQuestions(String course, String type) {
         return subjectDao.getQuestionByType(course,type);
     }
+
+    public Paper newPaper() {
+        return paperDao.newPaper();
+    }
 }

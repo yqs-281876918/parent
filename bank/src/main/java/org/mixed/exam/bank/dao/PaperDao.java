@@ -67,4 +67,11 @@ public class PaperDao {
         return mongoTemplate.find(query,Classification.class,"classifications");
     }
 
+    //新建空试卷并返回
+    public Paper newPaper() {
+        Paper p=new Paper();
+        p.setSubjectIDs(null);
+        mongoTemplate.save(p);
+        return p;
+    }
 }
