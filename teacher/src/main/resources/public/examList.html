@@ -127,23 +127,25 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped mb-0">
+                            <table class="table table-striped mb-0" align="center">
                                 <thead>
                                 <tr>
                                     <th>
                                         <input type="checkbox" id="chAll"
                                                onclick="selectAll(this.checked)">
                                     </th>
-                                    <th>考试名称</th>
-                                    <th>考试时间</th>
-                                    <th>考试简介</th>
+                                    <th align="right" colspan="3">考试名称</th>
+                                    <th align="right" colspan="1">考试时间</th>
+                                    <th align="right" colspan="1">考试时长</th>
+                                    <th align="right" colspan="5">考试简介</th>
+                                    <th align="right" colspan="2">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody id="data">
                                 </tbody>
                                 <tfoot>
                                 <tr id="table bottom" class="table-bordered">
-                                    <td colspan="4">
+                                    <td colspan=5">
                                         <div id="page_div">
                                             <div id="right">
                                             </div>
@@ -200,9 +202,17 @@
                             <input type="checkbox" name="ids" value="${u.id}">
                         </td>
 
-                        <td onclick="find('${u.id}')">${u.examName}</td>
-                        <td onclick="find('${u.id}'))">${u.startTime}</td>
-                        <td onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="3" onclick="find('${u.id}')">${u.examName}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.testTime}</td>
+                        <td colspan="5" onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="2">
+                            <a href="#"
+                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}')">查看成绩分析</a>
+
+                        </td>
+
+
                     </tr>
                     `;
 
@@ -252,7 +262,7 @@
         };
         jQuery.post("/teacher/analyse/findAll",param,function(rst){
             console.log(rst);
-            alert("查询到了");
+            //alert("查询到了");
             var ar=rst;
             var uu;
             for(var i=0;i<1;i++){
@@ -260,10 +270,12 @@
                 var id=uu.id;
                 var examName=uu.examName;
                 var startTime=uu.startTime;
+                var testTime=uu.testTime;
                 var introduce=uu.introduce;
-                var param2={"id":id,"examName":examName,"startTime":startTime,"introduce":introduce};
+                var param2={"id":id,"examName":examName,"startTime":startTime,"testTime":testTime,"introduce":introduce};
                 window.sessionStorage.setItem("examName",param2.examName);
                 window.sessionStorage.setItem("startTime",param2.startTime);
+                window.sessionStorage.setItem("testTime",param2.testTime);
                 window.sessionStorage.setItem("introduce",param2.introduce);
                 console.log(uu.examName);
             }
@@ -339,9 +351,16 @@
                             <input type="checkbox" name="ids" value="${u.id}">
                         </td>
 
-                        <td onclick="find('${u.id}')">${u.examName}</td>
-                        <td onclick="find('${u.id}'))">${u.startTime}</td>
-                        <td onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="2" onclick="find('${u.id}')">${u.examName}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
+                        <td colspan="6" onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="2">
+                            <a href="#"
+                                onclick="detail('${u.id}')">查看成绩分析</a>
+                            <a href="#"
+                                onclick="intoread('${u.id}')">进入批阅</a>
+                        </td>
+
                     </tr>
                     `;
 
@@ -383,12 +402,19 @@
         })
     }
 
-
-
-
-
 </script>
 <!--搜索结束-->
+<script>
+    function analyse(id,examName,startTime,testTime){
+        sessionStorage.setItem("id",id);
+        sessionStorage.setItem("examName",examName);
+        sessionStorage.setItem("startTime",startTime);
+        sessionStorage.setItem("testTime",testTime);
+
+        window.location.href="analyse.html";
+    }
+
+</script>
 <!--判断页面是否越界-->
 <script>
 
