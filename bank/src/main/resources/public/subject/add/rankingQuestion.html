@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>排序题添加</title>
+    <link rel="stylesheet" href="../../css/Question.css">
 </head>
 <body>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!--排序题面板-->
-<div class="editor rankingQuestionEditor">
+<div class="editor rankingQuestionEditor outer">
     <script>
         var rankingQuestionItemCount=4
         function onAddRankingQuestionItem()
@@ -46,6 +47,10 @@
             document.getElementById("rankingQuestionDate").value=time;
         })
     </script>
+    <div class="upper">
+        <div class="title">
+            <span class="tip"> 题干  </span>
+        </div>
     <div id="rankingQuestionEditor" onchange="alert('11')"></div>
     <button onclick="onAddRankingQuestionItem()">添加选项</button>
     <button onclick="onDeleteRankingQuestionItem()">删除选项</button>
@@ -71,27 +76,35 @@
                 <br/>
             </div>
         </div>
+    </div>
+    <div class="inner">
+        <span class="title2">题目属性 </span>
+        <div class="line"></div>
+        <div class="classify">
         题目所属分组：
+            <div class="line"></div>
         <div class="rankingQuestionCourseId">
             <div style="display: inline-block">所属课程：</div>
             <div style="display: inline-block">
                 <div>
-                    <select id="courseID" name="courseID"></select>
+                    <select class="button2" id="courseID" name="courseID"></select>
                 </div>
             </div>
             <div style="display: inline-block">所属知识点：</div>
             <div style="display: inline-block" id="class2ndID">
                 <div class="class2ndID">
-                    <select>
+                    <select class="button2">
 
                     </select>
                 </div>
             </div>
-
         </div>
+        </div>
+        <div class="star">
         题目难度星级:
+            <div class="line"></div>
         <div class="difficulty">
-            <select id="rankingQuestionDifficulty" name="difficulty">
+            <select  class="button2" id="rankingQuestionDifficulty" name="difficulty">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -99,10 +112,14 @@
                 <option value="5">5</option>
             </select>
         </div>
+        </div>
+        <div class="score">
         题目建议分值：
         <div class="rankingQuestionRecommendScore">
             <input name="recommendScore" type="text">
         </div>
+        </div>
+        <div class="answer">
         设置答案:
         <div class="rankingQuestionAnswer">
             <input type="text" name="answer">
@@ -112,9 +129,12 @@
         设置题目时间:
         <input id="rankingQuestionDate" name="date" type="date"/>
         <br/>
+            <div class="submit">
         <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
+            </div>
     </form>
 </div>
+    </div>
 <script>
     $.fn.serializeObject = function() {
         var o = {};
@@ -236,5 +256,6 @@
     }
     rankingQuestionEditor.create()
 </script>
+</div>
 </body>
 </html>

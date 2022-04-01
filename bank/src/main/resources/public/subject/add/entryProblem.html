@@ -3,53 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>分录题添加</title>
+    <link rel="stylesheet" href="../../css/Question.css">
+
 </head>
 <body>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!--分录题面板-->
-<div class="editor entryProblemEditor">
+<div class="editor entryProblemEditor outer">
     <script>
-        jQuery(function (){
+        jQuery(function () {
             var t = new Date();
             var year = t.getFullYear();
-            var month = t.getMonth()+1;
-            if (month<10){
-                month = '0'+month
+            var month = t.getMonth() + 1;
+            if (month < 10) {
+                month = '0' + month
             }
             var day = t.getDate();
-            if(day<10){
-                day = '0'+day;
+            if (day < 10) {
+                day = '0' + day;
             }
-            var time = year+"-"+month+"-"+day;
+            var time = year + "-" + month + "-" + day;
             console.log(time);
-            document.getElementById("entryProblemDate").value=time;
+            document.getElementById("entryProblemDate").value = time;
         })
     </script>
+    <div class="upper">
+        <div class="title">
+            <span class="tip"> 题干  </span>
+        </div>
     <div id="entryProblemEditor" onchange="alert('11')"></div>
+    </div>
+    <div class="inner">
     <form id="subject">
         <input type="hidden" id="entryProblemDescription" name="description" value="">
-        题目所属分组：
+        <span class="title2">题目属性 </span>
+        <div class="line"></div>
+        <div class="classify">题目所属分组：
+            <div class="line"></div>
         <div class="entryProblemCourseId">
             <div style="display: inline-block">所属课程：</div>
             <div style="display: inline-block">
                 <div>
-                    <select id="courseID" name="courseID"></select>
+                    <select class="button2" id="courseID" name="courseID"></select>
                 </div>
             </div>
             <div style="display: inline-block">所属知识点：</div>
             <div style="display: inline-block" id="class2ndID">
                 <div class="class2ndID">
-                    <select>
+                    <select class="button2">
 
                     </select>
                 </div>
             </div>
 
         </div>
+        </div>
+        <div class="star">
         题目难度星级:
-        <div class="difficulty">
-            <select id="entryProblemDifficulty" name="difficulty">
+            <div class="line"></div>
+
+            <div class="difficulty">
+            <select class="button2" id="entryProblemDifficulty" name="difficulty">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -57,19 +72,29 @@
                 <option value="5">5</option>
             </select>
         </div>
+        </div>
+        <div class="score">
         题目建议分值：
-        <div class="entryProblemRecommendScore">
+            <div class="line"></div>
+
+            <div class="entryProblemRecommendScore">
             <input name="recommendScore" type="text">
         </div>
+        </div>
+        <div class="answer">
         设置答案:
         <div id="entryProblemAnswer" onchange="alert('111')"></div>
         <input type="hidden" id="entryProblemAnswerDescription" name="answer" value="">
+        </div>
         <br/>
         设置题目时间:
-        <input id="entryProblemDate" name="date" type="date"/>
+            <input id="entryProblemDate" name="date" type="date"/>
         <br/>
+            <div class="submit">
         <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
+            </div>
     </form>
+    </div>
 </div>
 <script>
     $.fn.serializeObject = function() {
@@ -107,37 +132,38 @@
             "description":form.description,
             "answer":form.answer
         };
-        jQuery.post("/bank/addSubject/entryProblem",param,function (rst){
-            if (rst =="添加成功"){
+        jQuery.post("/bank/addSubject/entryProblem", param, function (rst) {
+            if (rst == "添加成功") {
                 alert("添加成功!")
-            }else{
+            } else {
                 alert("添加失败!")
             }
         })
     }
+
     //初始化课程信息
-    function init(){
-        jQuery.get("/bank/classify/findAllCourse",function (rst){
+    function init() {
+        jQuery.get("/bank/classify/findAllCourse", function (rst) {
             var trs = ''
             var superId = rst[0].id;
-            for (var i=0;i<rst.length;i++){
+            for (var i = 0; i < rst.length; i++) {
                 var u = rst[i];
-                trs +=`
+                trs += `
                     <option value="${u.id}">${u.classifyName}</option>
                 `
             }
             $("#courseID").append(trs);
-            jQuery.get("/bank/classify/findAllKnowledge",function (rst2){
+            jQuery.get("/bank/classify/findAllKnowledge", function (rst2) {
                 var trs2 = ''
                 $("div.class2ndID").remove();
                 trs2 += `<div class="class2ndID">
                     <select name="class2ndID">
                     `
-                for (var i=0;i<rst2.length;i++){
+                for (var i = 0; i < rst2.length; i++) {
                     var u = rst2[i];
-                    if(superId == u.superClassId){
+                    if (superId == u.superClassId) {
                         trs2 += `<option value="${u.id}">${u.classifyName}</option>`
-                    }else{
+                    } else {
 
                     }
                 }
@@ -147,24 +173,25 @@
             })
         })
     }
-    jQuery(function (){
+
+    jQuery(function () {
         init();
     })
     //监听选择的课程，呈现相应的知识点信息
     $(() => {
         $('#courseID').change(() => {
             $("div.class2ndID").remove();
-            jQuery.get("/bank/classify/findAllKnowledge",function (rst){
+            jQuery.get("/bank/classify/findAllKnowledge", function (rst) {
                 var trs = ""
                 trs += `<div class="class2ndID">
                     <select name="class2ndID">
                     `
                 var superId = $("#courseID").val()
-                for (var i=0;i<rst.length;i++){
+                for (var i = 0; i < rst.length; i++) {
                     var u = rst[i];
-                    if(superId == u.superClassId){
+                    if (superId == u.superClassId) {
                         trs += `<option value="${u.id}">${u.classifyName}</option>`
-                    }else{
+                    } else {
 
                     }
                 }
@@ -182,11 +209,10 @@
     entryProblemEditor.config.placeholder = '请输入题目描述'
     entryProblemEditor.config.uploadImgServer = '/upload-img'
     entryProblemEditor.config.uploadFileName = 'file';
-    entryProblemEditor.config.uploadImgMaxSize=2*1024*1024
+    entryProblemEditor.config.uploadImgMaxSize = 2 * 1024 * 1024
     entryProblemEditor.config.uploadVideoServer = '/upload-video'
     entryProblemEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
-    entryProblemEditor.config.onchange=function (newHtml)
-    {
+    entryProblemEditor.config.onchange = function (newHtml) {
         $("#entryProblemDescription").val(newHtml)
     }
     entryProblemEditor.create()
@@ -195,11 +221,10 @@
     entryProblemAnswer.config.placeholder = '请输入答案描述'
     entryProblemAnswer.config.uploadImgServer = '/upload-img'
     entryProblemAnswer.config.uploadFileName = 'file';
-    entryProblemAnswer.config.uploadImgMaxSize=2*1024*1024
+    entryProblemAnswer.config.uploadImgMaxSize = 2 * 1024 * 1024
     entryProblemAnswer.config.uploadVideoServer = '/upload-video'
     entryProblemAnswer.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
-    entryProblemAnswer.config.onchange=function (newHtml)
-    {
+    entryProblemAnswer.config.onchange = function (newHtml) {
         $("#entryProblemAnswerDescription").val(newHtml)
     }
     entryProblemAnswer.create()

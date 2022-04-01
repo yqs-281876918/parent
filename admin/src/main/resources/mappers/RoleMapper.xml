@@ -4,8 +4,8 @@
     <insert id="Insert"
     parameterType="org.mixed.exam.admin.pojo.dto.usersDto">
         insert into users
-            (username, password, realName, role)
-        values(#{username},#{password},#{realName},#{role})
+            (username, password, realName, role,email,telephone)
+        values(#{username},#{password},#{realName},#{role},#{email},#{telephone})
     </insert>
 
     <update id="updateMul" parameterType="String">
@@ -29,31 +29,33 @@
         update users
         set username=#{username},
             realName=#{realName},
-            role=#{role}
+            role=#{role},
+            email=#{email},
+            telephone=#{telephone}
         where username=#{username}
 
     </update>
 
     <select id="findAll" resultType="org.mixed.exam.admin.pojo.dto.usersDto">
         SELECT
-            username,realName,role
+            username,realName,role,email,telephone
         from users
 
     </select>
     <select id="Search"
             resultType="org.mixed.exam.admin.pojo.po.users"
             parameterType="org.mixed.exam.admin.pojo.dto.usersDto">
-        select username,realName,role
+        SELECT username,realName,role
         from users
         <where>
             <if test="username!=null and username!=''">
-                and username like '%${username}%'
+                and users.username like concat('%',#{username},'%')
             </if>
             <if test="realName!=null and realName!=''">
-                and realName like '%${realName}%'
+                and users.realName like concat('%',#{realName},'%')
             </if>
             <if test="role!=null and role!=''">
-                and role=#{role}
+                and users.role=#{role}
             </if>
         </where>
 

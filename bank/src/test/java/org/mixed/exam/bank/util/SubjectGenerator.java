@@ -1,7 +1,6 @@
 package org.mixed.exam.bank.util;
 
 import lombok.Data;
-import org.mixed.exam.bank.pojo.po.Completion;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.pojo.po.ReadComprehension;
 import org.mixed.exam.bank.pojo.po.SingleChoiceQuestion;
@@ -14,8 +13,6 @@ import java.util.*;
 public class SubjectGenerator {
     public static ChineseWrongCharacter CHINESE_WRONG_CHARACTER = new ChineseWrongCharacter();
     public static ChineseReadComprehension CHINESE_READ_COMPREHENSION=new ChineseReadComprehension();
-    public static AncientWrite ANCIENT_WRITE=new AncientWrite();
-    public static ChineseWriting CHINESE_WRITING=new ChineseWriting();
 }
 @Data
 class ChineseWrongCharacter
@@ -87,73 +84,6 @@ class ChineseReadComprehension
         q.setAnswers(Arrays.asList("第一题答案","第二题答案","第三题答案","第四题答案"));
         return q;
     }
-}
-class AncientWrite
-{
-    private String[] creators=new String[]{"yqs","qlh","yk","zyn","zhx"};
-    public Completion randomCompletion()
-    {
-        Completion q = new Completion();
-        q.setType("completion");
-        q.setDifficulty((int)(Math.random()*5)+1);
-        Date date_2000=null;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            date_2000 = sdf.parse("2000-01-01 00:00:00");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-        Date date_now=new Date();
-        long date_between=date_now.getTime()-date_2000.getTime();
-        Date date_random=new Date();
-        date_random.setTime(date_2000.getTime()+(long) (Math.random()*date_between));
-        q.setDate(date_random);
-        q.setCourseID("622dbb040913ed05f6402c8b");//语文
-        q.setClass2ndID("6230776f1aabf7331f816aae");//古诗默写
-        q.setRespondentCount((int)(Math.random()*100));
-        q.setCorrectCount((int)(Math.random()*q.getRespondentCount()));
-        q.setIntroduction("这是古诗默写题"+System.currentTimeMillis());
-        q.setDescription(" 峰峦如聚，波涛如怒，___________");
-        q.setAnswers(Arrays.asList("山河表里潼关"));
-        return q;
-    }
-}
-class ChineseWriting
-{
-    private String[] creators=new String[]{"yqs","qlh","yk","zyn","zhx"};
-    public Completion randomCompletion()
-    {
-        Completion q = new Completion();
-        q.setType("completion");
-        q.setDifficulty((int)(Math.random()*5)+1);
-        Date date_2000=null;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            date_2000 = sdf.parse("2000-01-01 00:00:00");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-        Date date_now=new Date();
-        long date_between=date_now.getTime()-date_2000.getTime();
-        Date date_random=new Date();
-        date_random.setTime(date_2000.getTime()+(long) (Math.random()*date_between));
-        q.setDate(date_random);
-        q.setCourseID("622dbb040913ed05f6402c8b");//语文
-        q.setClass2ndID("623074271aabf7331f816aad");//作文
-        q.setRespondentCount((int)(Math.random()*100));
-        q.setCorrectCount((int)(Math.random()*q.getRespondentCount()));
-        q.setIntroduction("这是语文作文题"+System.currentTimeMillis());
-        q.setDescription("请描述自己的老师");
-        q.setAnswers(Arrays.asList("无"));
-        return q;
-    }
-}
-class AncientAppreciation
-{
-    private String[] creators=new String[]{"yqs","qlh","yk","zyn","zhx"};
-
 }
 //private String id;//题目主键id
 //private Boolean isExamined=false;//是否审核通过

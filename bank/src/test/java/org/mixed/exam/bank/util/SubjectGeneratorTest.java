@@ -26,17 +26,13 @@ public class SubjectGeneratorTest
 //        {
 //            subjectDao.saveSubject(SubjectGenerator.CHINESE_WRONG_CHARACTER.randomSCQ());
 //        }
-//        for(int i=0;i<15;i++)
-//        {
-//            subjectDao.saveSubject(SubjectGenerator.CHINESE_READ_COMPREHENSION.randomRC());
-//        }
-//        for(int i=0;i<20;i++)
-//        {
-//            subjectDao.saveSubject(SubjectGenerator.ANCIENT_WRITE.randomCompletion());
-//        }
-        for(int i=0;i<5;i++)
+        for(int i=0;i<15;i++)
         {
-            subjectDao.saveSubject(SubjectGenerator.CHINESE_WRITING.randomCompletion());
+            subjectDao.saveSubject(SubjectGenerator.CHINESE_READ_COMPREHENSION.randomRC());
         }
+    }
+    private void renderBaseInfo(Question q)
+    {
+
     }
 }

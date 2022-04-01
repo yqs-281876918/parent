@@ -38,6 +38,7 @@ public class RoleService {
         row=rolemapper.update(username);
         return row;
     }
+    //编辑
     public int UpdateInfo(usersDto dto){
         int row=0;
         row=rolemapper.UpdateInfo(dto);
@@ -53,7 +54,8 @@ public class RoleService {
         //设置分页
         PageHelper.startPage(pageNum,pageSize);
         //查询需要的数据
-        List<users> users= rolemapper.Search();
+        List<users> users= rolemapper.Search(dto);
+        System.out.println(users.get(0).getRealName());
         //users表示页面中呈现的数据
         //4表示页码个数
         page=new PageInfo<>(users,4);

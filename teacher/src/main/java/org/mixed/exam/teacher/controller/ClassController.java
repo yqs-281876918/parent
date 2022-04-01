@@ -1,8 +1,10 @@
 package org.mixed.exam.teacher.controller;
 
 
+import com.github.pagehelper.PageInfo;
 import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.teacher.dao.InvitationCode;
+import org.mixed.exam.teacher.pojo.po.ChooseClass;
 import org.mixed.exam.teacher.pojo.po.Class;
 import org.mixed.exam.teacher.service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +61,15 @@ public class ClassController {
     @RequestMapping("/class/deleteClass")
     public int deleteClass(Long cno){
         return classService.deleteClass(cno);
+    }
+    //班级详情所有学生
+    @RequestMapping("/class/detail")
+    public PageInfo<ChooseClass> getClassDetail(int pageNum, int pageSize, long cno){
+        return classService.getClassDetail(pageNum,pageSize,cno);
+    }
+    //删除某学生
+    @RequestMapping("/class/deleteStudent")
+    public int deleteStudent(ChooseClass chooseClass){
+        return classService.deleteStudent(chooseClass);
     }
 }

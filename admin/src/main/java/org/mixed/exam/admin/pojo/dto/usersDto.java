@@ -7,6 +7,31 @@ public class usersDto extends users {
     private String realName;
     private String role;
     private String password;
+    private String email;
+    private String telephone;
+
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    @Override
+    public String getTelephone() {
+        return telephone;
+    }
+
+    @Override
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
     public String getPassword() {
         return password;
     }

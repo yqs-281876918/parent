@@ -3,308 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <title>阅读理解添加</title>
+    <link rel="stylesheet" href="../../css/Question.css">
 </head>
 <body>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!--阅读理解面板-->
-<div class="editor readComprehensionEditor">
+<div class="editor readComprehensionEditor outer">
     <script>
-        var readComprehensionItemCount=4
-        function onAddReadComprehensionItem()
-        {
-            html="<div class='readComprehensionTopic'>\n"+
-                (readComprehensionItemCount+1)+
-                ". 题目：<textarea name='options' type='text' style='width: 800px;height: 18px'></textarea>"+
-                "</br>"+
+        var readComprehensionItemCount = 4
+
+        function onAddReadComprehensionItem() {
+            html = "<div class='readComprehensionTopic'>\n" +
+                (readComprehensionItemCount + 1) +
+                ". 题目：<textarea name='options' type='text' style='width: 800px;height: 18px'></textarea>" +
+                "</br>" +
                 "A.<textarea name='options' type='text' style='height: 18px'></textarea> " +
                 "B.<textarea name='options' type='text' style='height: 18px'></textarea> " +
                 "C.<textarea name='options' type='text' style='height: 18px'></textarea> " +
-                "D.<textarea name='options' type='text' style='height: 18px'></textarea>"+
-                "\n"+
+                "D.<textarea name='options' type='text' style='height: 18px'></textarea>" +
+                "\n" +
                 "</div>"
             $("div.readComprehensionTopics").append(html)
-            html="<div class='readComprehensionAnswer'>\n"+
-                (readComprehensionItemCount+1)+". "+
-                "<select name='answers'>\n"+
+            html = "<div class='readComprehensionAnswer'>\n" +
+                (readComprehensionItemCount + 1) + ". " +
+                "<select name='answers'>\n" +
                 "<option value='1'>A</option>\n" +
                 "<option value='2'>B</option>\n" +
                 "<option value='3'>C</option>\n" +
-                "<option value='4'>D</option>"+
-                "\n"+
-                "</select>"+
-                "<br/>"+
+                "<option value='4'>D</option>" +
+                "\n" +
+                "</select>" +
+                "<br/>" +
                 "</div>"
             $("div.readComprehensionAnswers").append(html)
             readComprehensionItemCount++;
         }
-        function onDeleteReadComprehensionItem()
-        {
-            if (readComprehensionItemCount==1){
-            }else {
+
+        function onDeleteReadComprehensionItem() {
+            if (readComprehensionItemCount == 1) {
+            } else {
                 $("div.readComprehensionTopic").eq(-1).remove()
                 $("div.readComprehensionAnswer").eq(-1).remove()
                 readComprehensionItemCount--;
             }
         }
-        jQuery(function (){
+
+        jQuery(function () {
             var t = new Date();
             var year = t.getFullYear();
-            var month = t.getMonth()+1;
-            if (month<10){
-                month = '0'+month
+            var month = t.getMonth() + 1;
+            if (month < 10) {
+                month = '0' + month
             }
             var day = t.getDate();
-            if(day<10){
-                day = '0'+day;
+            if (day < 10) {
+                day = '0' + day;
             }
-            var time = year+"-"+month+"-"+day;
+            var time = year + "-" + month + "-" + day;
             console.log(time);
-            document.getElementById("readComprehensionDate").value=time;
+            document.getElementById("readComprehensionDate").value = time;
         })
     </script>
-    <div id="readComprehensionEditor" onchange="alert('11')"></div>
-    <button onclick="onAddReadComprehensionItem()">添加题目</button>
-    <button onclick="onDeleteReadComprehensionItem()">删除题目</button>
-    <form id="subject">
-        <input type="hidden" id="readComprehensionDescription" name="description" value="">
-        题目：
-        <div class="readComprehensionTopics">
-            <div class="readComprehensionTopic">
-                1. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
-                </br>
-                A.<textarea name="options" type="text" style="height: 18px"></textarea>
-                B.<textarea name="options" type="text" style="height: 18px"></textarea>
-                C.<textarea name="options" type="text" style="height: 18px"></textarea>
-                D.<textarea name="options" type="text" style="height: 18px"></textarea>
-            </div>
-            <div class="readComprehensionTopic">
-                2. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
-                </br>
-                A.<textarea name="options" type="text" style="height: 18px"></textarea>
-                B.<textarea name="options" type="text" style="height: 18px"></textarea>
-                C.<textarea name="options" type="text" style="height: 18px"></textarea>
-                D.<textarea name="options" type="text" style="height: 18px"></textarea>
-            </div>
-            <div class="readComprehensionTopic">
-                3. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
-                </br>
-                A.<textarea name="options" type="text" style="height: 18px"></textarea>
-                B.<textarea name="options" type="text" style="height: 18px"></textarea>
-                C.<textarea name="options" type="text" style="height: 18px"></textarea>
-                D.<textarea name="options" type="text" style="height: 18px"></textarea>
-            </div>
-            <div class="readComprehensionTopic">
-                4. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
-                </br>
-                A.<textarea name="options" type="text" style="height: 18px"></textarea>
-                B.<textarea name="options" type="text" style="height: 18px"></textarea>
-                C.<textarea name="options" type="text" style="height: 18px"></textarea>
-                D.<textarea name="options" type="text" style="height: 18px"></textarea>
-            </div>
+    <div class="upper">
+        <div class="title">
+            <span class="tip"> 题干  </span>
         </div>
-        题目所属分组：
-        <div class="readComprehensionCourseId">
-            <div style="display: inline-block">所属课程：</div>
-            <div style="display: inline-block">
-                <div>
-                    <select id="courseID" name="courseID"></select>
+        <div id="readComprehensionEditor" onchange="alert('11')"></div>
+        <button onclick="onAddReadComprehensionItem()">添加题目</button>
+        <button onclick="onDeleteReadComprehensionItem()">删除题目</button>
+        <form id="subject">
+            <input type="hidden" id="readComprehensionDescription" name="description" value="">
+            题目：
+            <div class="readComprehensionTopics">
+                <div class="readComprehensionTopic">
+                    1. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="readComprehensionTopic">
+                    2. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="readComprehensionTopic">
+                    3. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
+                </div>
+                <div class="readComprehensionTopic">
+                    4. 题目：<textarea name="options" type="text" style="width: 800px;height: 18px"></textarea>
+                    </br>
+                    A.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    B.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    C.<textarea name="options" type="text" style="height: 18px"></textarea>
+                    D.<textarea name="options" type="text" style="height: 18px"></textarea>
                 </div>
             </div>
-            <div style="display: inline-block">所属知识点：</div>
-            <div style="display: inline-block" id="class2ndID">
-                <div class="class2ndID">
-                    <select>
+    </div>
+    <div class="inner">
+        <span class="title2">题目属性 </span>
+        <div class="line"></div>
+        <div class="classify"> 题目所属分组：
+            <div class="line"></div>
+            <div class="readComprehensionCourseId">
+                <div style="display: inline-block">所属课程：</div>
+                <div style="display: inline-block">
+                    <div>
+                        <select  class="button2" id="courseID" name="courseID"></select>
+                    </div>
+                </div>
+                <div style="display: inline-block">所属知识点：</div>
+                <div style="display: inline-block" id="class2ndID">
+                    <div class="class2ndID">
+                        <select class="button2">
 
+                        </select>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="star">
+            题目难度星级:
+            <div class="line"></div>
+
+            <div class="difficulty">
+                <select class="button2" id="readComprehensionDifficulty" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
+        <div class="score">
+            题目建议分值：
+            <div class="line"></div>
+
+            <div class="readComprehensionRecommendScore">
+                <input name="recommendScore" type="text">
+            </div>
+        </div>
+
+        <div class="answer">
+            设置答案:
+            <div class="readComprehensionAnswers">
+                <div class="readComprehensionAnswer">
+                    1.
+                    <select class="button2" name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
                     </select>
+                    <br/>
+                </div>
+                <div class="readComprehensionAnswer">
+                    2.
+                    <select class="button2" name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="readComprehensionAnswer">
+                    3.
+                    <select class="button2" name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
+                </div>
+                <div class="readComprehensionAnswer">
+                    4.
+                    <select class="button2"  name="answers">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                    </select>
+                    <br/>
                 </div>
             </div>
+            <br/>
+            设置题目时间:
+            <input id="readComprehensionDate" name="date" type="date"/>
+            <br/>
+            <div class="submit">
+            <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
+            </div>
+            </form>
+        </div>
 
         </div>
-        题目难度星级:
-        <div class="difficulty">
-            <select id="readComprehensionDifficulty" name="difficulty">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-        </div>
-        题目建议分值：
-        <div class="readComprehensionRecommendScore">
-            <input name="recommendScore" type="text">
-        </div>
-        设置答案:
-        <div class="readComprehensionAnswers" >
-            <div class="readComprehensionAnswer">
-                1.
-                <select name="answers">
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                    <option value="4">D</option>
-                </select>
-                <br/>
-            </div>
-            <div class="readComprehensionAnswer">
-                2.
-                <select name="answers">
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                    <option value="4">D</option>
-                </select>
-                <br/>
-            </div>
-            <div class="readComprehensionAnswer">
-                3.
-                <select name="answers">
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                    <option value="4">D</option>
-                </select>
-                <br/>
-            </div>
-            <div class="readComprehensionAnswer">
-                4.
-                <select name="answers">
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                    <option value="4">D</option>
-                </select>
-                <br/>
-            </div>
-        </div>
-        <br/>
-        设置题目时间:
-        <input id="readComprehensionDate" name="date" type="date"/>
-        <br/>
-        <button type="button" class="btn btn-primary" onclick="submitSubject()">提交至题库</button>
-    </form>
-</div>
-<script>
-    $.fn.serializeObject = function() {
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
+        <script>
+            $.fn.serializeObject = function() {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function() {
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+                        o[this.name].push(this.value || '');
+                    } else {
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+            function submitSubject(){
+                var form = jQuery("#subject").serializeObject();
+                var introduction = form.description;
+                var msg = introduction.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&#39;/g,"\'").replace(/&quot;/g,"\"").replace(/<\/?.+?>/g,"")
+                if (msg.length>15){
+                    msg = msg.slice(0,15)
+                    msg = msg + "..."
+                }else{
+
                 }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
+                var param={
+                    "difficulty":form.difficulty,
+                    "date":form.date,
+                    "courseID":form.courseID,
+                    "class2ndID":form.class2ndID,
+                    "recommendScore":form.recommendScore,
+                    "introduction":msg,
+                    "description":form.description,
+                    "options":form.options,
+                    "answers":form.answers
+                };
+                console.log(param)
+                jQuery.post("/bank/addSubject/readComprehension", param, function (rst) {
+                    if (rst == "添加成功") {
+                        alert("添加成功!")
+                    } else {
+                        alert("添加失败!")
+                    }
+                })
             }
-        });
-        return o;
-    };
-    function submitSubject(){
-        var form = jQuery("#subject").serializeObject();
-        var introduction = form.description;
-        var msg = introduction.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&#39;/g,"\'").replace(/&quot;/g,"\"").replace(/<\/?.+?>/g,"")
-        if (msg.length>15){
-            msg = msg.slice(0,15)
-            msg = msg + "..."
-        }else{
 
-        }
-        var param={
-            "difficulty":form.difficulty,
-            "date":form.date,
-            "courseID":form.courseID,
-            "class2ndID":form.class2ndID,
-            "recommendScore":form.recommendScore,
-            "introduction":msg,
-            "description":form.description,
-            "options":form.options,
-            "answers":form.answers
-        };
-        jQuery.post("/bank/addSubject/readComprehension",param,function (rst){
-            if (rst =="添加成功"){
-                alert("添加成功!")
-            }else{
-                alert("添加失败!")
-            }
-        })
-    }
-    //初始化课程信息
-    function init(){
-        jQuery.get("/bank/classify/findAllCourse",function (rst){
-            var trs = ''
-            var superId = rst[0].id;
-            for (var i=0;i<rst.length;i++){
-                var u = rst[i];
-                trs +=`
+            //初始化课程信息
+            function init() {
+                jQuery.get("/bank/classify/findAllCourse", function (rst) {
+                    var trs = ''
+                    var superId = rst[0].id;
+                    for (var i = 0; i < rst.length; i++) {
+                        var u = rst[i];
+                        trs += `
                     <option value="${u.id}">${u.classifyName}</option>
                 `
+                    }
+                    $("#courseID").append(trs);
+                    jQuery.get("/bank/classify/findAllKnowledge", function (rst2) {
+                        var trs2 = ''
+                        $("div.class2ndID").remove();
+                        trs2 += `<div class="class2ndID">
+                    <select name="class2ndID">
+                    `
+                        for (var i = 0; i < rst2.length; i++) {
+                            var u = rst2[i];
+                            if (superId == u.superClassId) {
+                                trs2 += `<option value="${u.id}">${u.classifyName}</option>`
+                            } else {
+
+                            }
+                        }
+                        trs2 += `</select>
+                </div>`
+                        $("#class2ndID").append(trs2);
+                    })
+                })
             }
-            $("#courseID").append(trs);
-            jQuery.get("/bank/classify/findAllKnowledge",function (rst2){
-                var trs2 = ''
-                $("div.class2ndID").remove();
-                trs2 += `<div class="class2ndID">
+
+            jQuery(function () {
+                init();
+            })
+            //监听选择的课程，呈现相应的知识点信息
+            $(() => {
+                $('#courseID').change(() => {
+                    $("div.class2ndID").remove();
+                    jQuery.get("/bank/classify/findAllKnowledge", function (rst) {
+                        var trs = ""
+                        trs += `<div class="class2ndID">
                     <select name="class2ndID">
                     `
-                for (var i=0;i<rst2.length;i++){
-                    var u = rst2[i];
-                    if(superId == u.superClassId){
-                        trs2 += `<option value="${u.id}">${u.classifyName}</option>`
-                    }else{
+                        var superId = $("#courseID").val()
+                        for (var i = 0; i < rst.length; i++) {
+                            var u = rst[i];
+                            if (superId == u.superClassId) {
+                                trs += `<option value="${u.id}">${u.classifyName}</option>`
+                            } else {
 
-                    }
-                }
-                trs2 += `</select>
+                            }
+                        }
+                        trs += `</select>
                 </div>`
-                $("#class2ndID").append(trs2);
+                        $("#class2ndID").append(trs);
+                    })
+                })
             })
-        })
-    }
-    jQuery(function (){
-        init();
-    })
-    //监听选择的课程，呈现相应的知识点信息
-    $(() => {
-        $('#courseID').change(() => {
-            $("div.class2ndID").remove();
-            jQuery.get("/bank/classify/findAllKnowledge",function (rst){
-                var trs = ""
-                trs += `<div class="class2ndID">
-                    <select name="class2ndID">
-                    `
-                var superId = $("#courseID").val()
-                for (var i=0;i<rst.length;i++){
-                    var u = rst[i];
-                    if(superId == u.superClassId){
-                        trs += `<option value="${u.id}">${u.classifyName}</option>`
-                    }else{
 
-                    }
-                }
-                trs += `</select>
-                </div>`
-                $("#class2ndID").append(trs);
-            })
-        })
-    })
-
-</script>
-<script>
-    const E = window.wangEditor
-    const readComprehensionEditor = new E("#readComprehensionEditor")
-    readComprehensionEditor.config.placeholder = '请输入题目描述'
-    readComprehensionEditor.config.uploadImgServer = '/upload-img'
-    readComprehensionEditor.config.uploadFileName = 'file';
-    readComprehensionEditor.config.uploadImgMaxSize=2*1024*1024
-    readComprehensionEditor.config.uploadVideoServer = '/upload-video'
-    readComprehensionEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
-    readComprehensionEditor.config.onchange=function (newHtml)
-    {
-        $("#readComprehensionDescription").val(newHtml)
-    }
-    readComprehensionEditor.create()
-</script>
+        </script>
+        <script>
+            const E = window.wangEditor
+            const readComprehensionEditor = new E("#readComprehensionEditor")
+            readComprehensionEditor.config.placeholder = '请输入题目描述'
+            readComprehensionEditor.config.uploadImgServer = '/upload-img'
+            readComprehensionEditor.config.uploadFileName = 'file';
+            readComprehensionEditor.config.uploadImgMaxSize = 2 * 1024 * 1024
+            readComprehensionEditor.config.uploadVideoServer = '/upload-video'
+            readComprehensionEditor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024
+            readComprehensionEditor.config.onchange = function (newHtml) {
+                $("#readComprehensionDescription").val(newHtml)
+            }
+            readComprehensionEditor.create()
+        </script>
+</div>
 </body>
 </html>

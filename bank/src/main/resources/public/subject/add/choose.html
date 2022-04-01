@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>题型选择</title>
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="../../css/Question.css">
+
 </head>
 <body>
 <script>
     function onAddClick() {
         var value = $("#type_select").val();
-        window.location.href = "/bank/subject/add/"+value+".html";
+        window.location.href = value+".html";
     }
 </script>
+<div class="submit" style="padding-top: 100px">
 题型:
 <select id="type_select">
     <option value ="singleChoiceQuestion">单选题</option>
@@ -34,5 +37,6 @@
     <option value="programProblem">程序题</option>
 </select>
 <button onclick="onAddClick()">添加</button>
+</div>
 </body>
 </html>

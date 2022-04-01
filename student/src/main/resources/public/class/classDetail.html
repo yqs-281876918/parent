@@ -1,16 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>班级详情</title>
+    <meta name="MSSmartTagsPreventParsing" content="True" />
+    <meta http-equiv="MSThemeCompatible" content="Yes" />
+    <meta name="renderer" content="webkit"  />
+    <link href="https://itestres.unipus.cn/itest-saas/static/its/lib/sfront/student/css/stu_css.css?v=202203111833" rel="stylesheet">
+
     <style>
-        #delete{
-            padding: 10px 20px;
-            text-align: right;
+        .clsTest{
+            border-color: #2dbf7f !important;
+            color: #2dbf7f !important;
+        }
+        .h4{
+            cursor: pointer;
+        }
+        #page_div #left{
+            float: left;
+        }
+        #page_div #right{
             float: right;
         }
     </style>
 </head>
+
 <body>
 <!-- 新 Bootstrap4 核心 CSS 文件 -->
 <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
@@ -20,6 +37,211 @@
 <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
 <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- 退出班级的提示框 -->
+<div class="modal fade" id="quitClassDialog" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">退出班级</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteCno" value="">
+                <p>您确定要退出班级【<span id="quitClassName"></span>】吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="quitClass()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 退出班级模态框结束 -->
+<div id="wrap">
+    <div id="test-con">
+        <div id="bj-inner">
+            <div class="clear"></div>
+            <div class="bj-infor">
+                <div class="bj-yi">
+                    <div class="bj-head">
+                        <h2 class="bj-name" id="className"></h2>
+                        <div class="bj-date">
+                            <span class="start">班级邀请码：<span class="sdate" id="invitation"></span></span>
+                        </div>
+                        <a href="javascript:void(0)" class="libj clsTest" onclick="goExamList()">该班级测试</a>
+                        <a href="javascript:void(0)" class="libj outCls" onclick="showQuitClassDialog()">退出班级</a>
+                    </div>
+                    <div class="bj-message detail-bj">
+                        <table cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td><div>学生</div><div style="cursor:default;" class="h4" id="totalStudent"></div></td>
+                                <td><div>教师</div><div style="cursor:default;" class="h4 student" id="teacherName"></div></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <table cellpadding="0" cellspacing="0" class="my-tab1">
+                    <thead>
+                    <tr>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">序号</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">用户名</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">真实姓名</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">加入时间</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">性别</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <th><a href="javascript:void(0)" class="my-word" style="cursor:default;">邮箱</a><!-- <a href="javascript:void(0)" class="my-sj2 my-sjA"></a>--></th>
+                        <div class="clear"></div>
+                    </tr>
+                    </thead>
+                    <tbody id="studentDetail">
+                    <tr>
+                        <td style="cursor:default;">&nbsp;1&nbsp;</td>
+                        <td style="cursor:default;">董长升</td>
+                        <td style="cursor:default;">男</td>
+                        <td style="cursor:default;"></td>
+                        <td style="cursor:default;" class="student">2019级</td>
+                        <td style="cursor:default;">机械类1911</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <div id="page_div">
+                                <div id="left">
+                                    <span id="pageNum"></span>/<span id="pages"></span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    共<span id="totals"></span>名学生
+                                </div>
+                                <div id="right">
 
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="yeshu">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var pageNum=1;
+    var pageSize=10;
+    var pageNums=0;
+    function init(){
+        var invitation = sessionStorage.getItem("invitation")
+        jQuery("#invitation").html(invitation)
+        var cname = sessionStorage.getItem("cname")
+        $("#className").html(cname)
+        var creator = sessionStorage.getItem("creator")
+        $("#teacherName").html(creator)
+        var cno = sessionStorage.getItem("cno")
+        var param={
+            "pageNum":pageNum,
+            "pageSize":pageSize,
+            "cno":cno
+        };
+        jQuery.post("/student/class/detail",param,function (rst){
+            pageNums=rst.pages;
+            jQuery("#pages").html(pageNums);
+            jQuery("#pageNum").html(pageNum);
+            jQuery("#totals").html(rst.total);
+            jQuery("#totalStudent").html(rst.total)
+
+            var studentArrs = rst.list;
+            trs = ''
+            for (var i=0;i<studentArrs.length;i++){
+                var s = studentArrs[i];
+                trs += `
+<tr>
+    <td style="cursor:default;">&nbsp;${i+1}&nbsp;</td>
+    <td style="cursor:default;">${s.sname}</td>
+    <td style="cursor:default;">${s.users.realName}</td>
+    <td style="cursor:default;">${s.data}</td>
+    <td style="cursor:default;" class="student"></td>
+    <td style="cursor:default;"></td>
+</tr>
+                `
+            }
+            jQuery("#studentDetail").html(trs)
+            //设置页码
+            var nums=rst.navigatepageNums;
+            var nav=`
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a href="#" class="page-link"
+                            onclick="pageUtil(${pageNum-1})">上一页</a>
+                    </li>
+                   `;
+            //循环读取页码
+            for(var i=0;i<nums.length;i++)
+            {
+                nav+=`
+                        <li class="page-item ${pageNum==nums[i]?'active':''}">
+                            <a href="#" class="page-link"
+                                onclick="pageUtil(${nums[i]})">${nums[i]}</a>
+                        </li>
+                    `;
+            }
+            nav+=`
+                    <li class="page-item">
+                        <a href="#" class="page-link"
+                            onclick="pageUtil(${pageNum+1})">下一页</a>
+                    </li>
+                </ul>
+            `;
+            jQuery("#right").html(nav);
+        })
+    }
+    jQuery(function (){
+        init()
+    })
+    //完成分页操作
+    //要显示数据的页码
+    function pageUtil(num) {
+        if(num<=1)
+        {
+            num=1;
+        }
+        if(num>=pageNums)
+        {
+            num=pageNums;
+        }
+        pageNum=num;
+        init();
+    }
+</script>
+<script>
+    function showQuitClassDialog(){
+        var cname = sessionStorage.getItem("cname")
+        $("#quitClassName").html(cname)
+        $("#quitClassDialog").modal('show')
+    }
+    function quitClass(){
+        $("#quitClassDialog").modal('hide')
+        var deleteCno = sessionStorage.getItem("cno")
+        jQuery.post("/student/class/quitInDetail",{'cno':deleteCno},function (rst){
+            if (rst>0){
+                alert("退出班级成功")
+                location.href="myClass.html"
+            }else{
+                alert("退出班级失败！请检查是否已退出该班级！")
+            }
+        })
+    }
+</script>
+<script>
+    function goExamList(){
+        window.location.href='../exam/list';
+    }
+</script>
 </body>
 </html>
