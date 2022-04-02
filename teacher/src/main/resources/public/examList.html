@@ -137,6 +137,7 @@
                                     <th align="right" colspan="3">考试名称</th>
                                     <th align="right" colspan="1">考试时间</th>
                                     <th align="right" colspan="1">考试时长</th>
+                                    <th align="right" colspan="1">考试总分</th>
                                     <th align="right" colspan="5">考试简介</th>
                                     <th align="right" colspan="2">操作</th>
                                 </tr>
@@ -205,6 +206,7 @@
                         <td colspan="3" onclick="find('${u.id}')">${u.examName}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${u.testTime}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.totalScore}</td>
                         <td colspan="5" onclick="find('${u.id}'))">${u.introduce}</td>
                         <td colspan="2">
                             <a href="#"
@@ -358,9 +360,9 @@
                         <td colspan="6" onclick="find('${u.id}'))">${u.introduce}</td>
                         <td colspan="2">
                             <a href="#"
-                                onclick="detail('${u.id}')">查看成绩分析</a>
+                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
                             <a href="#"
-                                onclick="intoread('${u.id}')">进入批阅</a>
+                                onclick="intoread('${u.id}','${u.totalSCore}')">进入批阅</a>
                         </td>
 
                     </tr>
@@ -413,8 +415,6 @@
         sessionStorage.setItem("startTime",startTime);
         sessionStorage.setItem("testTime",testTime);
         sessionStorage.setItem("totalScore",totalScore);
-
-
         window.location.href="analyse.html";
     }
 

@@ -49,8 +49,9 @@ public class AnalyseService {
         page= new PageInfo<>(exams, 4);
         return page;
     }
+
     public int count(Integer examId){
-        int num=0;
+        var num=0;
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
         for(ExamDetail examDetail : examDetails){
             if(examDetail.getTotalScore()!=-1){
@@ -58,18 +59,47 @@ public class AnalyseService {
                 num++;
             }
         }
-        System.out.println(num);
+        //System.out.println(num);
         return num;
+    }
+    public int max(Integer examId){
+        int max=0;
+        List<ExamDetail> examDetails = analyseDao.max(examId);
+        //System.out.println(examDetails.size());
+        for(int i=0;i<examDetails.size();i++){
+            max=examDetails.get(i).getTotalScore();
+            System.out.println(max);
+            break;
+        }
+        return max;
+    }
+    public int min(Integer examId){
+        int min=0;
+        List<ExamDetail> examDetails = analyseDao.min(examId);
+        for(int i=0;i<examDetails.size();i++){
+            min=examDetails.get(i).getTotalScore();
+            //System.out.println(min);
+            break;
+        }
+        return min;
+    }
+    public float avg(Integer examId){
+        float avg=0;
+        float sum=0;
+        int count=0;
+        List<ExamDetail> examDetails = analyseDao.getAll(examId);
+        for(int i=0;i<examDetails.size();i++){
+            sum=sum+examDetails.get(i).getTotalScore();
+            count++;
+        }
+        avg=sum/count;
+        return avg;
 
     }
-    public ExamDetail max(Integer examId){
-        return analyseDao.max(examId);
+
+    public List<ExamDetail> findStuList(int examId){
+        return analyseDao.getStuList(examId);
     }
-    public ExamDetail min(Integer examId){return analyseDao.min(examId);}
-
-    public List<ExamDetail> findStuList(int pageNum, int pageSize, int examId){
-
-        return AnalyseDao.getStuList(examId);}
 
 
 }

@@ -37,20 +37,22 @@ public class AnalyseController {
     }
     @RequestMapping("/count")
     public int count(Integer examId){
+        System.out.println(examId);
         return analyseService.count(examId);
     }
     @RequestMapping("/max")
-    public ExamDetail max(Integer examId){
+    public int max(Integer examId){
         return analyseService.max(examId);
     }
     @RequestMapping("/min")
-    public ExamDetail min(Integer examId){
+    public int min(Integer examId){
         return analyseService.min(examId);
     }
-    @RequestMapping("findStuList")
-    public List<ExamDetail> findStuList(int pageNum, int pageSize, Integer examId){
-        return analyseService.findStuList(pageNum,pageSize,examId);
-
+    @RequestMapping("/findStuList")
+    public List<ExamDetail> findStuList(Integer examId){
+        return analyseService.findStuList(examId);
     }
+    @RequestMapping("/avg")
+    public float avg(Integer examId){return analyseService.avg(examId);}
 
 }

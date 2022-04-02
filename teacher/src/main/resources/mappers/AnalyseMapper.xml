@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.mixed.exam.teacher.mapper.AnalyseMapper">
 
-    <select id="findAll" resultType="org.mixed.exam.bank.api.pojo.dto.ExamDto">
+    <select id="findAll" resultType="org.mixed.exam.bank.api.pojo.po.Exam">
         SELECT
-            id,paperID,examName,startTime,introduce,testTime,lateTime,submitTime,classID,antiSettings,introduce
+            id,paperID,examName,startTime,totalScore,introduce,testTime,lateTime,submitTime,classID,antiSettings,introduce
         from exam
         WHERE classID='2'
     </select>

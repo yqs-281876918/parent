@@ -90,22 +90,15 @@
 
 </div>
 <script>
-    var pageNum=1;
-    var pageSize=30;
-    var pageNums=0;
     function init() {
         var examId = sessionStorage.getItem("examId");
         var param={
-            "pageNum":pageNum,
-            "pageSize":pageSize,
             "examId":examId
         };
+
         jQuery.post("/teacher/analyse/findStuList",param,function (rst) {
-            pageNums=rst.pages;
-            jQuery("#pages").html(pageNums);
-            jQuery("#pageNum").html(pageNum);
-            jQuery("#totalnum").html(rst.total);
             //alert(rst);
+            console.log(rst);
             //1、查询查询的数据
             var arrs=rst.list;
             var trs="";
@@ -128,35 +121,7 @@
 
             }
             //把根据数据构建的行添加到表格
-
             jQuery("#data").html(trs);
-
-            var nums=rst.navigatepageNums;
-            var nav=`
-        <ul class="pagination">
-                             <li class="page-item">
-                                    <a href="#" class="page-link"
-                                    onclick="pageUtil(${pageNum-1})">上一页</a>
-                                </li>
-                                `;
-            for(var i=0;i<nums.length;i++){
-                nav+=`
-            <li class="page-item ${pageNum==nums[i]?'active':''}">
-                                    <a href="#" class="page-link">${nums[i]}</a>
-                                </li>
-
-            `;
-            }
-
-            nav+=`
-                                <li class="page-item">
-                                    <a href="#" class="page-link"
-                                    onclick="pageUtil(${pageNum+1})">下一页</a>
-                                </li>
-                            </ul>
-        `;
-            jQuery("#right").html(nav);
-
         })
 
     }
@@ -171,7 +136,7 @@
             "examId":examId,
         };
         jQuery.post("/teacher/analyse/findStuList",param,function(rst){
-            console.log(rst);
+
             //alert("查询到了");
             var ar=rst;
             var uu;

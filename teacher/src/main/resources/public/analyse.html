@@ -204,8 +204,6 @@
                         <tr>
                             <th id="department">班级</th>
                             <th id="examineNum">应考人数</th>
-                            <th id="examineRealNums">实考人数</th>
-                            <th id="examinePercent">参考率</th>
                             <th id="passPercent">及格率</th>
                             <th id="max-Score">最高分</th>
                             <th id="min-Score">最低分</th>
@@ -225,6 +223,27 @@
                         </tr>
                         </tfoot>
                     </table>
+                </div>
+            </div>
+        </div>
+        </br>
+        </br>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0" align="center">
+                            <thead>
+                            <tr>
+                                <th align="right" colspan="3">考试排名</th>
+                                <th align="right" colspan="1">学生姓名</th>
+                                <th align="right" colspan="1">总分</th>
+                            </tr>
+                            </thead>
+                            <tbody id="data1">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,19 +289,43 @@
         console.log(param);
         jQuery.post("/teacher/analyse/count",param,function(data){
             console.log(data);
-            jQuery("#examineNum").html(data);
+            jQuery("#examineNums").html(data);
         })
-        jQuery.post("/teacher/analyse/max",param,function (data1){
-            console.log(data1);
-            jQuery("#max-Score").html(data1);
+        jQuery.post("/teacher/analyse/max",param,function (max){
+            jQuery("#maxScore").html(max);
+
         })
-        jQuery.post("/teacher/analyse/min",param,function (data2){
-            console.log(data2);
-            jQuery("#min-Score").html(data2);
+        jQuery.post("/teacher/analyse/min",param,function (min){
+            jQuery("#minScore").html(min);
         })
+        jQuery.post("/teacher/analyse/avg",param,function (avg){
+            jQuery("#avgScore").html(avg);
 
+        })
+        jQuery.post("/teacher/analyse/findStuList",param,function(rst){
+            var arrs=rst.list;
+            var trs="";
+            for(var i=0;i<arrs.length;i++) {
 
+                //获取每一行对应的用户对象
+                var u=arrs[i];
 
+                //循环一次一行数据
+                //使用反引号,用于定义模板
+
+                trs+=`
+                    <tr>
+                        <td>1</td>
+                        <td colspan="1" onclick="find('${u.examId}'))">${u.username}</td>
+                        <td colspan="1" onclick="find('${u.examId}'))">${u.totalScore}</td>
+
+                    </tr>
+                    `;
+
+            }
+            //把根据数据构建的行添加到表格
+            jQuery("#data1").html(trs);
+        })
 
     }
 
