@@ -1,9 +1,12 @@
-package org.mixed.exam.teacher.pojo.po;
+package org.mixed.exam.bank.pojo.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.mixed.exam.bank.pojo.po.Exam;
 
 @Data
-public class exam {
+@NoArgsConstructor
+public class ExamDto{
     private Integer id;
     private String paperID;
     private String examName;
@@ -14,4 +17,5 @@ public class exam {
     private String classID;
     private String[] antiSettings;
     private String introduce;
+
 }
