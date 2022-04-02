@@ -1,4 +1,4 @@
-package org.mixed.exam.bank.pojo.po;
+package org.mixed.exam.bank.pojo.po.exam;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
