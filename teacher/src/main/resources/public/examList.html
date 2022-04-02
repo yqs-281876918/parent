@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>考试列表</title>
+    <meta charset="UTF-8">
+    <title>role</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body onload="init()">
+<style type="text/css">
+    a.hand:hover   {cursor:hand}
+</style>
+<style type="text/css">
+    .unselectable {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    #top{
+        padding: 10px 20px;
+        text-align: right;
+    }
+    #page_div #left{
+        float: left;
+    }
+    #page_div #right{
+        float: right;
+    }
+    body{
+        background-color: #fff9ed;
+    }
+    table{
+        background-color: #f3fdff;
+    }
+    #tabletitle{
+        background-color: #9d9d9d;
+    }
+    #tablebottom{
+        background-color: #fff9ed;
+    }
+    #search{
+        padding: 10px 20px;
+    }
+</style>
+
+<!-- 批量选择删除的提示框 -->
+<div class="modal" id="delMulDialog" tabindex="-1">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-warning" role="alert">
+                您确定要删除选中项吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="doDeleteMul()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除模态框结束 -->
+<!--搜索模态框开始-->
+<div class="modal fade" id="searchDialog" tabindex="-1" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">搜索考试场次</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="search-Form">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">考试名称</span>
+                        </div>
+                        <div class="row-8">
+                            <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
+                        </div>
+                        <div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
+                        </div>
+                        <div class="row-8">
+                            <input id="start-Date" name="date" type="date"/>
+                        </div>
+                    </div>
+                    <div id="search">
+                        <button type="button"
+                                class="btn btn-primary"
+                                onclick="doSearch()">搜索考试</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--搜索模态框结束-->
+<div id="container">
+    <div id="top">
+        <button type="button"
+                class="btn btn-default "
+                onclick="showSearchDialog()">搜索考试</button>
+        <button type="button"
+                class="btn btn-outline-warning btn-danger"
+                onclick="showDeleteDialog()">删除考试</button>
+    </div>
+    <div id="middle">
+        <form id="Form">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0" align="center">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="chAll"
+                                               onclick="selectAll(this.checked)">
+                                    </th>
+                                    <th align="right" colspan="3">考试名称</th>
+                                    <th align="right" colspan="1">考试时间</th>
+                                    <th align="right" colspan="1">考试时长</th>
+                                    <th align="right" colspan="5">考试简介</th>
+                                    <th align="right" colspan="2">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="data">
+                                </tbody>
+                                <tfoot>
+                                <tr id="table bottom" class="table-bordered">
+                                    <td colspan=5">
+                                        <div id="page_div">
+                                            <div id="right">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<!--复选框-->
+<script>
+    function selectAll(f) {
+        //找页面控件名为input的并且name=users的控制
+        //设置控件的属性 checked=f
+        jQuery("input[name='exams']").prop("checked",f);
+    }
+</script>
+<script>
+    var pageNum=1;
+    var pageSize=10;
+    var pageNums=0;
+    function init() {
+        var param={
+            "pageNum":pageNum,
+            "pageSize":pageSize,
+        };
+        jQuery.post("/teacher/analyse/findAll",param,function (rst) {
+            pageNums=rst.pages;
+            jQuery("#pages").html(pageNums);
+            jQuery("#pageNum").html(pageNum);
+            jQuery("#totalnum").html(rst.total);
+            //alert(rst);
+            //1、查询查询的数据
+            var arrs=rst.list;
+            var trs="";
+            for(var i=0;i<arrs.length;i++) {
+
+                //获取每一行对应的用户对象
+                var u=arrs[i];
+
+                //循环一次一行数据
+                //使用反引号,用于定义模板
+
+                trs+=`
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="ids" value="${u.id}">
+                        </td>
+
+                        <td colspan="3" onclick="find('${u.id}')">${u.examName}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.testTime}</td>
+                        <td colspan="5" onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="2">
+                            <a href="#"
+                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}')">查看成绩分析</a>
+
+                        </td>
+
+
+                    </tr>
+                    `;
+
+            }
+            //把根据数据构建的行添加到表格
+
+            jQuery("#data").html(trs);
+
+            var nums=rst.navigatepageNums;
+            var nav=`
+        <ul class="pagination">
+                             <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum-1})">上一页</a>
+                                </li>
+                                `;
+            for(var i=0;i<nums.length;i++){
+                nav+=`
+            <li class="page-item ${pageNum==nums[i]?'active':''}">
+                                    <a href="#" class="page-link">${nums[i]}</a>
+                                </li>
+
+            `;
+            }
+
+            nav+=`
+                                <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum+1})">下一页</a>
+                                </li>
+                            </ul>
+        `;
+            jQuery("#right").html(nav);
+
+        })
+
+    }
+    jQuery(function () {
+        init();
+    })
+</script>
+<!--find-->
+<script>
+    function find(id){
+        var param={
+            "id":id,
+        };
+        jQuery.post("/teacher/analyse/findAll",param,function(rst){
+            console.log(rst);
+            //alert("查询到了");
+            var ar=rst;
+            var uu;
+            for(var i=0;i<1;i++){
+                uu=ar[i];
+                var id=uu.id;
+                var examName=uu.examName;
+                var startTime=uu.startTime;
+                var testTime=uu.testTime;
+                var introduce=uu.introduce;
+                var param2={"id":id,"examName":examName,"startTime":startTime,"testTime":testTime,"introduce":introduce};
+                window.sessionStorage.setItem("examName",param2.examName);
+                window.sessionStorage.setItem("startTime",param2.startTime);
+                window.sessionStorage.setItem("testTime",param2.testTime);
+                window.sessionStorage.setItem("introduce",param2.introduce);
+                console.log(uu.examName);
+            }
+        })
+    }
+</script>
+<!--删除-->
+<!--showDeleteMulDialog-->
+<script>
+    function showDeleteDialog() {
+        var arrs=jQuery("input[name='ids']:checked").length;
+        if(arrs>0){
+            jQuery("#delMulDialog").modal('show');
+        }else{
+            alert("您还未选择要删除的考试");
+        }
+    }
+</script>
+<script>
+    function doDeleteMul() {
+        jQuery("#delMulDialog").modal('hide');
+        //获取选择的复选框中的值
+        var form=jQuery("#Form").serialize();
+        jQuery.post("/teacher/analyse/delete",form,function (rst) {
+            console.log(rst);
+            if(rst>0)
+            {
+                alert("删除成功!");
+                pageNum=1;
+                init();
+            }else{
+                alert("删除失败!");
+            }
+        })
+    }
+
+</script>
+<!--搜索-->
+<script>
+    function showSearchDialog(){
+        jQuery("#searchDialog").modal('show');
+    }
+    function doSearch() {
+        var data = {
+            "examName": $("#exam-name").val(),
+            "startTime": $("#start-Date").val(),
+            "pageNum": pageNum,
+            "pageSize": pageSize,
+        }
+        console.log(data);
+        jQuery.post("/teacher/analyse/Search", data, function (rst) {
+            alert("yyy");
+            pageNums = rst.pages;
+            jQuery("#pages").html(pageNums);
+            jQuery("#pageNum").html(data.pageNum);
+            jQuery("#totals").html(rst.total);
+            if (rst.list.length > 0) {
+                jQuery("#searchDialog").modal('hide');
+
+                var arrs=rst.list;
+                var trs="";
+                for(var i=0;i<arrs.length;i++) {
+
+                    //获取每一行对应的用户对象
+                    var u=arrs[i];
+
+                    //循环一次一行数据
+                    //使用反引号,用于定义模板
+
+                    trs+=`
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="ids" value="${u.id}">
+                        </td>
+
+                        <td colspan="2" onclick="find('${u.id}')">${u.examName}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
+                        <td colspan="6" onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="2">
+                            <a href="#"
+                                onclick="detail('${u.id}')">查看成绩分析</a>
+                            <a href="#"
+                                onclick="intoread('${u.id}')">进入批阅</a>
+                        </td>
+
+                    </tr>
+                    `;
+
+                }
+                //把根据数据构建的行添加到表格
+
+                jQuery("#data").html(trs);
+
+                var nums=rst.navigatepageNums;
+                var nav=`
+        <ul class="pagination">
+                             <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum-1})">上一页</a>
+                                </li>
+                                `;
+                for(var i=0;i<nums.length;i++){
+                    nav+=`
+            <li class="page-item ${pageNum==nums[i]?'active':''}">
+                                    <a href="#" class="page-link">${nums[i]}</a>
+                                </li>
+
+            `;
+                }
+
+                nav+=`
+                                <li class="page-item">
+                                    <a href="#" class="page-link"
+                                    onclick="pageUtil(${pageNum+1})">下一页</a>
+                                </li>
+                            </ul>
+        `;
+                jQuery("#right").html(nav);
+            }
+            else if(rst.list.length == 0) {
+                alert("该考试不存在");
+                jQuery("#searchDialog").modal('hide');
+            }
+        })
+    }
+
+</script>
+<!--搜索结束-->
+<script>
+    function analyse(id,examName,startTime,testTime){
+        sessionStorage.setItem("id",id);
+        sessionStorage.setItem("examName",examName);
+        sessionStorage.setItem("startTime",startTime);
+        sessionStorage.setItem("testTime",testTime);
+
+        window.location.href="analyse.html";
+    }
+
+</script>
+<!--判断页面是否越界-->
+<script>
+
+    function pageUtil(num) {
+        if(num<=1){
+            num=1;
+        }
+        if(num>=pageNums){
+            num=pageNums;
+        }
+        pageNum=num;
+        init();
+    }
+
+</script>
+</body>
+</html>
