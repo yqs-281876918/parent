@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加题目</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="/bank/js/submit.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/bank/css/add.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="outer">
+    <div class="upper">
+        <div class="title">
+            <span class="tip">题干</span>
+        </div>
+        <div id="editor" class="text"></div>
+    </div>
+    <div class="inner">
+        <div><span>请选择答案的表现形式</span></div>
+        <div class="line" style="margin-bottom: 20px"></div>
+        <input style="display: inline-block" type="image" src="/bank/img/SingleChoice.png" width="10%"/>
+        <input style="display: inline-block" type="image" src="/bank/img/MulChoice.png" width="10%"/>
+        <input style="display: inline-block" type="image" src="/bank/img/Completion.png" width="10%"/>
+        <input style="display: inline-block" type="image" src="/bank/img/Judgement.png" width="10%"/>
+        <input style="display: inline-block" type="image" src="/bank/img/Comprehensive.png" width="10%"/>
+        <input style="display: inline-block" type="image" src="/bank/img/Combination.png" width="10%"/>
+        <input style="display: inline-block" type="image" src="/bank/img/Code.png" width="10%"/>
+    </div>
+</div>
+<script>
+    const E = window.wangEditor
+    const singleChoiceEditor = new E('#editor')
+    singleChoiceEditor.config.placeholder = '请输入题干'
+    singleChoiceEditor.config.uploadImgServer = '/upload-img'
+    singleChoiceEditor.config.uploadFileName = 'file';
+    singleChoiceEditor.config.uploadImgMaxSize = 2 * 1024 * 1024
+    singleChoiceEditor.config.uploadVideoServer = '/upload-video'
+    singleChoiceEditor.config.uploadVideoMaxSize = 1024 * 1024 * 1024
+    singleChoiceEditor.config.onchange = function (newHtml) {
+        $("#description").val(newHtml)
+    }
+    singleChoiceEditor.create()
+</script>
+</body>
+</html>

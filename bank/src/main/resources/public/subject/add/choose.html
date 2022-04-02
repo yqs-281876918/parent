@@ -4,39 +4,28 @@
     <meta charset="UTF-8">
     <title>题型选择</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="../../css/Question.css">
+    <link rel="stylesheet" href="../../css/add.css">
 
 </head>
 <body>
 <script>
     function onAddClick() {
-        var value = $("#type_select").val();
+        var value = $("#type_select option:selected").val();
         window.location.href = value+".html";
     }
 </script>
 <div class="submit" style="padding-top: 100px">
-题型:
-<select id="type_select">
-    <option value ="singleChoiceQuestion">单选题</option>
-    <option value ="multipleChoiceQuestion">多选题</option>
-    <option value="completion">填空题</option>
-    <option value="judgment">判断题</option>
-    <option value="nounParsing">名词解析</option>
-    <option value="essayQuestion">论述题</option>
-    <option value="calculationProblem">计算题</option>
-    <option value="entryProblem">分录题</option>
-    <option value ="dataItems">资料题</option>
-    <option value ="matching">连线题</option>
-    <option value="voteTopic">投票题</option>
-    <option value="rankingQuestion">排序题</option>
-    <option value="clozeTest">完型填空</option>
-    <option value="readComprehension">阅读理解</option>
-    <option value="comprehensiveQuestion">综合题</option>
-    <option value="oralTopic">口语题</option>
-    <option value="listeningQuestion">听力题</option>
-    <option value="programProblem">程序题</option>
-</select>
-<button onclick="onAddClick()">添加</button>
+    题型:
+    <select id="type_select">
+        <option value ="singleChoiceQuestion">单选题</option>
+        <option value ="multipleChoiceQuestion">多选题</option>
+        <option value="completion">填空题</option>
+        <option value="judgment">判断题</option>
+        <option value="comprehensiveQuestion">综合题</option>
+        <option value="programProblem">程序题</option>
+        <option value="combinationChoice">综合选择题</option>
+    </select>
+    <button onclick="onAddClick()">添加</button>
 </div>
 </body>
 </html>

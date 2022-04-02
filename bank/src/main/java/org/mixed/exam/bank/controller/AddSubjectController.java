@@ -8,16 +8,14 @@ import org.mixed.exam.bank.service.AddSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @PreAuthorize("hasAnyRole('ROLE_adm')")
@@ -61,7 +59,7 @@ public class AddSubjectController {
 
     //单选题
     @ResponseBody
-    @PostMapping("addSubject/singleChoice")
+    @PostMapping("addSubject/singleChoiceQuestion")
     public String singleChoice(BaseParam baseParam,
                                HttpServletRequest request,
                                @RequestParam("description") String description,
@@ -70,7 +68,6 @@ public class AddSubjectController {
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswer(answer);
-        question.setType("singleChoiceQuestion");
         question.setOptions(options);
         question.setDescription(description);
         addSubjectService.insertSingleChoice(question);
@@ -79,7 +76,7 @@ public class AddSubjectController {
 
     //多选题
     @ResponseBody
-    @PostMapping("addSubject/multipleChoice")
+    @PostMapping("addSubject/multipleChoiceQuestion")
     public String multipleChoice(BaseParam baseParam,
                                  HttpServletRequest request,
                                  @RequestParam("options") List<String> options,
@@ -90,7 +87,6 @@ public class AddSubjectController {
         question.setOptions(options);
         question.setDescription(description);
         question.setAnswers(answers);
-        question.setType("multipleChoiceQuestion");
         addSubjectService.insertMultipleChoice(question);
         return "添加成功";
     }
@@ -106,7 +102,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
         question.setAnswers(answers);
-        question.setType("completion");
         addSubjectService.insertCompletion(question);
         return "添加成功";
     }
@@ -124,7 +119,6 @@ public class AddSubjectController {
         question.setOptions(options);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("judgment");
         addSubjectService.insertJudgment(question);
         return "添加成功";
     }
@@ -134,13 +128,12 @@ public class AddSubjectController {
     @PostMapping("addSubject/nounParsing")
     public String nounParsing(BaseParam baseParam,
                               HttpServletRequest request,
-                              @RequestParam("description") String description,
-                              @RequestParam("answer") String answer) {
+                              @RequestParam("nouns") List<String> nouns,
+                              @RequestParam("answers") List<String> answers) {
         NounParsing question = new NounParsing();
         setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        question.setType("nounParsing");
+        question.setNouns(nouns);
+        question.setAnswers(answers);
         addSubjectService.insertNounParsing(question);
         return "添加成功";
     }
@@ -156,7 +149,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("calculationProblem");
         addSubjectService.insertCalculationProblem(question);
         return "添加成功";
     }
@@ -172,7 +164,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("entryProblem");
         addSubjectService.insertEntryProblem(question);
         return "添加成功";
     }
@@ -188,7 +179,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("essayQuestion");
         addSubjectService.insertEssayQuestion(question);
         return "添加成功";
     }
@@ -204,7 +194,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("dataItems");
         addSubjectService.insertDataItems(question);
         return "添加成功";
     }
@@ -222,7 +211,6 @@ public class AddSubjectController {
         question.setOptions(options);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("rankingQuestion");
         addSubjectService.insertRankingQuestion(question);
         return "添加成功";
     }
@@ -238,7 +226,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setOptions(options);
         question.setDescription(description);
-        question.setType("voteTopic");
         addSubjectService.insertVoteTopic(question);
         return "添加成功";
     }
@@ -256,7 +243,6 @@ public class AddSubjectController {
         question.setOptions(options);
         question.setDescription(description);
         question.setAnswers(answers);
-        question.setType("clozeTest");
         addSubjectService.insertClozeTest(question);
         return "添加成功";
     }
@@ -274,7 +260,6 @@ public class AddSubjectController {
         question.setOptions(options);
         question.setDescription(description);
         question.setAnswers(answers);
-        question.setType("readComprehension");
         addSubjectService.insertReadComprehension(question);
         return "添加成功";
     }
@@ -292,7 +277,6 @@ public class AddSubjectController {
         question.setOptions(options);
         question.setDescription(description);
         question.setAnswers(answers);
-        question.setType("listeningQuestion");
         addSubjectService.insertListeningQuestion(question);
         return "添加成功";
     }
@@ -308,7 +292,6 @@ public class AddSubjectController {
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
         question.setAnswer(answer);
-        question.setType("comprehensiveQuestion");
         addSubjectService.insertComprehensiveQuestion(question);
         return "添加成功";
     }
@@ -322,7 +305,6 @@ public class AddSubjectController {
         OralTopic question = new OralTopic();
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
-        question.setType("oralTopic");
         addSubjectService.insertOralTopic(question);
         return "添加成功";
     }
@@ -342,7 +324,6 @@ public class AddSubjectController {
         question.setPrepositionCode(prepositionCode);
         question.setPostCode(postCode);
         question.setAnswer(answer);
-        question.setType("programProblem");
         addSubjectService.insertProgramProblem(question);
         return "添加成功";
     }
@@ -365,7 +346,6 @@ public class AddSubjectController {
         question.setOptionsLeft(optionsLeft);
         question.setOptionsRight(optionsRight);
         question.setAnswer(answer);
-        question.setType("matching");
         addSubjectService.insertMatching(question);
         return "添加成功";
     }

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * 名词解析题
  */
@@ -14,6 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NounParsing extends Question
 {
-    private String description="null";
-    private String answer="null";
+    private List<String> nouns;
+    private List<String> answers;
 }
