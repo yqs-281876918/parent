@@ -128,12 +128,19 @@
 </style>
 <div class="viewFrameWork sidebar-full" id="viewFrameWork">
     <div class="body-toolbar clearfix">
-        <ul class="body-toolbar-left toolbar-left-nav">
-            <li class="active nav-tab-item" id="scoreAnalysis">
-                <span>成绩统计</span>
+        <ul class="scoreAnalysisContentBar ksx-tabs-card">
+            <li class="active scoreAnalysisBarOne ksx-tab-item" id="score">
+                <button type="button"
+                        class="btn btn-default "
+                        onclick="search()">查看学生成绩单</button>
             </li>
-            <li class="nav-tab-item" id="questionAnalysis">
-                <span>试题分析</span>
+            <li class="scoreAnalysisBarTwo ksx-tab-item" id="scoreInterval">
+                <a href="javascript:void(0);">
+                    分数段统计
+                </a>
+            </li>
+            <li class="scoreAnalysisBarThree ksx-tab-item" id="scoreExamine">
+                <a href="javascript:void(0);">学员信息</a>
             </li>
         </ul>
     </div>
@@ -141,6 +148,7 @@
 <div class="exam shadow-lg p-3 mb-5 bg-white rounded" >
     <div class="scoreAnalysis">
         <div class="examContentWrap">
+            <div id="examId"></div>
             <div class="examContentTitle content examName" id="examName">考试科目</div>
             <div class="examContent">
                 <div class="row">
@@ -151,7 +159,7 @@
                         </div>
                         <div class="form-row">
                             <span class="title">及格分:</span>
-                            <span id="passMark"></span>
+                            <span id="passMark"></span>分
                         </div>
 
                         <div class="form-row">
@@ -185,19 +193,7 @@
                 </div>
             </div>
         </div>
-        <ul class="scoreAnalysisContentBar ksx-tabs-card">
-            <li class="active scoreAnalysisBarOne ksx-tab-item" id="score">
-                <a href="javascript:void(0);">成绩分析</a>
-            </li>
-            <li class="scoreAnalysisBarTwo ksx-tab-item" id="scoreInterval">
-                <a href="javascript:void(0);">
-                    分数段统计
-                </a>
-            </li>
-            <li class="scoreAnalysisBarThree ksx-tab-item" id="scoreExamine">
-                <a href="javascript:void(0);">学员信息</a>
-            </li>
-        </ul>
+
         <!--全班成绩统计-->
         <div class="score tabContent">
             <div class="scoreAnalysisFun clear">
@@ -206,14 +202,14 @@
                     <table id="scoreAnalysis-grid-data" class="table">
                         <thead>
                         <tr>
-                            <th data-column-id="department">班级</th>
-                            <th data-column-id="examineNums">应考人数</th>
-                            <th data-column-id="examineRealNums">实考人数</th>
-                            <th data-column-id="examinePercent">参考率</th>
-                            <th data-column-id="passPercent">及格率</th>
-                            <th data-column-id="maxScore">最高分</th>
-                            <th data-column-id="minScore">最低分</th>
-                            <th data-column-id="avgScore">平均分</th>
+                            <th id="department">班级</th>
+                            <th id="examineNum">应考人数</th>
+                            <th id="examineRealNums">实考人数</th>
+                            <th id="examinePercent">参考率</th>
+                            <th id="passPercent">及格率</th>
+                            <th id="max-Score">最高分</th>
+                            <th id="min-Score">最低分</th>
+                            <th id="avg-Score">平均分</th>
                         </tr>
                         </thead>
                         <tbody id="data">
@@ -252,7 +248,7 @@
 
 
 
-</div>
+    </div>
 
 </div>
 <script>
@@ -261,22 +257,41 @@
         var examName=sessionStorage.getItem("examName");
         var startTime=sessionStorage.getItem("startTime");
         var testTime=sessionStorage.getItem("testTime");
+        var totalScore=sessionStorage.getItem("totalScore");
         jQuery("#examName").html(examName);
         jQuery("#examTimeInterval").html(startTime);
         jQuery("#examTime").html(testTime);
+        jQuery("#examTotalScore").html(totalScore);
+        jQuery("#passMark").html(totalScore*0.6);
+        sessionStorage.setItem("examId",examId);
         var param={
             "examId":examId
         };
         console.log(param);
         jQuery.post("/teacher/analyse/count",param,function(data){
             console.log(data);
-            jQuery("#examineNums").html(data);
+            jQuery("#examineNum").html(data);
         })
+        jQuery.post("/teacher/analyse/max",param,function (data1){
+            console.log(data1);
+            jQuery("#max-Score").html(data1);
+        })
+        jQuery.post("/teacher/analyse/min",param,function (data2){
+            console.log(data2);
+            jQuery("#min-Score").html(data2);
+        })
+
 
 
 
     }
 
+</script>
+
+<script>
+    function search(){
+        window.location.href="stuList.html";
+    }
 </script>
 
 </body>

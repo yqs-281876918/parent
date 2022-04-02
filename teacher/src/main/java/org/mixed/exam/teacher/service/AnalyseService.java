@@ -4,7 +4,7 @@ package org.mixed.exam.teacher.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.bank.api.pojo.po.Exam;
-import org.mixed.exam.bank.api.pojo.po.ExamDetail;
+import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.dao.AnalyseDao;
 import org.mixed.exam.teacher.mapper.AnalyseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+
 
 @Service
 public class AnalyseService {
@@ -51,7 +53,10 @@ public class AnalyseService {
         int num=0;
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
         for(ExamDetail examDetail : examDetails){
-            num++;
+            if(examDetail.getTotalScore()!=-1){
+                System.out.println(examDetail.getTotalScore());
+                num++;
+            }
         }
         System.out.println(num);
         return num;
@@ -61,5 +66,10 @@ public class AnalyseService {
         return analyseDao.max(examId);
     }
     public ExamDetail min(Integer examId){return analyseDao.min(examId);}
+
+    public List<ExamDetail> findStuList(int pageNum, int pageSize, int examId){
+
+        return AnalyseDao.getStuList(examId);}
+
 
 }

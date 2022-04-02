@@ -208,7 +208,7 @@
                         <td colspan="5" onclick="find('${u.id}'))">${u.introduce}</td>
                         <td colspan="2">
                             <a href="#"
-                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}')">查看成绩分析</a>
+                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
 
                         </td>
 
@@ -272,11 +272,13 @@
                 var startTime=uu.startTime;
                 var testTime=uu.testTime;
                 var introduce=uu.introduce;
-                var param2={"id":id,"examName":examName,"startTime":startTime,"testTime":testTime,"introduce":introduce};
+                var totalScore=uu.totalScore;
+                var param2={"id":id,"examName":examName,"startTime":startTime,"testTime":testTime,"introduce":introduce,"totalSCore":totalScore};
                 window.sessionStorage.setItem("examName",param2.examName);
                 window.sessionStorage.setItem("startTime",param2.startTime);
                 window.sessionStorage.setItem("testTime",param2.testTime);
                 window.sessionStorage.setItem("introduce",param2.introduce);
+                window.sessionStorage.setItem("totalScore",param2.totalSCore);
                 console.log(uu.examName);
             }
         })
@@ -405,11 +407,13 @@
 </script>
 <!--搜索结束-->
 <script>
-    function analyse(id,examName,startTime,testTime){
+    function analyse(id,examName,startTime,testTime,totalScore){
         sessionStorage.setItem("id",id);
         sessionStorage.setItem("examName",examName);
         sessionStorage.setItem("startTime",startTime);
         sessionStorage.setItem("testTime",testTime);
+        sessionStorage.setItem("totalScore",totalScore);
+
 
         window.location.href="analyse.html";
     }

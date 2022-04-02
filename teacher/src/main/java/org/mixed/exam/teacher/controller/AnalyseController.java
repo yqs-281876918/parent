@@ -2,7 +2,7 @@ package org.mixed.exam.teacher.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.bank.api.pojo.po.Exam;
-import org.mixed.exam.bank.api.pojo.po.ExamDetail;
+import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.service.AnalyseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
@@ -46,6 +46,11 @@ public class AnalyseController {
     @RequestMapping("/min")
     public ExamDetail min(Integer examId){
         return analyseService.min(examId);
+    }
+    @RequestMapping("findStuList")
+    public List<ExamDetail> findStuList(int pageNum, int pageSize, Integer examId){
+        return analyseService.findStuList(pageNum,pageSize,examId);
+
     }
 
 }
