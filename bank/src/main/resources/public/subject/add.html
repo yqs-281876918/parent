@@ -19,6 +19,39 @@
         <div id="editor" class="text"></div>
     </div>
     <div class="inner">
+        <span class="title2">题目属性 </span>
+        <div class="line"></div>
+        <div class="classify">题目所属分组
+            <div class="line"></div>
+            <div class="singleChoiceCourseId">
+                <span style="display: inline-block">所属课程：</span>
+                <div style="display: inline-block">
+                    <div>
+                        <select class="button2" id="courseID" name="courseID"></select>
+                    </div>
+                </div>
+                <span style="display: inline-block" class="button2">所属知识点：</span>
+                <div style="display: inline-block" id="class2ndID">
+                    <div class="class2ndID">
+                        <select class="button2">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="star">
+            题目难度星级：
+            <div class="line"></div>
+            <div class="difficulty">
+                <select id="singleChoiceDifficulty" class="button2" name="difficulty">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
         <div><span>请选择答案的表现形式</span></div>
         <div class="line" style="margin-bottom: 20px"></div>
         <input style="display: inline-block" type="image" src="/bank/img/SingleChoice.png" width="10%"/>
@@ -28,8 +61,99 @@
         <input style="display: inline-block" type="image" src="/bank/img/Comprehensive.png" width="10%"/>
         <input style="display: inline-block" type="image" src="/bank/img/Combination.png" width="10%"/>
         <input style="display: inline-block" type="image" src="/bank/img/Code.png" width="10%"/>
+        <div class="answer singleChoiceQuestion">
+            <form class="singleChoiceQuestion">
+                <span>设置答案</span>
+                <select class="singleChoiceAnswer" name="answer">
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">C</option>
+                    <option value="4">D</option>
+                </select>
+            </form>
+            <button>添加选项</button>
+            <button>删除选项</button>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('#subject','/bank/addSubject/singleChoice')">
+                    提交至题库
+                </button>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    //初始化
+    $(function () {
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+        jQuery.get("/bank/classify/findAllCourse", function (rst) {
+            var trs = ''
+            var superId = rst[0].id;
+            for (var i = 0; i < rst.length; i++) {
+                var u = rst[i];
+                trs += `
+                    <option value="${u.id}">${u.classifyName}</option>
+                `
+            }
+            $("#courseID").append(trs);
+            jQuery.get("/bank/classify/findAllKnowledge", function (rst2) {
+                var trs2 = ''
+                $("div.class2ndID").remove();
+                trs2 += `<div class="class2ndID">
+                    <select name="class2ndID">
+                    `
+                for (var i = 0; i < rst2.length; i++) {
+                    var u = rst2[i];
+                    if (superId == u.superClassId) {
+                        trs2 += `<option value="${u.id}">${u.classifyName}</option>`
+                    } else {
+
+                    }
+                }
+                trs2 += `</select>
+                </div>`
+                $("#class2ndID").append(trs2);
+            })
+        })
+    })
+</script>
+<script>
+    function submitSubject() {
+        let form = jQuery('#subject').serializeObject();
+        let msg = form.description;
+        msg = msg.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "\'").replace(/&quot;/g, "\"").replace(/<\/?.+?>/g, "")
+        if (msg.length > 15) {
+            msg = msg.slice(0, 15)
+            msg = msg + "..."
+        } else {
+            msg = msg.slice(0, msg.length)
+        }
+        form.introduction = msg
+        jQuery.ajax({
+            url: '/bank/addSubject/' + form.type,
+            data: form,
+            method: 'post',
+            traditional: true,
+            success: function (rst) {
+                alert(rst)
+            }
+        })
+    }
+</script>
 <script>
     const E = window.wangEditor
     const singleChoiceEditor = new E('#editor')
@@ -43,6 +167,12 @@
         $("#description").val(newHtml)
     }
     singleChoiceEditor.create()
+</script>
+<script>
+    let types = ["singleChoiceQuestion", "multipleChoiceQuestion", "judgment", "completion", "comprehensiveQuestion", "combinationChoice"]
+
+    function addItem(type) {
+    }
 </script>
 </body>
 </html>
