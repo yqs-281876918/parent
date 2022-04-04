@@ -1,12 +1,18 @@
 package org.mixed.exam.teacher.dao;
 
+import com.mongodb.client.result.DeleteResult;
+import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.pojo.po.Exam;
 import org.mixed.exam.bank.pojo.po.MultipleChoiceQuestion;
 import org.mixed.exam.bank.pojo.po.SingleChoiceQuestion;
 import org.mixed.exam.bank.pojo.po.exam.Answer;
 import org.mixed.exam.bank.pojo.po.exam.ExamDetail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -63,5 +69,39 @@ public class ReviewPaperDao {
             }
         }
         return e;
+    }
+
+    public List<ExamDetail> find(Integer examid) {
+        System.out.println("examid="+examid);
+        Query query = Query.query(Criteria.where("examId").is(examid)).with(Sort.by(new Sort.Order(Sort.Direction.ASC, "finishReview")));
+        //query.with(new Sort(Sort.Direction.DESC,"finishReview"));
+        return mongoTemplate.find(query, ExamDetail.class,"examDetail");
+    }
+
+    public List<ExamDetail> Search(String studentName) {
+        Query query = Query.query(Criteria.where("username").is(studentName)).with(Sort.by(new Sort.Order(Sort.Direction.ASC, "finishReview")));
+        return mongoTemplate.find(query, ExamDetail.class,"examDetail");
+    }
+
+    public List<ExamDetail> SearchAll() {
+        Query query = Query.query(Criteria.where("antiCount").gte(-1)).with(Sort.by(new Sort.Order(Sort.Direction.ASC, "finishReview")));
+        return mongoTemplate.find(query,ExamDetail.class,"examDetail");
+    }
+
+    public List<ExamDetail> SearchByAnti(String antiCount) {
+        int i=Integer.parseInt(antiCount);
+        Query query = Query.query(Criteria.where("antiCount").gte(i)).with(Sort.by(new Sort.Order(Sort.Direction.ASC, "finishReview")));
+        return mongoTemplate.find(query, ExamDetail.class,"examDetail");
+    }
+
+    public List<ExamDetail> SearchDouble(String studentName,String antiCount) {
+        int i=Integer.parseInt(antiCount);
+        Query query = Query.query(Criteria.where("username").is(studentName).and("antiCount").gte(i)).with(Sort.by(new Sort.Order(Sort.Direction.ASC, "finishReview")));
+        return mongoTemplate.find(query, ExamDetail.class,"examDetail");
+    }
+
+    public int delete(String[] ids) {
+        Query query = Query.query(Criteria.where("id").in(ids));
+        return (int) mongoTemplate.remove(query,ExamDetail.class,"examDetail").getDeletedCount();
     }
 }
