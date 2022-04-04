@@ -52,7 +52,7 @@
     <div id="top">
         <button type="button"
                 class="btn btn-default "
-                onclick="showSearchDialog()">搜索学生</button>
+                onclick="showSearchDialog()">导出成绩单</button>
     </div>
     <div id="middle">
         <form id="Form">
@@ -64,22 +64,12 @@
                                 <thead>
                                 <tr>
                                     <th align="right" colspan="3">考试排名</th>
-                                    <th align="right" colspan="1">学生姓名</th>
-                                    <th align="right" colspan="1">总分</th>
+                                    <th align="right" colspan="3">学生姓名</th>
+                                    <th align="right" colspan="3">总分</th>
                                 </tr>
                                 </thead>
                                 <tbody id="data">
                                 </tbody>
-                                <tfoot>
-                                <tr id="table bottom" class="table-bordered">
-                                    <td colspan=3">
-                                        <div id="page_div">
-                                            <div id="right">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -100,19 +90,16 @@
             //alert(rst);
             console.log(rst);
             //1、查询查询的数据
-            var arrs=rst.list;
             var trs="";
-            for(var i=0;i<arrs.length;i++) {
-
+            for(var i=0;i<rst.size;i++) {
+                var arrs=rst.list;
                 //获取每一行对应的用户对象
                 var u=arrs[i];
-
                 //循环一次一行数据
                 //使用反引号,用于定义模板
-
                 trs+=`
                     <tr>
-                        <td>1</td>
+                        <td colspan="1" onclick="find('${u.examId}'))">${u.id}</td>
                         <td colspan="1" onclick="find('${u.examId}'))">${u.username}</td>
                         <td colspan="1" onclick="find('${u.examId}'))">${u.totalScore}</td>
 
@@ -136,20 +123,22 @@
             "examId":examId,
         };
         jQuery.post("/teacher/analyse/findStuList",param,function(rst){
-
+            console.log(rst);
             //alert("查询到了");
             var ar=rst;
             var uu;
-            for(var i=0;i<1;i++){
+            for(var i=0;i<ar.length;i++){
                 uu=ar[i];
                 var id=uu.id;
                 var username=uu.username;
                 var totalScore=uu.totalScore;
                 var param2={"id":id,"username":username,"totalScore":totalScore};
+
+                window.sessionStorage.setItem("id",param2.id);
                 window.sessionStorage.setItem("username",param2.username);
                 window.sessionStorage.setItem("totalScore",param2.totalScore);
-                console.log(uu.username);
             }
+
         })
     }
 </script>

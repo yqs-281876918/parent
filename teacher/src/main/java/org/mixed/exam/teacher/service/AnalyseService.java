@@ -3,6 +3,7 @@ package org.mixed.exam.teacher.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.jdbc.Null;
 import org.mixed.exam.bank.api.pojo.po.Exam;
 import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.dao.AnalyseDao;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -55,7 +57,7 @@ public class AnalyseService {
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
         for(ExamDetail examDetail : examDetails){
             if(examDetail.getTotalScore()!=-1){
-                System.out.println(examDetail.getTotalScore());
+                //System.out.println(examDetail.getTotalScore());
                 num++;
             }
         }
@@ -68,7 +70,7 @@ public class AnalyseService {
         //System.out.println(examDetails.size());
         for(int i=0;i<examDetails.size();i++){
             max=examDetails.get(i).getTotalScore();
-            System.out.println(max);
+            //System.out.println(max);
             break;
         }
         return max;
@@ -99,6 +101,40 @@ public class AnalyseService {
 
     public List<ExamDetail> findStuList(int examId){
         return analyseDao.getStuList(examId);
+    }
+
+    //计算各分数段人数比例
+    public double[] percentage(Integer examId,Integer totalScore,Integer personNum){
+        int per1 = 0,per2=0,per3=0,per4=0 , per5=0;
+        List<ExamDetail> examDetails = analyseDao.getAll(examId);
+
+        System.out.println(examId);
+        System.out.println(totalScore);
+
+        for(int i=0;i<examDetails.size();i++){
+            System.out.println(examDetails.get(i).getTotalScore());
+
+            int score=examDetails.get(i).getTotalScore();
+
+            ///System.out.println(score);
+            if(score!=-1){
+                float per=(float)score/totalScore;
+                if(per >= 0 && per <= 0.2){ per1++;}
+                if (per > 0.2 && per <= 0.4) { per2++;}
+                if (per > 0.4 && per <= 0.6) { per3++;}
+                if (per > 0.6 && per <= 0.8) { per4++;}
+                if (per > 0.8 && per <= 1) { per5++;}
+            }
+        }
+        double pert1=(double)per1*1.0/personNum;
+        double pert2=(double)per2*1.0/personNum;
+        double pert3=(double)per3*1.0/personNum;
+        double pert4=(double)per4*1.0/personNum;
+        double pert5=(double)per5*1.0/personNum;
+        ////System.out.println(per1);
+        double[] percentage={pert1,pert2,pert3,pert4,pert5};
+        //System.out.println(Arrays.toString(percentage));
+        return percentage;
     }
 
 

@@ -54,5 +54,9 @@ public class AnalyseController {
     }
     @RequestMapping("/avg")
     public float avg(Integer examId){return analyseService.avg(examId);}
-
+    @RequestMapping("/percentage")
+    public double[] percentage(Integer examId,Integer totalScore,Integer personNum){
+       System.out.println(totalScore);
+        return analyseService.percentage(examId,totalScore,personNum);
+    }
 }

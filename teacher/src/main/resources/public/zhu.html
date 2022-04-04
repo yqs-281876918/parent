@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Animated 3D Bar Chart with CSS3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Animated 3D Bar Chart with CSS3" />
+  <meta name="keywords" content="css3, bar chart, animation, 3d" />
+  <meta name="author" content="Sergey Lukin for Codrops" />
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="shortcut icon" href="../favicon.ico">
+  <link rel="stylesheet" type="text/css" href="assets/css/demo.css" />
+  <link rel="stylesheet" type="text/css" href="assets/css/graph.css" />
+  <!--[if lt IE 9]>
+  <script type="text/javascript" src="assets/js/modernizr.custom.04022.js"></script>
+  <style>.ie-note-1{display:block;} .main{display:none;}</style>
+  <![endif]-->
+  <!--[if IE 9]><style>.ie-note-2{display:block;}</style><![endif]-->
+</head>
+<body onload="init()">
+<div class="container">
+  <div class="main">
+    <span class="button-label">Size:</span>
+    <input type="radio" name="resize-graph" id="graph-normal" checked="checked" /><label for="graph-normal">Normal</label>
+    <input type="radio" name="resize-graph" id="graph-large" /><label for="graph-large">Large</label>
+
+    <span class="button-label">Color:</span>
+    <input type="radio" name="paint-graph" id="graph-rainbow" checked="checked"/><label for="graph-rainbow">Rainbow</label>
+    <input type="radio" name="paint-graph" id="graph-blue" /><label for="graph-blue">Blue</label>
+    <input type="radio" name="paint-graph" id="graph-green" /><label for="graph-green">Green</label>
+
+
+    <span class="button-label">Product:</span>
+    <input type="radio" name="fill-graph" id="f-product1" checked="checked" /><label for="f-product1">总成绩</label>
+    <input type="radio" name="fill-graph" id="f-product2" /><label for="f-product2">填空题</label>
+    <input type="radio" name="fill-graph" id="f-product3" /><label for="f-product3">简答题</label>
+
+    <ul class="graph-container">
+      <li>
+        <span id="person1"></span>
+        <div class="bar-wrapper">
+          <div class="bar-container">
+            <div class="bar-background"></div>
+            <div class="bar-inner" id="percent1"></div>
+            <div class="bar-foreground"></div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span id="person2"></span>
+        <div class="bar-wrapper">
+          <div class="bar-container">
+            <div class="bar-background"></div>
+            <div class="bar-inner" id="percent2"></div>
+            <div class="bar-foreground"></div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span id="person3"></span>
+        <div class="bar-wrapper">
+          <div class="bar-container">
+            <div class="bar-background"></div>
+            <div class="bar-inner" id="percent3"></div>
+            <div class="bar-foreground"></div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span id="person4"></span>
+        <div class="bar-wrapper">
+          <div class="bar-container">
+            <div class="bar-background"></div>
+            <div class="bar-inner" id="percent4"></div>
+            <div class="bar-foreground"></div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <span id="person5"></span>
+        <div class="bar-wrapper">
+          <div class="bar-container">
+            <div class="bar-background"></div>
+            <div class="bar-inner" id="percent5"></div>
+            <div class="bar-foreground"></div>
+          </div>
+        </div>
+      </li>
+      <li style="left:130%;"><span>所得分数占所选题型总分的比例</span></li>
+      <li>
+        <ul class="graph-marker-container">
+          <li style="bottom:25%;"><span>25%</span></li>
+          <li style="bottom:50%;"><span>50%</span></li>
+          <li style="bottom:75%;"><span>75%</span></li>
+          <li style="bottom:100%;"><span>100%</span></li>
+          <li style="bottom:125%;"><span>人数占比</span></li>
+        </ul>
+      </li>
+    </ul>
+
+  </div>
+
+</div>
+<script>
+  function init(){
+    var examId = sessionStorage.getItem("examId");
+    var totalScore = sessionStorage.getItem("totalScore");
+    var personNum = sessionStorage.getItem("personNum");
+    var param={
+      "examId":examId,
+      "totalScore":totalScore,
+      "personNum":personNum
+    };
+    console.log(param);
+    console.log(personNum);
+    jQuery.post("/teacher/analyse/percentage",param,function(rst){
+      console.log(rst);
+      jQuery("#percent1").html(rst[0]);
+      jQuery("#percent2").html(rst[1]);
+      jQuery("#percent3").html(rst[2]);
+      jQuery("#percent4").html(rst[3]);
+      jQuery("#percent5").html(rst[4]);
+     // var per1=rst[1];
+     // jQuery("#percent1").html(per1);
+
+    })
+    //person是x轴
+    jQuery("#person1").html(totalScore*0.2);
+    jQuery("#person2").html(totalScore*0.4);
+    jQuery("#person3").html(totalScore*0.6);
+    jQuery("#person4").html(totalScore*0.8);
+    jQuery("#person5").html(totalScore*1.0);
+    //percent是y轴
+
+  }
+</script>
+</body>
+</html>
