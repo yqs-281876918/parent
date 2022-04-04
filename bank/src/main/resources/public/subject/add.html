@@ -5,63 +5,125 @@
     <title>添加题目</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="/bank/js/submit.js"></script>
+    <script src="/bank/js/format.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/bank/css/add.css">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+<div class="modal fade" id="add-file-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <script>
+        $(function () {
+            $('#add-file-modal').on('hide.bs.modal', function () {
+                $("#editor").show()
+            })
+            $('#add-file-modal').on('show.bs.modal', function () {
+                $("#editor").hide()
+            })
+        })
+        $(function () {
+            $("#upload").click(function () {
+                let formData = new FormData($('#uploadForm')[0])
+                console.log(formData)
+                $.ajax({
+                    type: 'post',
+                    url: "/res/upload", //上传文件的请求路径必须是绝对路劲
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        let fileName = document.getElementById("fileInput").files[0].name
+                        let url=data
+                        let form_file=$('form.file')
+                        let a="<a href='{0}' target='_blank'>{1}</a>".format(url,fileName) +
+                            "<input type='hidden' name='fileUrls' value='{0}'/><br/>".format(url)
+                        form_file.append(a);
+                        $('#add-file-modal').modal('hide')
+                    },
+                    error: function (){alert("上传失败")}
+                })
+            })
+        })
+    </script>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">选择文件</h4>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    文件:<input id="fileInput" type="file" name="file"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="upload" class="btn btn-primary">上传</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="outer">
     <div class="upper">
         <div class="title">
             <span class="tip">题干</span>
         </div>
         <div id="editor" class="text"></div>
+        <div id="files">
+
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="$('#add-file-modal').modal()">添加附件</button>
+        <form class="file">
+        </form>
     </div>
     <div class="inner">
-        <span class="title2">题目属性 </span>
-        <div class="line"></div>
-        <div class="classify">题目所属分组
+        <form class="common">
+            <span class="title2">题目属性 </span>
             <div class="line"></div>
-            <div class="singleChoiceCourseId">
-                <span style="display: inline-block">所属课程：</span>
-                <div style="display: inline-block">
-                    <div>
-                        <select class="button2" id="courseID" name="courseID"></select>
+            <div class="classify">题目所属分组
+                <div class="line"></div>
+                <div class="singleChoiceCourseId">
+                    <span style="display: inline-block">所属课程：</span>
+                    <div style="display: inline-block">
+                        <div>
+                            <select class="button2" id="courseID" name="courseID"></select>
+                        </div>
                     </div>
-                </div>
-                <span style="display: inline-block" class="button2">所属知识点：</span>
-                <div style="display: inline-block" id="class2ndID">
-                    <div class="class2ndID">
-                        <select class="button2">
-                        </select>
+                    <span style="display: inline-block" class="button2">所属知识点：</span>
+                    <div style="display: inline-block" id="class2ndID">
+                        <div class="class2ndID">
+                            <select class="button2">
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="star">
-            题目难度星级：
-            <div class="line"></div>
-            <div class="difficulty">
-                <select id="singleChoiceDifficulty" class="button2" name="difficulty">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+            <div class="star">
+                题目难度星级(1-入门 2-简单 3-中等 4-普通 5-困难)
+                <div class="line"></div>
+                <div class="difficulty">
+                    <select id="singleChoiceDifficulty" class="button2" name="difficulty">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
             </div>
-        </div>
+        </form>
         <div><span>请选择答案的表现形式</span></div>
         <div class="line" style="margin-bottom: 20px"></div>
-        <input style="display: inline-block" type="image" src="/bank/img/SingleChoice.png" width="10%"/>
-        <input style="display: inline-block" type="image" src="/bank/img/MulChoice.png" width="10%"/>
-        <input style="display: inline-block" type="image" src="/bank/img/Completion.png" width="10%"/>
-        <input style="display: inline-block" type="image" src="/bank/img/Judgement.png" width="10%"/>
-        <input style="display: inline-block" type="image" src="/bank/img/Comprehensive.png" width="10%"/>
-        <input style="display: inline-block" type="image" src="/bank/img/Combination.png" width="10%"/>
-        <input style="display: inline-block" type="image" src="/bank/img/Code.png" width="10%"/>
-        <div class="answer singleChoiceQuestion">
+        <input onclick="showAnswerPanel('singleChoiceQuestion')" style="display: inline-block" type="image" src="/bank/img/SingleChoice.png" width="10%"/>
+        <input onclick="showAnswerPanel('multipleChoiceQuestion')" style="display: inline-block" type="image" src="/bank/img/MulChoice.png" width="10%"/>
+        <input onclick="showAnswerPanel('completion')" style="display: inline-block" type="image" src="/bank/img/Completion.png" width="10%"/>
+        <input onclick="showAnswerPanel('judgment')" style="display: inline-block" type="image" src="/bank/img/Judgement.png" width="10%"/>
+        <input onclick="showAnswerPanel('comprehensiveQuestion')" style="display: inline-block" type="image" src="/bank/img/Comprehensive.png" width="10%"/>
+        <input onclick="showAnswerPanel('combinationChoice')" style="display: inline-block" type="image" src="/bank/img/Combination.png" width="10%"/>
+        <input onclick="showAnswerPanel('programProblem')" style="display: inline-block" type="image" src="/bank/img/Code.png" width="10%"/>
+        <div hidden="hidden" class="answer singleChoiceQuestion">
             <form class="singleChoiceQuestion">
                 <span>设置答案</span>
                 <select class="singleChoiceAnswer" name="answer">
@@ -71,17 +133,84 @@
                     <option value="4">D</option>
                 </select>
             </form>
-            <button>添加选项</button>
-            <button>删除选项</button>
+            <button onclick="addSingleItem()">添加选项</button>
+            <button onclick="delSingleItem()">删除选项</button>
+            <script>
+                function addSingleItem() {
+                    let select = $('select.singleChoiceAnswer')
+                    let length = select.children().length;
+                    let option = "<option value='{0}'>{1}</option>".format(String.fromCharCode(65 + length), String.fromCharCode(65 + length))
+                    select.append(option)
+                }
+
+                function delSingleItem() {
+                    let select = $('select.singleChoiceAnswer')
+                    if (select.children().length > 1) {
+                        select.children().eq(-1).remove()
+                    }
+                }
+            </script>
             <div class="submit">
                 <button type="button" class="btn btn-primary"
-                        onclick="submitSubject('#subject','/bank/addSubject/singleChoice')">
+                        onclick="submitSubject('singleChoiceQuestion')">
                     提交至题库
                 </button>
             </div>
         </div>
+        <div hidden="hidden" class="answer multipleChoiceQuestion">
+            <span>设置答案：</span>
+            <form class="multipleChoiceQuestion">
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="A">A
+                    <br/>
+                </div>
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="B">B
+                    <br/>
+                </div>
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="C">C
+                    <br/>
+                </div>
+                <div class="multipleChoiceAnswer" style="display: inline-block">
+                    <input type="checkbox" name="answers" value="D">D
+                </div>
+            </form>
+            <button onclick="addMulItem()">添加选项</button>
+            <button onclick="delMulItem()">删除选项</button>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('multipleChoiceQuestion')">
+                    提交至题库
+                </button>
+            </div>
+            <script>
+                function addMulItem() {
+                    $('form.multipleChoiceQuestion')
+                }
+                function delMulItem() {
+
+                }
+            </script>
+        </div>
+        <div hidden="hidden" class="answer judgment">判断题</div>
+        <div hidden="hidden" class="answer completion">填空题</div>
+        <div hidden="hidden" class="answer combinationChoice">组合选择题</div>
+        <div hidden="hidden" class="answer comprehensiveQuestion">综合题</div>
+        <div hidden="hidden" class="answer programProblem">程序题</div>
     </div>
 </div>
+<script>
+    let panel_types=['singleChoiceQuestion','multipleChoiceQuestion','judgment','completion',
+        'combinationChoice','comprehensiveQuestion','programProblem']
+    function showAnswerPanel(type) {
+        for(let index in panel_types)
+        {
+            $('div.answer.'+panel_types[index]).hide()
+        }
+        $('div.answer.'+type).show()
+    }
+</script>
 <script>
     //初始化
     $(function () {
@@ -100,6 +229,7 @@
             });
             return o;
         };
+
         jQuery.get("/bank/classify/findAllCourse", function (rst) {
             var trs = ''
             var superId = rst[0].id;
@@ -132,24 +262,32 @@
     })
 </script>
 <script>
-    function submitSubject() {
-        let form = jQuery('#subject').serializeObject();
-        let msg = form.description;
-        msg = msg.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "\'").replace(/&quot;/g, "\"").replace(/<\/?.+?>/g, "")
-        if (msg.length > 15) {
-            msg = msg.slice(0, 15)
-            msg = msg + "..."
+    function submitSubject(form_class) {
+        let form_private = jQuery('form.' + form_class).serializeObject()
+        let description = jQuery('div.w-e-text').html()
+        form_private.description = description
+        let form = form_private
+        let form_common = jQuery('form.common').serializeObject();
+        form.courseID = form_common.courseID
+        form.class2ndID = form_common.class2ndID
+        form.difficulty = form_common.difficulty
+        let introduction = description.replace(/<(p|div)[^>]*>(<br\/?>|&nbsp;)<\/\1>/gi, '\n').replace(/<br\/?>/gi, '\n').replace(/<[^>/]+>/g, '').replace(/(\n)?<\/([^>]+)>/g, '').replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/<\/?(img)[^>]*>/gi, '').replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "\'").replace(/&quot;/g, "\"").replace(/<\/?.+?>/g, "")
+        if (introduction.length > 15) {
+            introduction = introduction.slice(0, 15) + "..."
         } else {
-            msg = msg.slice(0, msg.length)
+            introduction = introduction.slice(0, introduction.length)
         }
-        form.introduction = msg
+        form.introduction = introduction
+        let form_file=$('form.file').serializeObject()
+        form.fileUrls=form_file.fileUrls
         jQuery.ajax({
-            url: '/bank/addSubject/' + form.type,
+            url: '/bank/addSubject/' + form_class,
             data: form,
             method: 'post',
             traditional: true,
             success: function (rst) {
                 alert(rst)
+                window.location.reload()
             }
         })
     }
@@ -167,12 +305,6 @@
         $("#description").val(newHtml)
     }
     singleChoiceEditor.create()
-</script>
-<script>
-    let types = ["singleChoiceQuestion", "multipleChoiceQuestion", "judgment", "completion", "comprehensiveQuestion", "combinationChoice"]
-
-    function addItem(type) {
-    }
 </script>
 </body>
 </html>
