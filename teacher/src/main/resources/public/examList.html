@@ -139,6 +139,7 @@
                                     <th align="right" colspan="1">考试时长</th>
                                     <th align="right" colspan="1">考试总分</th>
                                     <th align="right" colspan="5">考试简介</th>
+                                    <th align="right" colspan="2">批阅进度</th>
                                     <th align="right" colspan="2">操作</th>
                                 </tr>
                                 </thead>
@@ -211,6 +212,8 @@
                         <td colspan="2">
                             <a href="#"
                                 onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
+                                <a href="#"
+                                onclick="review('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
 
                         </td>
 
@@ -416,6 +419,14 @@
         sessionStorage.setItem("testTime",testTime);
         sessionStorage.setItem("totalScore",totalScore);
         window.location.href="analyse.html";
+    }
+    function review(id,examName,startTime,testTime,totalScore){
+        sessionStorage.setItem("id",id);
+        sessionStorage.setItem("examName",examName);
+        sessionStorage.setItem("startTime",startTime);
+        sessionStorage.setItem("testTime",testTime);
+        sessionStorage.setItem("totalScore",totalScore);
+        window.location.href="reviewPaper.html";
     }
 
 </script>
