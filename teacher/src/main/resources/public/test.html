@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/highcharts.js"></script>
+<!--    <script type="text/javascript" src="assets/js/exporting.js"></script>-->
+    <script type="text/javascript" src="assets/js/modernizr.custom.04022.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>
+</head>
+<body onload="init()">
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+    <div id="top">
+        <button type="button"
+                class="btn btn-default "
+                checked="checked">柱状图</button>
+        <button type="button"
+                class="btn btn-default "
+                onclick="pie()">柱状图</button>
+    </div>
+    <div id="middle"></div>
+</div>
+
+<script>
+    var Barlist=[];
+
+    var BarArr;
+
+    function init(){
+        var examId = sessionStorage.getItem("examId");
+        var totalScore = sessionStorage.getItem("totalScore");
+        var personNum = sessionStorage.getItem("personNum");
+        var param={
+            "examId":examId,
+            "totalScore":totalScore,
+            "personNum":personNum
+        };
+        console.log(param);
+        console.log(personNum);
+
+        var myChart = echarts.init(document.getElementById('container'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '各分数段比例统计'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
+            },
+            legend: {
+                data:['比例']
+            },
+            xAxis: {
+                data: ["0-20","20-40","40-60","60-80","80-100"]
+            },
+            yAxis: {},
+            series: [{
+                name: '比例',
+                type: 'bar',
+                colorByPoint: true,
+                data: [],
+            }]
+        };
+
+        jQuery.post("/teacher/analyse/percentage",param,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            for(var i=0;i<BarArr.length;i++){
+                option.series[0].data.push(BarArr[i]);
+            }
+
+            myChart.setOption(option);
+        })
+
+    }
+</script>
+<script >
+    function bar(){
+
+    }
+
+</script>
+</body>
+
+</html>

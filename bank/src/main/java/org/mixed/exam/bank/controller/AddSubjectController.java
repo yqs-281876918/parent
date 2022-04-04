@@ -14,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -21,15 +22,14 @@ import java.util.Map;
 @PreAuthorize("hasAnyRole('ROLE_adm')")
 public class AddSubjectController {
     @Data
-    private class BaseParam {
+    private static class BaseParam {
         private HttpServletRequest request;
         private Integer difficulty;
-        private String date;
         private String courseID;
         private String class2ndID;
-        private Integer recommendScore;
         private String creator;//创建人
         private String introduction;
+        private String description;
     }
 
     @Autowired
@@ -40,13 +40,8 @@ public class AddSubjectController {
         q.setCourseID(param.getCourseID());
         q.setClass2ndID(param.getClass2ndID());
         q.setIntroduction(param.getIntroduction());
-        q.setRecommendScore(param.getRecommendScore());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            q.setDate(simpleDateFormat.parse(param.getDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        q.setDate(new Date());
+        q.setDescription(param.description);
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {
@@ -62,14 +57,10 @@ public class AddSubjectController {
     @PostMapping("addSubject/singleChoiceQuestion")
     public String singleChoice(BaseParam baseParam,
                                HttpServletRequest request,
-                               @RequestParam("description") String description,
-                               @RequestParam("options") List<String> options,
                                @RequestParam("answer") String answer) {
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswer(answer);
-        question.setOptions(options);
-        question.setDescription(description);
         addSubjectService.insertSingleChoice(question);
         return "添加成功";
     }

@@ -31,6 +31,7 @@ public abstract class Question
     private Integer correctCount=0;//答对人数
     private String introduction="暂无简介";//题目简介，用于显示题目列表时使用
     private String creator;//创建人
+    private String description="null";//题目描述
     //获得正确率
     public double getCorrectRate()
     {
