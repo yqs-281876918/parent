@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>
+<!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 </head>
 <body onload="init()">
 <style type="text/css">
@@ -244,8 +245,10 @@
 <script>
     var Barlist=[];
     var BarArr;
-    var personNum;
+
     function init(){
+        var personNum;
+        var avg1,max1,min1;
         var examId = sessionStorage.getItem("id");
         var classId=sessionStorage.getItem("classId");
         var examName=sessionStorage.getItem("examName");
@@ -269,37 +272,37 @@
             console.log(data);
             jQuery("#examineNums").html(data);
             jQuery("#examineNum").html(data);
+            personNum=data;
 
         })
         jQuery.post("/teacher/analyse/max",param,function (max){
             jQuery("#maxScore").html(max);
             jQuery("#max-Score").html(max);
+            max1=max;
         })
 
         jQuery.post("/teacher/analyse/min",param,function (min){
             jQuery("#minScore").html(min);
             jQuery("#min-Score").html(min);
+            min1=min;
         })
 
         jQuery.post("/teacher/analyse/avg",param,function (avg){
             jQuery("#avgScore").html(avg);
             jQuery("#avg-Score").html(avg);
+            avg1=avg;
         })
 
-        personNum=$("#examineNum").val();
-
-        var max=$("#maxScore").val();
-        var min=$("#minScore").val();
-        var avg=$("#avgScore").val();
         console.log(personNum);
+
         var trs="";
         trs+=`
             <tr>
                 <td>${personNum}</td>
                 <td>60%</td>
-                <td>${max}</td>
-                <td>${min}</td>
-                <td>${avg}</td>
+                <td>${max1}</td>
+                <td>${min1}</td>
+                <td>${avg1}</td>
             </tr>
             `;
 
@@ -308,7 +311,7 @@
         var param1={
             "examId":examId,
             "totalScore":totalScore,
-            "personNum":6
+            "personNum":personNum
         };
         console.log(param1);
 
@@ -316,17 +319,17 @@
         // 指定图表的配置项和数据
         var option = {
             title: {
-                text: '各分数段比例统计'
+                text: ''
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
             },
             legend: {
-                data:['比例']
+                data:['合格率','优良率','平均分']
             },
             xAxis: {
-                data: ["0-20","20-40","40-60","60-80","80-100"]
+                data: ["合格率","优良率","平均分"]
             },
             yAxis: {},
             series: [{
@@ -336,12 +339,24 @@
                 data: [],
             }]
         };
+        var pass;
+        var excellent;
+        console.log(avg1);
         jQuery.post("/teacher/analyse/percentage",param1,function(rst){
             console.log(rst);
             BarArr=rst;
             for(var i=0;i<BarArr.length;i++){
-                option.series[0].data.push(BarArr[i]);
+                if(i==3){
+                    pass=BarArr[3];
+                }
+                if(i==4){
+                    excellent=BarArr[4];
+                    pass=pass+BarArr[4];
+                }
             }
+            option.series[0].data.push(pass);
+            option.series[0].data.push(excellent);
+            option.series[0].data.push(avg1);
             myChart.setOption(option);
         })
         sessionStorage.setItem("personNum",personNum);
@@ -416,7 +431,7 @@
                         {value:'', name:'40-60'},
                         {value:'', name:'60-80'},
                         {value:'', name:'80-100'}
-                    ];
+                    ],
                     itemStyle: {
                         normal:{
                             label:{
