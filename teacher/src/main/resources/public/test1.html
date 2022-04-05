@@ -56,7 +56,7 @@
             visualMap: {
                 show: false,
                 //饼图中在最大值最小值颜色范围中的亮度，值越大颜色越深
-                min:500,
+                min:10,
                 max: 600,
                 inRange: {
                     //0-1之间，值越小颜色越深
@@ -74,53 +74,11 @@
                     //饼图生成后的位置
                     center: ['50%', '50%'],
                     data: [
-                        {
-                            value: '',
-                            name: '0-20',
-                            itemStyle:{
-                                normal:{
-                                    color:'rgb(255,192,0)',
-                                    //shadowBlur:'90',
-                                    //shadowColor:'rgba(0,0,0,0.8)',
-                                    //shadowOffsetY:'30'
-                                }
-                            }
-                        },
-                        {
-                            value: '',
-                            name: '20-40',
-                            itemStyle:{
-                                normal:{
-                                    color:'rgb(1,175,80)'
-                                }
-                            }},
-                        {
-                            value: '',
-                            name: '40-60',
-                            itemStyle:{
-                                normal:{
-                                    color:'rgb(122,48,158)'
-                                }
-                            }
-                        },
-                        {
-                            value: '',
-                            name: '60-80',
-                            itemStyle:{
-                                normal:{
-                                    color:'rgb(100,250,158)'
-                                }
-                            }
-                        },
-                        {
-                            value: '',
-                            name: '80-100',
-                            itemStyle:{
-                                normal:{
-                                    color:'rgb(159,190,358)'
-                                }
-                            }
-                        }
+                        {value: '', name: '0-20'},
+                        {value: '', name: '20-40'},
+                        {value: '', name: '40-60'},
+                        {value: '', name: '60-80'},
+                        {value: '', name: '80-100'}
                     ],
                     itemStyle: {
                         normal: {
