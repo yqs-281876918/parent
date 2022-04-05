@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>批阅试卷</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body onload="init()">
+
+
+
+
+
+<!-- 设置锚点 -->
+<a href="#mark-1">跳转到区域一</a><br>
+<a href="#mark-2">跳转到区域二</a>
+<br><br><br><br><br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div id="mark-1">区域一</div>
+</body>
+<script>
+    function init(){
+        // var loc=location.href;
+        // var n1 = loc.length;
+        // var n2 = loc.indexOf('=');
+        // var txt = decodeURI(loc.substr(n2+1,n1-n2));
+        var txt=window.sessionStorage.getItem("id");
+        console.log(txt);
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/autoandget',
+            data:{'id':txt},
+            success:function (rst) {
+                console.log(rst);
+            }
+        })
+    }
+</script>
+</html>

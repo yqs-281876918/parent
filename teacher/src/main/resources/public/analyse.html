@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>
 </head>
 <body onload="init()">
 <style type="text/css">
@@ -199,19 +200,20 @@
             <div class="scoreAnalysisFun clear">
                 <div class="scoreAnalysisGrid">
                     <button type="button" class="btn btn-default export scoreExport pull-right" id="scoreExport">导出答题情况</button>
-                    <table id="scoreAnalysis-grid-data" class="table">
+                    <table class="table table-bordered table-hover table-striped">
                         <thead>
                         <tr>
-                            <th id="class">班级</th>
-                            <th id="examineNum">应考人数</th>
-                            <th id="passPercent">及格率</th>
-                            <th id="max-Score">最高分</th>
-                            <th id="min-Score">最低分</th>
-                            <th id="avg-Score">平均分</th>
+                            <td id="examineNum">应考人数</td>
+                            <td id="passPercent">及格率</td>
+                            <td id="max-Score">最高分</td>
+                            <td id="min-Score">最低分</td>
+                            <td id="avg-Score">平均分</td>
                         </tr>
                         </thead>
+
                         <tbody id="data">
                         </tbody>
+
                         <tfoot>
                         <tr id="table bottom" class="table-bordered">
                             <td colspan=5">
@@ -227,66 +229,16 @@
             </div>
         </div>
         </br>
-
-        <div class="row">
-            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                <div class="up_downs">
-                    <div class="left_up_downs pull-left">
-                        <p>100%</p>
-                        <p>80%</p>
-                        <p>60%</p>
-                        <p>40%</p>
-                        <p>20%</p>
-                        <p>0%</p>　
-                    </div>
-                    <div class="right_up_downs pull-left">
-                        <div class="right_up_downs_top">
-                            <!--背景线-->
-                            <ul class="list-unstyled right_top_ul">
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                            </ul>
-                            <!--柱形-->
-                            <div class="right_pillar">
-                                <ul class="list-unstyled right_pillar_ul">
-                                    <li>
-                                        <div class="right_pillar_for">
-                                            <div class="right_pillar_fill right_pillar_color1" id="pillar_content1"
-                                                 data-toggle="tooltip" data-placement="auto"
-                                                 title="<p class='text-left'>满分：100分</p><p  class='text-left'>52%(52分)</p>">
-                                                <div class="right_pillar_bg_1" style="height: 50%"></div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="right_pillar_for">
-                                            <div class="right_pillar_fill  right_pillar_color6" id="pillar_content6"
-                                                 data-toggle="tooltip" data-placement="auto"
-                                                 title="<p class='text-left'>满分：120分</p><p  class='text-left'>46%(84分)</p>">
-                                                <div class="right_pillar_bg_6" style="height: 45%"></div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="right_up_downs_bottom clearfix">
-                            <div class="pull-left text-center">及格率</div>
-                            <div class="pull-left text-center">优良率</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="bar" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 
     </div>
 
 </div>
 <script>
+    var Barlist=[];
+    var BarArr;
+
     function init(){
         var examId = sessionStorage.getItem("id");
         var classId=sessionStorage.getItem("classId");
@@ -294,13 +246,14 @@
         var startTime=sessionStorage.getItem("startTime");
         var testTime=sessionStorage.getItem("testTime");
         var totalScore=sessionStorage.getItem("totalScore");
+
         jQuery("#examName").html(examName);
         jQuery("#examTimeInterval").html(startTime);
         jQuery("#examTime").html(testTime);
         jQuery("#examTotalScore").html(totalScore);
         jQuery("#passMark").html(totalScore*0.6);
-        sessionStorage.setItem("examId",examId);
-        sessionStorage.setItem("totalScore",totalScore);
+
+
         var param={
             "examId":examId
         };
@@ -309,38 +262,88 @@
             console.log(data);
             jQuery("#examineNums").html(data);
             jQuery("#examineNum").html(data);
-            sessionStorage.setItem("personNum",data);
 
         })
-
         jQuery.post("/teacher/analyse/max",param,function (max){
             jQuery("#maxScore").html(max);
             jQuery("#max-Score").html(max);
-
         })
+
         jQuery.post("/teacher/analyse/min",param,function (min){
             jQuery("#minScore").html(min);
             jQuery("#min-Score").html(min);
         })
+
         jQuery.post("/teacher/analyse/avg",param,function (avg){
             jQuery("#avgScore").html(avg);
             jQuery("#avg-Score").html(avg);
         })
-        //下方表格
-        jQuery("#class").html(classId);
 
+        var personNum=$("#examineNum").val();
+        var max=$("#maxScore").val();
+        var min=$("#minScore").val();
+        var avg=$("#avgScore").val();
+        console.log(personNum);
+        var trs="";
+        trs+=`
+            <tr>
+                <td>${personNum}</td>
+                <td>60%</td>
+                <td>${max}</td>
+                <td>${min}</td>
+                <td>${avg}</td>
+            </tr>
+            `;
 
+        jQuery('#data').html(trs);
 
+        var param1={
+            "examId":examId,
+            "totalScore":totalScore,
+            "personNum":6
+        };
+        console.log(param1);
+
+        var myChart = echarts.init(document.getElementById('bar'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '各分数段比例统计'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
+            },
+            legend: {
+                data:['比例']
+            },
+            xAxis: {
+                data: ["0-20","20-40","40-60","60-80","80-100"]
+            },
+            yAxis: {},
+            series: [{
+                name: '比例',
+                type: 'bar',
+                colorByPoint: true,
+                data: [],
+            }]
+        };
+        jQuery.post("/teacher/analyse/percentage",param1,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            for(var i=0;i<BarArr.length;i++){
+                option.series[0].data.push(BarArr[i]);
+            }
+            myChart.setOption(option);
+        })
     }
-
 </script>
-
 <script>
     function search(){
         window.location.href="stuList.html";
     }
     function zhu(){
-        window.location.href="zhu.html";
+        window.location.href="test.html";
     }
 </script>
 
