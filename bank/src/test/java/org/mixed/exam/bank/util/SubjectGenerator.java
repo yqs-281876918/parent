@@ -46,7 +46,6 @@ class ChineseWrongCharacter
         q.setIntroduction("这是语文错词题目"+System.currentTimeMillis());
         q.setCreator(creators[(int)(Math.random()*5)]);
         q.setDescription("这是语文错词题目"+System.currentTimeMillis());
-        q.setOptions(Arrays.asList("选项1","选项2","选项3","选项4"));
         q.setAnswer(String.valueOf((int)(Math.random()*4)+1));
         return q;
     }
