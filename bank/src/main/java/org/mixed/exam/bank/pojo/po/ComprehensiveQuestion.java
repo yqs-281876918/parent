@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ComprehensiveQuestion extends Question
 {
-    private String description="null";
-    private String answer="null";
 }

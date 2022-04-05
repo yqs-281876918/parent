@@ -5,15 +5,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * 计算题
- */
-@EqualsAndHashCode(callSuper = true)
+import java.util.Collections;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CalculationProblem extends Question
+public class CombinationChoice extends Question
 {
-    private String description="null";
-    private String answer="null";
+    private List<String> answers= Collections.singletonList("null");
 }
