@@ -170,14 +170,14 @@
     function selectAll(f) {
         //找页面控件名为input的并且name=users的控制
         //设置控件的属性 checked=f
-        jQuery("input[name='exams']").prop("checked",f);
+        jQuery("input[name='ids']").prop("checked",f);
     }
 </script>
 <script>
     var pageNum=1;
     var pageSize=10;
     var pageNums=0;
-    var examid=window.sessionStorage.getItem('examid');
+    var examid=window.sessionStorage.getItem('examId');
     var examName=sessionStorage.getItem("examName");
     var startTime=sessionStorage.getItem("startTime");
     var testTime=sessionStorage.getItem("testTime");
