@@ -30,6 +30,7 @@ public class AddSubjectController {
         private String creator;//创建人
         private String introduction;
         private String description;
+        private List<String> fileUrls;
     }
 
     @Autowired
@@ -50,50 +51,42 @@ public class AddSubjectController {
                 q.setCreator(userName);
             }
         }
+        q.setFileUrls(param.fileUrls);
     }
 
     //单选题
     @ResponseBody
     @PostMapping("addSubject/singleChoiceQuestion")
     public String singleChoice(BaseParam baseParam,
-                               HttpServletRequest request,
-                               @RequestParam("answer") String answer) {
+                               HttpServletRequest request, @RequestParam("answer") String answer) {
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswer(answer);
-        addSubjectService.insertSingleChoice(question);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
     }
 
     //多选题
     @ResponseBody
     @PostMapping("addSubject/multipleChoiceQuestion")
-    public String multipleChoice(BaseParam baseParam,
-                                 HttpServletRequest request,
-                                 @RequestParam("options") List<String> options,
-                                 @RequestParam("description") String description,
+    public String multipleChoice(BaseParam baseParam, HttpServletRequest request,
                                  @RequestParam("answers") List<String> answers) {
         MultipleChoiceQuestion question = new MultipleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
         question.setAnswers(answers);
-        addSubjectService.insertMultipleChoice(question);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
     }
 
     //填空题
     @ResponseBody
     @PostMapping("addSubject/completion")
-    public String completion(BaseParam baseParam,
-                             HttpServletRequest request,
-                             @RequestParam("description") String description,
+    public String completion(BaseParam baseParam, HttpServletRequest request,
                              @RequestParam("answers") List<String> answers) {
         Completion question = new Completion();
         setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
         question.setAnswers(answers);
-        addSubjectService.insertCompletion(question);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
     }
 
@@ -102,201 +95,33 @@ public class AddSubjectController {
     @PostMapping("addSubject/judgment")
     public String judgment(BaseParam baseParam,
                            HttpServletRequest request,
-                           @RequestParam("options") List<String> options,
-                           @RequestParam("description") String description,
                            @RequestParam("answer") String answer) {
         Judgment question = new Judgment();
         setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
         question.setAnswer(answer);
-        addSubjectService.insertJudgment(question);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
     }
-
-    //名词解析题
+    //组合选择
     @ResponseBody
-    @PostMapping("addSubject/nounParsing")
-    public String nounParsing(BaseParam baseParam,
-                              HttpServletRequest request,
-                              @RequestParam("nouns") List<String> nouns,
-                              @RequestParam("answers") List<String> answers) {
-        NounParsing question = new NounParsing();
-        setBaseInfo(question, request, baseParam);
-        question.setNouns(nouns);
-        question.setAnswers(answers);
-        addSubjectService.insertNounParsing(question);
-        return "添加成功";
-    }
-
-    //计算题
-    @ResponseBody
-    @PostMapping("addSubject/calculationProblem")
-    public String calculationProblem(BaseParam baseParam,
-                                     HttpServletRequest request,
-                                     @RequestParam("description") String description,
-                                     @RequestParam("answer") String answer) {
-        CalculationProblem question = new CalculationProblem();
-        setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        addSubjectService.insertCalculationProblem(question);
-        return "添加成功";
-    }
-
-    //分录题
-    @ResponseBody
-    @PostMapping("addSubject/entryProblem")
-    public String entryProblem(BaseParam baseParam,
-                               HttpServletRequest request,
-                               @RequestParam("description") String description,
-                               @RequestParam("answer") String answer) {
-        EntryProblem question = new EntryProblem();
-        setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        addSubjectService.insertEntryProblem(question);
-        return "添加成功";
-    }
-
-    //论述题
-    @ResponseBody
-    @PostMapping("addSubject/essayQuestion")
-    public String essayQuestion(BaseParam baseParam,
-                                HttpServletRequest request,
-                                @RequestParam("description") String description,
-                                @RequestParam("answer") String answer) {
-        EssayQuestion question = new EssayQuestion();
-        setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        addSubjectService.insertEssayQuestion(question);
-        return "添加成功";
-    }
-
-    //资料题
-    @ResponseBody
-    @PostMapping("addSubject/dataItems")
-    public String dataItems(BaseParam baseParam,
+    @PostMapping("addSubject/combinationChoice")
+    public String combinationChoice(BaseParam baseParam,
                             HttpServletRequest request,
-                            @RequestParam("description") String description,
-                            @RequestParam("answer") String answer) {
-        DataItems question = new DataItems();
-        setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        addSubjectService.insertDataItems(question);
-        return "添加成功";
-    }
-
-    //排序题
-    @ResponseBody
-    @PostMapping("addSubject/rankingQuestion")
-    public String rankingQuestion(BaseParam baseParam,
-                                  HttpServletRequest request,
-                                  @RequestParam("options") List<String> options,
-                                  @RequestParam("description") String description,
-                                  @RequestParam("answer") String answer) {
-        RankingQuestion question = new RankingQuestion();
-        setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        addSubjectService.insertRankingQuestion(question);
-        return "添加成功";
-    }
-
-    //投票题
-    @ResponseBody
-    @PostMapping("addSubject/voteTopic")
-    public String voteTopic(BaseParam baseParam,
-                            HttpServletRequest request,
-                            @RequestParam("options") List<String> options,
-                            @RequestParam("description") String description) {
-        VoteTopic question = new VoteTopic();
-        setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
-        addSubjectService.insertVoteTopic(question);
-        return "添加成功";
-    }
-
-    //完型填空
-    @ResponseBody
-    @PostMapping("addSubject/clozeTest")
-    public String clozeTest(BaseParam baseParam,
-                            HttpServletRequest request,
-                            @RequestParam("options") List<String> options,
-                            @RequestParam("description") String description,
                             @RequestParam("answers") List<String> answers) {
-        ClozeTest question = new ClozeTest();
+        CombinationChoice question = new CombinationChoice();
         setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
         question.setAnswers(answers);
-        addSubjectService.insertClozeTest(question);
-        return "添加成功";
-    }
-
-    //阅读理解
-    @ResponseBody
-    @PostMapping("addSubject/readComprehension")
-    public String readComprehension(BaseParam baseParam,
-                                    HttpServletRequest request,
-                                    @RequestParam("options") List<String> options,
-                                    @RequestParam("description") String description,
-                                    @RequestParam("answers") List<String> answers) {
-        ReadComprehension question = new ReadComprehension();
-        setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
-        question.setAnswers(answers);
-        addSubjectService.insertReadComprehension(question);
-        return "添加成功";
-    }
-
-    //听力题
-    @ResponseBody
-    @PostMapping("addSubject/listeningQuestion")
-    public String listeningQuestion(BaseParam baseParam,
-                                    HttpServletRequest request,
-                                    @RequestParam("options") List<String> options,
-                                    @RequestParam("description") String description,
-                                    @RequestParam("answers") List<String> answers) {
-        ListeningQuestion question = new ListeningQuestion();
-        setBaseInfo(question, request, baseParam);
-        question.setOptions(options);
-        question.setDescription(description);
-        question.setAnswers(answers);
-        addSubjectService.insertListeningQuestion(question);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
     }
 
     //综合题
     @ResponseBody
     @PostMapping("addSubject/comprehensiveQuestion")
-    public String comprehensiveQuestion(BaseParam baseParam,
-                                        HttpServletRequest request,
-                                        @RequestParam("description") String description,
-                                        @RequestParam("answer") String answer) {
+    public String comprehensiveQuestion(BaseParam baseParam, HttpServletRequest request) {
         ComprehensiveQuestion question = new ComprehensiveQuestion();
         setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setAnswer(answer);
-        addSubjectService.insertComprehensiveQuestion(question);
-        return "添加成功";
-    }
-
-    //口语题
-    @ResponseBody
-    @PostMapping("addSubject/oralTopic")
-    public String oralTopic(BaseParam baseParam,
-                            HttpServletRequest request,
-                            @RequestParam("description") String description) {
-        OralTopic question = new OralTopic();
-        setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        addSubjectService.insertOralTopic(question);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
     }
 
@@ -306,52 +131,14 @@ public class AddSubjectController {
     public String programProblem(BaseParam baseParam,
                                  HttpServletRequest request,
                                  @RequestParam("description") String description,
-                                 @RequestParam("prepositionCode") String prepositionCode,
-                                 @RequestParam("postCode") String postCode,
-                                 @RequestParam("answer") String answer) {
+                                 @RequestParam("inputs") List<String> inputs,
+                                 @RequestParam("outputs") List<String> outputs) {
         ProgramProblem question = new ProgramProblem();
         setBaseInfo(question, request, baseParam);
         question.setDescription(description);
-        question.setPrepositionCode(prepositionCode);
-        question.setPostCode(postCode);
-        question.setAnswer(answer);
-        addSubjectService.insertProgramProblem(question);
+        question.setInputs(inputs);
+        question.setOutputs(outputs);
+        addSubjectService.insertQuestion(question);
         return "添加成功";
-    }
-
-    //    private List<String> optionsLeft = Collections.singletonList("null");
-//    private List<String> optionsRight = Collections.singletonList("null");
-//    private List<String> answer=Collections.singletonList("null");
-    //连线题
-    @ResponseBody
-    @PostMapping("addSubject/matching")
-    public String matching(BaseParam baseParam,
-                           HttpServletRequest request,
-                           @RequestParam("description") String description,
-                           @RequestParam("optionsLeft") List<String> optionsLeft,
-                           @RequestParam("optionsRight") List<String> optionsRight,
-                           @RequestParam("answer") List<String> answer) {
-        Matching question = new Matching();
-        setBaseInfo(question, request, baseParam);
-        question.setDescription(description);
-        question.setOptionsLeft(optionsLeft);
-        question.setOptionsRight(optionsRight);
-        question.setAnswer(answer);
-        addSubjectService.insertMatching(question);
-        return "添加成功";
-    }
-
-    //查找所有课程信息
-    @ResponseBody
-    @GetMapping("classify/findAllCourse")
-    public List<Classification> findAllCourse() {
-        return addSubjectService.findAllCourse();
-    }
-
-    //查找所有课程知识点信息
-    @ResponseBody
-    @GetMapping("classify/findAllKnowledge")
-    public List<Classification> findAllKnowledge() {
-        return addSubjectService.findAllKnowledge();
     }
 }

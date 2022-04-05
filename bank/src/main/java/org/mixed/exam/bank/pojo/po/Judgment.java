@@ -17,7 +17,5 @@ import java.util.List;
 @AllArgsConstructor
 public class Judgment extends Question
 {
-    private String description="null";
-    private List<String> options= Collections.singletonList("null");
     private String answer="null";
 }

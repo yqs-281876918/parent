@@ -15,6 +15,14 @@ spring:
       authentication-database: admin
   application:
     name: admin-service
+  thymeleaf:
+    prefix: classpath:/private/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
 eureka:
   client:
     service-url:

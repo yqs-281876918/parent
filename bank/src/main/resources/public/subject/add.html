@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>添加题目</title>
@@ -127,10 +127,10 @@
             <form class="singleChoiceQuestion">
                 <span>设置答案</span>
                 <select class="singleChoiceAnswer" name="answer">
-                    <option value="1">A</option>
-                    <option value="2">B</option>
-                    <option value="3">C</option>
-                    <option value="4">D</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
                 </select>
             </form>
             <button onclick="addSingleItem()">添加选项</button>
@@ -160,21 +160,10 @@
         <div hidden="hidden" class="answer multipleChoiceQuestion">
             <span>设置答案：</span>
             <form class="multipleChoiceQuestion">
-                <div class="multipleChoiceAnswer" style="display: inline-block">
-                    <input type="checkbox" name="answers" value="A">A
-                    <br/>
-                </div>
-                <div class="multipleChoiceAnswer" style="display: inline-block">
-                    <input type="checkbox" name="answers" value="B">B
-                    <br/>
-                </div>
-                <div class="multipleChoiceAnswer" style="display: inline-block">
-                    <input type="checkbox" name="answers" value="C">C
-                    <br/>
-                </div>
-                <div class="multipleChoiceAnswer" style="display: inline-block">
-                    <input type="checkbox" name="answers" value="D">D
-                </div>
+                <div style='display: inline-block'><input type="checkbox" name="answers" value="A">A</div>
+                <div style='display: inline-block'><input type="checkbox" name="answers" value="B">B</div>
+                <div style='display: inline-block'><input type="checkbox" name="answers" value="C">C</div>
+                <div style='display: inline-block'><input type="checkbox" name="answers" value="D">D</div>
             </form>
             <button onclick="addMulItem()">添加选项</button>
             <button onclick="delMulItem()">删除选项</button>
@@ -186,18 +175,177 @@
             </div>
             <script>
                 function addMulItem() {
-                    $('form.multipleChoiceQuestion')
+                    let form = $('form.multipleChoiceQuestion')
+                    let length = form.children().length
+                    let input = "<div style='display: inline-block'><input type='checkbox' name='answers' value='{0}'>{1}</div>"
+                        .format(String.fromCharCode(65+length),String.fromCharCode(65+length))
+                    form.append(input)
                 }
                 function delMulItem() {
-
+                    let form = $('form.multipleChoiceQuestion')
+                    let length = form.children().length
+                    if(length>1)
+                    {
+                        form.children().eq(-1).remove()
+                    }
                 }
             </script>
         </div>
-        <div hidden="hidden" class="answer judgment">判断题</div>
-        <div hidden="hidden" class="answer completion">填空题</div>
-        <div hidden="hidden" class="answer combinationChoice">组合选择题</div>
-        <div hidden="hidden" class="answer comprehensiveQuestion">综合题</div>
-        <div hidden="hidden" class="answer programProblem">程序题</div>
+        <div hidden="hidden" class="answer judgment">
+            <span>设置答案：</span>
+            <form class="judgment">
+                <input checked="checked" type="radio" name="answer" value="T">T</input>
+                <input type="radio" name="answer" value="F">F</input>
+            </form>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('judgment')">
+                    提交至题库
+                </button>
+            </div>
+        </div>
+        <div hidden="hidden" class="answer completion">
+            <span>设置答案：</span>
+            <form class="completion">
+                <input type="text" name="answers" value="">
+                <input type="text" name="answers" value="">
+            </form>
+            <button onclick="addCompletionItem()">添加选项</button>
+            <button onclick="delCompletionItem()">删除选项</button>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('completion')">
+                    提交至题库
+                </button>
+            </div>
+            <script>
+                function addCompletionItem() {
+                    let form = $('form.completion')
+                    let input = "<input type='text' name='answers' value=''>"
+                    form.append(input)
+                }
+                function delCompletionItem() {
+                    let form = $('form.completion')
+                    let length = form.children().length
+                    if(length>1)
+                    {
+                        form.children().eq(-1).remove()
+                    }
+                }
+            </script>
+        </div>
+        <div hidden="hidden" class="answer combinationChoice">
+            <span>设置答案：</span>
+            <form class="combinationChoice">
+                <div class="choice-line">
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-A">A</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-B">B</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-C">C</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-D">D</div>
+                </div>
+                <div class="choice-line">
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-A">A</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-B">B</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-C">C</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-D">D</div>
+                </div>
+            </form>
+            <button onclick="addChoiceLine()">添加行</button>
+            <button onclick="delChoiceLine()">删除行</button>
+            <br/>
+            <button onclick="addCombinationItem()">添加选项</button>
+            <button onclick="delCombinationItem()">删除选项</button>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('combinationChoice')">
+                    提交至题库
+                </button>
+            </div>
+            <script>
+                function addChoiceLine()
+                {
+                    let lines=$('form.combinationChoice').children()
+                    let choiceCount=lines.eq(0).children().length
+                    let inner=""
+                    for(let i=0;i<choiceCount;i++)
+                    {
+                        inner+="<div style='display: inline-block'><input type='checkbox' name='answers' value='{0}-{1}'>{2}</div>"
+                            .format(lines.length+1,String.fromCharCode(65+i),String.fromCharCode(65+i))
+                    }
+                    let line="<div class='choice-line'>{0}</div>"
+                        .format(inner)
+                    $('form.combinationChoice').append(line)
+                }
+                function delChoiceLine()
+                {
+                    let form = $('form.combinationChoice')
+                    if(form.children().length>1)
+                    {
+                        form.children().eq(-1).remove()
+                    }
+                }
+                function addCombinationItem(){
+                    let lines=$('form.combinationChoice').children()
+                    let choiceCount=lines.eq(-1).children().length
+                    for(let i=0;i<lines.length;i++)
+                    {
+                        let line=lines.eq(i)
+                        let input="<div style='display: inline-block'><input type='checkbox' name='answers' value='{0}-{1}'>{2}</div>"
+                            .format(i+1,String.fromCharCode(65+choiceCount),String.fromCharCode(65+choiceCount))
+                        line.append(input)
+                    }
+                }
+                function delCombinationItem(){
+                    let lines=$('form.combinationChoice').children()
+                    let choiceCount=lines.eq(-1).children().length
+                    if(choiceCount>1)
+                    {
+                        for(let i=0;i<lines.length;i++)
+                        {
+                            lines.eq(i).children().eq(-1).remove()
+                        }
+                    }
+                }
+            </script>
+        </div>
+        <div hidden="hidden" class="answer comprehensiveQuestion">
+            <form class="comprehensiveQuestion"></form>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('comprehensiveQuestion')">
+                    提交至题库
+                </button>
+            </div>
+        </div>
+        <div hidden="hidden" class="answer programProblem">
+            <form class="programProblem">
+                <div class="sample">
+                    <textarea name="inputs" placeholder="样例输入" cols="25"></textarea>
+                    <textarea name="outputs" placeholder="样例输出" cols="25"></textarea>
+                    <input onclick="delParent(this)" type="button" value="-" class="btn-danger" style="vertical-align: middle">
+                </div>
+            </form>
+            <button onclick="addSample()">添加样例</button>
+            <div class="submit">
+                <button type="button" class="btn btn-primary"
+                        onclick="submitSubject('programProblem')">
+                    提交至题库
+                </button>
+            </div>
+            <script>
+                function addSample() {
+                    let html = "<div class='sample'>\n" +
+                        "<textarea name='inputs' placeholder='样例输入' cols='25'></textarea>\n" +
+                        "<textarea name='outputs' placeholder='样例输出' cols='25'></textarea>\n" +
+                        "<input onclick='delParent(this)' type='button' value='-' class='btn-danger' style='vertical-align: middle'>\n" +
+                        "</div>"
+                    $('form.programProblem').append(html)
+                }
+                function delParent(obj){
+                    $(obj).parent().remove()
+                }
+            </script>
+        </div>
     </div>
 </div>
 <script>
@@ -230,7 +378,7 @@
             return o;
         };
 
-        jQuery.get("/bank/classify/findAllCourse", function (rst) {
+        $.get("/bank/classify/findAllCourse", function (rst) {
             var trs = ''
             var superId = rst[0].id;
             for (var i = 0; i < rst.length; i++) {
@@ -240,7 +388,7 @@
                 `
             }
             $("#courseID").append(trs);
-            jQuery.get("/bank/classify/findAllKnowledge", function (rst2) {
+            $.get("/bank/classify/findAllKnowledge", function (rst2) {
                 var trs2 = ''
                 $("div.class2ndID").remove();
                 trs2 += `<div class="class2ndID">
@@ -259,15 +407,39 @@
                 $("#class2ndID").append(trs2);
             })
         })
+
+        $(() => {
+            $('#courseID').change(() => {
+                $("div.class2ndID").remove();
+                $.get("/bank/classify/findAllKnowledge", function (rst) {
+                    var trs = ""
+                    trs += `<div class="class2ndID">
+                    <select name="class2ndID">
+                    `
+                    var superId = $("#courseID").val()
+                    for (var i = 0; i < rst.length; i++) {
+                        var u = rst[i];
+                        if (superId == u.superClassId) {
+                            trs += `<option value="${u.id}">${u.classifyName}</option>`
+                        } else {
+
+                        }
+                    }
+                    trs += `</select>
+                </div>`
+                    $("#class2ndID").append(trs);
+                })
+            })
+        })
     })
 </script>
 <script>
     function submitSubject(form_class) {
-        let form_private = jQuery('form.' + form_class).serializeObject()
-        let description = jQuery('div.w-e-text').html()
+        let form_private = $('form.' + form_class).serializeObject()
+        let description = $('div.w-e-text').html()
         form_private.description = description
         let form = form_private
-        let form_common = jQuery('form.common').serializeObject();
+        let form_common = $('form.common').serializeObject();
         form.courseID = form_common.courseID
         form.class2ndID = form_common.class2ndID
         form.difficulty = form_common.difficulty
@@ -280,7 +452,7 @@
         form.introduction = introduction
         let form_file=$('form.file').serializeObject()
         form.fileUrls=form_file.fileUrls
-        jQuery.ajax({
+        $.ajax({
             url: '/bank/addSubject/' + form_class,
             data: form,
             method: 'post',

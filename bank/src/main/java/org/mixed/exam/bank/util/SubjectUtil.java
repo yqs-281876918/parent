@@ -63,34 +63,6 @@ public class SubjectUtil
                 return Completion.class;
             case "judgment":
                 return Judgment.class;
-            case "nounParsing":
-                return NounParsing.class;
-            case "calculationProblem":
-                return CalculationProblem.class;
-            case "entryProblem":
-                return EntryProblem.class;
-            case "essayQuestion":
-                return EssayQuestion.class;
-            case "dataItems":
-                return DataItems.class;
-            case "rankingQuestion":
-                return RankingQuestion.class;
-            case "voteTopic":
-                return VoteTopic.class;
-            case "clozeTest":
-                return ClozeTest.class;
-            case "readComprehension":
-                return ReadComprehension.class;
-            case "listeningQuestion":
-                return ListeningQuestion.class;
-            case "comprehensiveQuestion":
-                return ComprehensiveQuestion.class;
-            case "oralTopic":
-                return OralTopic.class;
-            case "programProblem":
-                return ProgramProblem.class;
-            case "matching":
-                return Matching.class;
             default:
                 return Question.class;
         }
