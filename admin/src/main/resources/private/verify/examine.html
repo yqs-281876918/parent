@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>审核题目</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<div id="container">
+    <span>题目描述:</span>
+    <br>
+    <div style="border:1px solid #0f0f0f" th:text="${json}"></div>
+    <span>审核小工具:</span>
+    <br>
+    <div style="border:1px solid #0f0f0f">
+        <span>敏感词检测</span>
+        <span>检测状态:</span><span id="word-check">未检测</span>
+        <button onclick="WordsCheck()">自动检测</button>
+        <br>
+        <span>题目查重</span>
+        <span>检测状态:</span><span id="repeat-check">未检测</span>
+        <button onclick="RepeatCheck()">自动检测</button>
+    </div>
+    <span>操作:</span>
+    <br>
+    <div style="border:1px solid #0f0f0f">
+        <button onclick="Pass()">通过</button>
+        <button onclick="Fail()">不通过</button>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    const form = {
+        "id": [[${id}]],
+        "type": [[${type}]]
+    };
+</script>
+<script th:inline="javascript">
+    function RepeatCheck() {
+        jQuery.post("/admin/examineExercises/repeatCheck",form,function (rst) {
+            if(rst===""||rst===null){
+                jQuery("#repeat-check").html("无重复");
+            }else{
+                jQuery("#repeat-check").html("有重复");
+                alert(JSON.stringify(rst));
+            }
+        })
+    }
+    function WordsCheck() {
+        jQuery.post("/admin/examineExercises/wordCheck",form,function (rst) {
+            if(rst===true||rst==="true")
+            {
+                jQuery("#word-check").html("通过");
+            }else {
+                jQuery("#word-check").html("有敏感词");
+            }
+        })
+    }
+</script>
+<script>
+    function Pass() {
+        jQuery.post("/admin/examineExercises/pass",form,function (rst) {
+            alert(rst);
+        })
+    }
+</script>
+</html>
