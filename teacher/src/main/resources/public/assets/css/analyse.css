@@ -1,0 +1,138 @@
+.examContentWrap {
+    background: #fff;
+    padding: 25px 40px 0;
+    margin-bottom: 20px;
+    border: 1px solid #DEDEDE;
+}
+.examContentWrap {
+    background: #fff;
+    padding: 25px 40px 0;
+    margin-bottom: 20px;
+    border: 1px solid #DEDEDE;
+}
+.examContentTitle, .testAnalysisTitle, .questionAnalysisTitle{
+    margin-bottom: 20px;
+    font-size: 20px;
+    color:  #27274A;
+    border-bottom: 1px solid #DBDDE6;
+    padding-bottom: 25px;
+}
+.examContent .form-row {
+    margin-bottom: 20px;
+}
+.examContent .form-row .title {
+    color: #9090A4;
+    display: inline-block;
+    width: 70px;
+}
+.examContent .form-row .content {
+    color: #4A4A4A;
+}
+.examContent .form-row .content.active {
+    color: #1A8CFE;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.free-trail-modal .modal-dialog {
+    width: 600px;
+    margin: 15vh auto;
+    border-radius: 10px;
+    overflow: auto;
+}
+.free-trail-modal .modal-content {
+    padding: 0;
+    border-radius: 10px;
+    border: none;
+}
+/* modal header */
+.free-trail-modal .modal-content .modal-header {
+    height: auto;
+    padding: 0;
+    position: relative;
+    background: url("https://s4.kaoshixing.com/static/vue/images/free-trail/free-trail-dialog-bg.png?v=07505532b2") center/cover;
+    text-align: center;
+}
+.free-trail-modal .modal-content .modal-header > .image {
+    width: 100px;
+    height: 121px;
+    margin: 25px auto 0;
+}
+.free-trail-modal .modal-content .modal-header .title {
+    font-size: 20px;
+    line-height: 28px;
+    color: #fff;
+    padding: 7px 0 22px;
+}
+.free-trail-modal .modal-content .modal-header .title .image {
+    width: 22px;
+    height: 22px;
+    vertical-align: -5px;
+}
+/* modal body */
+.free-trail-modal .modal-content .modal-body {
+    padding: 40px 50px;
+    margin: 0;
+    overflow: auto;
+    text-align: left;
+}
+.free-trail-modal .modal-content .modal-body .list .list-item {
+    font-size: 16px;
+    line-height: 22px;
+    color: #27274a;
+    padding: 0 0 0 20px;
+}
+.free-trail-modal .modal-content .modal-body .list .list-item::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: -12px;
+    transform: translateX(-8px);
+    background: #cadaff;
+    border-radius: 50%;
+}
+.free-trail-modal .modal-content .modal-body .list .list-item .strong {
+    color: #1269ff;
+    font-weight: 500;
+}
+/* modal footer */
+.free-trail-modal .modal-footer {
+    text-align: center;
+    padding: 0 0 30px;
+    border: none;
+}
+.free-trail-modal .modal-footer .btn {
+    font-size: 18px;
+    line-height: 25px;
+    padding: 10px 54px;
+    border: none;
+    border-radius: 24px;
+    background: linear-gradient(to right, #1b75ff, #0058ff);
+}
+.outer {
+    padding: 40px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+    border-radius: 3px;
+    width:1000px;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 40px;
+    background: #f1f1f1;
+}
+.top{
+
+    height: auto;
+    width:100%;
+    margin-left: 0;
+    background:rgb(189, 181, 181);
+    margin-bottom: 5px;
+}
+.inner {
+    padding: 16px 0 13px 0;
+    font-size: 16px;
+    position: relative;
+    padding: 40px;
+    background:white;
+    box-sizing:border-box;
+    color: #434e5c;}
