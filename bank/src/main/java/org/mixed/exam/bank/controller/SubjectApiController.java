@@ -109,4 +109,10 @@ public class SubjectApiController {
     {
         return subjectDao.getSubjectByID(id);
     }
+    @ResponseBody
+    @GetMapping("subject/un-verify")
+    public List<SubjectItem> getUnVerifySubjectItems()
+    {
+        return subjectDao.getUnVerifySubjectItems();
+    }
 }
