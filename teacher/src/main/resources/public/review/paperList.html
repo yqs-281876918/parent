@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>考试列表</title>
+    <title>试卷列表</title>
     <meta charset="UTF-8">
     <title>role</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
@@ -77,7 +77,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">搜索考试场次</h5>
+                <h5 class="modal-title">搜索试卷</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -86,19 +86,19 @@
                 <form id="search-Form">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">考试名称</span>
+                            <span class="input-group-text" id="basic-addon1">考试人</span>
                         </div>
                         <div class="row-8">
-                            <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
+                            <input type="text" id="stu-name" name="userName" class="form-control" placeholder="请输入考试人" aria-label="name" aria-describedby="basic-addon1">
                         </div>
                         <div>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
+                            <span class="input-group-text" id="basic-addon2">切屏次数大于：</span>
                         </div>
                         <div class="row-8">
-                            <input id="start-Date" name="date" type="date"/>
+                            <input type="text" id="anti-count" name="anti" class="form-control" placeholder="请输入最低切屏次数" aria-label="anti" aria-describedby="basic-addon2">
                         </div>
                     </div>
                     <div id="search">
@@ -132,14 +132,15 @@
                                 <tr>
                                     <th>
                                         <input type="checkbox" id="chAll"
-                                               onclick="selectAll(this.checked)">
+                                               onclick="selectAll(this.checked)"/>
                                     </th>
                                     <th align="right" colspan="3">考试名称</th>
+                                    <th align="right" colspan="1">考试人</th>
                                     <th align="right" colspan="1">考试时间</th>
-                                    <th align="right" colspan="1">考试时长</th>
                                     <th align="right" colspan="1">考试总分</th>
-                                    <th align="right" colspan="5">考试简介</th>
-                                    <th align="right" colspan="2">批阅进度</th>
+                                    <th align="right" colspan="5">切屏次数</th>
+                                    <th align="right" colspan="1">批阅状态</th>
+<!--                                    <th align="right" colspan="2">批阅进度</th>-->
                                     <th align="right" colspan="2">操作</th>
                                 </tr>
                                 </thead>
@@ -169,61 +170,56 @@
     function selectAll(f) {
         //找页面控件名为input的并且name=users的控制
         //设置控件的属性 checked=f
-        jQuery("input[name='exams']").prop("checked",f);
+        jQuery("input[name='ids']").prop("checked",f);
     }
 </script>
 <script>
     var pageNum=1;
     var pageSize=10;
     var pageNums=0;
+    var examid=window.sessionStorage.getItem('examId');
+    var examName=sessionStorage.getItem("examName");
+    var startTime=sessionStorage.getItem("startTime");
+    var testTime=sessionStorage.getItem("testTime");
+    var totalScore=sessionStorage.getItem("totalScore");
     function init() {
         var param={
             "pageNum":pageNum,
             "pageSize":pageSize,
+            "examid":examid
         };
-        jQuery.post("/teacher/analyse/findAll",param,function (rst) {
+        jQuery.post("/teacher/reviewpaper/find",param,function (rst) {
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
             jQuery("#pageNum").html(pageNum);
             jQuery("#totalnum").html(rst.total);
-            //alert(rst);
             //1、查询查询的数据
             var arrs=rst.list;
             var trs="";
             for(var i=0;i<arrs.length;i++) {
-
                 //获取每一行对应的用户对象
                 var u=arrs[i];
-
                 //循环一次一行数据
-                //使用反引号,用于定义模板
-
                 trs+=`
                     <tr>
                         <td>
                             <input type="checkbox" name="ids" value="${u.id}">
                         </td>
 
-                        <td colspan="3" onclick="find('${u.id}')">${u.examName}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.testTime}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.totalScore}</td>
-                        <td colspan="5" onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="3" onclick="find('${u.id}')">${examName}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.username}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${testTime}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${totalScore}</td>
+                        <td colspan="5" onclick="find('${u.id}'))">${u.antiCount}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.finishReview}</td>
                         <td colspan="2">
-                            <a href="#"
-                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
                                 <a href="#"
-                                onclick="review('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
-
+                                onclick="review('${u.id}','${examName}','${totalScore}')">批阅试卷</a>
                         </td>
-
-
                     </tr>
                     `;
-
             }
             //把根据数据构建的行添加到表格
-
             jQuery("#data").html(trs);
 
             var nums=rst.navigatepageNums;
@@ -267,7 +263,6 @@
         };
         jQuery.post("/teacher/analyse/findAll",param,function(rst){
             console.log(rst);
-            //alert("查询到了");
             var ar=rst;
             var uu;
             for(var i=0;i<ar.length;i++){
@@ -306,7 +301,7 @@
         jQuery("#delMulDialog").modal('hide');
         //获取选择的复选框中的值
         var form=jQuery("#Form").serialize();
-        jQuery.post("/teacher/analyse/delete",form,function (rst) {
+        jQuery.post("/teacher/reviewpaper/delete",form,function (rst) {
             console.log(rst);
             if(rst>0)
             {
@@ -327,13 +322,13 @@
     }
     function doSearch() {
         var data = {
-            "examName": $("#exam-name").val(),
-            "startTime": $("#start-Date").val(),
+            "studentName": $("#stu-name").val(),
+            "antiCount": $("#anti-count").val(),
             "pageNum": pageNum,
             "pageSize": pageSize,
         }
         console.log(data);
-        jQuery.post("/teacher/analyse/Search", data, function (rst) {
+        jQuery.post("/teacher/reviewpaper/Search", data, function (rst) {
             alert("yyy");
             pageNums = rst.pages;
             jQuery("#pages").html(pageNums);
@@ -345,25 +340,20 @@
                 var arrs=rst.list;
                 var trs="";
                 for(var i=0;i<arrs.length;i++) {
-
-                    //获取每一行对应的用户对象
                     var u=arrs[i];
-
-                    //循环一次一行数据
-                    //使用反引号,用于定义模板
-
                     trs+=`
                     <tr>
                         <td>
                             <input type="checkbox" name="ids" value="${u.id}">
                         </td>
 
-                        <td colspan="2" onclick="find('${u.id}')">${u.examName}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
-                        <td colspan="6" onclick="find('${u.id}'))">${u.introduce}</td>
+                        <td colspan="3" onclick="find('${u.id}')">${examName}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.username}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${testTime}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${totalScore}</td>
+                        <td colspan="5" onclick="find('${u.id}'))">${u.antiCount}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.finishReview}</td>
                         <td colspan="2">
-                            <a href="#"
-                                onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
                             <a href="#"
                                 onclick="intoread('${u.id}','${u.totalSCore}')">进入批阅</a>
                         </td>
@@ -403,30 +393,19 @@
                 jQuery("#right").html(nav);
             }
             else if(rst.list.length == 0) {
-                alert("该考试不存在");
+                alert("该考生信息不存在");
                 jQuery("#searchDialog").modal('hide');
             }
         })
     }
-
 </script>
 <!--搜索结束-->
 <script>
-    function analyse(id,examName,startTime,testTime,totalScore){
+    function review(id,examName,totalScore){
         sessionStorage.setItem("id",id);
         sessionStorage.setItem("examName",examName);
-        sessionStorage.setItem("startTime",startTime);
-        sessionStorage.setItem("testTime",testTime);
         sessionStorage.setItem("totalScore",totalScore);
-        window.location.href="analyse.html";
-    }
-    function review(id,examName,startTime,testTime,totalScore){
-        sessionStorage.setItem("id",id);
-        sessionStorage.setItem("examName",examName);
-        sessionStorage.setItem("startTime",startTime);
-        sessionStorage.setItem("testTime",testTime);
-        sessionStorage.setItem("totalScore",totalScore);
-        window.location.href="review/paperList.html";
+        window.location.href="reviewPaper.html";
     }
 
 </script>

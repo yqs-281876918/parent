@@ -8,7 +8,10 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body onload="init()">
-
+<div id="container">
+    <div class="accordion" id="accordionExample">
+    </div>
+</div>
 
 
 
@@ -36,6 +39,37 @@
             data:{'id':txt},
             success:function (rst) {
                 console.log(rst);
+                var rightGuide=``;
+                var table=``;
+                var subject=rst.answers;
+                var c=0;
+                var count=0;
+                for(var i=0;i<subject.length;i++){
+                    count++;
+                    if((i>=1&&subject[i].subjectType!=subject[i-1].subjectType)||i==0){
+                        //jQuery("#"+c).html(table);
+                        c++;
+                        table=``;
+                        table+=`<button id="${count}">${count}</button>`;
+                        rightGuide+=`
+                        <div class="card">
+                            <div class="card-header" id="heading${c}">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse${c}" aria-expanded="true" aria-controls="collapse${c}">
+                                        ${subject[i].subjectType}
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapse${c}" class="collapse" aria-labelledby="heading${c}" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div id="a${c}">${table}</div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    }
+                }
+                jQuery("#accordionExample").html(rightGuide);
             }
         })
     }

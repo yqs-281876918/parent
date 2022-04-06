@@ -3,12 +3,12 @@ package org.mixed.exam.teacher.dao;
 import com.mongodb.client.result.DeleteResult;
 import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.pojo.po.Exam;
+import org.mixed.exam.bank.pojo.po.Judgment;
 import org.mixed.exam.bank.pojo.po.MultipleChoiceQuestion;
 import org.mixed.exam.bank.pojo.po.SingleChoiceQuestion;
 import org.mixed.exam.bank.pojo.po.exam.Answer;
 import org.mixed.exam.bank.pojo.po.exam.ExamDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,6 +27,7 @@ public class ReviewPaperDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    //ReviewPaper
     //自动批卷 获取id自动给出单选多选填空的成绩 并取出来
     public ExamDetail AutoReviewAndGet(String id){
         ExamDetail e=mongoTemplate.findById(id,ExamDetail.class,"examDetail");
@@ -57,9 +58,9 @@ public class ReviewPaperDao {
                 }else{
                     a.get(i).setScore(0);
                 }
-            }else if(a.get(i).getSubjectType().equals("singleChoiceQuestion")){
+            }else if(a.get(i).getSubjectType().equals("judgment")){
                 List<String> hisanswer=a.get(i).getAnswerList();
-                SingleChoiceQuestion s=mongoTemplate.findById(a.get(i).getSubjectId(),SingleChoiceQuestion.class,"subjects");
+                Judgment s=mongoTemplate.findById(a.get(i).getSubjectId(),Judgment.class,"subjects");
                 String trueanswer=s.getAnswer();
                 if(trueanswer.equals(hisanswer.get(0))){
                     a.get(i).setScore(Integer.valueOf(arr[i]));
@@ -71,6 +72,13 @@ public class ReviewPaperDao {
         return e;
     }
 
+
+
+
+
+
+
+    //PaperList
     public List<ExamDetail> find(Integer examid) {
         System.out.println("examid="+examid);
         Query query = Query.query(Criteria.where("examId").is(examid)).with(Sort.by(new Sort.Order(Sort.Direction.ASC, "finishReview")));
