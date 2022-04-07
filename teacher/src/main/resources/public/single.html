@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>
+</head>
+<body onload="init()">
+<div id="container" style="height: 400px">
+    <div id="choose type">
+        <select id="choose" name="choose"
+                class="form-control">
+            <option value="SingleChoiceQuestion" selected = "selected">单选题</option>
+            <option value="MultipleChoiceQuestion">多选题</option>
+            <option value="Completion">填空题</option>
+            <option value="Judgment">判断题</option>
+            <option value="ComprehensiveQuestion">综合题</option>
+            <option value="CombinationChoice">综合（组合）选择题</option>
+            <option value="ProgramProblem">程序题</option>
+        </select>
+    </div>
+    <div id="pie"></div>
+</div>
+
+<script>
+    var Barlist=[];
+    var BarArr;
+    function init(){
+        var examId = sessionStorage.getItem("examId");
+        var totalScore = sessionStorage.getItem("totalScore");
+        var personNum = sessionStorage.getItem("personNum");
+
+
+        var myChart = echarts.init(document.getElementById('pie'));
+        // 指定图表的配置项和数据
+        var option1 = {
+        };
+        var type=$("#choose").val();
+        var param={
+            "examId":13,
+            "type":type
+        };
+        console.log(param);
+        jQuery.post("/teacher/analyse/apart-percentage",param,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            for(var i=0;i<BarArr.length;i++){
+                option1.series[0].data.push(BarArr[i]);
+            }
+            myChart.setOption(option1);
+        })
+    }
+</script>
+
+</body>
+
+</html>

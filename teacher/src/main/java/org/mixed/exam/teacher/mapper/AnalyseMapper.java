@@ -17,4 +17,7 @@ public interface AnalyseMapper {
 
     //查找考试 模糊查询
     List<Exam> Search(String examName);
+
+    //mysql找出每道题的总分
+    public String findscoreList(Integer examId);
 }

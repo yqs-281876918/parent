@@ -3,8 +3,10 @@ package org.mixed.exam.teacher.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.javassist.compiler.ast.StringL;
 import org.apache.ibatis.jdbc.Null;
 import org.mixed.exam.bank.api.pojo.po.Exam;
+import org.mixed.exam.bank.api.pojo.po.exam.Answer;
 import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.dao.AnalyseDao;
 import org.mixed.exam.teacher.mapper.AnalyseMapper;
@@ -104,7 +106,7 @@ public class AnalyseService {
     }
 
     //计算各分数段人数比例
-    public double[] percentage(Integer examId,Integer totalScore,Integer personNum){
+    public int[] percentage(Integer examId,Integer totalScore,Integer personNum){
         int per1 = 0,per2=0,per3=0,per4=0 , per5=0;
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
 
@@ -126,15 +128,15 @@ public class AnalyseService {
                 if (per > 0.8 && per <= 1) { per5++;}
             }
         }
-        double pert1=(double)per1*1.0/personNum;
-        double pert2=(double)per2*1.0/personNum;
-        double pert3=(double)per3*1.0/personNum;
-        double pert4=(double)per4*1.0/personNum;
-        double pert5=(double)per5*1.0/personNum;
         ////System.out.println(per1);
-        double[] percentage={pert1,pert2,pert3,pert4,pert5};
+        int[] percentage={per1,per2,per3,per4,per5};
         //System.out.println(Arrays.toString(percentage));
         return percentage;
+    }
+
+    public int[] getscores(Integer examId,String type){
+        //先得到每个题的满分
+        return analyseDao.getscores(examId,type);
     }
 
 
