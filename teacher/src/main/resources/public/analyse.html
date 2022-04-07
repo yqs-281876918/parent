@@ -15,6 +15,11 @@
 <body onload="init()">
 <style type="text/css">
     a.hand:hover   {cursor:hand}
+    .pie {
+        width:160px;
+        height:160px;
+        margin: 0 auto;
+    }
 </style>
 <div class="viewFrameWork sidebar-full" id="viewFrameWork">
     <div class="body-toolbar clearfix">
@@ -120,11 +125,8 @@
         </div>
         </br>
         <div id="bottom">
-            <button type="button" class="btn btn-primary"
-                    onclick="pie()">饼图</button>
-            <div id="bar" style="min-width: 310px; height: 400px; margin: 0 auto">
-                <input type="radio" name="paint-graph" id="graph-rainbow" checked="checked"/><label for="graph-rainbow">Rainbow</label>
-            </div>
+            <div id="box1" class="pie"></div>
+            <div id="box2" class="pie"></div>
         </div>
 
     </div>
@@ -204,28 +206,52 @@
         };
         console.log(param1);
 
-        var myChart = echarts.init(document.getElementById('bar'));
+        var myChart = echarts.init(document.getElementById('box1'));
         // 指定图表的配置项和数据
         var option = {
             title: {
                 text: ''
             },
-            tooltip: {
-                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
-            },
-            legend: {
-                data:['合格率','优良率','平均分']
-            },
-            xAxis: {
-                data: ["合格率","优良率","平均分"]
-            },
-            yAxis: {},
             series: [{
                 name: '比例',
-                type: 'bar',
+                type: 'pie',
                 colorByPoint: true,
-                data: [],
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: true,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}%' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'及格率',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    },
+
+                    {
+                        value: '',
+                        name: '',
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        }
+
+                    }
+                ],
             }]
         };
         var pass;
@@ -243,9 +269,15 @@
                     pass=pass+BarArr[4];
                 }
             }
+
+            var pass=parseFloat(pass/7)*100;
+            console.log(pass);
             option.series[0].data.push(pass);
-            option.series[0].data.push(excellent);
-            option.series[0].data.push(avg1);
+            var unpass=100-pass;
+            console.log(unpass);
+            option.series[0].data.push(unpass);
+            //option.series[0].data.push(excellent);
+            //option.series[0].data.push(avg1);
             myChart.setOption(option);
         })
         sessionStorage.setItem("personNum",personNum);
