@@ -74,6 +74,11 @@
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mixed.exam</groupId>
+            <artifactId>auth-api</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

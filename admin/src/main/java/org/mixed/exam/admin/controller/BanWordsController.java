@@ -51,7 +51,7 @@ public class BanWordsController {
         return banWordsService.addWord(word);
     }
     @ResponseBody
-    @GetMapping("/banWords/serchWord")
+    @GetMapping("/banWords/searchWord")
     public List<Map<String, Object>> serchWord(@RequestParam("word")String word){
         return banWordsService.serchWord(word);
     }

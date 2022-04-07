@@ -48,7 +48,7 @@ public class OAuth2Config extends AuthorizationServerConfigurerAdapter
                 .withClient("all-client")
                 .secret(passwordEncoder.encode("all-client-secret"))
                 .authorizedGrantTypes("refresh_token", "authorization_code", "password")
-                .accessTokenValiditySeconds(3600*5)
+                .accessTokenValiditySeconds(3600*24*7)
                 .scopes("all");
     }
 
