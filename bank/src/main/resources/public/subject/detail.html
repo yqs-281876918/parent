@@ -17,11 +17,11 @@
     }
     //页面加载完毕后向后端获取题目信息
     $(document).ready(function() {
-        $.ajax({url:"/bank/subjectByID?id="+getUrlParam("id")+"&"+"type="+getUrlParam("type"),
+        $.ajax({url:"/bank/subject/json?id="+getUrlParam("id"),
             method:"get",
             success:function(result)
             {
-                renderHtml(result)
+                renderHtml(JSON.parse(result))
             }});
     });
 </script>
@@ -30,7 +30,7 @@
     function renderHtml(subject_obj)
     {
         commonRender(subject_obj)
-        var type=subject_obj.type
+        let type=subject_obj.type
         switch (type) {
             case "singleChoice":
                 singleChoiceRender(subject_obj)
@@ -44,48 +44,14 @@
             case "judgment":
                 judgmentRender(subject_obj)
                 break
-            case "nounParsing":
-                nounParsingRender(subject_obj)
-                break
-            case "calculationProblem":
-                calculationProblemRender(subject_obj)
-                break
-            case "entryProblem":
-                entryProblemRender(subject_obj)
-                break
-            case "essayQuestion":
-                essayQuestionRender(subject_obj)
-                break
-            case "dataItems":
-                dataItemsRender(subject_obj)
-                break
-            case "rankingQuestion":
-                rankingQuestionRender(subject_obj)
-                break
-            case "voteTopic":
-                voteTopicRender(subject_obj)
-                break
-            case "clozeTest":
-                clozeTestRender(subject_obj)
-                break
-            case "readComprehension":
-                readComprehensionRender(subject_obj)
-                break
-            case "listeningQuestion":
-                listeningQuestionRender(subject_obj)
-                break
             case "comprehensiveQuestion":
                 comprehensiveQuestionRender(subject_obj)
-                break
-            case "oralTopic":
-                oralTopicRender(subject_obj)
                 break
             case "programProblem":
                 programProblemRender(subject_obj)
                 break
-            case "matching":
-                matchingRender(subject_obj)
-                break
+            case "CombinationChoice":
+
         }
     }
     //渲染共有的属性
@@ -114,7 +80,6 @@
         {
             options = options+String.fromCharCode(65+i)+". "+subject_obj.options[i]+"</br>"
         }
-
         //显示答案
         let answer='';
         let s=0;
@@ -159,238 +124,16 @@
         $("div#multiple_options_info").html(options)
         $("div#multiple_answer_info").html("正确答案："+answer)
     }
-
-    //渲染填空题
-    function completionRender(subject_obj)
-    {
-        //显示答案
-        var answer='';
-        let len = 0;
-        while(subject_obj.answers[len]){
-            len++;
-        }
-        for (let i=0 ;i<len;i++)
-        {
-            answer=answer+subject_obj.answers[i];
-            console.log(answer);
-        }
-        console.log(len);
-        $("div#completion_answer_info").html("正确答案："+answer)
-    }
     //渲染判断题
-    function judgmentRender(subject_obj)
-    {
+    function judgmentRender(subject_obj) {
         //显示答案
-        let answer1=subject_obj.answer;
+        let answer1 = subject_obj.answer;
         console.log(answer1);
-        let answer='';
-        answer=answer+subject_obj.options[answer1-1];
+        let answer = '';
+        answer = answer + subject_obj.options[answer1 - 1];
         console.log(answer);
-        $("div#judgment_answer_info").html("正确答案："+answer)
+        $("div#judgment_answer_info").html("正确答案：" + answer)
 
-    }
-    //渲染名词解析题
-    function nounParsingRender(subject_obj)
-    {
-        $("div#nounParsing_answer_info").html("正确答案："+subject_obj.answer)
-    }
-    //渲染计算题
-    function calculationProblemRender(subject_obj)
-    {
-        $("div#calculation_answer_info").html("正确答案："+subject_obj.answer)
-    }
-    //渲染分录题
-    function entryProblemRender(subject_obj)
-    {
-        $("div#entry_answer_info").html("正确答案："+subject_obj.answer)
-    }
-    //渲染论述题
-    function essayQuestionRender(subject_obj)
-    {
-        $("div#essay_answer_info").html("正确答案："+subject_obj.answer)
-    }
-    //渲染资料题
-    function dataItemsRender(subject_obj)
-    {
-        $("div#dataItems_answer_info").html("正确答案："+subject_obj.answer)
-    }
-    //渲染排序题
-    function rankingQuestionRender(subject_obj)
-    {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
-        }
-        console.log(len);
-        for (let i=0 ;i<len;i++)
-        {
-            options=options+String.fromCharCode(65+i)+". "+subject_obj.options[i]+"</br>";
-            console.log(options);
-        }
-        $("div#rankingQuestion_options_info").html(options)
-        $("div#rankingQuestion_answer_info").html("正确答案："+subject_obj.answer)
-    }
-    //渲染投票题
-    function voteTopicRender(subject_obj)
-    {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
-        }
-        console.log(len);
-        for (let i=0 ;i<len;i++)
-        {
-            options=options+String.fromCharCode(65+i)+". "+subject_obj.options[i]+"</br>";
-            console.log(options);
-        }
-        $("div#voteTopic_options_info").html(options)
-
-    }
-    //渲染完形填空？
-    function clozeTestRender(subject_obj)
-    {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
-        }
-        console.log(len);
-        for (let i=0 ;i<len;i++)
-        {
-            if(i%4==0)
-            {
-                options=options+(i/2)+"、"+String.fromCharCode(65)+". "+subject_obj.options[i]+"       ";
-                $("div#clozeTest_options_info").html(options)
-            }
-            else if(i%4==1){
-                options=options+String.fromCharCode(66)+". "+subject_obj.options[i]+"       ";
-                $("div#clozeTest_options_info").html(options)
-            }
-            else if(i%4==2){
-                options=options+String.fromCharCode(67)+". "+subject_obj.options[i]+"       ";
-                $("div#clozeTest_options_info").html(options)
-            }
-            else if(i%4==3){
-                options=options+String.fromCharCode(68)+". "+subject_obj.options[i]+"</br>";
-                $("div#clozeTest_options_info").html(options)
-            }
-
-        }
-
-        //显示答案
-        var  answers='';
-        let  len1=0;
-        while(subject_obj.answers[len1]){
-            len1++;
-        }
-        console.log(len1);
-
-        let num = len/4;
-        console.log(num);
-        for(let i=1;i<=num;i++){
-            var s = 0;
-            s=parseInt(subject_obj.answers[i-1]);
-            console.log(s)
-            answers=answers+i+"、"+String.fromCharCode(65+s-1)+"   ";
-        }
-        $("div#clozeTest_options_info").html(options)
-        $("div#clozeTest_answer_info").html("正确答案："+"<br>"+answers)
-    }
-    //渲染听力
-    function listeningQuestionRender(subject_obj)
-    {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
-        }
-        var questions='';
-        console.log(len);
-        for (let i=0 ;i<len;)
-        {
-            questions=(i/5+1)+"、"+subject_obj.options[i]+"</br>";
-            $("div#listeningQuestion_questions_info").append(questions)
-            options=String.fromCharCode(65)+". "+subject_obj.options[i+1]+"   ";
-            $("div#listeningQuestion_questions_info").append(options)
-            options=String.fromCharCode(66)+". "+subject_obj.options[i+2]+"   ";
-            $("div#listeningQuestion_questions_info").append(options)
-            options=String.fromCharCode(67)+". "+subject_obj.options[i+3]+"   ";
-            $("div#listeningQuestion_questions_info").append(options)
-            options=String.fromCharCode(68)+". "+subject_obj.options[i+4]+"<br>";
-            $("div#listeningQuestion_questions_info").append(options)
-            i=i+5;
-        }
-        //显示答案
-        var  answers='';
-        let  len1=0;
-        while(subject_obj.answers[len1]){
-            len1++;
-        }
-        console.log(len1);
-
-        let num = len/5;
-        console.log(num);
-        for(let i=1;i<=num;i++){
-            var s = 0;
-            s=parseInt(subject_obj.answers[i-1]);
-            console.log(s)
-            answers=answers+i+"、"+String.fromCharCode(65+s-1)+"<br>";
-        }
-        $("div#listeningQuestion_answer_info").html("正确答案："+"</br>"+answers)
-    }
-    //渲染阅读理解
-    function readComprehensionRender(subject_obj)
-    {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
-        }
-        var questions='';
-        console.log(len);
-        for (let i=0 ;i<len;)
-        {
-            questions=(i/5+1)+"、"+subject_obj.options[i]+"</br>";
-            $("div#readComprehension_questions_info").append(questions)
-            options=String.fromCharCode(65)+". "+subject_obj.options[i+1]+"   ";
-            $("div#readComprehension_questions_info").append(options)
-            options=String.fromCharCode(66)+". "+subject_obj.options[i+2]+"   ";
-            $("div#readComprehension_questions_info").append(options)
-            options=String.fromCharCode(67)+". "+subject_obj.options[i+3]+"   ";
-            $("div#readComprehension_questions_info").append(options)
-            options=String.fromCharCode(68)+". "+subject_obj.options[i+4]+"<br>";
-            $("div#readComprehension_questions_info").append(options)
-            i=i+5;
-        }
-        //显示答案
-        var  answers='';
-        let  len1=0;
-        while(subject_obj.answers[len1]){
-            len1++;
-        }
-        console.log(len1);
-
-        let num = len/5;
-        console.log(num);
-        for(let i=1;i<=num;i++){
-            var s = 0;
-            s=parseInt(subject_obj.answers[i-1]);
-            console.log(s)
-            answers=answers+i+"、"+String.fromCharCode(65+s-1)+"<br>";
-        }
-        $("div#readComprehension_answer_info").html("正确答案："+"</br>"+answers)
-    }
-
-    //渲染口语
-    function oralTopicRender(subject_obj)
-    {
     }
     //渲染综合题
     function comprehensiveQuestionRender(subject_obj)
@@ -402,133 +145,42 @@
     {
         $("div#programProblem_answer_info").html("正确答案："+subject_obj.answer)
     }
+    //渲染组合选择题
+    function combinationChoiceRender(subject_obj){
 
-    //渲染连线题
-    function matchingRender(subject_obj) {
-        //显示左侧选项
-        var optionsLeft = '';
-        for (let i = 0; i < subject_obj.optionsLeft.length; i++) {
-            optionsLeft = optionsLeft + String.fromCharCode(65 + i) + ". " + subject_obj.optionsLeft[i] + "</br>";
-            $("div#left_side").html(optionsLeft)
-        }
-        //显示右侧选项
-        var optionsRight = '';
-        for (let i = 0; i < subject_obj.optionsRight.length; i++) {
-            optionsRight = optionsRight + String.fromCharCode(65 + i) + ". " + subject_obj.optionsRight[i] + "</br>";
-            $("div#right_side").html(optionsRight)
-        }
-
-        //显示答案
-        let begin;
-        let last;
-        let num;
-        let len = subject_obj.answer.length;
-        let questions = 0;
-        var answer = '';
-        for (num = 0; num < len;) {
-
-            for (let i = num; i < len; i++) {
-                if (subject_obj.answer[i] != 0) {
-                    begin = i;
-                    console.log(begin)
-                    questions++;
-                    break;
-                }
-            }
-            for (let j = begin; j < len; j++) {
-                if (subject_obj.answer[j] == 0) {
-                    last = j;
-                    console.log(last)
-                    break;
-                }
-                if(j==len-1)
-                    last=j;
-            }
-            let s;
-            answer = answer + (questions) + "、";
-            for (let k = begin; k < last; k++) {
-                s = parseInt(subject_obj.answer[k]);
-                console.log(s)
-                answer = answer + String.fromCharCode(65+s-1);
-            }
-            if(questions==subject_obj.optionsLeft.length){
-                let  a = parseInt(subject_obj.answer[last]);
-                answer = answer + String.fromCharCode(65+a-1);
-            }
-            answer = answer + "</br>";
-            $("div#matching_answer_info").html(answer)
-            if (questions==subject_obj.optionsLeft.length)
-                break;
-            else
-                num=last;
-        }
     }
 </script>
 <div class="outer">
     <div class="upper">
         <div class="title">
             <span class="tip">题干</span> </div>
-
         <div id="id_info">
             该题目不存在，请确保url参数正确（如：http://127.0.0.1:8080/admin/subject/detail.html?id=6207b3a80875141b0f368672&type=singleChoice）
         </div>
+        <div id="description_info" style="border: 1px solid black;background: #f8f8f8">
 
-</body>
-<div id="description_info" style="border: 1px solid black">
-
+        </div>
+    </div>
+    <!-- 单选题  -->
+    <div id="single_options_info"></div>
+    <div id="single_answer_info" ></div>
+    <!-- 多选题  -->
+    <div id="multiple_options_info"></div>
+    <div id="multiple_answer_info" ></div>
+    <!-- 填空题  -->
+    <div id="completion_answer_info" ></div>
+    <!-- 判断题  -->
+    <div id="judgment_options_info"></div>
+    <div id="judgment_answer_info"></div>
+    <!-- 综合题 -->
+    <div id="comprehensiveQuestion_answer_info"></div>
+    <!-- 程序题 -->
+    <div id="programProblem_answer_info"></div>
+    <div id="container">
+        <div id="left_side"></div>
+        <div id="right_side"></br></div>
+    </div>
 </div>
-
-<!-- 单选题  -->
-<div id="single_options_info"></div>
-<div id="single_answer_info" ></div>
-<!-- 多选题  -->
-<div id="multiple_options_info"></div>
-<div id="multiple_answer_info" ></div>
-<!-- 填空题  -->
-<div id="completion_answer_info" ></div>
-<!-- 判断题  -->
-<div id="judgment_options_info"></div>
-<div id="judgment_answer_info"></div>
-<!-- 名词解析题 -->
-<div id="nounParsing_answer_info"></div>
-<!-- 计算题 -->
-<div id="calculation_answer_info"></div>
-<!-- 分录题 -->
-<div id="entry_answer_info"></div>
-<!-- 论述题 -->
-<div id="essay_answer_info"></div>
-<!-- 资料题 -->
-<div id="dataItems_answer_info"></div>
-<!-- 排序题 -->
-<div id="rankingQuestion_options_info"></div>
-<div id="rankingQuestion_answer_info"></div>
-<!-- 投票题 -->
-<div id="voteTopic_options_info"></div>
-<!-- 完形填空 -->
-<div id="clozeTest_options_info"></div>
-<div id="clozeTest_answer_info"></div>
-<!-- 阅读理解 -->
-<div id="readComprehension_questions_info"></div><br/>
-<div id="readComprehension_answer_info"></div>
-
-<!-- 听力题 -->
-<div id="listeningQuestion_questions_info"></div><br/>
-<!--<div id="listeningQuestion_options_info"></div><br/>-->
-<div id="listeningQuestion_answer_info"></div>
-
-<!-- 综合题 -->
-<div id="comprehensiveQuestion_answer_info"></div>
-
-<!-- 程序题 -->
-<div id="programProblem_answer_info"></div>
-
-<!-- 连线题 -->
-<body>
-<div id="container">
-    <div id="left_side"></div>
-    <div id="right_side"></br></div>
-</div>
-</body>
 <style>
     #left_side{
         background: #ccffff;
@@ -544,7 +196,7 @@
 <hr />
 </div>
 <div class="inner">
-    <span class="title2">题目属性 </span>
+    <span class="title2">题目属性</span>
     <div class="line"></div>
     <div id="recommend_score_info"></div>
     <hr />

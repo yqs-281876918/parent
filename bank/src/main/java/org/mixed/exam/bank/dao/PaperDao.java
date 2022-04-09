@@ -16,14 +16,18 @@ public class PaperDao {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    private static String DOCUMENT_NAME="paper";
+    public void add(Paper paper){
+        mongoTemplate.insert(paper,DOCUMENT_NAME);
+    }
     //取出所有试卷
     public List<Paper> getAll(){
-        return mongoTemplate.findAll(Paper.class,"paper");
+        return mongoTemplate.findAll(Paper.class,DOCUMENT_NAME);
     }
     //取出自己创建的试卷
     public List<Paper> getOwn(String teacherid){
         Query query = Query.query(Criteria.where("creator").is(teacherid));
-        return mongoTemplate.find(query,Paper.class,"paper");
+        return mongoTemplate.find(query,Paper.class,DOCUMENT_NAME);
     }
     //取自己管理的试卷
     public List<Paper> getControl(String teacherid){
@@ -33,20 +37,20 @@ public class PaperDao {
     public void sealed(String id){
         Query query = Query.query(Criteria.where("id").is(id));
         Update update = Update.update("open",false);
-        mongoTemplate.updateFirst(query, update, Paper.class,"paper");
+        mongoTemplate.updateFirst(query, update, Paper.class,DOCUMENT_NAME);
     }
     //通过id取一个试卷
     public Paper getOne(String id){
-        return mongoTemplate.findById(id,Paper.class,"paper");
+        return mongoTemplate.findById(id,Paper.class,DOCUMENT_NAME);
     }
     //保存试卷
     public void savePaper(Paper paper){
-        mongoTemplate.save(paper,"paper");
+        mongoTemplate.save(paper,DOCUMENT_NAME);
     }
     //删除试卷
     public void deletePaper(String id){
         Query query=new Query(Criteria.where("id").is(id));
-        mongoTemplate.remove(query, Paper.class,"paper");
+        mongoTemplate.remove(query, Paper.class,DOCUMENT_NAME);
     }
     //分配教师
     public int assign(String id){

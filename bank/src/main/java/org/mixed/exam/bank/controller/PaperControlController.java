@@ -1,6 +1,7 @@
 package org.mixed.exam.bank.controller;
 
 import org.mixed.exam.auth.api.AuthUtil;
+import org.mixed.exam.bank.dao.PaperDao;
 import org.mixed.exam.bank.pojo.po.Paper;
 import org.mixed.exam.bank.service.PaperControlService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,14 @@ public class PaperControlController {
     @Autowired
     private PaperControlService paperControlService;
 
+    @Autowired
+    private PaperDao paperDao;
     @ResponseBody
     @PostMapping("/paper/add")
-    public String addPaper(String foreWord, List<String> subjectIDs, String courseID, Integer difficulty,
+    public String addPaper(@RequestParam("foreWord") String foreWord,
+                           @RequestParam("subjectIDs") List<String> subjectIDs,
+                           @RequestParam("courseID") String courseID,
+                           @RequestParam("difficulty") Integer difficulty,
                            @CookieValue("token")String token){
         Paper paper=new Paper();
         paper.setForeWord(foreWord);
@@ -27,6 +33,7 @@ public class PaperControlController {
         paper.setOpen(true);
         paper.setDate(new Date());
         paper.setCreator(AuthUtil.parseUsername(token));
+        paperDao.add(paper);
         return "添加成功";
     }
     //取出所有试卷
