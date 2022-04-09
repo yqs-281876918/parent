@@ -26,20 +26,9 @@
                             <option value="multipleChoiceQuestion">多选题</option>
                             <option value="completion">填空题</option>
                             <option value="judgment">判断题</option>
-                            <option value="nounParsing">名词解析</option>
-                            <option value="essayQuestion">论述题</option>
-                            <option value="calculationProblem">计算题</option>
-                            <option value="entryProblem">分录题</option>
-                            <option value="dataItems">资料题</option>
-                            <option value="matching">连线题</option>
-                            <option value="voteTopic">投票题</option>
-                            <option value="rankingQuestion">排序题</option>
-                            <option value="clozeTest">完形填空</option>
-                            <option value="readComprehension">阅读理解</option>
                             <option value="comprehensiveQuestion">综合题</option>
-                            <option value="oralTopic">口语题</option>
-                            <option value="listeningQuestion">听力题</option>
                             <option value="programProblem">程序题</option>
+                            <option value="combinationChoice">组合选择题</option>
                         </select>
                     </div>
                     <div>
@@ -55,7 +44,7 @@
         </div>
     </div>
 </div>
-<div name="container">
+<div class="container">
     <form id="paperform">
         <div class="form-group">
             <label for="foreWord">简介：</label>
@@ -88,24 +77,8 @@
                 <option>10</option>
             </select>
         </div>
-        <div class="form-group">
-            <label for="isopen">开放：</label>
-            <select class="form-control" id="isopen">
-                <option id="open">是</option>
-                <option id="close">否</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="foreWord">总分值：</label>
-            <div class="form-control" id="totalpoint"></div>
-        </div>
-        <!--        <div class="form-group">-->
-        <!--            <label for="exampleFormControlTextarea1">Example textarea</label>-->
-        <!--            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>-->
-        <!--        </div>-->
     </form>
     <div id="subbutton"></div>
-
 </div>
 </body>
 <script>
@@ -154,7 +127,7 @@
         var course = $("#course").val();
         var isopen=$("#isopen").val();
         var difficulty=$("#difficulty").val();
-        var parm={
+        var param={
             "id":id,
             "foreWord":foreWord,
             "subjectIDs[][]":questionids,
@@ -162,8 +135,8 @@
             "open":isopen,
             "difficulty":difficulty
         }
-        jQuery.post("/bank/edit/getfrom",parm,function (rst) {
-            location.href="../operate/paper_control.html";
+        jQuery.post("/bank/edit/getfrom",param,function (rst) {
+            location.href="bank/operate/paper_control.html";
         })
     }
 </script>
@@ -294,42 +267,20 @@
                         success:function (rst1){
                             rst1 = eval('('+rst1+')');
                             var qtype=null;
-                            if(rst1.type=="singleChoiceQuestion"){
+                            if(rst1.type==="singleChoiceQuestion"){
                                 qtype="单选题";
-                            }else if(rst1.type=="multipleChoiceQuestion"){
+                            }else if(rst1.type==="multipleChoiceQuestion"){
                                 qtype="多选题";
-                            }else if(rst1.type=="completion"){
+                            }else if(rst1.type==="completion"){
                                 qtype="填空题";
-                            }else if(rst1.type=="judgment"){
+                            }else if(rst1.type==="judgment"){
                                 qtype="判断题";
-                            }else if(rst1.type=="nounParsing"){
-                                qtype="名词解析";
-                            }else if(rst1.type=="essayQuestion"){
-                                qtype="论述题";
-                            }else if(rst1.type=="calculationProblem"){
-                                qtype="计算题";
-                            }else if(rst1.type=="entryProblem"){
-                                qtype="分录题";
-                            }else if(rst1.type=="dataItems"){
-                                qtype="资料题";
-                            }else if(rst1.type=="matching"){
-                                qtype="连线题";
-                            }else if(rst1.type=="voteTopic"){
-                                qtype="投票题";
-                            }else if(rst1.type=="rankingQuestion"){
-                                qtype="排序题";
-                            }else if(rst1.type=="clozeTest"){
-                                qtype="完形填空";
-                            }else if(rst1.type=="readComprehension"){
-                                qtype="阅读理解";
-                            }else if(rst1.type=="comprehensiveQuestion"){
+                            }else if(rst1.type==="comprehensiveQuestion"){
                                 qtype="综合题";
-                            }else if(rst1.type=="oralTopic"){
-                                qtype="口语题";
-                            }else if(rst1.type=="listeningQuestion"){
-                                qtype="听力题";
-                            }else if(rst1.type=="programProblem"){
+                            }else if(rst1.type==="programProblem"){
                                 qtype="程序题";
+                            }else if(rst1.type==="combinationChoice"){
+                                qtype="综合选择题"
                             }else {
                                 qtype="未知题型";
                             }
@@ -373,20 +324,9 @@
                                                     <option value="multipleChoiceQuestion">多选题</option>
                                                     <option value="completion">填空题</option>
                                                     <option value="judgment">判断题</option>
-                                                    <option value="nounParsing">名词解析</option>
-                                                    <option value="essayQuestion">论述题</option>
-                                                    <option value="calculationProblem">计算题</option>
-                                                    <option value="entryProblem">分录题</option>
-                                                    <option value="dataItems">资料题</option>
-                                                    <option value="matching">连线题</option>
-                                                    <option value="voteTopic">投票题</option>
-                                                    <option value="rankingQuestion">排序题</option>
-                                                    <option value="clozeTest">完形填空</option>
-                                                    <option value="readComprehension">阅读理解</option>
                                                     <option value="comprehensiveQuestion">综合题</option>
-                                                    <option value="oralTopic">口语题</option>
-                                                    <option value="listeningQuestion">听力题</option>
                                                     <option value="programProblem">程序题</option>
+                                                    <option value="combinationChoice">组合选择题</option>
                                                 </select>
                                             </div>
                                             <div>

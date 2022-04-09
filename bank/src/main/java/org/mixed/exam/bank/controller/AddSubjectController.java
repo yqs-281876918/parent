@@ -62,6 +62,7 @@ public class AddSubjectController {
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswer(answer);
+        question.setType("singleChoiceQuestion");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -74,6 +75,7 @@ public class AddSubjectController {
         MultipleChoiceQuestion question = new MultipleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswers(answers);
+        question.setType("multipleChoiceQuestion");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -86,6 +88,7 @@ public class AddSubjectController {
         Completion question = new Completion();
         setBaseInfo(question, request, baseParam);
         question.setAnswers(answers);
+        question.setType("completion");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -99,6 +102,7 @@ public class AddSubjectController {
         Judgment question = new Judgment();
         setBaseInfo(question, request, baseParam);
         question.setAnswer(answer);
+        question.setType("judgment");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -111,6 +115,7 @@ public class AddSubjectController {
         CombinationChoice question = new CombinationChoice();
         setBaseInfo(question, request, baseParam);
         question.setAnswers(answers);
+        question.setType("combinationChoice");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -118,9 +123,12 @@ public class AddSubjectController {
     //综合题
     @ResponseBody
     @PostMapping("addSubject/comprehensiveQuestion")
-    public String comprehensiveQuestion(BaseParam baseParam, HttpServletRequest request) {
+    public String comprehensiveQuestion(BaseParam baseParam, HttpServletRequest request,
+                                        @RequestParam("answer") String answer) {
         ComprehensiveQuestion question = new ComprehensiveQuestion();
         setBaseInfo(question, request, baseParam);
+        question.setAnswer(answer);
+        question.setType("comprehensiveQuestion");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -138,6 +146,7 @@ public class AddSubjectController {
         question.setDescription(description);
         question.setInputs(inputs);
         question.setOutputs(outputs);
+        question.setType("programProblem");
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }

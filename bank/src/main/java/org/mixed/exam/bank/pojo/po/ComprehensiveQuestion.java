@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 综合题
  */
@@ -13,4 +16,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ComprehensiveQuestion extends Question
 {
+    private String answer= "无参考答案";
 }

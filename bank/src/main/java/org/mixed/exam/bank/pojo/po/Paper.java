@@ -12,7 +12,7 @@ public class Paper
     @Id
     private String id;
     private String foreWord;//前言
-    private List<List<String>> subjectIDs;//题目
+    private List<String> subjectIDs;//题目
     private String courseID;//试卷所属的学科
     private Boolean open=true;//试卷是否开放
     private Integer difficulty=-1;//试卷难度

@@ -56,14 +56,11 @@ public class RouteController
         System.out.println(111);
         Exam exam = examClient.getByID(examId);
         Paper paper = paperClient.getByID(exam.getPaperID());
-        List<List<String>> subjectIDs=paper.getSubjectIDs();
+        List<String> subjectIDs=paper.getSubjectIDs();
         List<Map<String,Object>> subjectsMap=new ArrayList<>();
-        for(List<String> ls : subjectIDs)
+        for(String id : subjectIDs)
         {
-            for(String id : ls)
-            {
-                subjectsMap.add(StringUtil.jsonToMap(subjectClient.getSubjectByID(id)));
-            }
+            subjectsMap.add(StringUtil.jsonToMap(subjectClient.getSubjectByID(id)));
         }
         model.addAttribute("subjects",subjectsMap);
         model.addAttribute("paper",paper);

@@ -19,7 +19,7 @@ public class EditService {
 
     public void getFrom(String id,
                         String foreWord,
-                        List<List<String>> subjectIDs,
+                        List<String> subjectIDs,
                         String courseID,
                         boolean open,
                         Integer difficulty){
@@ -31,10 +31,6 @@ public class EditService {
         p.setOpen(open);
         p.setDifficulty(difficulty);
         paperDao.savePaper(p);
-    }
-
-    public List<Classification> getAllCourse() {
-        return paperDao.getAllCourse();
     }
 
     public Classification getCourse(String id) {

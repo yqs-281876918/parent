@@ -52,11 +52,6 @@ public class PaperDao {
     public int assign(String id){
         return 0;
     }
-    //取所有课程名
-    public List<Classification> getAllCourse(){
-        Query query = Query.query(Criteria.where("superClassId").is(""));
-        return mongoTemplate.find(query, Classification.class,"classifications");
-    }
     //根据课程id取
     public Classification getCourse(String id) {
         return mongoTemplate.findById(id,Classification.class,"classifications");

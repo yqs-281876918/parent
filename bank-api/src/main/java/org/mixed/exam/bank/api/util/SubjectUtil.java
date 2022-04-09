@@ -35,10 +35,8 @@ public class SubjectUtil
         {
             return typeList;
         }
-        typeList= Arrays.asList("singleChoiceQuestion", "multipleChoiceQuestion","completion","judgment","nounParsing",
-                "calculationProblem","entryProblem","essayQuestion","dataItems","rankingQuestion","voteTopic",
-                "clozeTest","readComprehension","listeningQuestion","comprehensiveQuestion","oralTopic",
-                "programProblem","matching");
+        typeList= Arrays.asList("singleChoiceQuestion", "multipleChoiceQuestion","completion","judgment",
+                "comprehensiveQuestion", "programProblem","combinationChoice");
         return typeList;
     }
     private static List<String> typeListCHN;
@@ -48,9 +46,26 @@ public class SubjectUtil
         {
             return typeListCHN;
         }
-        typeListCHN=Arrays.asList("单选题","多选题","填空题","判断题","名词解析","计算题","分录题","论述题","资料题","排序题","投票题",
-                "完形填空","阅读理解","听力题","综合题","口语题","程序题","连线题");
+        typeListCHN=Arrays.asList("单选题","多选题","填空题","判断题","综合题","程序题","组合选择题");
         return typeListCHN;
+    }
+    public static String typeCHN2ENG(String chn)
+    {
+        for (String s : typeListCHN) {
+            if (chn.equals(s)) {
+                return s;
+            }
+        }
+        return "";
+    }
+    public static String typeENG2CHN(String eng)
+    {
+        for (String s : typeList) {
+            if (eng.equals(s)) {
+                return s;
+            }
+        }
+        return "";
     }
     public static Class<? extends Question> getClassByType(String type)
     {
@@ -64,34 +79,12 @@ public class SubjectUtil
                 return Completion.class;
             case "judgment":
                 return Judgment.class;
-            case "nounParsing":
-                return NounParsing.class;
-            case "calculationProblem":
-                return CalculationProblem.class;
-            case "entryProblem":
-                return EntryProblem.class;
-            case "essayQuestion":
-                return EssayQuestion.class;
-            case "dataItems":
-                return DataItems.class;
-            case "rankingQuestion":
-                return RankingQuestion.class;
-            case "voteTopic":
-                return VoteTopic.class;
-            case "clozeTest":
-                return ClozeTest.class;
-            case "readComprehension":
-                return ReadComprehension.class;
-            case "listeningQuestion":
-                return ListeningQuestion.class;
             case "comprehensiveQuestion":
                 return ComprehensiveQuestion.class;
-            case "oralTopic":
-                return OralTopic.class;
             case "programProblem":
                 return ProgramProblem.class;
-            case "matching":
-                return Matching.class;
+            case "combinationChoice":
+                return CombinationChoice.class;
             default:
                 return Question.class;
         }

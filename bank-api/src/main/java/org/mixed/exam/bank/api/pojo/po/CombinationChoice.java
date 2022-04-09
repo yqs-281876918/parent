@@ -8,13 +8,10 @@ import lombok.NoArgsConstructor;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 多选题
- */
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MultipleChoiceQuestion extends Question {
+public class CombinationChoice extends Question
+{
     private List<String> answers= Collections.singletonList("null");
 }

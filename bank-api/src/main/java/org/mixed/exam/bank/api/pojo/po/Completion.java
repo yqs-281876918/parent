@@ -17,6 +17,5 @@ import java.util.List;
 @AllArgsConstructor
 public class Completion extends Question
 {
-    private String description="null";
     private List<String> answers= Collections.singletonList("null");
 }

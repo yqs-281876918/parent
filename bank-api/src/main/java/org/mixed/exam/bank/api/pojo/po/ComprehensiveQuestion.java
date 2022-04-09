@@ -5,15 +5,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 综合题
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ComprehensiveQuestion extends Question
 {
-    private String description="null";
-    private String answer="null";
+    private String answer= "无参考答案";
 }

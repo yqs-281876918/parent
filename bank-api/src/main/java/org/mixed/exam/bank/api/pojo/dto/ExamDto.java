@@ -6,7 +6,7 @@ import org.mixed.exam.bank.api.pojo.po.Exam;
 
 @Data
 @NoArgsConstructor
-public class ExamDto {
+public class ExamDto{
     private Integer id;
     private String paperID;
     private String examName;

@@ -179,301 +179,37 @@ public class SimHashService {
 
     public Question repeatCheck(String id, String type) throws IOException {
         Question back = null;
-        //根据不通类型分类处理
-        //单选题
-        if (type.equals("singleChoiceQuestion")) {
-            //所有单选题
-            List<SubjectJson> question = subjectClient.subjects(type);
-            //所查单选题
-            SubjectJson json = subjectClient.getSubjectByID(id, type);
-            SingleChoiceQuestion q = (SingleChoiceQuestion) SubjectUtil.json2Subject(json);
-            //题目描述部分
-            String s1 =delHTMLTag(q.getDescription());
-            SimHashService hash1 = new SimHashService(s1, 64);
-            System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash1.subByDistance(hash1, 3);
+        //所有口语题
+        List<SubjectJson> questions = subjectClient.subjects(type);
+        //所有题目
+        SubjectJson json = subjectClient.getSubjectByID(id, type);
+        Question q = SubjectUtil.json2Subject(json);
+        //题目描述部分
+        String s1 = delHTMLTag(q.getDescription());
+        SimHashService hash1 = new SimHashService(s1, 64);
+        System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
+        // 计算 海明距离 在 3 以内的各块签名的 hash 值
+        hash1.subByDistance(hash1, 3);
 
-            //选项部分
-            String s3 = delHTMLTag(String.join("",q.getOptions()));
-            System.out.println("s3" + s3);
-            SimHashService hash3 = new SimHashService(s3, 64);
-            System.out.println(hash3.intSimHash + "  " + hash3.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash3.subByDistance(hash3, 3);
+        int smallest1 = 4;
+        //遍历判断是否重复
+        for (SubjectJson att : questions) {
+            //String id2=attribute.getid();
+            //System.out.println(attribute);
+            Question attribute=json2Subject(att);
 
-            int smallest1 = 4;
-            int smallest2 = 4;
-            //遍历判断是否重复
-            for (SubjectJson att : question) {
-                //String id2=attribute.getid();
-                //System.out.println(attribute);
-                SingleChoiceQuestion attribute=(SingleChoiceQuestion)json2Subject(att);
+            String s2 = delHTMLTag(attribute.getDescription());
+            SimHashService hash2 = new SimHashService(s2, 64);
+            System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
+            hash1.subByDistance(hash2, 3);
 
-                String s2 = delHTMLTag(attribute.getDescription());
-                SimHashService hash2 = new SimHashService(s2, 64);
-                System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
-                hash1.subByDistance(hash2, 3);
-
-                System.out.println("题目============================");
-                int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
-                System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
-                //判断为题目描述重复
-                if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
-                    smallest1 = hash1.hammingDistance(hash2);
-                    //back=attribute;
-                    //判断答案是否重复
-                    String s4 = delHTMLTag(String.join("",attribute.getOptions()));
-                    SimHashService hash4 = new SimHashService(s4, 64);
-                    System.out.println(hash4.intSimHash + "  " + hash4.intSimHash.bitCount());
-                    hash3.subByDistance(hash4, 3);
-
-                    System.out.println("答案============================");
-                    int dis2 = hash3.getDistance(hash3.strSimHash, hash4.strSimHash);
-                    System.out.println(hash3.hammingDistance(hash4) + " " + dis2);
-                    //判断答案是否重复
-                    if(hash3.hammingDistance(hash4)<smallest2){
-                        smallest2=hash3.hammingDistance(hash4);
-                        back=attribute;
-                    }
-                }
-
-            }
-
-        }
-        //多选
-        if (type.equals("multipleChoiceQuestion")) {
-            //所有多选题
-            List<SubjectJson> question = subjectClient.subjects(type);
-            //所查多选题
-            SubjectJson json = subjectClient.getSubjectByID(id, type);
-            MultipleChoiceQuestion q = (MultipleChoiceQuestion) SubjectUtil.json2Subject(json);
-            //题目描述部分
-            String s1 = delHTMLTag(q.getDescription());
-            SimHashService hash1 = new SimHashService(s1, 64);
-            System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash1.subByDistance(hash1, 3);
-
-            //选项部分
-            String s3 = delHTMLTag(String.join("",q.getOptions()));
-            System.out.println("s3" + s3);
-            SimHashService hash3 = new SimHashService(s3, 64);
-            System.out.println(hash3.intSimHash + "  " + hash3.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash3.subByDistance(hash3, 3);
-
-            int smallest1 = 4;
-            int smallest2 = 4;
-            //遍历判断是否重复
-            for (SubjectJson att : question) {
-                //String id2=attribute.getid();
-                //System.out.println(attribute);
-                MultipleChoiceQuestion attribute=(MultipleChoiceQuestion)json2Subject(att);
-
-                String s2 = delHTMLTag(attribute.getDescription());
-                SimHashService hash2 = new SimHashService(s2, 64);
-                System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
-                hash1.subByDistance(hash2, 3);
-
-                System.out.println("题目============================");
-                int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
-                System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
-                //判断为题目描述重复
-                if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
-                    smallest1 = hash1.hammingDistance(hash2);
-                    //back=attribute;
-                    //判断答案是否重复
-                    String s4 = delHTMLTag(String.join("",attribute.getOptions()));
-                    SimHashService hash4 = new SimHashService(s4, 64);
-                    System.out.println(hash4.intSimHash + "  " + hash4.intSimHash.bitCount());
-                    hash3.subByDistance(hash4, 3);
-
-                    System.out.println("答案============================");
-                    int dis2 = hash3.getDistance(hash3.strSimHash, hash4.strSimHash);
-                    System.out.println(hash3.hammingDistance(hash4) + " " + dis2);
-                    //判断答案是否重复
-                    if(hash3.hammingDistance(hash4)<smallest2){
-                        smallest2=hash3.hammingDistance(hash4);
-                        back=attribute;
-                    }
-                }
-
-            }
-
-        }
-        //填空
-        if (type.equals("completion")) {
-            //所有填空
-            List<SubjectJson> question = subjectClient.subjects(type);
-            //所查填空
-            SubjectJson json = subjectClient.getSubjectByID(id, type);
-            Completion q = (Completion) SubjectUtil.json2Subject(json);
-            //题目描述部分
-            String s1 = delHTMLTag(q.getDescription());
-            SimHashService hash1 = new SimHashService(s1, 64);
-            System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash1.subByDistance(hash1, 3);
-
-            //答案部分
-            String s3 = delHTMLTag(String.join("",q.getAnswers()));
-            System.out.println("s3" + s3);
-            SimHashService hash3 = new SimHashService(s3, 64);
-            System.out.println(hash3.intSimHash + "  " + hash3.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash3.subByDistance(hash3, 3);
-
-            int smallest1 = 4;
-            int smallest2 = 4;
-            //遍历判断是否重复
-            for (SubjectJson att : question) {
-                //String id2=attribute.getid();
-                //System.out.println(attribute);
-                Completion attribute=(Completion)json2Subject(att);
-
-                String s2 = delHTMLTag(attribute.getDescription());
-                SimHashService hash2 = new SimHashService(s2, 64);
-                System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
-                hash1.subByDistance(hash2, 3);
-
-                System.out.println("题目============================");
-                int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
-                System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
-                //判断为题目描述重复
-                if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
-                    smallest1 = hash1.hammingDistance(hash2);
-                    //back=attribute;
-                    //判断答案是否重复
-                    String s4 = delHTMLTag(String.join("",attribute.getAnswers()));
-                    SimHashService hash4 = new SimHashService(s4, 64);
-                    System.out.println(hash4.intSimHash + "  " + hash4.intSimHash.bitCount());
-                    hash3.subByDistance(hash4, 3);
-
-                    System.out.println("答案============================");
-                    int dis2 = hash3.getDistance(hash3.strSimHash, hash4.strSimHash);
-                    System.out.println(hash3.hammingDistance(hash4) + " " + dis2);
-                    //判断答案是否重复
-                    if(hash3.hammingDistance(hash4)<smallest2){
-                        smallest2=hash3.hammingDistance(hash4);
-                        back=attribute;
-                    }
-                }
-
-            }
-
-        }
-        //判断
-        if (type.equals("judgment")) {
-            //所有判断题
-            List<SubjectJson> question = subjectClient.subjects(type);
-            //所查单选题
-            SubjectJson json = subjectClient.getSubjectByID(id, type);
-            Judgment q = (Judgment) SubjectUtil.json2Subject(json);
-            //题目描述部分
-            String s1 = delHTMLTag(q.getDescription());
-            SimHashService hash1 = new SimHashService(s1, 64);
-            System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash1.subByDistance(hash1, 3);
-
-            int smallest1 = 4;
-            //遍历判断是否重复
-            for (SubjectJson att : question) {
-                //String id2=attribute.getid();
-                //System.out.println(attribute);
-                Judgment attribute=(Judgment)json2Subject(att);
-
-                String s2 = delHTMLTag(attribute.getDescription());
-                SimHashService hash2 = new SimHashService(s2, 64);
-                System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
-                hash1.subByDistance(hash2, 3);
-
-                System.out.println("题目============================");
-                int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
-                System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
-                //判断为题目描述重复
-                if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
-                    smallest1 = hash1.hammingDistance(hash2);
-                    back=attribute;
-                }
-
-            }
-
-        }
-        //综合
-        if (type.equals("comprehensiveQuestion")) {
-            //所有综合题
-            List<SubjectJson> question = subjectClient.subjects(type);
-            //所查单选题
-            SubjectJson json = subjectClient.getSubjectByID(id, type);
-            ComprehensiveQuestion q = (ComprehensiveQuestion) SubjectUtil.json2Subject(json);
-            //题目描述部分
-            String s1 = delHTMLTag(q.getDescription());
-            SimHashService hash1 = new SimHashService(s1, 64);
-            System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash1.subByDistance(hash1, 3);
-
-            int smallest1 = 4;
-            //遍历判断是否重复
-            for (SubjectJson att : question) {
-                //String id2=attribute.getid();
-                //System.out.println(attribute);
-                ComprehensiveQuestion attribute=(ComprehensiveQuestion)json2Subject(att);
-
-                String s2 = delHTMLTag(attribute.getDescription());
-                SimHashService hash2 = new SimHashService(s2, 64);
-                System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
-                hash1.subByDistance(hash2, 3);
-
-                System.out.println("题目============================");
-                int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
-                System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
-                //判断为题目描述重复
-                if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
-                    smallest1 = hash1.hammingDistance(hash2);
-                    back=attribute;
-                }
-
-            }
-
-        }
-        //程序
-        if (type.equals("programProblem")) {
-            //所有程序题
-            List<SubjectJson> question = subjectClient.subjects(type);
-            //所查单选题
-            SubjectJson json = subjectClient.getSubjectByID(id, type);
-            ProgramProblem q = (ProgramProblem) SubjectUtil.json2Subject(json);
-            //题目描述部分
-            String s1 = delHTMLTag(q.getDescription());
-            SimHashService hash1 = new SimHashService(s1, 64);
-            System.out.println(hash1.intSimHash + "  " + hash1.intSimHash.bitLength());
-            // 计算 海明距离 在 3 以内的各块签名的 hash 值
-            hash1.subByDistance(hash1, 3);
-
-            int smallest1 = 4;
-            //遍历判断是否重复
-            for (SubjectJson att : question) {
-                //String id2=attribute.getid();
-                //System.out.println(attribute);
-                ProgramProblem attribute=(ProgramProblem)json2Subject(att);
-
-                String s2 = delHTMLTag(attribute.getDescription());
-                SimHashService hash2 = new SimHashService(s2, 64);
-                System.out.println(hash2.intSimHash + "  " + hash2.intSimHash.bitCount());
-                hash1.subByDistance(hash2, 3);
-
-                System.out.println("题目============================");
-                int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
-                System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
-                //判断为题目描述重复
-                if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
-                    smallest1 = hash1.hammingDistance(hash2);
-                    back=attribute;
-                }
-
+            System.out.println("题目============================");
+            int dis1 = hash1.getDistance(hash1.strSimHash, hash2.strSimHash);
+            System.out.println(hash1.hammingDistance(hash2) + " " + dis1);
+            //判断为题目描述重复
+            if (hash1.hammingDistance(hash2) < smallest1 && q.getId().equals(attribute.getId())!=true) {
+                smallest1 = hash1.hammingDistance(hash2);
+                back=attribute;
             }
 
         }

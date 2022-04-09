@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>智能组卷</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/format.js"></script>
+</head>
+<body>
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">选择题目</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="small-question-type" class="col-form-label">题目类型</label>
+                        <select class="form-control" id="small-question-type" onchange="selectChange()">
+                            <option value="singleChoiceQuestion">单选题</option>
+                            <option value="multipleChoiceQuestion">多选题</option>
+                            <option value="completion">填空题</option>
+                            <option value="judgment">判断题</option>
+                            <option value="comprehensiveQuestion">综合题</option>
+                            <option value="programProblem">程序题</option>
+                            <option value="combinationChoice">组合选择题</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>题目:</label>
+                        <div id="chooseAddQuestion">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">学科</th>
+                                    <th scope="col">简介</th>
+                                    <th scope="col">难度</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitAddSmall()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <form id="paper-form">
+        <div class="form-group">
+            <label for="foreWord">简介:</label>
+            <input type="text" class="form-control" id="foreWord">
+        </div>
+        <div class="form-group">
+            <label for="course">课程:</label>
+            <select class="form-control" id="course">
+
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="question">题目:</label>
+            <div id="question">
+                <div class="accordion" id="accordionExample">
+                </div>
+                <button type="button" class="btn btn-light" onclick="addQuestion()">添加题目
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="difficulty">难度:</label>
+            <select class="form-control" id="difficulty">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+            </select>
+        </div>
+    </form>
+    <button type="button" class="btn btn-light">提交</button>
+</div>
+</body>
+<script>
+    let typeListENG = ["singleChoiceQuestion", "multipleChoiceQuestion", "completion", "judgment",
+        "comprehensiveQuestion", "programProblem", "combinationChoice"]
+    let typeListCHN = ["单选题", "多选题", "填空题", "判断题", "综合题", "程序题", "组合选择题"]
+    let tempSubjectJsonList = []
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            async: false, url: "/admin/classify/findAllCourse", success: function (rst) {
+                let options = "";
+                for (let i = 0; i < rst.length; i++) {
+                    options += `<option value="${rst[i].id}">${rst[i].classifyName}</option>`;
+                }
+                $("#course").html(options);
+            }, method: 'post'
+        })
+    })
+    $(function () {
+        let accordion = $("#accordionExample")
+        for (let i = 0; i < 7; i++) {
+            let card = `<div class="card" id="${i}">
+                        <div class="card-header" id="heading-${i}">
+                            <h2 class="mb-${i}">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#collapse-${i}" aria-expanded="true" aria-controls="collapse-${i}">
+                                    <div>
+                                        <div id="qtype-${i}">${typeListCHN[i]}</div>
+                                        <span class="badge badge-secondary" id="count-${i}">0</span>
+                                    </div>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapse-${i}" class="collapse in" aria-labelledby="heading-${i}"
+                             data-parent="#accordionExample" aria-expanded="true" style="">
+                            <div class="card-body" id="table-${i}">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">学科</th>
+                                        <th scope="col">简介</th>
+                                        <th scope="col">难度</th>
+                                        <th scope="col">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>`
+            accordion.append(card)
+        }
+    })
+</script>
+<script>
+    function addQuestion() {
+        $('#addModal').modal('show');
+    }
+</script>
+<script>
+    function selectChange() {
+        let list = ""
+        $.ajax(
+            {
+                type: 'get',
+                url: '/bank/api/subjects',
+                data: {
+                    'courseID': getCourseID(),
+                    'type': $("#small-question-type option:selected").val()
+                },
+                success: function (q) {
+                    for (let i = 0; i < q.length; i++) {
+                        let obj = JSON.parse(q[i].json)
+                        tempSubjectJsonList[i] = obj
+                        list += `<tr id="${obj.id}">
+                                    <td><input name="subject-checkbox" type="checkbox" value="${obj.id}" /></td>
+                                    <td>${$("#course option:selected").text()}</td>
+                                    <td>${obj.introduction}</td>
+                                    <td>${obj.difficulty}</td>
+                                    <td>
+                                    </td>
+                                </tr>`;
+                    }
+                    jQuery('#chooseAddQuestion table tbody').html(list);
+                }
+            }
+        )
+    }
+</script>
+<script>
+    function submitAddSmall() {
+        let type = $("#small-question-type option:selected").text()
+        let typePos = 0
+        for (let i = 0; i < 7; i++) {
+            if (typeListCHN[i] === type) {
+                typePos = i
+                break
+            }
+        }
+        let pos = 0
+        $('input[name="subject-checkbox"]').each(function () {
+            if(!$(this).is(":checked"))
+            {
+                return
+            }
+            let json = tempSubjectJsonList[pos]
+            let trs = `<tr class="subject" value="${json.id}">
+                            <td>${$("#course option:selected").text()}</td>
+                            <td>${json.introduction}</td>
+                            <td id="diff">${json.difficulty}</td>
+                            <td><button type="button" class="btn btn-light" onclick="removeThis(this)">移除</button></td>
+                       </tr>`;
+            jQuery("#table-" + typePos + " table tbody").append(trs);
+            pos++
+        });
+        $('#addModal').modal('hide');
+    }
+</script>
+<script>
+    function removeThis(obj) {
+        $(obj).parent().parent().remove()
+    }
+</script>
+<script>
+    function getForeWord(){
+        return $('#foreWord').val()
+    }
+    function getCourseID(){
+        return $("#course option:selected").val()
+    }
+    function getSubjectList(){
+
+        $("tr.subject").each(function () {
+            $(this).val()
+        })
+    }
+    function submitPaper() {
+        let param={}
+    }
+</script>
+</html>

@@ -4,18 +4,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 题目的基类
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Question
 {
+    @Id
     private String id;//题目主键id
     private Boolean isExamined=false;//是否审核通过
     private Boolean open=true;//题目是否开放
@@ -29,6 +32,8 @@ public class Question
     private Integer correctCount=0;//答对人数
     private String introduction="暂无简介";//题目简介，用于显示题目列表时使用
     private String creator;//创建人
+    private String description="null";//题目描述
+    private List<String> fileUrls;
     //获得正确率
     public double getCorrectRate()
     {

@@ -1,13 +1,11 @@
 package org.mixed.exam.bank.api.pojo.vo;
 
 import lombok.Data;
-import lombok.ToString;
 import org.mixed.exam.bank.api.pojo.po.Paper;
 
 import java.util.Date;
 
 @Data
-@ToString
 public class PaperItem
 {
     private String id;

@@ -17,17 +17,5 @@ import java.util.List;
 @AllArgsConstructor
 public class SingleChoiceQuestion extends Question
 {
-    private String description="null";
-    private List<String> options= Collections.singletonList("null");
     private String answer="null";
-
-    @Override
-    public String toString() {
-        return super.toString()+
-                "SingleChoiceQuestion{" +
-                "description='" + description + '\'' +
-                ", options=" + options +
-                ", answer='" + answer + '\'' +
-                '}';
-    }
 }

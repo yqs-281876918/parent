@@ -1,14 +1,13 @@
 package org.mixed.exam.bank.controller;
 
+import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.bank.pojo.po.Paper;
 import org.mixed.exam.bank.service.PaperControlService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -16,6 +15,20 @@ public class PaperControlController {
     @Autowired
     private PaperControlService paperControlService;
 
+    @ResponseBody
+    @PostMapping("/paper/add")
+    public String addPaper(String foreWord, List<String> subjectIDs, String courseID, Integer difficulty,
+                           @CookieValue("token")String token){
+        Paper paper=new Paper();
+        paper.setForeWord(foreWord);
+        paper.setSubjectIDs(subjectIDs);
+        paper.setCourseID(courseID);
+        paper.setDifficulty(difficulty);
+        paper.setOpen(true);
+        paper.setDate(new Date());
+        paper.setCreator(AuthUtil.parseUsername(token));
+        return "添加成功";
+    }
     //取出所有试卷
     @ResponseBody
     @PostMapping("/papercontrol/getAll")
