@@ -8,31 +8,58 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body onload="init()">
-<div id="container">
-    <div class="accordion" id="accordionExample">
+<div class="modal" tabindex="-1" id="dialog1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>本试卷还未批完是否提交？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog()">取消</button>
+                <button type="button" class="btn btn-primary" onclick="goback()">确定</button>
+            </div>
+        </div>
     </div>
 </div>
+<div id="container">
+    //信息
+    <div id="info"></div>
+    //导航
+    <div class="accordion" id="accordionExample">
+    </div>
+    //主界面
+    <div id="review">
 
-
-
-
-<!-- 设置锚点 -->
-<a href="#mark-1">跳转到区域一</a><br>
-<a href="#mark-2">跳转到区域二</a>
-<br><br><br><br><br><br><br><br><br><br><br><br> <br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<div id="mark-1">区域一</div>
+    </div>
+    <button onclick="finishReview()">完成</button>
+</div>
 </body>
 <script>
+    var subject;
+    var txt;
+    var scorelist;
     function init(){
         // var loc=location.href;
         // var n1 = loc.length;
         // var n2 = loc.indexOf('=');
         // var txt = decodeURI(loc.substr(n2+1,n1-n2));
-        var txt=window.sessionStorage.getItem("id");
+        txt=window.sessionStorage.getItem("detialId");
         console.log(txt);
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/getScoreList',
+            async : false,
+            data:{'id':txt},
+            success:function (rst) {
+                scorelist=rst;
+            }
+        })
         jQuery.ajax({
             type:'post',
             url:'/teacher/reviewpaper/autoandget',
@@ -41,16 +68,24 @@
                 console.log(rst);
                 var rightGuide=``;
                 var table=``;
-                var subject=rst.answers;
+                subject=rst.answers;
                 var c=0;
                 var count=0;
+                var information=`
+                <div>答题人：${rst.username}</div>
+                <div>科目：${sessionStorage.getItem("examName")}</div>
+                <div>切屏次数：${rst.antiCount}</div>
+                <div id="scoreGot">考试得分：${rst.totalScore}</div>
+                `;
+                var r=``;
+                jQuery("#info").html(information);
                 for(var i=0;i<subject.length;i++){
-                    count++;
+
                     if((i>=1&&subject[i].subjectType!=subject[i-1].subjectType)||i==0){
                         //jQuery("#"+c).html(table);
                         c++;
                         table=``;
-                        table+=`<button id="${count}">${count}</button>`;
+                        table+=`<a href="#mark-${count}">${count+1}</a>`;
                         rightGuide+=`
                         <div class="card">
                             <div class="card-header" id="heading${c}">
@@ -67,9 +102,131 @@
                             </div>
                         </div>
                         `;
+                    }else {
+                        table+=`<a href="#mark-${count}">${count}</a>`;
                     }
+                    //显示题目
+                    console.log(subject[i].answerList);
+                    jQuery.ajax({
+                        type:'get',
+                        url:'/bank/subject/json',
+                        async : false,
+                        data:{'id':subject[i].subjectId},
+                        success:function (back) {
+                            back = eval('('+back+')');
+                            if(back.answer!=undefined){
+                                r+=`
+                                <div id="mark-${count}">
+                                    <div><p class="text-break">题目：${back.description}</p></div>
+                                    <div>分值：${scorelist[count]}</div>
+                                    <div>学生作答情况：${subject[i].answerList}</div>
+                                    <div>标准答案：${back.answer}</div>
+                                    <div>
+                                        得分判定:<input type="text" id="score${count}" value="${subject[i].score}" onchange="changeScore(${count})"/>
+                                    </div>
+                                </div>
+                                `;
+                            }else if(back.answers!=undefined){
+                                r+=`
+                                <div id="mark-${count}">
+                                    <div><p class="text-break">题目：${back.description}</p></div>
+                                    <div>分值：${scorelist[count]}</div>
+                                    <div>学生作答情况：${subject[i].answerList}</div>
+                                    <div>标准答案：${back.answers}</div>
+                                    <div>
+                                        得分判定:<input type="text" id="score${count}" value="${subject[i].score}" onchange="changeScore(${count})"/>
+                                    </div>
+                                </div>
+                                `;
+                            }
+
+                        }
+                    })
+                    count++;
                 }
+                jQuery("#review").html(r);
                 jQuery("#accordionExample").html(rightGuide);
+            }
+        })
+
+    }
+</script>
+<script>
+    function changeScore(id) {
+        var score = parseInt(jQuery("#score"+id).val());
+        if(score<0){
+            alert("分值请勿低于0");
+            jQuery("#score"+id).val(0);
+            score=0;
+        }else if(score>scorelist[id]){
+            alert("分值请勿超过最大分值");
+            jQuery("#score"+id).val(scorelist[id]);
+            score=scorelist[id];
+        }
+        subject[id].score=score;
+        console.log(subject);
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/changeScore',
+            async : false,
+            data:{
+                'id':txt,
+                'Answer':JSON.stringify(subject)
+            },
+            success:function (rst) {
+
+            }
+        })
+        var totalScore=parseInt(0);
+        for(var i=0;i<subject.length;i++){
+            totalScore=totalScore+parseInt(subject[i].score);
+        }
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/changeTotalScore',
+            async : false,
+            data:{
+                'id':txt,
+                'score':totalScore
+            },
+            success:function (rst) {
+                jQuery("#scoreGot").html("考试得分："+totalScore);
+            }
+        })
+
+    }
+</script>
+<script>
+    function FR() {
+        jQuery("#dialog1").show();
+    }
+</script>
+<script>
+    function hideDialog() {
+        jQuery("#dialog1").hide();
+    }
+</script>
+<script>
+    function goback() {
+        location.href="paperList.html";
+    }
+</script>
+<script>
+    function finishReview() {
+        for(var i=0;i<subject.length;i++){
+            if(subject[i].score==-1){
+                FR();
+                return;
+            }
+        }
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/finishReview',
+            data:{
+                'id':txt
+            },
+            success:function (rst) {
+                location.href="paperList.html";
             }
         })
     }

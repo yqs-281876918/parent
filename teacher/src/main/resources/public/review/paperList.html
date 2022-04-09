@@ -137,7 +137,7 @@
                                     <th align="right" colspan="3">考试名称</th>
                                     <th align="right" colspan="1">考试人</th>
                                     <th align="right" colspan="1">考试时间</th>
-                                    <th align="right" colspan="1">考试总分</th>
+                                    <th align="right" colspan="1">考试得分</th>
                                     <th align="right" colspan="5">切屏次数</th>
                                     <th align="right" colspan="1">批阅状态</th>
 <!--                                    <th align="right" colspan="2">批阅进度</th>-->
@@ -177,7 +177,7 @@
     var pageNum=1;
     var pageSize=10;
     var pageNums=0;
-    var examid=window.sessionStorage.getItem('examId');
+    var examid=window.sessionStorage.getItem('id');
     var examName=sessionStorage.getItem("examName");
     var startTime=sessionStorage.getItem("startTime");
     var testTime=sessionStorage.getItem("testTime");
@@ -209,7 +209,7 @@
                         <td colspan="3" onclick="find('${u.id}')">${examName}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${u.username}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${testTime}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${totalScore}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${u.totalScore}</td>
                         <td colspan="5" onclick="find('${u.id}'))">${u.antiCount}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${u.finishReview}</td>
                         <td colspan="2">
@@ -402,7 +402,7 @@
 <!--搜索结束-->
 <script>
     function review(id,examName,totalScore){
-        sessionStorage.setItem("id",id);
+        sessionStorage.setItem("detialId",id);
         sessionStorage.setItem("examName",examName);
         sessionStorage.setItem("totalScore",totalScore);
         window.location.href="reviewPaper.html";
