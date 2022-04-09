@@ -3,11 +3,13 @@ package org.mixed.exam.teacher.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.bank.api.pojo.po.Exam;
+import org.mixed.exam.bank.pojo.po.exam.Answer;
 import org.mixed.exam.bank.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.dao.ReviewPaperDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 @Service
@@ -19,7 +21,7 @@ public class ReviewPaperService {
         return reviewPaperDao.AutoReviewAndGet(id);
     }
 
-    public PageInfo<ExamDetail> find(int pageNum, int pageSize, Integer examid) {
+    public PageInfo<ExamDetail> find(int pageNum, int pageSize, int examid) {
         PageInfo<ExamDetail> page=null;
         //设置分页
         PageHelper.startPage(pageNum,pageSize);
@@ -58,5 +60,21 @@ public class ReviewPaperService {
         int row=-1;
         row=reviewPaperDao.delete(ids);
         return row;
+    }
+
+    public void finishReview(String id) {
+        reviewPaperDao.finishReview(id);
+    }
+
+    public String[] getScoreList(String id) {
+        return reviewPaperDao.getScoreList(id);
+    }
+
+    public void changeScore(String id, String subject) {
+        reviewPaperDao.changeScore(id,subject);
+    }
+
+    public void changeTotalScore(String id, int totalscore) {
+        reviewPaperDao.changeTotalScore(id,totalscore);
     }
 }
