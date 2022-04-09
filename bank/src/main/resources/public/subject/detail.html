@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>题目详细信息</title>
+    <link rel="stylesheet" href="/bank/css/add.css">
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -462,9 +464,14 @@
         }
     }
 </script>
-<div id="id_info">
-该题目不存在，请确保url参数正确（如：http://127.0.0.1:8080/admin/subject/detail.html?id=6207b3a80875141b0f368672&type=singleChoice）
-</div>
+<div class="outer">
+    <div class="upper">
+        <div class="title">
+            <span class="tip">题干</span> </div>
+
+        <div id="id_info">
+            该题目不存在，请确保url参数正确（如：http://127.0.0.1:8080/admin/subject/detail.html?id=6207b3a80875141b0f368672&type=singleChoice）
+        </div>
 
 </body>
 <div id="description_info" style="border: 1px solid black">
@@ -472,10 +479,10 @@
 </div>
 
 <!-- 单选题  -->
-<div id="single_options_info" style="border: 1px solid black"></div>
+<div id="single_options_info"></div>
 <div id="single_answer_info" ></div>
 <!-- 多选题  -->
-<div id="multiple_options_info" style="border: 1px solid black"></div>
+<div id="multiple_options_info"></div>
 <div id="multiple_answer_info" ></div>
 <!-- 填空题  -->
 <div id="completion_answer_info" ></div>
@@ -532,18 +539,23 @@
         float: left;
     }
 </style>
+
 <div id="matching_answer_info"></div>
-
-
 <hr />
-<div id="recommend_score_info"></div>
-<hr />
-<div id="date_info" ></div>
-<hr />
-<div id="difficulty_info" ></div>
-<hr />
-<div id="respondentCount_info"></div>
-<hr />
-<div id="correctCount_info"></div>
-<hr />
+</div>
+<div class="inner">
+    <span class="title2">题目属性 </span>
+    <div class="line"></div>
+    <div id="recommend_score_info"></div>
+    <hr />
+    <div id="date_info" ></div>
+    <hr />
+    <div id="difficulty_info" ></div>
+    <hr />
+    <div id="respondentCount_info"></div>
+    <hr />
+    <div id="correctCount_info"></div>
+    <hr />
+</div>
+</div>
 </html>

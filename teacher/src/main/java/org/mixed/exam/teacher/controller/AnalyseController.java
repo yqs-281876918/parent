@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -55,8 +56,17 @@ public class AnalyseController {
     @RequestMapping("/avg")
     public float avg(Integer examId){return analyseService.avg(examId);}
     @RequestMapping("/percentage")
-    public double[] percentage(Integer examId,Integer totalScore,Integer personNum){
+    public int[] percentage(Integer examId,Integer totalScore,Integer personNum){
        System.out.println(totalScore);
         return analyseService.percentage(examId,totalScore,personNum);
+    }
+
+    //填空题正确率和错误率
+    @RequestMapping("/apart-percentage")
+    public int[] single(Integer examId,String type){
+        int[] scoreList=analyseService.getscores(examId,type);
+        System.out.println(examId);
+        System.out.println(type);
+        return scoreList;
     }
 }

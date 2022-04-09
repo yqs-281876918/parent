@@ -2,9 +2,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>试卷列表</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <caption>审核列表</caption>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>简介</th>
+                    <th>创建时间</th>
+                    <th>难度</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item,itemStat : ${items}">
+                    <td th:text="${item.id}"></td>
+                    <td th:text="${item.introduction}"></td>
+                    <td th:text="${item.date}"></td>
+                    <td th:text="${item.difficulty}"></td>
+                    <td><a th:href="@{examine(id=${item.id},type=${item.type})}">审核</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

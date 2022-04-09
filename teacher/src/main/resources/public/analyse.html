@@ -8,233 +8,125 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>
+    <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <link rel="stylesheet" href="assets/css/analyse.css">
 </head>
 <body onload="init()">
 <style type="text/css">
     a.hand:hover   {cursor:hand}
-</style>
-<style>
-    .examContentWrap {
-        background: #fff;
-        padding: 25px 40px 0;
-        margin-bottom: 20px;
-        border: 1px solid #DEDEDE;
-    }
-    .examContentWrap {
-        background: #fff;
-        padding: 25px 40px 0;
-        margin-bottom: 20px;
-        border: 1px solid #DEDEDE;
-    }
-    .examContentTitle, .testAnalysisTitle, .questionAnalysisTitle{
-        margin-bottom: 20px;
-        font-size: 20px;
-        color:  #27274A;
-        border-bottom: 1px solid #DBDDE6;
-        padding-bottom: 25px;
-    }
-    .examContent .form-row {
-        margin-bottom: 20px;
-    }
-    .examContent .form-row .title {
-        color: #9090A4;
-        display: inline-block;
-        width: 70px;
-    }
-    .examContent .form-row .content {
-        color: #4A4A4A;
-    }
-    .examContent .form-row .content.active {
-        color: #1A8CFE;
-        cursor: pointer;
-        text-decoration: underline;
-    }
-    .free-trail-modal .modal-dialog {
-        width: 600px;
-        margin: 15vh auto;
-        border-radius: 10px;
-        overflow: auto;
-    }
-    .free-trail-modal .modal-content {
-        padding: 0;
-        border-radius: 10px;
-        border: none;
-    }
-    /* modal header */
-    .free-trail-modal .modal-content .modal-header {
-        height: auto;
-        padding: 0;
-        position: relative;
-        background: url("https://s4.kaoshixing.com/static/vue/images/free-trail/free-trail-dialog-bg.png?v=07505532b2") center/cover;
-        text-align: center;
-    }
-    .free-trail-modal .modal-content .modal-header > .image {
-        width: 100px;
-        height: 121px;
-        margin: 25px auto 0;
-    }
-    .free-trail-modal .modal-content .modal-header .title {
-        font-size: 20px;
-        line-height: 28px;
-        color: #fff;
-        padding: 7px 0 22px;
-    }
-    .free-trail-modal .modal-content .modal-header .title .image {
-        width: 22px;
-        height: 22px;
-        vertical-align: -5px;
-    }
-    /* modal body */
-    .free-trail-modal .modal-content .modal-body {
-        padding: 40px 50px;
-        margin: 0;
-        overflow: auto;
-        text-align: left;
-    }
-    .free-trail-modal .modal-content .modal-body .list .list-item {
-        font-size: 16px;
-        line-height: 22px;
-        color: #27274a;
-        padding: 0 0 0 20px;
-    }
-    .free-trail-modal .modal-content .modal-body .list .list-item::before {
-        content: "";
-        display: inline-block;
-        width: 12px;
-        height: 12px;
-        margin-left: -12px;
-        transform: translateX(-8px);
-        background: #cadaff;
-        border-radius: 50%;
-    }
-    .free-trail-modal .modal-content .modal-body .list .list-item .strong {
-        color: #1269ff;
-        font-weight: 500;
-    }
-    /* modal footer */
-    .free-trail-modal .modal-footer {
-        text-align: center;
-        padding: 0 0 30px;
-        border: none;
-    }
-    .free-trail-modal .modal-footer .btn {
-        font-size: 18px;
-        line-height: 25px;
-        padding: 10px 54px;
-        border: none;
-        border-radius: 24px;
-        background: linear-gradient(to right, #1b75ff, #0058ff);
+    .pie {
+        width:160px;
+        height:160px;
+        margin: 0 auto;
     }
 </style>
 <div class="viewFrameWork sidebar-full" id="viewFrameWork">
     <div class="body-toolbar clearfix">
         <ul class="scoreAnalysisContentBar ksx-tabs-card">
-            <li class="active scoreAnalysisBarOne ksx-tab-item" id="score">
+            <div class="active scoreAnalysisBarOne ksx-tab-item" id="score">
+                <a href="stuList.html">成绩分析</a>
+            </div>
+            <div class="scoreAnalysisBarTwo ksx-tab-item" id="scoreInterval">
                 <button type="button"
                         class="btn btn-default "
-                        onclick="search()">查看学生成绩单</button>
-            </li>
-            <li class="scoreAnalysisBarTwo ksx-tab-item" id="scoreInterval">
-                <button type="button"
-                        class="btn btn-default "
-                        onclick="zhu()">柱状图</button>
-            </li>
-            <li class="scoreAnalysisBarThree ksx-tab-item" id="scoreExamine">
-                <a href="javascript:void(0);">学员信息</a>
-            </li>
+                        onclick="zhu()">学员信息</button>
+            </div>
+            <div class="scoreAnalysisBarThree ksx-tab-item" id="scoreExamine">
+                <a href="javascript:void(0);">试题分析</a>
+            </div>
         </ul>
     </div>
 </div>
-<div class="exam shadow-lg p-3 mb-5 bg-white rounded" >
-    <div class="scoreAnalysis">
-        <div class="examContentWrap">
-            <div id="examId"></div>
-            <div class="examContentTitle content examName" id="examName">考试科目</div>
-            <div class="examContent">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-row">
-                            <span class="title">总分:</span>
-                            <span id="examTotalScore"></span>分
-                        </div>
-                        <div class="form-row">
-                            <span class="title">及格分:</span>
-                            <span id="passMark"></span>分
-                        </div>
+<div class="outer">
+    <div class="exam shadow-lg p-3 mb-5 bg-white rounded" >
+        <div class="scoreAnalysis">
+            <div class="examContentWrap">
+                <div id="examId"></div>
+                <div class="examContentTitle content examName" id="examName">考试科目</div>
+                <div class="examContent">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-row">
+                                <span class="title">总分:</span>
+                                <span id="examTotalScore"></span>分
+                            </div>
+                            <div class="form-row">
+                                <span class="title">及格分:</span>
+                                <span id="passMark"></span>分
+                            </div>
 
-                        <div class="form-row">
-                            <span class="title">答题时长:</span>
-                            <span id="examTime"></span>
+                            <div class="form-row">
+                                <span class="title">答题时长:</span>
+                                <span id="examTime"></span>
+                            </div>
+                            <div class="form-row">
+                                <span class="title">考试时间:</span>
+                                <span id="examTimeInterval"></span>
+                            </div>
                         </div>
-                        <div class="form-row">
-                            <span class="title">考试时间:</span>
-                            <span id="examTimeInterval"></span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-row">
-                            <span class="title">应考人数:</span>
-                            <span id="examineNums"></span>
-                        </div>
-                        <div class="form-row">
-                            <span class="title">平均分:</span>
-                            <span id="avgScore"></span>分
-                        </div>
-                        <div class="form-row">
-                            <span class="title">最高分:</span>
-                            <span id="maxScore"></span>分
-                        </div>
-                        <div class="form-row">
-                            <span class="title">最低分:</span>
-                            <span id="minScore"></span>分
-                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-row">
+                                <span class="title">应考人数:</span>
+                                <span id="examineNums"></span>
+                            </div>
+                            <div class="form-row">
+                                <span class="title">平均分:</span>
+                                <span id="avgScore"></span>分
+                            </div>
+                            <div class="form-row">
+                                <span class="title">最高分:</span>
+                                <span id="maxScore"></span>分
+                            </div>
+                            <div class="form-row">
+                                <span class="title">最低分:</span>
+                                <span id="minScore"></span>分
+                            </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!--全班成绩统计-->
-        <div class="score tabContent">
-            <div class="scoreAnalysisFun clear">
-                <div class="scoreAnalysisGrid">
-                    <button type="button" class="btn btn-default export scoreExport pull-right" id="scoreExport">导出答题情况</button>
-                    <table class="table table-bordered table-hover table-striped">
-                        <thead>
-                        <tr>
-                            <td id="examineNum">应考人数</td>
-                            <td id="passPercent">及格率</td>
-                            <td id="max-Score">最高分</td>
-                            <td id="min-Score">最低分</td>
-                            <td id="avg-Score">平均分</td>
-                        </tr>
-                        </thead>
+        <div class="inner">
+            <div class="score tabContent" >
+                <div class="scoreAnalysisFun clear">
+                    <div class="scoreAnalysisGrid">
+                        <button type="button" class="btn btn-default export scoreExport pull-right" id="scoreExport">导出答题情况</button>
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <td id="examineNum">应考人数</td>
+                                <td id="passPercent">及格率</td>
+                                <td id="max-Score">最高分</td>
+                                <td id="min-Score">最低分</td>
+                                <td id="avg-Score">平均分</td>
+                            </tr>
+                            </thead>
 
-                        <tbody id="data">
-                        </tbody>
+                            <tbody id="data">
+                            </tbody>
 
-                        <tfoot>
-                        <tr id="table bottom" class="table-bordered">
-                            <td colspan=5">
-                                <div id="page_div">
-                                    <div id="right">
+                            <tfoot>
+                            <tr id="table bottom" class="table-bordered">
+                                <td colspan=5">
+                                    <div id="page_div">
+                                        <div id="right">
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
         </br>
         <div id="bottom">
-            <button type="button" class="btn btn-primary"
-                    onclick="pie()">饼图</button>
-            <div id="bar" style="min-width: 310px; height: 400px; margin: 0 auto">
-                <input type="radio" name="paint-graph" id="graph-rainbow" checked="checked"/><label for="graph-rainbow">Rainbow</label>
-            </div>
+            <div id="box1" class="pie"></div>
+            <div id="box2" class="pie"></div>
         </div>
 
     </div>
@@ -244,8 +136,10 @@
 <script>
     var Barlist=[];
     var BarArr;
-    var personNum;
+
     function init(){
+        var personNum;
+        var avg1,max1,min1;
         var examId = sessionStorage.getItem("id");
         var classId=sessionStorage.getItem("classId");
         var examName=sessionStorage.getItem("examName");
@@ -269,37 +163,37 @@
             console.log(data);
             jQuery("#examineNums").html(data);
             jQuery("#examineNum").html(data);
+            personNum=data;
 
         })
         jQuery.post("/teacher/analyse/max",param,function (max){
             jQuery("#maxScore").html(max);
             jQuery("#max-Score").html(max);
+            max1=max;
         })
 
         jQuery.post("/teacher/analyse/min",param,function (min){
             jQuery("#minScore").html(min);
             jQuery("#min-Score").html(min);
+            min1=min;
         })
 
         jQuery.post("/teacher/analyse/avg",param,function (avg){
             jQuery("#avgScore").html(avg);
             jQuery("#avg-Score").html(avg);
+            avg1=avg;
         })
 
-        personNum=$("#examineNum").val();
-
-        var max=$("#maxScore").val();
-        var min=$("#minScore").val();
-        var avg=$("#avgScore").val();
         console.log(personNum);
+
         var trs="";
         trs+=`
             <tr>
                 <td>${personNum}</td>
                 <td>60%</td>
-                <td>${max}</td>
-                <td>${min}</td>
-                <td>${avg}</td>
+                <td>${max1}</td>
+                <td>${min1}</td>
+                <td>${avg1}</td>
             </tr>
             `;
 
@@ -312,36 +206,78 @@
         };
         console.log(param1);
 
-        var myChart = echarts.init(document.getElementById('bar'));
+        var myChart = echarts.init(document.getElementById('box1'));
         // 指定图表的配置项和数据
         var option = {
             title: {
-                text: '各分数段比例统计'
+                text: ''
             },
-            tooltip: {
-                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
-            },
-            legend: {
-                data:['比例']
-            },
-            xAxis: {
-                data: ["0-20","20-40","40-60","60-80","80-100"]
-            },
-            yAxis: {},
             series: [{
                 name: '比例',
-                type: 'bar',
+                type: 'pie',
                 colorByPoint: true,
-                data: [],
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: true,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}%' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'及格率',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    },
+
+                    {
+                        value: '',
+                        name: '',
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        }
+
+                    }
+                ],
             }]
         };
+        var pass;
+        var excellent;
+        console.log(avg1);
         jQuery.post("/teacher/analyse/percentage",param1,function(rst){
             console.log(rst);
             BarArr=rst;
             for(var i=0;i<BarArr.length;i++){
-                option.series[0].data.push(BarArr[i]);
+                if(i==3){
+                    pass=BarArr[3];
+                }
+                if(i==4){
+                    excellent=BarArr[4];
+                    pass=pass+BarArr[4];
+                }
             }
+
+            var pass=parseFloat(pass/7)*100;
+            console.log(pass);
+            option.series[0].data.push(pass);
+            var unpass=100-pass;
+            console.log(unpass);
+            option.series[0].data.push(unpass);
+            //option.series[0].data.push(excellent);
+            //option.series[0].data.push(avg1);
             myChart.setOption(option);
         })
         sessionStorage.setItem("personNum",personNum);
@@ -416,7 +352,7 @@
                         {value:'', name:'40-60'},
                         {value:'', name:'60-80'},
                         {value:'', name:'80-100'}
-                    ];
+                    ],
                     itemStyle: {
                         normal:{
                             label:{

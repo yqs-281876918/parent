@@ -20,6 +20,7 @@
         </where>
     </select>
     <select id="detail" resultType="org.mixed.exam.bank.api.pojo.po.Exam"></select>
+
     <delete id="delete" parameterType="int">
         delete
         from exam

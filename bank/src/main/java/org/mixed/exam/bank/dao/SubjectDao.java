@@ -5,6 +5,7 @@ import org.checkerframework.checker.units.qual.C;
 import org.mixed.exam.admin.api.pojo.Classification;
 import org.mixed.exam.bank.pojo.dto.SubjectJson;
 import org.mixed.exam.bank.pojo.po.Question;
+import org.mixed.exam.bank.pojo.vo.SubjectItem;
 import org.mixed.exam.bank.util.HttpUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,5 +135,16 @@ public class SubjectDao
         }
         Query query = Query.query(criteria);
         return mongoTemplate.find(query,Question.class,DOCUMENT_NAME);
+    }
+
+    public List<SubjectItem> getUnVerifySubjectItems(){
+        Query query = Query.query(Criteria.where("isExamined").is(false));
+        List<Question> questions =  mongoTemplate.find(query,Question.class,DOCUMENT_NAME);
+        List<SubjectItem> items= new ArrayList<>();
+        for(Question q : questions)
+        {
+            items.add(new SubjectItem(q));
+        }
+        return items;
     }
 }

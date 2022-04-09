@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public abstract class Question
+public class Question
 {
     @Id
     private String id;//题目主键id

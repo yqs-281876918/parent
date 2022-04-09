@@ -50,4 +50,8 @@ public interface SubjectClient
     @ResponseBody
     @GetMapping("bank/subject/json")
     String getSubjectByID(@RequestParam("id") String id);
+
+    @ResponseBody
+    @GetMapping("bank/subject/un-verify")
+    List<SubjectItem> getUnVerifySubjectItems();
 }
