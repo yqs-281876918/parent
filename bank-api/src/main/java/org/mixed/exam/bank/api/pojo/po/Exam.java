@@ -19,4 +19,5 @@ public class Exam
     private Integer classID;
     private String[] antiSettings;
     private String introduce;
+    private Integer status;//考试状态
 }

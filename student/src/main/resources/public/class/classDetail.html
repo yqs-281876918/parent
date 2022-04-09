@@ -98,14 +98,14 @@
                     </tr>
                     </thead>
                     <tbody id="studentDetail">
-                    <tr>
-                        <td style="cursor:default;">&nbsp;1&nbsp;</td>
-                        <td style="cursor:default;">董长升</td>
-                        <td style="cursor:default;">男</td>
-                        <td style="cursor:default;"></td>
-                        <td style="cursor:default;" class="student">2019级</td>
-                        <td style="cursor:default;">机械类1911</td>
-                    </tr>
+<!--                    <tr>-->
+<!--                        <td style="cursor:default;">&nbsp;1&nbsp;</td>-->
+<!--                        <td style="cursor:default;">董长升</td>-->
+<!--                        <td style="cursor:default;">男</td>-->
+<!--                        <td style="cursor:default;"></td>-->
+<!--                        <td style="cursor:default;" class="student">2019级</td>-->
+<!--                        <td style="cursor:default;">机械类1911</td>-->
+<!--                    </tr>-->
                     </tbody>
                     <tfoot>
                     <tr>
@@ -240,7 +240,8 @@
 </script>
 <script>
     function goExamList(){
-        window.location.href='../exam/list';
+        var cno = sessionStorage.getItem("cno")
+        window.location.href='../exam/list?cno='+cno;
     }
 </script>
 </body>

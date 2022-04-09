@@ -15,20 +15,28 @@
                 <caption>试卷列表</caption>
                 <thead>
                 <tr>
+                    <th>考试名</th>
                     <th>开始时间</th>
                     <th>测试时长</th>
                     <th>允许迟到时间</th>
+<!--                    <th>允许提早交卷时间</th>-->
                     <th>测试说明</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="item,status : ${exams}">
-                    <td th:text="${item.startTime}"></td>
+                    <td th:text="${item.examName}"></td>
+                    <td th:text="${#dates.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td th:text="${item.testTime}"></td>
                     <td th:text="${item.lateTime}"></td>
+
                     <td th:text="${item.introduce}"></td>
-                    <td><a th:href="@{'stuExam?id='+${item.id}}">加入测试</a></td>
+                    <td>
+                        <span th:if="${item.status == 1}">未开始</span>
+                        <a th:if="${item.status == 2}" th:href="@{/exam/stuExam(id=${item.id})}">加入测试</a>
+                        <span th:if="${item.status == 3}">已结束</span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

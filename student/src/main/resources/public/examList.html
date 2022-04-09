@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>我的测试</title>
+</head>
+<body>
+<!-- 新 Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <caption>试卷列表</caption>
+            </br>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>考试名</th>
+                    <th>开始时间</th>
+                    <th>测试时长</th>
+                    <th>允许迟到时间</th>
+                    <th>允许提早交卷时间</th>
+                    <th>测试说明</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="examData">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function init(){
+        var cno = sessionStorage.getItem("cno")
+        jQuery.post("/student/test/examList",{'classID': cno},function (rst){
+            var trs = ''
+            for (var i=0;i<rst.length;i++){
+                var exam = rst[i];
+                var date = timestampToTime(exam.startTime)
+                trs +=
+                    `
+    <tr>
+        <td>${exam.examName}</td>
+        <td>${date}</td>
+        <td>${exam.testTime}分钟</td>
+        <td>${exam.lateTime}分钟</td>
+        <td>${exam.submitTime}分钟</td>
+        <td>${exam.introduce}</td>
+        <td><a href="javascript:void(0)" onclick="goExamDetail('${exam.id}')">加入测试</a></td>
+    </tr>
+                    `
+            }
+            jQuery("#examData").html(trs);
+        })
+    }
+    jQuery(function (){
+        init();
+    })
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        var h = date.getHours() + ':';
+        var m = date.getMinutes() + ':';
+        var s = date.getSeconds();
+        return Y+M+D+h+m+s;
+    }
+    function goExamDetail(id){
+        jQuery.post("/student/test/goExamDetail",{'id':id},function (rst){
+            if (rst=="可以进入"){
+                window.location.href = "examDetail.html"
+            }else{
+                if (rst == "未到时间"){
+                    alert('未到考试时间!')
+                }else{
+                    alert("已错过该考试!不能加入该考试!")
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>
