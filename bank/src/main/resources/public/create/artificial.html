@@ -203,6 +203,7 @@
         $('input[name="subject-checkbox"]').each(function () {
             if(!$(this).is(":checked"))
             {
+                pos++
                 return
             }
             let json = tempSubjectJsonList[pos]

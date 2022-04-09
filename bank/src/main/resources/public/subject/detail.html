@@ -5,9 +5,19 @@
     <meta charset="UTF-8">
     <title>题目详细信息</title>
     <link rel="stylesheet" href="/bank/css/add.css">
+    <style>
+        #left_side{
+            background: #ccffff;
+            float: left;
+        }
+        #right_side{
+            background: #ffcccc;
+            float: left;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script>
     //获取url中的参数
     function getUrlParam(name) {
@@ -32,10 +42,10 @@
         commonRender(subject_obj)
         let type=subject_obj.type
         switch (type) {
-            case "singleChoice":
+            case "singleChoiceQuestion":
                 singleChoiceRender(subject_obj)
                 break
-            case "multipleChoice":
+            case "multipleChoiceQuestion":
                 multipleChoiceRender(subject_obj)
                 break
             case "completion":
@@ -57,72 +67,26 @@
     //渲染共有的属性
     function commonRender(subject_obj)
     {
-        $("div#id_info").html("题目编号:"+subject_obj.id)
-        $("div#recommend_score_info").html("建议分值:"+subject_obj.recommendScore)
-        $("div#date_info").html("题目创建时间："+subject_obj.date)
-        $("div#difficulty_info").html("题目难度等级："+subject_obj.difficulty)
-        $("div#respondentCount_info").html("题目作答次数："+subject_obj.respondentCount)
-        $("div#correctCount_info").html("作答正确次数："+subject_obj.correctCount)
-        $("div#description_info").html(subject_obj.description)
-        $("div#recommend_score_info").html("推荐分数："+subject_obj.recommendScore)
+        $("#id_info").html("题目编号:"+subject_obj.id)
+        $("#date_info").html("题目创建时间:"+subject_obj.date)
+        $("#difficulty_info").html("题目难度等级:"+subject_obj.difficulty)
+        $("#respondentCount_info").html("题目作答次数:"+subject_obj.respondentCount)
+        $("#correctCount_info").html("作答正确次数:"+subject_obj.correctCount)
+        $("#description_info").html(subject_obj.description)
     }
     //渲染单选题
     function singleChoiceRender(subject_obj)
     {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
-        }
-        console.log(len);
-        for (let i=0 ;i<len;i++)
-        {
-            options = options+String.fromCharCode(65+i)+". "+subject_obj.options[i]+"</br>"
-        }
-        //显示答案
-        let answer='';
-        let s=0;
-        s=parseInt(subject_obj.answer);
-        answer=answer+String.fromCharCode(65+s-1);
-
-        $("div#single_options_info").append(options)
-        $("div#single_answer_info").html("正确答案："+answer)
-
+        $("div.unique-info").html("正确答案:"+subject_obj.answer)
     }
     //渲染多选题
     function multipleChoiceRender(subject_obj)
     {
-        //显示选项
-        var options='';
-        let len = 0;
-        while(subject_obj.options[len]){
-            len++;
+        let text="正确答案:"
+        for(let ans in subject_obj.answers){
+            text+=ans
         }
-        console.log(len);
-        for (let i=0 ;i<len;i++)
-        {
-            options=options+String.fromCharCode(65+i)+". "+subject_obj.options[i]+"</br>";
-            console.log(options);
-        }
-
-        //显示答案
-        var answer='';
-        let len1 = 0;
-        while(subject_obj.answers[len1]){
-            len1++;
-        }
-        console.log(len1);
-        for (let i=0 ;i<len1;i++)
-        {
-            var s = 0;
-            s=parseInt(subject_obj.answers[i]);
-            answer=answer+String.fromCharCode(65+s-1);
-        }
-
-
-        $("div#multiple_options_info").html(options)
-        $("div#multiple_answer_info").html("正确答案："+answer)
+        $("div.unique-info").html(text)
     }
     //渲染判断题
     function judgmentRender(subject_obj) {
@@ -161,45 +125,14 @@
 
         </div>
     </div>
-    <!-- 单选题  -->
-    <div id="single_options_info"></div>
-    <div id="single_answer_info" ></div>
-    <!-- 多选题  -->
-    <div id="multiple_options_info"></div>
-    <div id="multiple_answer_info" ></div>
-    <!-- 填空题  -->
-    <div id="completion_answer_info" ></div>
-    <!-- 判断题  -->
-    <div id="judgment_options_info"></div>
-    <div id="judgment_answer_info"></div>
-    <!-- 综合题 -->
-    <div id="comprehensiveQuestion_answer_info"></div>
-    <!-- 程序题 -->
-    <div id="programProblem_answer_info"></div>
-    <div id="container">
-        <div id="left_side"></div>
-        <div id="right_side"></br></div>
+    <div class="unique-info">
+
     </div>
 </div>
-<style>
-    #left_side{
-        background: #ccffff;
-        float: left;
-    }
-    #right_side{
-        background: #ffcccc;
-        float: left;
-    }
-</style>
-
-<div id="matching_answer_info"></div>
-<hr />
-</div>
+<hr/>
 <div class="inner">
     <span class="title2">题目属性</span>
     <div class="line"></div>
-    <div id="recommend_score_info"></div>
-    <hr />
     <div id="date_info" ></div>
     <hr />
     <div id="difficulty_info" ></div>
@@ -209,5 +142,5 @@
     <div id="correctCount_info"></div>
     <hr />
 </div>
-</div>
+</body>
 </html>
