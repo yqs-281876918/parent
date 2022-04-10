@@ -97,11 +97,11 @@
                         <table class="table table-bordered table-hover table-striped">
                             <thead>
                             <tr>
-                                <td id="examineNum">应考人数</td>
-                                <td id="passPercent">及格率</td>
-                                <td id="max-Score">最高分</td>
-                                <td id="min-Score">最低分</td>
-                                <td id="avg-Score">平均分</td>
+                                <td >应考人数</td>
+                                <td >及格率</td>
+                                <td >最高分</td>
+                                <td >最低分</td>
+                                <td >平均分</td>
                             </tr>
                             </thead>
 
@@ -127,6 +127,7 @@
         <div id="bottom">
             <div id="box1" class="pie"></div>
             <div id="box2" class="pie"></div>
+            <div id="box3" class="pie"></div>
         </div>
 
     </div>
@@ -135,11 +136,10 @@
 
 <script>
     var Barlist=[];
+    var Arr=[];
     var BarArr;
 
     function init(){
-        var personNum;
-        var avg1,max1,min1;
         var examId = sessionStorage.getItem("id");
         var classId=sessionStorage.getItem("classId");
         var examName=sessionStorage.getItem("examName");
@@ -156,56 +156,57 @@
 
 
         var param={
-            "examId":examId
+            "examId":examId,
+            "totalScore":totalScore,
         };
         console.log(param);
-        jQuery.post("/teacher/analyse/count",param,function(data){
-            console.log(data);
-            jQuery("#examineNums").html(data);
-            jQuery("#examineNum").html(data);
-            personNum=data;
-
-        })
-        jQuery.post("/teacher/analyse/max",param,function (max){
+        var personNum;
+        var max;
+        var min;
+        var avg;
+        var pass;
+        jQuery.post("/teacher/analyse/count",param,function(rst){
+            Arr=rst;
+            personNum=Arr[0];
+            max=Arr[1];
+            min=Arr[2];
+            avg=Arr[3];
+            var pass=0;
+            pass=pass+Arr[7]+Arr[8];
+            pass=Math.floor(pass*100/personNum)/100;
+            jQuery("#examineNums").html(personNum);
             jQuery("#maxScore").html(max);
-            jQuery("#max-Score").html(max);
-            max1=max;
-        })
-
-        jQuery.post("/teacher/analyse/min",param,function (min){
             jQuery("#minScore").html(min);
-            jQuery("#min-Score").html(min);
-            min1=min;
-        })
-
-        jQuery.post("/teacher/analyse/avg",param,function (avg){
             jQuery("#avgScore").html(avg);
-            jQuery("#avg-Score").html(avg);
-            avg1=avg;
-        })
-
-        console.log(personNum);
-
-        var trs="";
-        trs+=`
+            var trs="";
+            trs+=`
             <tr>
                 <td>${personNum}</td>
-                <td>60%</td>
-                <td>${max1}</td>
-                <td>${min1}</td>
-                <td>${avg1}</td>
+                <td>${pass}</td>
+                <td>${max}</td>
+                <td>${min}</td>
+                <td>${avg}</td>
             </tr>
             `;
-
-        jQuery('#data').html(trs);
+            jQuery('#data').html(trs);
+        })
 
         var param1={
             "examId":examId,
             "totalScore":totalScore,
-            "personNum":6
+            "personNum":8
+        };
+
+
+
+
+        var param1={
+            "examId":examId,
+            "totalScore":totalScore,
         };
         console.log(param1);
 
+        //及格率的图
         var myChart = echarts.init(document.getElementById('box1'));
         // 指定图表的配置项和数据
         var option = {
@@ -227,7 +228,7 @@
                         color: '#000000',
                         fontSize: 14,
                         fontWeight: 'bold',
-                        formatter: '{b}\n{c}%' // {b}:数据名； {c}：数据值； {d}：百分比
+                        formatter: '{b}\n{c}' // {b}:数据名； {c}：数据值； {d}：百分比
                     }
                 },
                 data: [
@@ -240,7 +241,6 @@
                             }
                         }
                     },
-
                     {
                         value: '',
                         name: '',
@@ -249,39 +249,149 @@
                                 show: false
                             }
                         }
-
                     }
-                ],
+
+                ]
             }]
         };
-        var pass;
-        var excellent;
-        console.log(avg1);
+
         jQuery.post("/teacher/analyse/percentage",param1,function(rst){
             console.log(rst);
             BarArr=rst;
-            for(var i=0;i<BarArr.length;i++){
-                if(i==3){
-                    pass=BarArr[3];
-                }
-                if(i==4){
-                    excellent=BarArr[4];
-                    pass=pass+BarArr[4];
-                }
-            }
-
-            var pass=parseFloat(pass/7)*100;
+            var pass=0;
+            pass=pass+BarArr[3]+BarArr[4];
+            pass=Math.floor(pass*100/personNum)/100;
             console.log(pass);
             option.series[0].data.push(pass);
-            var unpass=100-pass;
+            var unpass=1-pass;
             console.log(unpass);
             option.series[0].data.push(unpass);
-            //option.series[0].data.push(excellent);
-            //option.series[0].data.push(avg1);
             myChart.setOption(option);
         })
+
+        //优良率的图
+        var myChart2 = echarts.init(document.getElementById('box2'));
+        // 指定图表的配置项和数据
+        var option2 = {
+            title: {
+                text: ''
+            },
+            series: [{
+                name: '比例',
+                type: 'pie',
+                colorByPoint: true,
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: true,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'优良率',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    },
+                    {
+                        value: '',
+                        name: '',
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        }
+                    }
+
+                ]
+            }]
+        };
+        jQuery.post("/teacher/analyse/percentage",param1,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            var excellent=BarArr[4];
+            excellent = Math.floor(excellent*100/personNum)/100;
+            option2.series[0].data.push(excellent);
+            var unexe=1-excellent;
+            option2.series[0].data.push(unexe);
+            myChart2.setOption(option2);
+        })
         sessionStorage.setItem("personNum",personNum);
+
+
+        //平均分的图
+        var myChart3 = echarts.init(document.getElementById('box3'));
+        // 指定图表的配置项和数据
+        var option3 = {
+            title: {
+                text: ''
+            },
+            series: [{
+                name: '比例',
+                type: 'pie',
+                colorByPoint: true,
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: true,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'平均分',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    },
+                    {
+                        value: '',
+                        name: '',
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        }
+                    }
+
+                ]
+            }]
+        };
+        var examId = sessionStorage.getItem("id");
+        var param3={
+            "examId":examId
+        };
+        jQuery.post("/teacher/analyse/avg",param3,function (avg){
+            var avg1=avg;
+            console.log(avg1);
+            option3.series[0].data.push(avg1);
+            var unavg=100-avg1;
+            option3.series[0].data.push(unavg);
+            myChart3.setOption(option3);
+        })
     }
+
 </script>
 <script>
     function search(){

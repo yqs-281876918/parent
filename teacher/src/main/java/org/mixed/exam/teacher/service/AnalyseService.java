@@ -106,7 +106,7 @@ public class AnalyseService {
     }
 
     //计算各分数段人数比例
-    public int[] percentage(Integer examId,Integer totalScore,Integer personNum){
+    public int[] percentage(Integer examId,Integer totalScore){
         int per1 = 0,per2=0,per3=0,per4=0 , per5=0;
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
 
