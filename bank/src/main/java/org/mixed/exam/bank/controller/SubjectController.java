@@ -21,7 +21,7 @@ import java.util.List;
 
 @Controller
 @PreAuthorize("hasAnyRole('ROLE_adm,ROLE_tea2')")
-public class SubjectApiController {
+public class SubjectController {
     @Autowired
     private SubjectDao subjectDao;
 
@@ -114,5 +114,11 @@ public class SubjectApiController {
     public List<SubjectItem> getUnVerifySubjectItems()
     {
         return subjectDao.getUnVerifySubjectItems();
+    }
+    @ResponseBody
+    @PostMapping("subject/delete")
+    public String delete(String id){
+        subjectDao.deleteSubject(id);
+        return "success";
     }
 }

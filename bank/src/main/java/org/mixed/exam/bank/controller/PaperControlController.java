@@ -38,7 +38,7 @@ public class PaperControlController {
     }
     //取出所有试卷
     @ResponseBody
-    @PostMapping("/papercontrol/getAll")
+    @PostMapping("/paper/getAll")
     public List<Paper> getAll(){
         return paperControlService.getAll();
     }
