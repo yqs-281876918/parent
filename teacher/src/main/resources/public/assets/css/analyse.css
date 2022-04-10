@@ -136,3 +136,18 @@
     background:white;
     box-sizing:border-box;
     color: #434e5c;}
+.nav
+{
+    padding: 5px 14px;
+    font-size: 15px;
+    margin-right: 12px;
+    display: inline-block;
+    box-sizing:border-box;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #dedede;
+    float: left;
+}
+.dhl{
+    background: #ffffff;
+    border: 0.5px solid #dedede;
+}

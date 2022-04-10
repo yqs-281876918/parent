@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <title>成绩分析</title>
@@ -21,24 +21,22 @@
         margin: 0 auto;
     }
 </style>
-<div class="viewFrameWork sidebar-full" id="viewFrameWork">
-    <div class="body-toolbar clearfix">
-        <ul class="scoreAnalysisContentBar ksx-tabs-card">
-            <div class="active scoreAnalysisBarOne ksx-tab-item" id="score">
-                <a href="stuList.html">成绩分析</a>
-            </div>
-            <div class="scoreAnalysisBarTwo ksx-tab-item" id="scoreInterval">
-                <button type="button"
-                        class="btn btn-default "
-                        onclick="zhu()">学员信息</button>
-            </div>
-            <div class="scoreAnalysisBarThree ksx-tab-item" id="scoreExamine">
-                <a href="javascript:void(0);">试题分析</a>
-            </div>
-        </ul>
-    </div>
-</div>
 <div class="outer">
+    <div class="dhl">
+        <div class="nav">
+            <a  href="stuList.html">成绩分析</a>
+        </div>
+        <div class="nav">
+
+            <a href="#"  onclick="zhu()">学员信息</button>
+        </div>
+        <div class="nav">
+            <a href="javascript:void(0);">试题分析</a>
+        </div>
+    </div>
+    </br>
+    </br>
+
     <div class="exam shadow-lg p-3 mb-5 bg-white rounded" >
         <div class="scoreAnalysis">
             <div class="examContentWrap">
