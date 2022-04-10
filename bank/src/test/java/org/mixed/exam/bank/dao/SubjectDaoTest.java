@@ -24,4 +24,8 @@ public class SubjectDaoTest {
     {
         System.out.println(subjectDao.getSubjectByID("6207b3a80875141b0f368672"));
     }
+    @Test
+    public void delete(){
+        subjectDao.deleteSubject("624be3685dccf8443e9246be");
+    }
 }

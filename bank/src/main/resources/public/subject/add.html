@@ -132,6 +132,7 @@
                     <option value="C">C</option>
                     <option value="D">D</option>
                 </select>
+                <input type="hidden" name="optionCount" value="4">
             </form>
             <button onclick="addSingleItem()">添加选项</button>
             <button onclick="delSingleItem()">删除选项</button>
@@ -141,12 +142,14 @@
                     let length = select.children().length;
                     let option = "<option value='{0}'>{1}</option>".format(String.fromCharCode(65 + length), String.fromCharCode(65 + length))
                     select.append(option)
+                    $('form.singleChoiceQuestion input[name=optionCount]').val(length+1)
                 }
 
                 function delSingleItem() {
                     let select = $('select.singleChoiceAnswer')
                     if (select.children().length > 1) {
                         select.children().eq(-1).remove()
+                        $('form.singleChoiceQuestion input[name=optionCount]').val(select.children().length)
                     }
                 }
             </script>
@@ -160,10 +163,13 @@
         <div hidden="hidden" class="answer multipleChoiceQuestion">
             <span>设置答案：</span>
             <form class="multipleChoiceQuestion">
-                <div style='display: inline-block'><input type="checkbox" name="answers" value="A">A</div>
-                <div style='display: inline-block'><input type="checkbox" name="answers" value="B">B</div>
-                <div style='display: inline-block'><input type="checkbox" name="answers" value="C">C</div>
-                <div style='display: inline-block'><input type="checkbox" name="answers" value="D">D</div>
+                <div class="multipleChoiceOptions">
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="A">A</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="B">B</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="C">C</div>
+                    <div style='display: inline-block'><input type="checkbox" name="answers" value="D">D</div>
+                </div>
+                <input type="hidden" name="optionCount" value="4">
             </form>
             <button onclick="addMulItem()">添加选项</button>
             <button onclick="delMulItem()">删除选项</button>
@@ -175,18 +181,20 @@
             </div>
             <script>
                 function addMulItem() {
-                    let form = $('form.multipleChoiceQuestion')
-                    let length = form.children().length
+                    let div = $('div.multipleChoiceOptions')
+                    let length = div.children().length
                     let input = "<div style='display: inline-block'><input type='checkbox' name='answers' value='{0}'>{1}</div>"
                         .format(String.fromCharCode(65+length),String.fromCharCode(65+length))
-                    form.append(input)
+                    div.append(input)
+                    $('form.multipleChoiceQuestion input[name=optionCount]').val(length+1)
                 }
                 function delMulItem() {
-                    let form = $('form.multipleChoiceQuestion')
-                    let length = form.children().length
+                    let div = $('div.multipleChoiceOptions')
+                    let length = div.children().length
                     if(length>1)
                     {
-                        form.children().eq(-1).remove()
+                        div.children().eq(-1).remove()
+                        $('form.multipleChoiceQuestion input[name=optionCount]').val(length-1)
                     }
                 }
             </script>
@@ -237,18 +245,21 @@
         <div hidden="hidden" class="answer combinationChoice">
             <span>设置答案：</span>
             <form class="combinationChoice">
-                <div class="choice-line">
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-A">A</div>
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-B">B</div>
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-C">C</div>
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="1-D">D</div>
+                <div class="choice-lines">
+                    <div class="choice-line">
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="1-A">A</div>
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="1-B">B</div>
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="1-C">C</div>
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="1-D">D</div>
+                    </div>
+                    <div class="choice-line">
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="2-A">A</div>
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="2-B">B</div>
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="2-C">C</div>
+                        <div style='display: inline-block'><input type="checkbox" name="answers" value="2-D">D</div>
+                    </div>
                 </div>
-                <div class="choice-line">
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-A">A</div>
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-B">B</div>
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-C">C</div>
-                    <div style='display: inline-block'><input type="checkbox" name="answers" value="2-D">D</div>
-                </div>
+                <input type="hidden" name="optionCount" value="4">
             </form>
             <button onclick="addChoiceLine()">添加行</button>
             <button onclick="delChoiceLine()">删除行</button>
@@ -264,7 +275,7 @@
             <script>
                 function addChoiceLine()
                 {
-                    let lines=$('form.combinationChoice').children()
+                    let lines=$('div.choice-lines').children()
                     let choiceCount=lines.eq(0).children().length
                     let inner=""
                     for(let i=0;i<choiceCount;i++)
@@ -274,18 +285,18 @@
                     }
                     let line="<div class='choice-line'>{0}</div>"
                         .format(inner)
-                    $('form.combinationChoice').append(line)
+                    $('div.choice-lines').append(line)
                 }
                 function delChoiceLine()
                 {
-                    let form = $('form.combinationChoice')
-                    if(form.children().length>1)
+                    let lines = $('div.choice-lines')
+                    if(lines.children().length>1)
                     {
-                        form.children().eq(-1).remove()
+                        lines.children().eq(-1).remove()
                     }
                 }
                 function addCombinationItem(){
-                    let lines=$('form.combinationChoice').children()
+                    let lines=$('div.choice-lines').children()
                     let choiceCount=lines.eq(-1).children().length
                     for(let i=0;i<lines.length;i++)
                     {
@@ -294,15 +305,18 @@
                             .format(i+1,String.fromCharCode(65+choiceCount),String.fromCharCode(65+choiceCount))
                         line.append(input)
                     }
+                    $('form.combinationChoice input[name=optionCount]').val(choiceCount+1)
                 }
                 function delCombinationItem(){
-                    let lines=$('form.combinationChoice').children()
+                    let lines=$('div.choice-lines').children()
                     let choiceCount=lines.eq(-1).children().length
                     if(choiceCount>1)
                     {
                         for(let i=0;i<lines.length;i++)
                         {
                             lines.eq(i).children().eq(-1).remove()
+                            $('form.combinationChoice input[name=optionCount]').val(choiceCount-1)
+
                         }
                     }
                 }

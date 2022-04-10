@@ -18,4 +18,5 @@ import java.util.List;
 public class SingleChoiceQuestion extends Question
 {
     private String answer="null";
+    private Integer optionCount=0;
 }

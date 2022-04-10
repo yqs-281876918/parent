@@ -14,4 +14,5 @@ import java.util.List;
 public class CombinationChoice extends Question
 {
     private List<String> answers= Collections.singletonList("null");
+    private Integer optionCount=0;
 }
