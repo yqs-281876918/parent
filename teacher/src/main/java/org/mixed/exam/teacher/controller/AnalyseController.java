@@ -37,9 +37,20 @@ public class AnalyseController {
         return page;
     }
     @RequestMapping("/count")
-    public int count(Integer examId){
-        System.out.println(examId);
-        return analyseService.count(examId);
+    public float[] count(Integer examId,Integer totalScore){
+        float[] count=new float[9];
+        int [] per=new int[5];
+        count[0]=analyseService.count(examId);
+        count[1]=analyseService.max(examId);
+        count[2]=analyseService.min(examId);
+        count[3]=analyseService.avg(examId);
+        per=analyseService.percentage(examId,totalScore);
+        int num=4;
+        for(int i=0;i<per.length;i++){
+            count[num]=per[i];
+            num++;
+        }
+        return count;
     }
     @RequestMapping("/max")
     public int max(Integer examId){
@@ -58,7 +69,7 @@ public class AnalyseController {
     @RequestMapping("/percentage")
     public int[] percentage(Integer examId,Integer totalScore,Integer personNum){
        System.out.println(totalScore);
-        return analyseService.percentage(examId,totalScore,personNum);
+        return analyseService.percentage(examId,totalScore);
     }
 
     //填空题正确率和错误率
