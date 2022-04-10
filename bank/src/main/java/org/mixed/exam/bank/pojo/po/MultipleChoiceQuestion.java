@@ -17,4 +17,5 @@ import java.util.List;
 @AllArgsConstructor
 public class MultipleChoiceQuestion extends Question {
     private List<String> answers= Collections.singletonList("null");
+    private Integer optionCount=0;
 }

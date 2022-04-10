@@ -147,4 +147,9 @@ public class SubjectDao
         }
         return items;
     }
+
+    public void deleteSubject(String id){
+        Query query=new Query(Criteria.where("id").is(id));
+        mongoTemplate.remove(query,Question.class,DOCUMENT_NAME);
+    }
 }

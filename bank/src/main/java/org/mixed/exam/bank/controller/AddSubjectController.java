@@ -58,11 +58,13 @@ public class AddSubjectController {
     @ResponseBody
     @PostMapping("addSubject/singleChoiceQuestion")
     public String singleChoice(BaseParam baseParam,
-                               HttpServletRequest request, @RequestParam("answer") String answer) {
+                               HttpServletRequest request, @RequestParam("answer") String answer,
+                               @RequestParam("optionCount")int optionCount) {
         SingleChoiceQuestion question = new SingleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswer(answer);
         question.setType("singleChoiceQuestion");
+        question.setOptionCount(optionCount);
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -71,11 +73,13 @@ public class AddSubjectController {
     @ResponseBody
     @PostMapping("addSubject/multipleChoiceQuestion")
     public String multipleChoice(BaseParam baseParam, HttpServletRequest request,
-                                 @RequestParam("answers") List<String> answers) {
+                                 @RequestParam("answers") List<String> answers,
+                                 @RequestParam("optionCount")int optionCount) {
         MultipleChoiceQuestion question = new MultipleChoiceQuestion();
         setBaseInfo(question, request, baseParam);
         question.setAnswers(answers);
         question.setType("multipleChoiceQuestion");
+        question.setOptionCount(optionCount);
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
@@ -110,12 +114,14 @@ public class AddSubjectController {
     @ResponseBody
     @PostMapping("addSubject/combinationChoice")
     public String combinationChoice(BaseParam baseParam,
-                            HttpServletRequest request,
-                            @RequestParam("answers") List<String> answers) {
+                                    HttpServletRequest request,
+                                    @RequestParam("answers") List<String> answers,
+                                    @RequestParam("optionCount")int optionCount) {
         CombinationChoice question = new CombinationChoice();
         setBaseInfo(question, request, baseParam);
         question.setAnswers(answers);
         question.setType("combinationChoice");
+        question.setOptionCount(optionCount);
         addSubjectService.insertQuestion(question);
         return "添加成功";
     }
