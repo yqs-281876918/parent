@@ -63,10 +63,10 @@
                             <table id="table" class="table table-striped mb-0" align="center">
                                 <thead>
                                 <tr>
-                                    <td align="right" colspan="3">考试排名</td>
-                                    <td align="right" colspan="3">学生姓名</td>
-                                    <td align="right" colspan="3">总分</td>
-                                    <td align="right" colspan="3">切屏次数</td>
+                                    <td align="center" colspan="3">考试排名</td>
+                                    <td align="center" colspan="3">学生姓名</td>
+                                    <td align="center" colspan="3">总分</td>
+                                    <td align="center" colspan="3">切屏次数</td>
                                 </tr>
                                 </thead>
                                 <tbody id="data">
@@ -99,10 +99,10 @@
                 //使用反引号,用于定义模板
                 trs+=`
                     <tr>
-                        <td align="right" colspan="3">${count}</td>
-                        <td align="right" colspan="3">${u.username}</td>
-                        <td align="right" colspan="3">${u.totalScore}</td>
-                        <td align="right" colspan="3">${u.antiCount}</td>
+                        <td align="center" colspan="3">${count}</td>
+                        <td align="center" colspan="3">${u.username}</td>
+                        <td align="center" colspan="3">${u.totalScore}</td>
+                        <td align="center" colspan="3">${u.antiCount}</td>
 
                     </tr>
                     `;
@@ -118,35 +118,8 @@
     })
 
 </script>
-<!--<script>-->
-<!--    function find(examId){-->
-<!--        var param={-->
-<!--            "examId":examId,-->
-<!--        };-->
 
-<!--        jQuery.post("/teacher/analyse/findStuList",param,function(rst){-->
-<!--            console.log(rst);-->
-<!--            //alert("查询到了");-->
-<!--            var ar=rst;-->
-<!--            var uu;-->
-<!--            var count=0;-->
-<!--            for(var i=0;i<ar.length;i++){-->
-<!--                uu=ar[i];-->
-<!--                count++;-->
-<!--                var id=uu.id;-->
-<!--                var username=uu.username;-->
-<!--                var totalScore=uu.totalScore;-->
-<!--                var param2={"id":id,"username":username,"totalScore":totalScore};-->
-
-<!--                window.sessionStorage.setItem("id",param2.id);-->
-<!--                window.sessionStorage.setItem("count",count);-->
-<!--                window.sessionStorage.setItem("username",param2.username);-->
-<!--                window.sessionStorage.setItem("totalScore",param2.totalScore);-->
-<!--            }-->
-
-<!--        })-->
-<!--    }-->
-<!--</script>-->
+<!--导出-->
 
 <!--<script>-->
 <!--    function table(){-->

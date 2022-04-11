@@ -110,11 +110,11 @@ public class AnalyseService {
         float per1 = 0,per2=0,per3=0,per4=0 , per5=0;
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
 
-        System.out.println(examId);
-        System.out.println(totalScore);
+        //System.out.println(examId);
+        //System.out.println(totalScore);
 
         for(int i=0;i<examDetails.size();i++){
-            System.out.println(examDetails.get(i).getTotalScore());
+            //System.out.println(examDetails.get(i).getTotalScore());
 
             int score=examDetails.get(i).getTotalScore();
 
@@ -136,8 +136,29 @@ public class AnalyseService {
     }
 
     public int[] getscores(Integer examId,String type){
-        //先得到每个题的满分
-        return analyseDao.getscores(examId,type);
+        //先得到每个人填空题的得分 + 填空题总分
+        float[] list=analyseDao.getscores(examId,type);
+        float sum=list[list.length-1];
+        System.out.println(sum);
+        int per1=0,per2=0,per3=0,per4=0;
+        for(int i=0;i<list.length-1;i++){
+            float per= (float)( Math.round(list[i]*100/sum)/100.0);
+            System.out.println(per);
+            if(per>=0&&per<=0.25){
+                per1++;
+            }
+            if(per>0.25&&per<=0.50){
+                per2++;
+            }
+            if(per>0.50&&per<=0.75){
+                per3++;
+            }
+            if(per>0.75&&per<=1.00){
+                per4++;
+            }
+        }
+        int[] percentage1={per1,per2,per3,per4};
+        return percentage1;
     }
 
 

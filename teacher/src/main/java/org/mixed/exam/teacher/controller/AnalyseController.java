@@ -55,6 +55,7 @@ public class AnalyseController {
         }
         return count;
     }
+
     @RequestMapping("/max")
     public float max(Integer examId){
         return analyseService.max(examId);
@@ -75,14 +76,14 @@ public class AnalyseController {
         return analyseService.percentage(examId,totalScore);
     }
 
-    //填空题正确率和错误率
+    //填空题分数段统计
     @RequestMapping("/apart-percentage")
     public int[] single(Integer examId,String type){
-        int[] scoreList=analyseService.getscores(examId,type);
-        System.out.println(examId);
-        System.out.println(type);
-        return scoreList;
+        int[] percentage=analyseService.getscores(13, "SingleChoiceQuestion");
+
+        return percentage;
     }
+
     //导出
 //    @RequestMapping("/courseScore/export.action")
 //    @ResponseBody
