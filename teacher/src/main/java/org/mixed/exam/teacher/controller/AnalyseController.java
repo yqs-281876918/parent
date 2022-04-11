@@ -7,9 +7,12 @@ import org.mixed.exam.teacher.service.AnalyseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
@@ -80,4 +83,18 @@ public class AnalyseController {
         System.out.println(type);
         return scoreList;
     }
+    //导出
+//    @RequestMapping("/courseScore/export.action")
+//    @ResponseBody
+//    public void export(String code, HttpServletRequest request, HttpServletResponse response){
+//        String thecoursename = analyseService.getNameByCode(code);
+//        Score score = new Score();
+//        score.setCode(code);
+//        List<CourseScore> courseScoreList = scoreDao.selectCourseScoreList(score);
+//        ExportExcel<CourseScore> ee = new ExportExcel<CourseScore>();
+//        String[] headers = {"编号", "学年", "学号", "姓名", "班级", "成绩"};
+//        String fileName = thecoursename + "课程成绩表";
+//        ee.exportExcel(headers, courseScoreList, fileName, response);
+//
+//    }
 }
