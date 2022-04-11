@@ -66,7 +66,7 @@ public class AnalyseService {
         //System.out.println(num);
         return num;
     }
-    public int max(Integer examId){
+    public float max(Integer examId){
         int max=0;
         List<ExamDetail> examDetails = analyseDao.max(examId);
         //System.out.println(examDetails.size());
@@ -77,7 +77,7 @@ public class AnalyseService {
         }
         return max;
     }
-    public int min(Integer examId){
+    public float min(Integer examId){
         int min=0;
         List<ExamDetail> examDetails = analyseDao.min(examId);
         for(int i=0;i<examDetails.size();i++){
@@ -106,8 +106,8 @@ public class AnalyseService {
     }
 
     //计算各分数段人数比例
-    public int[] percentage(Integer examId,Integer totalScore){
-        int per1 = 0,per2=0,per3=0,per4=0 , per5=0;
+    public float[] percentage(Integer examId,Integer totalScore){
+        float per1 = 0,per2=0,per3=0,per4=0 , per5=0;
         List<ExamDetail> examDetails = analyseDao.getAll(examId);
 
         System.out.println(examId);
@@ -128,8 +128,9 @@ public class AnalyseService {
                 if (per > 0.8 && per <= 1) { per5++;}
             }
         }
+        int num=count(examId);
         ////System.out.println(per1);
-        int[] percentage={per1,per2,per3,per4,per5};
+        float[] percentage={per1,per2,per3,per4,per5,num};
         //System.out.println(Arrays.toString(percentage));
         return percentage;
     }

@@ -44,6 +44,7 @@ public class AnalyseDao {
     //找出某场考试的全部学生
     public List<ExamDetail> getStuList(Integer examId){
         Query query = Query.query(Criteria.where("examId").is(examId));
+        query.with(Sort.by(Sort.Direction.DESC,"totalScore"));
         return mongoTemplate.find(query,ExamDetail.class,"examDetail");
     }
     //

@@ -52,7 +52,7 @@
     <div id="top">
         <button type="button"
                 class="btn btn-default "
-                onclick="showSearchDialog()">导出成绩单</button>
+                onclick="table()">导出成绩单</button>
     </div>
     <div id="middle">
         <form id="Form">
@@ -60,7 +60,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped mb-0" align="center">
+                            <table id="table" class="table table-striped mb-0" align="center">
                                 <thead>
                                 <tr>
                                     <td align="right" colspan="3">考试排名</td>
@@ -78,7 +78,6 @@
             </div>
         </form>
     </div>
-
 </div>
 <script>
     function init() {
@@ -91,18 +90,19 @@
             console.log(rst);
             //1、查询查询的数据
             var trs="";
+            var count=0;
             for(var i=0;i<rst.length;i++) {
-
                 //获取每一行对应的用户对象
                 var u=rst[i];
+                count++;
                 //循环一次一行数据
                 //使用反引号,用于定义模板
                 trs+=`
                     <tr>
-                        <ol></ol>
-                        <td colspan="3">${u.username}</td>
-                        <td colspan="3">${u.totalScore}</td>
-                        <td colspan="3">${u.antiCount}</td>
+                        <td align="right" colspan="3">${count}</td>
+                        <td align="right" colspan="3">${u.username}</td>
+                        <td align="right" colspan="3">${u.totalScore}</td>
+                        <td align="right" colspan="3">${u.antiCount}</td>
 
                     </tr>
                     `;
@@ -118,30 +118,100 @@
     })
 
 </script>
-<script>
-    function find(examId){
-        var param={
-            "examId":examId,
-        };
-        jQuery.post("/teacher/analyse/findStuList",param,function(rst){
-            console.log(rst);
-            //alert("查询到了");
-            var ar=rst;
-            var uu;
-            for(var i=0;i<ar.length;i++){
-                uu=ar[i];
-                var id=uu.id;
-                var username=uu.username;
-                var totalScore=uu.totalScore;
-                var param2={"id":id,"username":username,"totalScore":totalScore};
+<!--<script>-->
+<!--    function find(examId){-->
+<!--        var param={-->
+<!--            "examId":examId,-->
+<!--        };-->
 
-                window.sessionStorage.setItem("id",param2.id);
-                window.sessionStorage.setItem("username",param2.username);
-                window.sessionStorage.setItem("totalScore",param2.totalScore);
-            }
+<!--        jQuery.post("/teacher/analyse/findStuList",param,function(rst){-->
+<!--            console.log(rst);-->
+<!--            //alert("查询到了");-->
+<!--            var ar=rst;-->
+<!--            var uu;-->
+<!--            var count=0;-->
+<!--            for(var i=0;i<ar.length;i++){-->
+<!--                uu=ar[i];-->
+<!--                count++;-->
+<!--                var id=uu.id;-->
+<!--                var username=uu.username;-->
+<!--                var totalScore=uu.totalScore;-->
+<!--                var param2={"id":id,"username":username,"totalScore":totalScore};-->
 
-        })
-    }
-</script>
+<!--                window.sessionStorage.setItem("id",param2.id);-->
+<!--                window.sessionStorage.setItem("count",count);-->
+<!--                window.sessionStorage.setItem("username",param2.username);-->
+<!--                window.sessionStorage.setItem("totalScore",param2.totalScore);-->
+<!--            }-->
+
+<!--        })-->
+<!--    }-->
+<!--</script>-->
+
+<!--<script>-->
+<!--    function table(){-->
+<!--        swal({-->
+<!--                title: "是否确认导出",-->
+<!--                text: "(注意：请确定要导出的资产信息，导出的内容为当前列表的所有搜索结果)",-->
+<!--                type: "info",-->
+<!--                showCancelButton: true,-->
+<!--                confirmButtonColor: "#5cb85c",-->
+<!--                confirmButtonText: "确认",-->
+<!--                cancelButtonText: "取消",-->
+<!--                closeOnConfirm: true,-->
+<!--                closeOnCancel: true-->
+<!--            },-->
+<!--            function(isConfirm) {-->
+<!--                if (isConfirm) {-->
+<!--                    perExportData();-->
+<!--                }-->
+<!--            });-->
+<!--    }-->
+<!--    function perExportData() {-->
+<!--        // 获取展示的列-->
+<!--        var columnList = $("#table").bootstrapTable('getVisibleColumns');-->
+<!--        var data = {};-->
+<!--        var consume_start = $("#consume_start").val();-->
+<!--        var consume_end = $("#consume_end").val();-->
+<!--        var columnsArr = new Array();-->
+<!--        var columnNamesArr = new Array();-->
+<!--        // 跳过选择框-->
+<!--        for (var i = 1; i < columnList.length; i++) {-->
+<!--            columnsArr.push(columnList[i].field.trim());-->
+<!--            columnNamesArr.push(columnList[i].title.trim());-->
+<!--        }-->
+<!--        data.columns = columnsArr.join(',');-->
+<!--        data.columnNames = columnNamesArr.join(',');-->
+
+<!--        if ( !! consume_start) {-->
+<!--            data.consume_start = consume_start;-->
+<!--        }-->
+<!--        if ( !! consume_end) {-->
+<!--            data.consume_end = consume_end;-->
+<!--        }-->
+<!--        postDownLoadFile({-->
+<!--            url: 'AnalyseController/export',-->
+<!--            data: data,-->
+<!--            method: 'post'-->
+<!--        });-->
+<!--    }-->
+
+<!--    function postDownLoadFile(options) {-->
+<!--        var config = $.extend(true, {-->
+<!--                method: 'post'-->
+<!--            },-->
+<!--            options);-->
+<!--        var $iframe = $('<iframe id="down-file-iframe" />');-->
+<!--        var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');-->
+<!--        $form.attr('action', config.url);-->
+<!--        for (var key in config.data) {-->
+<!--            $form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');-->
+<!--        }-->
+<!--        $iframe.append($form);-->
+<!--        $(document.body).append($iframe);-->
+<!--        $form[0].submit();-->
+<!--        $iframe.remove();-->
+<!--    }-->
+<!--</script>-->
 </body>
 </html>

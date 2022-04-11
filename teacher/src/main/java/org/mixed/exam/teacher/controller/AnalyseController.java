@@ -7,9 +7,12 @@ import org.mixed.exam.teacher.service.AnalyseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,25 +42,25 @@ public class AnalyseController {
     @RequestMapping("/count")
     public float[] count(Integer examId,Integer totalScore){
         float[] count=new float[9];
-        int [] per=new int[5];
+        float[] per=new float[5];
         count[0]=analyseService.count(examId);
         count[1]=analyseService.max(examId);
         count[2]=analyseService.min(examId);
         count[3]=analyseService.avg(examId);
         per=analyseService.percentage(examId,totalScore);
         int num=4;
-        for(int i=0;i<per.length;i++){
+        for(int i=0;i<per.length-1;i++){
             count[num]=per[i];
             num++;
         }
         return count;
     }
     @RequestMapping("/max")
-    public int max(Integer examId){
+    public float max(Integer examId){
         return analyseService.max(examId);
     }
     @RequestMapping("/min")
-    public int min(Integer examId){
+    public float min(Integer examId){
         return analyseService.min(examId);
     }
     @RequestMapping("/findStuList")
@@ -67,7 +70,7 @@ public class AnalyseController {
     @RequestMapping("/avg")
     public float avg(Integer examId){return analyseService.avg(examId);}
     @RequestMapping("/percentage")
-    public int[] percentage(Integer examId,Integer totalScore,Integer personNum){
+    public float[] percentage(Integer examId,Integer totalScore){
        System.out.println(totalScore);
         return analyseService.percentage(examId,totalScore);
     }
@@ -80,4 +83,18 @@ public class AnalyseController {
         System.out.println(type);
         return scoreList;
     }
+    //导出
+//    @RequestMapping("/courseScore/export.action")
+//    @ResponseBody
+//    public void export(String code, HttpServletRequest request, HttpServletResponse response){
+//        String thecoursename = analyseService.getNameByCode(code);
+//        Score score = new Score();
+//        score.setCode(code);
+//        List<CourseScore> courseScoreList = scoreDao.selectCourseScoreList(score);
+//        ExportExcel<CourseScore> ee = new ExportExcel<CourseScore>();
+//        String[] headers = {"编号", "学年", "学号", "姓名", "班级", "成绩"};
+//        String fileName = thecoursename + "课程成绩表";
+//        ee.exportExcel(headers, courseScoreList, fileName, response);
+//
+//    }
 }
