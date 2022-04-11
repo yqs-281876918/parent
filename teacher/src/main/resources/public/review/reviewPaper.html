@@ -7,7 +7,9 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
+
 <body onload="init()">
+
 <div class="modal" tabindex="-1" id="dialog1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -31,13 +33,14 @@
     //信息
     <div id="info"></div>
     //导航
-    <div class="accordion" id="accordionExample">
+    <div class="accordion" id="accordionExample" style="width:20%; height:80%;">
     </div>
     //主界面
     <div id="review">
 
     </div>
     <button onclick="finishReview()">完成</button>
+    <button onclick="b()">返回</button>
 </div>
 </body>
 <script>
@@ -80,7 +83,6 @@
                 var r=``;
                 jQuery("#info").html(information);
                 for(var i=0;i<subject.length;i++){
-
                     if((i>=1&&subject[i].subjectType!=subject[i-1].subjectType)||i==0){
                         //jQuery("#"+c).html(table);
                         c++;
@@ -102,8 +104,11 @@
                             </div>
                         </div>
                         `;
-                    }else {
-                        table+=`<a href="#mark-${count}">${count}</a>`;
+                        jQuery("#accordionExample").html(rightGuide);
+                    }else{
+                        table+=`<a href="#mark-${count}">${count+1}</a>`;
+                        jQuery("#a2").html(table);
+                        rightGuide=jQuery("#accordionExample").html();
                     }
                     //显示题目
                     console.log(subject[i].answerList);
@@ -114,13 +119,58 @@
                         data:{'id':subject[i].subjectId},
                         success:function (back) {
                             back = eval('('+back+')');
+                            var anser;
+                            var stuanswer;
+                            switch (back.type) {
+                                case "singleChoiceQuestion":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "multipleChoiceQuestion":
+                                    anser="正确答案：";
+                                    stuanswer="";
+                                    for(let ans in back.answers){
+                                        anser+=ans;
+                                    }
+                                    // for(let ans2 in subject[i].answerList){
+                                    //     stuanswer+=ans2;
+                                    // }
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "completion":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break
+                                case "judgment":
+                                    let answer1 = back.answer;
+                                    let answer = '';
+                                    answer = answer + back.options[answer1 - 1];
+                                    anser="正确答案："+answer;
+
+                                    let a = subject[i].answerList;
+                                    let as = '';
+                                    as = as + subject[i].options[a - 1];
+                                    stuanswer=as;
+                                    break;
+                                case "comprehensiveQuestion":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "programProblem":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "CombinationChoice":
+
+                            }
+//subject[i].answerList
                             if(back.answer!=undefined){
                                 r+=`
                                 <div id="mark-${count}">
-                                    <div><p class="text-break">题目：${back.description}</p></div>
+                                    <div><p class="text-break">题目${count+1}：${back.description}</p></div>
                                     <div>分值：${scorelist[count]}</div>
-                                    <div>学生作答情况：${subject[i].answerList}</div>
-                                    <div>标准答案：${back.answer}</div>
+                                    <div>学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}">${anser}</div>
                                     <div>
                                         得分判定:<input type="text" id="score${count}" value="${subject[i].score}" onchange="changeScore(${count})"/>
                                     </div>
@@ -131,8 +181,8 @@
                                 <div id="mark-${count}">
                                     <div><p class="text-break">题目：${back.description}</p></div>
                                     <div>分值：${scorelist[count]}</div>
-                                    <div>学生作答情况：${subject[i].answerList}</div>
-                                    <div>标准答案：${back.answers}</div>
+                                    <div>学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}">${anser}</div>
                                     <div>
                                         得分判定:<input type="text" id="score${count}" value="${subject[i].score}" onchange="changeScore(${count})"/>
                                     </div>
@@ -145,7 +195,7 @@
                     count++;
                 }
                 jQuery("#review").html(r);
-                jQuery("#accordionExample").html(rightGuide);
+                //jQuery("#accordionExample").html(rightGuide);
             }
         })
 
@@ -154,6 +204,15 @@
 <script>
     function changeScore(id) {
         var score = parseInt(jQuery("#score"+id).val());
+        if (!isNaN(score)) { //数字
+
+        }
+        else//字符
+        {
+            alert("请输入合适的数字");
+            jQuery("#score"+id).val(subject[id].score);
+            return;
+        }
         if(score<0){
             alert("分值请勿低于0");
             jQuery("#score"+id).val(0);
@@ -229,6 +288,11 @@
                 location.href="paperList.html";
             }
         })
+    }
+</script>
+<script>
+    function b() {
+        location.href="paperList.html";
     }
 </script>
 </html>

@@ -39,25 +39,25 @@ public class AnalyseController {
     @RequestMapping("/count")
     public float[] count(Integer examId,Integer totalScore){
         float[] count=new float[9];
-        int [] per=new int[5];
+        float[] per=new float[5];
         count[0]=analyseService.count(examId);
         count[1]=analyseService.max(examId);
         count[2]=analyseService.min(examId);
         count[3]=analyseService.avg(examId);
         per=analyseService.percentage(examId,totalScore);
         int num=4;
-        for(int i=0;i<per.length;i++){
+        for(int i=0;i<per.length-1;i++){
             count[num]=per[i];
             num++;
         }
         return count;
     }
     @RequestMapping("/max")
-    public int max(Integer examId){
+    public float max(Integer examId){
         return analyseService.max(examId);
     }
     @RequestMapping("/min")
-    public int min(Integer examId){
+    public float min(Integer examId){
         return analyseService.min(examId);
     }
     @RequestMapping("/findStuList")
@@ -67,7 +67,7 @@ public class AnalyseController {
     @RequestMapping("/avg")
     public float avg(Integer examId){return analyseService.avg(examId);}
     @RequestMapping("/percentage")
-    public int[] percentage(Integer examId,Integer totalScore,Integer personNum){
+    public float[] percentage(Integer examId,Integer totalScore){
        System.out.println(totalScore);
         return analyseService.percentage(examId,totalScore);
     }
