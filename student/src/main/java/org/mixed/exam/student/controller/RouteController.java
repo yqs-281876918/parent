@@ -1,5 +1,6 @@
 package org.mixed.exam.student.controller;
 
+import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.bank.api.client.ExamClient;
 import org.mixed.exam.bank.api.client.PaperClient;
 import org.mixed.exam.bank.api.client.SubjectClient;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,9 +54,19 @@ public class RouteController
         return "exam/list.html";
     }
     @GetMapping("/exam/stuExam")
-    public String info(Model model,@RequestParam("id") Integer examId)
+    public String info(Model model, @RequestParam("id") Integer examId, HttpServletRequest request)
     {
         System.out.println(111);
+//        ExamDetail examDetail = new ExamDetail();
+//        examDetail.setExamId(examId);
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String jwt = cookie.getValue();
+                String userName = AuthUtil.parseUsername(jwt);
+                model.addAttribute("userName",userName);
+            }
+        }
         Exam exam = examClient.getByID(examId);
         Paper paper = paperClient.getByID(exam.getPaperID());
         List<String> subjectIDs=paper.getSubjectIDs();
@@ -64,6 +77,7 @@ public class RouteController
         }
         model.addAttribute("subjects",subjectsMap);
         model.addAttribute("paper",paper);
+        model.addAttribute("exam",exam);
         return "exam/stuExamDetail.html";
     }
 }
