@@ -53,10 +53,10 @@
             <div class="row">
                 <table class="ui table">
                     <tbody>
-<!--                    <tr>-->
-<!--                        <td><span style="font-weight: bolder;">考生学号:</span></td>-->
-<!--                        <td><span th:text="${current_account.username}"></span></td>-->
-<!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td><span style="font-weight: bolder;">考生学号:</span></td>-->
+                    <!--                        <td><span th:text="${current_account.username}"></span></td>-->
+                    <!--                    </tr>-->
                     <tr>
                         <td><span style="font-weight: bolder;">当前考生:</span></td>
                         <td><span th:text="${userName}"></span></td>
@@ -164,14 +164,13 @@
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var contest = [[${exam}]];
-    var questions = [[${subjects}]];
     // var contextPath = [[${#httpServletRequest.getContextPath()}]];
-
     $(function(){
+        let contest = [[${exam}]];
+        let questions = [[${subjects}]]
         // app.init(contextPath);
-        var score = contest.scoreList
-        var scoreList = score.split(",")
+        let score = contest.scoreList
+        let scoreList = score.split(",")
         console.log(questions)
         contestDetailPage.init(contest, questions,scoreList);
     });

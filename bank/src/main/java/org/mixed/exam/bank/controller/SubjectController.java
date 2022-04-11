@@ -6,6 +6,7 @@ import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.pojo.vo.SubjectItem;
 import org.mixed.exam.bank.service.QuerySubjectService;
 import org.mixed.exam.bank.service.SubjectItemService;
+import org.mixed.exam.bank.service.SubjectService;
 import org.mixed.exam.bank.util.HttpUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class SubjectController {
 
     @Autowired
     private QuerySubjectService querySubjectService;
+
+    @Autowired
+    private SubjectService subjectService;
     @ResponseBody
     @GetMapping("api/subjects/type")
     public List<SubjectJson> subjects(@RequestParam("type") String type) {
@@ -72,15 +76,7 @@ public class SubjectController {
     @GetMapping("api/subject/typeList")
     public List<String> getTypeList(@RequestParam("language")String language)
     {
-        if(language.equals("chn"))
-        {
-            return SubjectUtil.getTypeListCHN();
-        }
-        else if(language.equals("en"))
-        {
-            return SubjectUtil.getTypeList();
-        }
-        return new ArrayList<>();
+        return subjectService.getTypeList(language);
     }
     @ResponseBody
     @GetMapping("api/subjects")
@@ -107,7 +103,7 @@ public class SubjectController {
     @GetMapping("subject/json")
     public String getSubjectByID(@RequestParam("id") String id)
     {
-        return subjectDao.getSubjectByID(id);
+        return subjectService.getSubjectByID(id);
     }
     @ResponseBody
     @GetMapping("subject/un-verify")
