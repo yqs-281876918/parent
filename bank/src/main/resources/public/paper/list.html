@@ -8,23 +8,23 @@
 <body onload="getAllPaper()">
 <div>
     <table>
-    <thead>
-    <tr>
-        <td>前言</td>
-        <td>学科</td>
-        <td>开放</td>
-        <td>难度</td>
-        <td>时间</td>
-        <td>管理</td>
-    </tr>
-    </thead>
-    <tbody id="data">
+        <thead>
+        <tr>
+            <td>前言</td>
+            <td>学科</td>
+            <td>开放</td>
+            <td>难度</td>
+            <td>时间</td>
+            <td>管理</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody id="data">
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
 </div>
 
-<div><button onclick="manual()">添加新试卷</button></div>
 </body>
 <script>
     function getAllPaper() {
@@ -34,7 +34,7 @@
             for(let i=0;i<rst.length;i++){
                 let uu=rst[i];
                 sen=sen+`
-                    <tr onclick="showPaper('${uu.id}')">
+                    <tr>
                         <td>${uu.foreWord}</td>
                         <td>${uu.courseID}</td>
                         <td>${uu.difficulty}</td>
@@ -46,6 +46,7 @@
                             <button onclick=\"sealed('${uu.id}')\">封存</button>
                             <button onclick=\"deletePaper('${uu.id}')\">删除</button>
                             <button onclick=\"assign('${uu.id}')\">分配教师</button>
+                            <button onclick=\"showPaper('${uu.id}')\">预览/编辑</button>
                         </td>
                     </tr>`
             }
@@ -56,64 +57,49 @@
 </script>
 <script>
     function sealed(id) {
-        var parm={
+        let param={
             "id":id
         }
-        jQuery.post("/bank/papercontrol/sealed",parm,function (rst) {
+        jQuery.post("/bank/paper/sealed",param,function (rst) {
             location.reload();
         })
     }
 </script>
 <script>
     function copyPaper(id) {
-        var param={
+        let param={
             "id":id
         }
-        jQuery.post("/bank/papercontrol/copy",param,function (rst) {
+        jQuery.post("/bank/paper/copy",param,function () {
             location.reload();
         })
 
     }
 </script>
 <script>
-    function pushPaper(id) {
-        var parm={
-            "id":id
-        }
-        jQuery.post("/bank/papercontrol/push",parm,function (rst) {
-            alert(rst);
-            location.reload();
-        })
-    }
-</script>
-<script>
     function deletePaper(id) {
-        var parm={
+        let param={
             "id":id
         }
-        jQuery.post("/bank/papercontrol/delete",parm,function (rst) {
+        jQuery.post("/bank/paper/delete",param,function (rst) {
             location.reload();
         })
     }
 </script>
 <script>
     function assign(id) {
-        var parm={
+        let param={
             "id":id
         }
-        jQuery.post("/bank/papercontrol/assign",parm,function (rst) {
+        jQuery.post("/bank/paper/assign",param,function (rst) {
             alert(rst);
         })
     }
 </script>
 <script>
-    function showpaper(id) {
+    function showPaper(id) {
         location.href="edit.html?"+'id='+encodeURI(id);
     }
 </script>
-<script>
-    function manual() {
-        location.href="../create/artificial.html";
-    }
-</script>
+
 </html>

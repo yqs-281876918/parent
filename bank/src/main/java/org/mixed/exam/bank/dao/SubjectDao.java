@@ -30,6 +30,10 @@ public class SubjectDao
     public String getSubjectByID(String id)
     {
         SubjectType type = mongoTemplate.findById(id,SubjectType.class,DOCUMENT_NAME);
+        if(type==null)
+        {
+            return "{}";
+        }
         Question q = mongoTemplate.findById(id,SubjectUtil.getClassByType(type.getType()),DOCUMENT_NAME);
         SubjectJson sj=SubjectUtil.subject2Json(q);
         return sj.getJson();

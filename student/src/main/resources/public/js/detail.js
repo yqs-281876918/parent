@@ -14,16 +14,17 @@ var contestDetailPage = {
         contestDetailPage.data.questions = questions;
         contestDetailPage.data.scoreList = scoreList
         contestDetailPage.data.questionsAnswer = questions;
+        console.log(contestDetailPage.data.questions)
 
         for (var i=0;i<contestDetailPage.data.questionsAnswer.length;i++){
             if (contestDetailPage.data.questionsAnswer[i].type == 'singleChoiceQuestion'){
-                contestDetailPage.data.questionsAnswer[i].answer = null;
+                contestDetailPage.data.questionsAnswer[i].answer = '';
             }else if (contestDetailPage.data.questionsAnswer[i].type == 'judgment'){
-                contestDetailPage.data.questionsAnswer[i].answer = null;
+                contestDetailPage.data.questionsAnswer[i].answer = '';
             }else if (contestDetailPage.data.questionsAnswer[i].type == 'comprehensiveQuestion'){
-                contestDetailPage.data.questionsAnswer[i].answer = null;
+                contestDetailPage.data.questionsAnswer[i].answer = '';
             }else {
-                contestDetailPage.data.questionsAnswer[i].answers = null;
+                contestDetailPage.data.questionsAnswer[i].answers = '';
             }
         }
 
@@ -133,7 +134,7 @@ var contestDetailPage = {
                 '                    </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
         } else {
-            $('#currentQuetionTitle').html('(综合题)'+contestDetailPage.data.questions[0].content+'('+contestDetailPage.data.questions[0].score+'分)');
+            $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  id="questionAnswer" rows="20"></textarea>\n' +
                 '                    </div>';
@@ -153,53 +154,53 @@ var contestDetailPage = {
         contestDetailPage.data.currentQuestionIndex = index;
 
         //记录答案
-        if (contestDetailPage.data.questions[0].type == 'singleChoiceQuestion') {
-            contestDetailPage.data.questions[preIndex].answer = '';
+        if (contestDetailPage.data.questions[preIndex].type == 'singleChoiceQuestion') {
+            contestDetailPage.data.questionsAnswer[preIndex].answer = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
-                contestDetailPage.data.questions[preIndex].answer += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answer += $(this).val();
                 // contestDetailPage.data.questions[preIndex].answer += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'multipleChoiceQuestion') {
-            contestDetailPage.data.questions[preIndex].answer = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answers = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questions[preIndex].answer += $(this).val();
-                contestDetailPage.data.questions[preIndex].answer += ',';
+                contestDetailPage.data.questionsAnswer[preIndex].answers += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answers += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'completion') {
-            contestDetailPage.data.questions[preIndex].answer = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answers = '';
             for (var i=0;i<contestDetailPage.data.questions[preIndex].answers.length;i++){
                 var answerStr = '#'+i;
-                contestDetailPage.data.questions[preIndex].answer += $(answerStr).val();
-                contestDetailPage.data.questions[preIndex].answer += ',';
+                contestDetailPage.data.questionsAnswer[preIndex].answers += $(answerStr).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answers += ',';
             }
         } else if (contestDetailPage.data.questions[preIndex].type == 'judgment') {
-            contestDetailPage.data.questions[preIndex].answer = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answer = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questions[preIndex].answer += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answer += $(this).val();
                 // contestDetailPage.data.questions[preIndex].answer += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'combinationChoice') {
-            contestDetailPage.data.questions[preIndex].answer = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answers = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questions[preIndex].answer += $(this).val();
-                contestDetailPage.data.questions[preIndex].answer += ',';
+                contestDetailPage.data.questionsAnswer[preIndex].answers += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answers += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'programProblem') {
-            contestDetailPage.data.questions[preIndex].answer = $("#questionAnswer").val();
+            contestDetailPage.data.questionsAnswer[preIndex].answer = $("#questionAnswer").val();
         } else {
             //console.log($("#questionAnswer").val());
-            contestDetailPage.data.questions[preIndex].answer = $("#questionAnswer").val();
+            contestDetailPage.data.questionsAnswer[preIndex].answer = $("#questionAnswer").val();
         }
 
-        if (contestDetailPage.data.questions[0].type == 'singleChoiceQuestion') {
-            $('#currentQuetionTitle').html('(单选)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+        if (contestDetailPage.data.questions[index].type == 'singleChoiceQuestion') {
+            $('#currentQuetionTitle').html('(单选)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
             var selectOptionStr =
                 '  <div class="grouped fields">\n' +
                 '    <div class="field">\n';
-            for (var i=0;i<contestDetailPage.data.questions[0].optionCount;i++){
+            for (var i=0;i<contestDetailPage.data.questions[index].optionCount;i++){
                 selectOptionStr +=
                     '<div class="ui toggle checkbox" style="display: inline">\n' +
                     '   <input type="radio" name="questionAnswer" value="'+String.fromCharCode(65+i)+'"/>\n' +
@@ -212,19 +213,19 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questions[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answer.indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
             }
-        } else if (contestDetailPage.data.questions[0].type == 'multipleChoiceQuestion') {
-            $('#currentQuetionTitle').html('(多选)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+        } else if (contestDetailPage.data.questions[index].type == 'multipleChoiceQuestion') {
+            $('#currentQuetionTitle').html('(多选)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
             var selectOptionStr =
                 '  <div class="grouped fields">\n' +
                 '    <div class="field">\n';
-            for (var i=0;i<contestDetailPage.data.questions[0].optionCount;i++){
+            for (var i=0;i<contestDetailPage.data.questions[index].optionCount;i++){
                 selectOptionStr +=
                     '<div class="ui toggle checkbox" style="display: inline">\n' +
                     '   <input type="checkbox" name="questionAnswer" value="'+String.fromCharCode(65+i)+'"/>\n' +
@@ -237,15 +238,16 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answers != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questions[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answers.indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
             }
-        } else if (contestDetailPage.data.questions[0].type == 'completion') {
-            $('#currentQuetionTitle').html('(填空)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+        } else if (contestDetailPage.data.questions[index].type == 'completion') {
+            $('#currentQuetionTitle').html('(填空)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            console.log(contestDetailPage.data.questions[index].answers)
             var selectOptionStr =
                 '  <div class="grouped fields">\n';
             for (var i=0;i<contestDetailPage.data.questions[0].answers.length;i++){
@@ -259,98 +261,98 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answers != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questions[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answers.indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
             }
-        }else if (contestDetailPage.data.questions[0].type == 'multipleChoiceQuestion') {
-            $('#currentQuetionTitle').html('(判断)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
-            var selectOptionStr =
-                '  <div class="grouped fields">\n' +
-                '    <div class="field">\n';
-            for (var i=0;i<contestDetailPage.data.questions[0].optionCount;i++){
-                selectOptionStr +=
-                    '<div class="ui toggle checkbox" style="display: inline">\n' +
-                    '   <input type="checkbox" name="questionAnswer" value="'+String.fromCharCode(65+i)+'"/>\n' +
-                    '   <label>'+String.fromCharCode(65+i)+'&nbsp;&nbsp;&nbsp;&nbsp;</label>\n' +
-                    '</div>\n'
-            }
-            selectOptionStr +=
+        }else if (contestDetailPage.data.questions[index].type == 'judgment') {
+            $('#currentQuetionTitle').html('(判断)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var selectOptionStr = '<div class="grouped fields">\n' +
+                '    <div class="field">\n' +
+                '      <div class="ui toggle checkbox">\n' +
+                '        <input type="radio" name="questionAnswer" value="T"/>\n' +
+                '        <label>True&nbsp;&nbsp;&nbsp;&nbsp;</label>\n' +
+                '      </div>\n' +
+                '    </div>\n' +
+                '    <div class="field">\n' +
+                '      <div class="ui toggle checkbox">\n' +
+                '        <input type="radio" name="questionAnswer" value="F"/>\n' +
+                '        <label>False&nbsp;&nbsp;&nbsp;&nbsp;</label>\n' +
+                '      </div>\n' +
                 '    </div>\n' +
                 '  </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questions[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answer.indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
             }
-        }else if (contestDetailPage.data.questions[0].type == 'multipleChoiceQuestion') {
-            $('#currentQuetionTitle').html('(组合选择)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
-            var selectOptionStr =
-                '  <div class="grouped fields">\n' +
-                '    <div class="field">\n';
-            for (var i=0;i<contestDetailPage.data.questions[0].optionCount;i++){
+        }else if (contestDetailPage.data.questions[index].type == 'combinationChoice') {
+            $('#currentQuetionTitle').html('(组合选择)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var topics = contestDetailPage.data.questions[index].answers;
+            var answerLength = topics.length;
+            var topic = topics[answerLength-1]
+            console.log(topic)
+            var topicCount = topic.split("-")[0]
+            console.log(topicCount)
+            var selectOptionStr = ''
+            for (var j=0;j<topicCount;j++){
                 selectOptionStr +=
-                    '<div class="ui toggle checkbox" style="display: inline">\n' +
-                    '   <input type="checkbox" name="questionAnswer" value="'+String.fromCharCode(65+i)+'"/>\n' +
-                    '   <label>'+String.fromCharCode(65+i)+'&nbsp;&nbsp;&nbsp;&nbsp;</label>\n' +
-                    '</div>\n'
+                    '  <div class="grouped fields">\n' +
+                    '    <div class="field">\n'+(j+1)+'.&nbsp;&nbsp;';
+                for (var i=0;i<contestDetailPage.data.questions[index].optionCount;i++){
+                    selectOptionStr +=
+                        '<div class="ui toggle checkbox" style="display: inline">\n' +
+                        '   <input type="checkbox" name="questionAnswer" value="'+(j+1)+'-'+String.fromCharCode(65+i)+'"/>\n' +
+                        '   <label>'+String.fromCharCode(65+i)+'&nbsp;&nbsp;&nbsp;&nbsp;</label>\n' +
+                        '</div>\n'
+                }
+                selectOptionStr +=
+                    '    </div>\n' +
+                    '  </div>';
             }
-            selectOptionStr +=
-                '    </div>\n' +
-                '  </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answers != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questions[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answers.indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
             }
-        }else if (contestDetailPage.data.questions[0].type == 'multipleChoiceQuestion') {
-            $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
-            var selectOptionStr =
-                '  <div class="grouped fields">\n' +
-                '    <div class="field">\n';
-            for (var i=0;i<contestDetailPage.data.questions[0].optionCount;i++){
-                selectOptionStr +=
-                    '<div class="ui toggle checkbox" style="display: inline">\n' +
-                    '   <input type="checkbox" name="questionAnswer" value="'+String.fromCharCode(65+i)+'"/>\n' +
-                    '   <label>'+String.fromCharCode(65+i)+'&nbsp;&nbsp;&nbsp;&nbsp;</label>\n' +
-                    '</div>\n'
-            }
-            selectOptionStr +=
-                '    </div>\n' +
-                '  </div>';
+        }else if (contestDetailPage.data.questions[index].type == 'programProblem') {
+            $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var selectOptionStr = '<div class="field">\n' +
+                '                        <textarea  name="questionAnswer" id="questionAnswer" rows="20"></textarea>\n' +
+                '                    </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questions[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answer.indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
             }
         }else {
-            $('#currentQuetionTitle').html('(问答)'+contestDetailPage.data.questions[index].content+'('+contestDetailPage.data.questions[index].score+'分)');
+            $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
             var selectOptionStr = '<div class="field">\n' +
-                '                        <textarea  id="questionAnswer" name="questionAnswer" rows="20"></textarea>\n' +
+                '                        <textarea  id="questionAnswer" rows="20"></textarea>\n' +
                 '                    </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questions[index].answer != '') {
-                $('#questionAnswer').val(contestDetailPage.data.questions[index].answer);
+            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
+                $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[index].answer);
             }
         }
 
