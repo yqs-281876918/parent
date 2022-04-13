@@ -46,8 +46,9 @@
         <div class="form-group">
             <label>题目:</label>
             <div id="questions">
+                <caption>题目列表</caption>
+                <input type="button" class="btn btn-success" value="▼/▲" onclick="hide_show()"/>
                 <table class="table table-striped">
-                    <caption>题目列表</caption>
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -59,15 +60,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="item,itemStat : ${items}">
+                    <tr th:each="item,itemStat : ${subjectItems}">
                         <td class="id" th:text="${item.id}"></td>
                         <td th:text="${item.type}"></td>
                         <td th:text="${item.introduction}"></td>
                         <td th:text="${item.date}"></td>
                         <td th:text="${item.difficulty}"></td>
                         <td>
-                            <a th:href="'/bank/subject/detail.html?id='+[[${item.id]]">详情</a>
-                            <button th:onclick="deleteSubject(this,[[${item.id}]])">删除</button>
+                            <a th:href="@{/subject/detail.html(id=${item.id})}" target="_blank">详情</a>
                         </td>
                     </tr>
                     </tbody>
@@ -102,6 +102,16 @@
         };
 
     })
+    let display=true
+    function hide_show(){
+        if(display===true){
+            $('table.table').hide()
+            display=false
+        } else {
+            $('table.table').show()
+            display=true
+        }
+    }
 </script>
 </body>
 </html>

@@ -59,4 +59,9 @@
         from chooseClass,users
         where cno = #{cno} AND sname = users.username
     </select>
+    <select id="getRealName" resultType="java.lang.String">
+        select realName
+        from users
+        where username = #{username}
+    </select>
 </mapper>

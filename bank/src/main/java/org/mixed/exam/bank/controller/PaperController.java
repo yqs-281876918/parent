@@ -54,24 +54,6 @@ public class PaperController {
     public List<Paper> getControl(@RequestParam("teacherid") String teacherid){
         return paperService.getControl(teacherid);
     }
-    //封存
-    @ResponseBody
-    @PostMapping("/paper/sealed")
-    public void sealed(@RequestParam("id") String id){
-        paperService.sealed(id);
-    }
-    //预览
-    @ResponseBody
-    @PostMapping("/paper/get")
-    public Paper showOne(@RequestParam("id") String id){
-        return paperService.getPaper(id);
-    }
-    //编辑
-    @ResponseBody
-    @PostMapping("/paper/edit")
-    public Paper edit(@RequestParam("id") String id){
-        return paperService.edit(id);
-    }
     //复制
     @ResponseBody
     @PostMapping("/paper/copy")

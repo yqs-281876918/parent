@@ -3,43 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>我的测试</title>
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/stu_css.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css}">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <caption>试卷列表</caption>
-                <thead>
-                <tr>
-                    <th>考试名</th>
-                    <th>开始时间</th>
-                    <th>测试时长</th>
-                    <th>允许迟到时间</th>
-<!--                    <th>允许提早交卷时间</th>-->
-                    <th>测试说明</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="item,status : ${exams}">
-                    <td th:text="${item.examName}"></td>
-                    <td th:text="${#dates.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <td th:text="${item.testTime}"></td>
-                    <td th:text="${item.lateTime}"></td>
+<div id="wrap">
+    <div id="header">
+        <div class="itest-logo"></div>
+        <span class="itestName">MIXED考试平台</span>
+        <ul class="h-list">
+            <li class="level1 ">
+                <a  class="fir le-bg">我的测试</a>
+            </li>
+        </ul>
+        <div class="per-infor" style="top:0px">
+            <!--            <img  id="userlogo3" src="" class="person-head" style="width:30px;height:30px;border-radius: 50%;">-->
+            <a href="#" class="infor dropdown-toggle" data-toggle="dropdown" aria-expanded="false" th:text="${realName}"></a>
 
-                    <td th:text="${item.introduce}"></td>
-                    <td>
-                        <span th:if="${item.status == 1}">未开始</span>
-                        <a th:if="${item.status == 2}" th:href="@{/exam/stuExam(id=${item.id})}">加入测试</a>
-                        <span th:if="${item.status == 3}">已结束</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">个人中心</a>
+                <a class="dropdown-item" href="#">退出登录</a>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div id="test-con">
+        <div class="now-his">
+            <a  class="now select">班级测试</a>
+        </div>
+
+
+
+        <div class="clear"></div>
+
+        <div id="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th class="my-word" style="cursor:default;">考试名</th>
+                            <th class="my-word" style="cursor:default;">开始时间</th>
+                            <th class="my-word" style="cursor:default;">测试时长</th>
+                            <th class="my-word" style="cursor:default;">允许迟到时间</th>
+                            <!--                    <th>允许提早交卷时间</th>-->
+                            <th class="my-word" style="cursor:default;">测试说明</th>
+                            <th class="my-word" style="cursor:default;">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item,status : ${exams}">
+                            <td th:text="${item.examName}"></td>
+                            <td th:text="${#dates.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${item.testTime}"></td>
+                            <td th:text="${item.lateTime}"></td>
+
+                            <td th:text="${item.introduce}"></td>
+                            <td>
+                                <span th:if="${item.status == 1}">未开始</span>
+                                <a th:if="${item.status == 2}" th:href="@{/exam/stuExam(id=${item.id})}">加入测试</a>
+                                <span th:if="${item.status == 3}">已结束</span>
+                                <span th:if="${item.status == 4}">已完成,待批阅</span>
+                                <span th:if="${item.status == 5}" th:text="${item.studentScore}"></span>
+                                <a th:if="${item.status == 5}" th:href="@{/exam/stuExam(id=${item.id})}">回顾测试</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

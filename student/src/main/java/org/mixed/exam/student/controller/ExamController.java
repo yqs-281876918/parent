@@ -72,10 +72,11 @@ public class ExamController {
             }else {
                 String ans = answer.getAnswerList().get(0);
                 String[] list = ans.split(",");
-                List<String> answerList = null;
+                List<String> answerList = new ArrayList<>();
                 for (int i=0;i<list.length;i++){
                     answerList.add(list[i]);
                 }
+                System.out.println(answerList);
                 answer.setAnswerList(answerList);
             }
         }
