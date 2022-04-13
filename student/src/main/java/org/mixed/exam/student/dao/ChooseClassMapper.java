@@ -23,4 +23,6 @@ public interface ChooseClassMapper {
     long getCountStudent(long cno);
     //班级人员信息详情
     List<ChooseClass> getClassDetail(long cno);
+    //得到用户真实姓名
+    String getRealName(String username);
 }

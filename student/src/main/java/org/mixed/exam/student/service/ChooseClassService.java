@@ -26,6 +26,10 @@ public class ChooseClassService {
     public List<ChooseClass> selectAllClass(String sname){
         return chooseClassMapper.selectAllClass(sname);
     }
+    //得到学生真实姓名
+    public String getRealName(String username){
+        return chooseClassMapper.getRealName(username);
+    }
     //学生退出班级
     public int quitClass(long cno ,String sname){
         return chooseClassMapper.quitClass(cno,sname);

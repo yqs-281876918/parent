@@ -20,4 +20,5 @@ public class Exam
     private String[] antiSettings;
     private String introduce;
     private Integer status;//考试状态
+    private Integer studentScore;//学生分数
 }
