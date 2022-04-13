@@ -6,6 +6,9 @@ import org.mixed.exam.bank.api.client.PaperClient;
 import org.mixed.exam.bank.api.client.SubjectClient;
 import org.mixed.exam.bank.api.pojo.po.Exam;
 import org.mixed.exam.bank.api.pojo.po.Paper;
+import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
+import org.mixed.exam.student.service.ChooseClassService;
+import org.mixed.exam.student.service.ExamDetailService;
 import org.mixed.exam.student.service.ExamService;
 import org.mixed.exam.student.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +35,25 @@ public class RouteController
     private SubjectClient subjectClient;
     @Autowired
     private ExamService examService;
+    @Autowired
+    private ExamDetailService examDetailService;
+    @Autowired
+    private ChooseClassService classService;
     @GetMapping("/exam/list")
-    public String exam_list(Model model,@RequestParam("cno") long cno)
+    public String exam_list(Model model,@RequestParam("cno") long cno,HttpServletRequest request)
     {
+        String userName = "";
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String jwt = cookie.getValue();
+                userName = AuthUtil.parseUsername(jwt);
+            }
+        }
+        String realName = classService.getRealName(userName);
+        if (realName==null){
+            realName = userName;
+        }
         List<Exam> exams=examService.getExamByCno(cno);
         for (Exam exam:exams){
             Date date = new Date();
@@ -49,7 +68,20 @@ public class RouteController
             else {
                 exam.setStatus(3);
             }
+            List<ExamDetail> examDetailList = examDetailService.selectExamDetail(userName,exam.getId());
+            if (examDetailList!=null){
+                for (ExamDetail examDetail:examDetailList){
+                    if (examDetail.getFinishReview()==0){
+                        exam.setStatus(4);
+                    }
+                    else {
+                        exam.setStatus(5);
+                        exam.setStudentScore(examDetail.getTotalScore());
+                    }
+                }
+            }
         }
+        model.addAttribute("realName",realName);
         model.addAttribute("exams",exams);
         return "exam/list.html";
     }

@@ -69,6 +69,24 @@ public class ChooseClassController {
         }
         return classService.selectAllClass(sname);
     }
+    //得到学生真实姓名
+    @RequestMapping("/class/realName")
+    public String getRealName(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        String sname = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String jwt = cookie.getValue();
+                String userName = AuthUtil.parseUsername(jwt);
+                sname = userName;
+            }
+        }
+        if (classService.getRealName(sname)!=null){
+            return classService.getRealName(sname);
+        }else {
+            return sname;
+        }
+    }
     //学生退出班级
     @RequestMapping("/class/quit")
     public int quitClass(long cno,String sname){
