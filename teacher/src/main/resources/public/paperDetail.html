@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试题分析</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
+    <meta name="MSSmartTagsPreventParsing" content="True" />
+    <meta http-equiv="MSThemeCompatible" content="Yes" />
+    <meta name="renderer" content="webkit"  />
+    <link href="https://itestres.unipus.cn/itest-saas/static/its/lib/sfront/student/css/stu_css.css?v=202203111833" rel="stylesheet">
+
+    <style>
+        .clsTest{
+            border-color: #2dbf7f !important;
+            color: #2dbf7f !important;
+        }
+        .h4{
+            cursor: pointer;
+        }
+        #page_div #left{
+            float: left;
+        }
+        #page_div #right{
+            float: right;
+        }
+    </style>
+
+</head>
+<body onload="init()">
+<div id="container">
+    <div class="examContentTitle content examName" id="examName">的试题分析</div>
+    <div id="choose type" class="questionSelDept dropdown selDept pull-left dropdownBtn open">
+        <select id="choose" name="choose" class="form-control">
+            <option value="All" selected = "selected">全部题型</option>
+            <option value="SingleChoiceQuestion">单选题</option>
+            <option value="MultipleChoiceQuestion">多选题</option>
+            <option value="Completion">填空题</option>
+            <option value="Judgment">判断题</option>
+            <option value="ComprehensiveQuestion">综合题</option>
+            <option value="CombinationChoice">综合（组合）选择题</option>
+            <option value="ProgramProblem">程序题</option>
+        </select>
+    </div>
+    <div class="questionAnalysis">
+        <div class="questionItems">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                <tr>
+                    <td >题型</td>
+                    <td >题号</td>
+                    <td >题目内容</td>
+                    <td >答题人数</td>
+                    <td >正确人数</td>
+                    <td >得分率</td>
+                    <td> </td>
+                </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="6">
+                        <div id="page_div">
+                            <div id="left">
+                                <span id="pageNum"></span>/<span id="pages"></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                共<span id="totals"></span>道题目
+                            </div>
+                            <div id="right">
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+<!--        <div class="panel-group allContent" id="allContent" role="tablist" aria-multiselectable="true">-->
+<!--            <div class="panel panel-default everyContent">-->
+<!--                <div class="panel-heading" role="tab" id="heading">-->
+<!--                    <ul></ul>-->
+<!--                </div>-->
+<!--                <div id="collapse detail" class="collapse show" role="tabpanel" aria-labelledby="heading" aria-expanded="true" style>-->
+<!--                    <div class="panel-body">-->
+<!--                        <div class="questionDetail clear title" >-->
+<!--                            <td class="questionLeft titleAnswer pull-left">答题情况</td>-->
+<!--                            <td class-="questionRight titleScore pull-left">得分率</td>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+    </div>
+</div>
+<script>
+    var pageNum=1;
+    var pageSize=10;
+    var pageNums=0;
+    function init(){
+        var examId = sessionStorage.getItem("id");
+        var examName=sessionStorage.getItem("examName");
+        jQuery("#examName").html(examName);
+
+        var param={
+            "pageNum":pageNum,
+            "pageSize":pageSize,
+            "examId":examId,
+            "type":type
+        };
+        jquery.post("/teacher/analyse/itemDetail",param,function(rst){
+            pageNums=rst.pages;
+            jQuery("#pages").html(pageNums);
+            jQuery("#pageNum").html(pageNum);
+            jQuery("#totals").html(rst.total);
+
+            var itemArr = rst.list;
+            var trs=''
+            for(var i=0;i<itemArr.length;i++){
+                var u=itemArr[i];
+                trs+=`
+<tr>
+    <td style="cursor:default;"></td>
+    <td style="cursor:default;"></td>
+    <td style="cursor:default;">${s.users.realName}</td>
+    <td style="cursor:default;">${s.data}</td>
+    <td style="cursor:default;" class="student"></td>
+    <td style="cursor:default;"></td>
+    <td style="cursor:default;" nowrap>
+        <a href="#" style="color: #d42020" onclick="showDeleteStudentDialog('${s.sname}','${s.users.realName}')">删除学生</a>
+    </td>
+</tr>
+                `
+            }
+
+        })
+    }
+</script>
+
+</body>
+</html>
