@@ -162,7 +162,7 @@ public class AnalyseService {
     public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
         PageInfo<Answer> pageInfo = null;
         PageHelper.startPage(pageNum,pageSize);
-        List<Answer> a = analyseDao.getAllDetail(13);
+        List<Answer> a = analyseDao.getAllDetail(examId);
         pageInfo=new PageInfo<Answer>(a,5);
         return pageInfo;
     }
@@ -174,6 +174,15 @@ public class AnalyseService {
         pageInfo=new PageInfo<Answer>(a,5);
         return pageInfo;
     }
+    //根据题目id查找题目描述
+    public String getDescription(String subjectId){
+        return analyseDao.getDescription(subjectId);
+    }
+    //每道题答对的人数
+//    public int[] getsingleRight(Integer examId, String type) {
+//        List<Answer> a = analyseDao.getElseDetail(examId,type);
+//        return a;
+//    }
 
 //    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
 //        PageInfo<Answer> pageInfo = null;
