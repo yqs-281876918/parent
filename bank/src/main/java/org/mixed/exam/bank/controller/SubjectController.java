@@ -66,6 +66,13 @@ public class SubjectController {
     }
 
     @ResponseBody
+    @PostMapping("api/subject/fail")
+    public void failSubject(@RequestParam("id")String id)
+    {
+        subjectDao.deleteSubject(id);
+    }
+
+    @ResponseBody
     @GetMapping("api/subject/count")
     public Integer getCountByType(@RequestParam("type") String type,@RequestParam("courseID") String courseID)
     {
