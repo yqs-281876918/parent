@@ -29,7 +29,7 @@ public class SubjectItemController
     @GetMapping("subject/list")
     public List<SubjectItem> list(Model model)
     {
-        List<SubjectItem> items = subjectDao.getUnVerifySubjectItems();
+        List<SubjectItem> items = subjectItemService.getItems();
         model.addAttribute("items",items);
         return subjectItemService.getItems();
     }

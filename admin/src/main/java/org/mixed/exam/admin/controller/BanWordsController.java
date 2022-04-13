@@ -33,17 +33,6 @@ public class BanWordsController {
         String authorizationHeader = requestAttributes.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
         return authorizationHeader;
     }
-//    @ResponseBody
-//    @PostMapping("/banWords/addWord")
-//    public int addWord(@RequestParam("word")String word){
-//        return banWordsService.addWord(word);
-//    }
-
-//    @ResponseBody
-//    @GetMapping("/banWords/serchWord")
-//    public List<String> serchWord(@RequestParam("word")String word){
-//        return banWordsService.serchWord(word);
-//    }
 
     @ResponseBody
     @PostMapping("/banWords/addWord")
@@ -62,54 +51,7 @@ public class BanWordsController {
     }
     @ResponseBody
     @PostMapping("/banWords/changeWord")
-    public int deleteWord(@RequestParam("id")String id,@RequestParam("word")String word){
-        return banWordsService.changeWord(id,word);
+    public int deleteWord(@RequestParam("id")String id,@RequestParam("word")String word) {
+        return banWordsService.changeWord(id, word);
     }
-
-
-
-//    public List<Map<String, Object>> isItSame(@RequestParam("word")String word){
-//        String sql = "SELECT * FROM verify WHERE word = '"+word+"'";
-//        List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
-//        return list;
-//    }
-
-    /*@ResponseBody
-    @PostMapping("/banWords/addWord")
-    public int addWord(@RequestParam("word")String word){
-        System.out.println(isItSame(word));
-        if(isItSame(word).isEmpty()){
-            //add
-            String sql2="INSERT INTO verify VALUES ('"+word+"')";
-            if(jdbcTemplate.update(sql2)>0){
-                return 1;
-            }else {
-                return 0;
-            }
-        }else {
-            return 0;
-        }
-
-    }
-    @ResponseBody
-    @GetMapping("/banWords/serchWord")
-    public List<Map<String, Object>> serchWord(@RequestParam("word")String word){
-        String sql = "SELECT * FROM verify WHERE word like '%"+word+"%'";
-        List<Map<String, Object>> list=jdbcTemplate.queryForList(sql);
-        return list;
-    }
-    @ResponseBody
-    @PostMapping("/banWords/deleteWord")
-    public int deleteWord(@RequestParam("word")String word){
-        String sql = "DELETE FROM verify where word = ?";
-        //String sql = "DELETE FROM verify WHERE word = '"+word+"'";
-        //jdbcTemplate.update(sql,"lucy");
-        Object[] args={word};
-        System.out.println(jdbcTemplate.update(sql,args));
-        if(true){
-            return 1;
-        }else {
-            return 0;
-        }
-    }*/
 }

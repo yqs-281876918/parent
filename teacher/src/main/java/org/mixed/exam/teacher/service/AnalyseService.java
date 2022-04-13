@@ -6,10 +6,12 @@ import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.javassist.compiler.ast.StringL;
 import org.apache.ibatis.jdbc.Null;
 import org.mixed.exam.bank.api.pojo.po.Exam;
+import org.mixed.exam.bank.api.pojo.po.Question;
 import org.mixed.exam.bank.api.pojo.po.exam.Answer;
 import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.dao.AnalyseDao;
 import org.mixed.exam.teacher.mapper.AnalyseMapper;
+import org.mixed.exam.teacher.pojo.po.ChooseClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,6 +158,35 @@ public class AnalyseService {
         int[] percentage1={per1,per2,per3,per4};
         return percentage1;
     }
+    //查找一场考试所有题的题型 、 题号
+    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
+        PageInfo<Answer> pageInfo = null;
+        PageHelper.startPage(pageNum,pageSize);
+        List<Answer> a = analyseDao.getAllDetail(13);
+        pageInfo=new PageInfo<Answer>(a,5);
+        return pageInfo;
+    }
+    //按题型查找
+    public PageInfo<Answer> getElseDetil(int pageNum, int pageSize, Integer examId,String type) {
+        PageInfo<Answer> pageInfo = null;
+        PageHelper.startPage(pageNum,pageSize);
+        List<Answer> a = analyseDao.getElseDetail(examId,type);
+        pageInfo=new PageInfo<Answer>(a,5);
+        return pageInfo;
+    }
+
+//    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
+//        PageInfo<Answer> pageInfo = null;
+//        PageHelper.startPage(pageNum,pageSize);
+//        List<Answer> a = analyseDao.getAllDetail(examId);
+//        String[] id = new String[a.size()];
+//        for(int i=0;i<a.size();i++){
+//            id[i]= a.get(i).getSubjectId();
+//        }
+//        String[] q = analyseDao.getDescription(id);
+//        pageInfo=new PageInfo<Answer>(a,5);
+//        return pageInfo;
+//    }
 
 
 }

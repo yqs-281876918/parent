@@ -6,13 +6,14 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.common.min.js"></script>
 </head>
 <body onload="init()">
 <div id="container" style="height: 400px">
     <div id="choose type">
         <select id="choose" name="choose" class="form-control">
-            <option value="SingleChoiceQuestion" selected = "selected">单选题</option>
+            <option value="ALL" selected = "selected">全部题型</option>
+            <option value="SingleChoiceQuestion" >单选题</option>
             <option value="MultipleChoiceQuestion">多选题</option>
             <option value="Completion">填空题</option>
             <option value="Judgment">判断题</option>
@@ -21,21 +22,25 @@
             <option value="ProgramProblem">程序题</option>
         </select>
     </div>
-    <div id="pie" class="pie"></div>
-    <div id="bar" class="bar"></div>
-</div>
 
+</div>
+<div id="pie" class="pie"></div>
+<div id="bar" class="bar"></div>
 <script>
-    var Barlist=[];
+    var Barlist;
 
     function init(){
         //var examId = sessionStorage.getItem("examId");
         //var totalScore = sessionStorage.getItem("totalScore");
         //var personNum = sessionStorage.getItem("personNum");
-
+        var param={
+            "examId":13,
+            "type":'SingleChoiceQuestion'
+        };
         var myChart = echarts.init(document.getElementById('pie'));
         // 指定图表的配置项和数据
         var option = {
+            backgroundColor:'#FAFAD2',
             title: {
                 text: '各分数段比例统计',
                 left: 'center',
@@ -43,7 +48,7 @@
                 top: 20,
                 //标题栏字体的颜色
                 textStyle: {
-                    color: 'rgb(0,0,0)'
+                    color: '#ccc'
                 }
             },
             tooltip: {
@@ -55,8 +60,8 @@
                 left: '70%',  //图例距离左的距离
                 y: 'center',  //图例上下居中
             },
-            color:['rgb(109,205,5)', 'rgb(149,162,255)', 'rgb(58,266,355)',
-                'rgb(299,168,249)', 'rgb(355,1,159)'],
+            color:['rgb(203,55,255)', 'rgb(149,162,255)', 'rgb(58,186,255)',
+                'rgb(119,168,249)', 'rgb(235,161,159)'],
             series : [
                 {
                     name: "分数段人数",
@@ -66,12 +71,10 @@
                     radius : '60%',
                     center: ['50%', '50%'],
                     data: [
-
-                        {name: '0%-25%',value: ''},
-                        {name: "25%-50%",value: '' },
-                        {name: "50%-75%",value: '' },
-                        {name: "75%-100%",value: ''},
-
+                        {name: '0.0-25.0',value: ''},
+                        {name: "25.0-50.0",value: '' },
+                        {name: "50.0-75.0",value: '' },
+                        {name: "75.0-100.0",value: ''}
                     ],
                     itemStyle:{
                         normal:{
@@ -92,6 +95,19 @@
             ],
 
         };
+
+        console.log(param);
+        jQuery.post("/teacher/analyse/apart-percentage",param,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            console.log(BarArr);
+            for(var i=0;i<BarArr.length;i++){
+                //option.series[0].data.push(BarArr[i]);
+                option.series[0].data[i].value=BarArr[i];
+            }
+            console.log(option);
+            myChart.setOption(option);
+        })
 
 
         //条形图
@@ -119,21 +135,15 @@
                 data: [],
             }]
         };
-        var param={
-            "examId":13,
-            "type":'SingleChoiceQuestion'
-        };
         console.log(param);
         jQuery.post("/teacher/analyse/apart-percentage",param,function(rst){
             console.log(rst);
-            var BarArr=[];
             BarArr=rst;
             console.log(BarArr);
-            for(var i=0;i<BarArr.length-1;i++){
-                option.series[0].data.push(BarArr[i]);
+            for(var i=0;i<BarArr.length;i++){
                 option1.series[0].data.push(BarArr[i]);
             }
-            myChart.setOption(option);
+            console.log(option1);
             myChart1.setOption(option1);
         })
 

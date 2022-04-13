@@ -4,6 +4,7 @@ import org.mixed.exam.admin.api.client.ClassifyClient;
 import org.mixed.exam.bank.pojo.po.Paper;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.service.PaperService;
+import org.mixed.exam.bank.service.SubjectItemService;
 import org.mixed.exam.bank.service.SubjectService;
 import org.mixed.exam.bank.util.StringUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
@@ -27,18 +28,14 @@ public class EditController {
     private SubjectService subjectService;
     @Autowired
     private ClassifyClient classifyClient;
+    @Autowired
+    private SubjectItemService subjectItemService;
 
     @GetMapping("paper/edit")
     public String edit(Model model,@RequestParam("id") String id){
         Paper paper = paperService.getPaper(id);
         model.addAttribute("paper",paper);
-        List<String> subjectIDs=paper.getSubjectIDs();
-        List<Map<String,Object>> subjectsMap=new ArrayList<>();
-        for(String subjectID : subjectIDs)
-        {
-            subjectsMap.add(StringUtil.jsonToMap(subjectService.getSubjectByID(subjectID)));
-        }
-        model.addAttribute("subjects",subjectsMap);
+        model.addAttribute("subjectItems",subjectItemService.getItems());
         model.addAttribute("courses",classifyClient.findAllCourse());
         return "paper/edit.html";
     }

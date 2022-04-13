@@ -2,6 +2,8 @@ package org.mixed.exam.teacher.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.bank.api.pojo.po.Exam;
+import org.mixed.exam.bank.api.pojo.po.Question;
+import org.mixed.exam.bank.api.pojo.po.exam.Answer;
 import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.teacher.service.AnalyseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,19 @@ public class AnalyseController {
         int[] percentage=analyseService.getscores(13, "SingleChoiceQuestion");
 
         return percentage;
+    }
+    //跟据
+   //试题分析详情
+    @RequestMapping("/itemDetail")
+    public PageInfo<Answer> itemDetail(int pageNum, int pageSize, Integer examId, String type){
+        //全部题型
+        if(type.equals("ALL")){
+            return analyseService.getAllDetail(pageNum,pageSize,examId);
+        }
+        //选择题型
+        else{
+            return analyseService.getElseDetil(pageNum,pageSize,13,"SingleChoiceQuestion");
+        }
     }
 
     //导出
