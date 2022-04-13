@@ -16,6 +16,14 @@ spring:
     username: root
     password: Mixed2022.
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      host: 42.192.123.219
+      port: 27017
+      database: mixed
+      username: root
+      password: Mixed2022.
+      authentication-database: admin
 eureka:
   client:
     service-url:

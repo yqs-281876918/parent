@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PaperControlService {
+public class PaperService {
     @Autowired
     private PaperDao paperDao;
-
     //取出所有试卷
     public List<Paper> getAll(){
         return paperDao.getAll();
@@ -29,7 +28,7 @@ public class PaperControlService {
         paperDao.sealed(id);
     }
     //预览
-    public Paper showOne(String id){
+    public Paper getPaper(String id){
         return paperDao.getOne(id);
 
     }
@@ -53,10 +52,6 @@ public class PaperControlService {
         n.setRespondentCount(p.getRespondentCount());
         n.setSubjectIDs(p.getSubjectIDs());
         paperDao.savePaper(n);
-    }
-    //发布考试
-    public int push(String id){
-        return 0;
     }
     //删除
     public void delete(String id){

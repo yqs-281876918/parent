@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.spring5.context.IThymeleafBindStatus;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,7 @@ public class AnalyseController {
         }
         return count;
     }
+
     @RequestMapping("/max")
     public float max(Integer examId){
         return analyseService.max(examId);
@@ -75,14 +77,14 @@ public class AnalyseController {
         return analyseService.percentage(examId,totalScore);
     }
 
-    //填空题正确率和错误率
+    //填空题分数段统计
     @RequestMapping("/apart-percentage")
     public int[] single(Integer examId,String type){
-        int[] scoreList=analyseService.getscores(examId,type);
-        System.out.println(examId);
-        System.out.println(type);
-        return scoreList;
+        int[] percentage=analyseService.getscores(13, "SingleChoiceQuestion");
+
+        return percentage;
     }
+
     //导出
 //    @RequestMapping("/courseScore/export.action")
 //    @ResponseBody

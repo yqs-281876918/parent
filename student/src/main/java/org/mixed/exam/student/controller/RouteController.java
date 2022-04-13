@@ -56,9 +56,6 @@ public class RouteController
     @GetMapping("/exam/stuExam")
     public String info(Model model, @RequestParam("id") Integer examId, HttpServletRequest request)
     {
-        System.out.println(111);
-//        ExamDetail examDetail = new ExamDetail();
-//        examDetail.setExamId(examId);
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {

@@ -16,12 +16,12 @@
 <div class="ui fixed inverted menu">
     <a th:href="@{/}" class="header item">
         <!--<img class="ui" th:src="@{/img/logo_flat.png}" width="104" height="24" alt="" />-->
-        <img class="ui" th:src="@{/img/logo.png}" width="156" height="32" alt="" />
+        <img class="ui" th:src="@{/img/logo.png}" width="50" height="50" alt="" />
     </a>
 </div>
 <div class="ui header container">
     <div class="ui large breadcrumb">
-        <a class="section" href="/exam/list"><i class="home icon"></i>在线考试列表</a>
+        <a class="section" th:href="@{/exam/list(cno=${exam.classID})}"><i class="home icon"></i>在线考试列表</a>
         <i class="right chevron icon divider"></i>
         <div class="section" th:text="${exam.examName}"></div>
     </div>
@@ -53,10 +53,10 @@
             <div class="row">
                 <table class="ui table">
                     <tbody>
-<!--                    <tr>-->
-<!--                        <td><span style="font-weight: bolder;">考生学号:</span></td>-->
-<!--                        <td><span th:text="${current_account.username}"></span></td>-->
-<!--                    </tr>-->
+                    <!--                    <tr>-->
+                    <!--                        <td><span style="font-weight: bolder;">考生学号:</span></td>-->
+                    <!--                        <td><span th:text="${current_account.username}"></span></td>-->
+                    <!--                    </tr>-->
                     <tr>
                         <td><span style="font-weight: bolder;">当前考生:</span></td>
                         <td><span th:text="${userName}"></span></td>
@@ -164,14 +164,13 @@
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var contest = [[${exam}]];
-    var questions = [[${subjects}]];
-    var contextPath = [[${#httpServletRequest.getContextPath()}]];
-
+    // var contextPath = [[${#httpServletRequest.getContextPath()}]];
     $(function(){
-        app.init(contextPath);
-        var score = contest.scoreList
-        var scoreList = score.split(",")
+        let contest = [[${exam}]];
+        let questions = [[${subjects}]]
+        // app.init(contextPath);
+        let score = contest.scoreList
+        let scoreList = score.split(",")
         contestDetailPage.init(contest, questions,scoreList);
     });
     /*]]>*/
