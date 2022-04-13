@@ -51,5 +51,10 @@ public class ExamineExercisesController {
     public int pass(@RequestParam("id") String id,@RequestParam("type") String type){
         return subjectClient.passSubject(id,type);
     }
+    @ResponseBody
+    @PostMapping("examineExercises/fail")
+    public void fail(@RequestParam("id") String id){
+        subjectClient.failSubject(id);
+    }
 
 }

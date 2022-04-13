@@ -29,312 +29,310 @@
     #page_div #right{
         float: right;
     }
-    body{
-        background-color: #fff9ed;
-    }
-    table{
-        background-color: #f3fdff;
-    }
-    #tabletitle{
-        background-color: #9d9d9d;
-    }
-    #tablebottom{
-        background-color: #fff9ed;
+    .outer {
+        padding: 40px;
+        box-sizing: border-box;
+        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+        border-radius: 10px;
+        width:1000px;
+        margin-left: 40px;
+        margin-right: 40px;
+        margin-top: 40px;
     }
     #search{
         padding: 10px 20px;
     }
+
 </style>
 <!-- 删除的提示框 -->
-<div class="modal fade" id="delDialog" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">提示</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>您确定要删除【<span id="delUserName"></span>】吗?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        onclick="doDelete()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 删除模态框结束 -->
-
-<!-- 批量选择删除的提示框 -->
-<div class="modal" id="delMulDialog" tabindex="-1">
-    <div class="modal-dialog ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">提示</h5>
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="alert alert-warning" role="alert">
-                您确定要删除选中项吗？
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        onclick="doDeleteMul()">确定</button>
+<div class="outer">
+    <div class="modal fade" id="delDialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">提示</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>您确定要删除【<span id="delUserName"></span>】吗?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="doDelete()">确定</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- 删除模态框结束 -->
-<!-- 修改的提示框 -->
-<div class="modal fade" id="editDialog" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">编辑</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editDialogForm">
-                    <input type="hidden" name="userName" id="userName1">
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户姓名:</label>
-                        <div class="col-8">
-                            <input type="text" id="edit-username" name="edit-username"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户真实姓名:</label>
-                        <div class="col-8">
-                            <input type="text" name="edit-realName" id="edit-realName"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户邮箱:</label>
-                        <div class="col-8">
-                            <input type="text" name="edit-email" id="edit-email"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户联系方式:</label>
-                        <div class="col-8">
-                            <input type="text" name="edit-telephone" id="edit-telephone"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户角色:</label>
-                        <div class="col-8">
-                            <select id="edit-role" name="edit-role"
-                                    class="form-control">
-                                <option value="adm">管理员</option>
-                                <option value="tea1">普通教师</option>
-                                <option value="tea2">高级教师</option>
-                                <option value="stu">学生</option>
-                            </select>
-                        </div>
-                    </div>
+    <!-- 删除模态框结束 -->
 
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        onclick="doEdit()">确定</button>
+    <!-- 批量选择删除的提示框 -->
+    <div class="modal" id="delMulDialog" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">提示</h5>
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    您确定要删除选中项吗？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="doDeleteMul()">确定</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- 修改模态框结束 -->
-<!-- 添加的提示框 -->
-<div class="modal fade" id="addDialog" tabindex="-1" >
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">添加用户</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addDialogForm">
-                    <input type="hidden" name="add-userName" id="add-userName">
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户姓名:</label>
-                        <div class="col-8">
-                            <input type="text" id="add-name" name="add-name"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户真实姓名:</label>
-                        <div class="col-8">
-                            <input type="text" name="add-realName" id="add-realName"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户密码:</label>
-                        <div class="col-8">
-                            <input type="text" name="add-password" id="add-password"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户邮箱:</label>
-                        <div class="col-8">
-                            <input type="text" name="add-email" id="add-email"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">联系方式:</label>
-                        <div class="col-8">
-                            <input type="text" name="add-telephone" id="add-telephone"
-                                   class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-form-label col-3 text-right">用户角色:</label>
-                        <div class="col-8">
-                            <select id="add-role" name="add-role"
-                                    class="form-control">
-                                <option value="adm">管理员</option>
-                                <option value="tea1">普通教师</option>
-                                <option value="tea2">高级教师</option>
-                                <option value="stu">学生</option>
-                            </select>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        id="btn-add">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 添加模态框结束 -->
-
-<!--搜索模态框开始-->
-<div class="modal fade" id="searchDialog" tabindex="-1" >
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">搜索用户</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="search-Form">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">用户名</span>
-                        </div>
-                        <div class="row-8">
-                            <input type="text" id="name" name="userName" class="form-control" placeholder="请输入用户名" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </div>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon2">真实姓名</span>
-                        </div>
-                        <div class="row-8">
-                            <input id="rn" type="text" name="userRealName" class="form-control" placeholder="请输入用户真实姓名" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text row-4" id="basic-addon3">用户角色</span>
-                        </div>
-                        <div class="row-8">
-                            <select id="sle" name="userRole"
-                                    class="form-control">
-                                <option name="userRole" value="adm">管理员</option>
-                                <option name="userRole" value="tea1">高级教师</option>
-                                <option name="userRole" value="tea2">普通教师</option>
-                                <option name="userRole" value="stu">学生</option>
-                            </select>
-                        </div>
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </div>
-
-                    </div>
-                    <div id="search">
-                        <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!--搜索模态框结束-->
-
-<div id="container">
-    <div id="top">
-        <button type="button" class="btn btn-default " onclick="showSearchDialog()">搜索用户</button>
-        <button type="button"
-                class="btn btn-outline-warning btn-danger"
-                onclick="showDeleteMulDialog()">删除</button>
-        <button type="button"
-                class="btn btn-outline-warning btn-danger"
-                onclick="showAddDialog()">添加</button>
-    </div>
-
-    <div id="middle">
-        <form id="Form">
-            <table class="table table-bordered table-hover table-striped">
-                <thead>
-                <tr id="tabletitle" class="unselectable table-bordered">
-                    <td>
-                        <input type="checkbox" id="chAll"
-                               onclick="selectAll(this.checked)">
-                    </td>
-                    <td>用户名</td>
-                    <td>真实名称</td>
-                    <td>用户角色</td>
-                    <td>邮箱</td>
-                    <td>联系方式</td>
-                    <td>管理员操作</td>
-                </tr>
-                </thead>
-
-                <tbody id="data">
-                </tbody>
-
-                <tfoot>
-                <tr id="tablebottom" class="table-bordered">
-                    <td colspan="7">
-                        <div id="page_div">
-                            <div id="right">
+    <!-- 删除模态框结束 -->
+    <!-- 修改的提示框 -->
+    <div class="modal fade" id="editDialog" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">编辑</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editDialogForm">
+                        <input type="hidden" name="userName" id="userName1">
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">用户姓名:</label>
+                            <div class="col-8">
+                                <input type="text" id="edit-username" name="edit-username"
+                                       class="form-control">
                             </div>
                         </div>
-                    </td>
-                </tr>
-                </tfoot>
-            </table>
-        </form>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">用户真实姓名:</label>
+                            <div class="col-8">
+                                <input type="text" name="edit-realName" id="edit-realName"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">用户邮箱:</label>
+                            <div class="col-8">
+                                <input type="text" name="edit-email" id="edit-email"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">用户联系方式:</label>
+                            <div class="col-8">
+                                <input type="text" name="edit-telephone" id="edit-telephone"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">用户角色:</label>
+                            <div class="col-8">
+                                <select id="edit-role" name="edit-role"
+                                        class="form-control">
+                                    <option value="adm">管理员</option>
+                                    <option value="tea1">普通教师</option>
+                                    <option value="tea2">高级教师</option>
+                                    <option value="stu">学生</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="doEdit()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改模态框结束 -->
+    <!-- 添加的提示框 -->
+    <div class="modal fade" id="addDialog" tabindex="-1" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加用户</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDialogForm">
+                        <input type="hidden" name="add-userName" id="add-userName">
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户姓名:</label>
+                            <div class="col-8">
+                                <input type="text" id="add-name" name="add-name"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户真实姓名:</label>
+                            <div class="col-8">
+                                <input type="text" name="add-realName" id="add-realName"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户密码:</label>
+                            <div class="col-8">
+                                <input type="text" name="add-password" id="add-password"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户邮箱:</label>
+                            <div class="col-8">
+                                <input type="text" name="add-email" id="add-email"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;联系方式:</label>
+                            <div class="col-8">
+                                <input type="text" name="add-telephone" id="add-telephone"
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户角色:</label>
+                            <div class="col-8">
+                                <select id="add-role" name="add-role"
+                                        class="form-control">
+                                    <option value="adm">管理员</option>
+                                    <option value="tea1">普通教师</option>
+                                    <option value="tea2">高级教师</option>
+                                    <option value="stu">学生</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            id="btn-add">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加模态框结束 -->
+
+    <!--搜索模态框开始-->
+    <div class="modal fade" id="searchDialog" tabindex="-1" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">搜索用户</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="search-Form">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">用户名</span>
+                            </div>
+                            <div class="row-8">
+                                <input type="text" id="name" name="userName" class="form-control" placeholder="请输入用户名" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">真实姓名</span>
+                            </div>
+                            <div class="row-8">
+                                <input id="rn" type="text" name="userRealName" class="form-control" placeholder="请输入用户真实姓名" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text row-4" id="basic-addon3">用户角色</span>
+                            </div>
+                            <div class="row-8">
+                                <select id="sle" name="userRole"
+                                        class="form-control">
+                                    <option name="userRole" value="adm">管理员</option>
+                                    <option name="userRole" value="tea1">高级教师</option>
+                                    <option name="userRole" value="tea2">普通教师</option>
+                                    <option name="userRole" value="stu">学生</option>
+                                </select>
+                            </div>
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+
+                        </div>
+                        <div id="search">
+                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--搜索模态框结束-->
+
+    <div id="container">
+        <div id="top">
+            <button type="button" class="btn btn-default " onclick="showSearchDialog()">搜索用户</button>
+            <button type="button"
+                    class="btn btn-outline-warning btn-danger"
+                    onclick="showDeleteMulDialog()">删除</button>
+            <button type="button"
+                    class="btn btn-outline-warning btn-danger"
+                    onclick="showAddDialog()">添加</button>
+        </div>
+
+        <div id="middle">
+            <form id="Form">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr id="tabletitle" class="unselectable table-bordered">
+                        <td>
+                            <input type="checkbox" id="chAll"
+                                   onclick="selectAll(this.checked)">
+                        </td>
+                        <td>用户名</td>
+                        <td>真实名称</td>
+                        <td>用户角色</td>
+                        <td>邮箱</td>
+                        <td>联系方式</td>
+                        <td>管理员操作</td>
+                    </tr>
+                    </thead>
+
+                    <tbody id="data">
+                    </tbody>
+
+                    <tfoot>
+                    <tr id="tablebottom" class="table-bordered">
+                        <td colspan="7">
+                            <div id="page_div">
+                                <div id="right">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </form>
+        </div>
     </div>
 </div>
-
 <script>
     function selectAll(f) {
         //找页面控件名为input的并且name=users的控制
@@ -645,7 +643,7 @@
 
             if (rst.list.length > 0) {
                 jQuery("#searchDialog").modal('hide');
-                
+
                 var arrs=rst.list;
                 var trs="";
                 for(var i=0;i<arrs.length;i++) {

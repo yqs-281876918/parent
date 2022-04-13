@@ -31,6 +31,10 @@ public interface SubjectClient
     Integer passSubject(@RequestParam("id")String id,@RequestParam("type")String type);
 
     @ResponseBody
+    @PostMapping("bank/api/subject/fail")
+    void failSubject(@RequestParam("id")String id);
+
+    @ResponseBody
     @GetMapping("bank/api/subject/count")
     Integer getCountByType(@RequestParam("type") String type,@RequestParam("courseID") String courseID);
 

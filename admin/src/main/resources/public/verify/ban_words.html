@@ -4,92 +4,155 @@
     <meta charset="UTF-8">
     <title>违禁词管理</title>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <style>
+        .outer{
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+            border-radius: 10px;
+            width:1000px;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .words{
+            text-align: center;
+            margin: 0 auto;
+
+
+        }
+        .line{
+            border-top: 1px solid #dedede;
+        }
+        .button_add1{
+
+            background: #ffffff;
+            display: inline-block;
+            padding: 6px 10px;
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .button_add2{
+            color: #ffffff;
+            padding: 6px 10px;
+            background: #f14343;
+            display: inline-block;
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body onload="searchWord()">
-<div id="top">
-    违禁词：<input type="text" name="word">
-    <button id="add_word" onclick="addWord()">添加</button>
-    <button id="search" onclick="searchWord()">搜索</button>
+<div class="outer">
+    <div id="top">
+        违禁词：<input type="text" name="word">
+        <button class="button_add1" id="search" onclick="searchWord()">搜索</button>
+        <button class="button_add2" id="add_word" onclick="addWord()">添加</button>
+    </div>
+    <div id="mid">
+        <form id="newsForm">
+            <div class="line">
+                <table class="table table-striped table-hover words ">
+                    <tbody id="data" name="data">
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div id="bottom"></div>
 </div>
-<div id="mid">
-    <form id="newsForm">
-        <table class="table table-striped table-hover ">
-            <tbody id="data" name="data">
-            </tbody>
-        </table>
-    </form>
-</div>
-<div id="bottom"></div>
 </body>
 <script>
     function addWord() {
-        let param={
-            "word":$("input[name='word']").val()};
-        jQuery.post("/admin/banWords/addWord",param,function (rst) {
-            if(rst===1){
-                alert("状态："+rst+" 添加成功");
+        let param = {
+            "word": $("input[name='word']").val()
+        };
+        jQuery.post("/admin/banWords/addWord", param, function (rst) {
+            if (rst === 1) {
+                alert("状态：" + rst + " 添加成功");
                 searchWord()
-            }else if(rst===0){
-                alert("状态："+rst+" 添加失败");
-            }else if(rst===2){
-                alert("状态："+rst+" 添加失败，已经有该词语")
-            }else{
-                alert("状态："+rst+" error");
+            } else if (rst === 0) {
+                alert("状态：" + rst + " 添加失败");
+            } else if (rst === 2) {
+                alert("状态：" + rst + " 添加失败，已经有该词语")
+            } else {
+                alert("状态：" + rst + " error");
             }
         })
     }
 </script>
 <script>
     function deleteWord(word) {
-        let param={
-            "word":word
+        let param = {
+            "word": word
         };
-        jQuery.post("/admin/banWords/deleteWord",param,function (rst) {
-            if(rst===1){
-                alert("状态："+rst+" 删除成功");
-            }else if(rst===0){
-                alert("状态："+rst+" 删除失败");
-            }else{
-                alert("状态："+rst+" error");
+        jQuery.post("/admin/banWords/deleteWord", param, function (rst) {
+            if (rst === 1) {
+                alert("状态：" + rst + " 删除成功");
+            } else if (rst === 0) {
+                alert("状态：" + rst + " 删除失败");
+            } else {
+                alert("状态：" + rst + " error");
             }
         })
     }
 </script>
 <script>
     function searchWord() {
-        let param={
-            "word":$("input[name='word']").val()
+        let param = {
+            "word": $("input[name='word']").val()
         };
-        jQuery.get("/admin/banWords/searchWord",param,function (rst) {
-            let ar=rst;
-            let sw="<div>";
-            for(let i=0;i<ar.length;i++){
-                uu=ar[i];
-                sw=sw+`<div><input name="${i}" id="${i}" type="text" value='`+uu.word+`'>
+        jQuery.get("/admin/banWords/searchWord", param, function (rst) {
+            let ar = rst;
+            let sw = "<div>";
+            for (let i = 0; i < ar.length; i++) {
+                uu = ar[i];
+                sw = sw + `<div><input name="${i}" id="${i}" type="text" value='` + uu.word + `'>
                         <button onclick="changeWord('${uu.id}',${i})" type="button" id="${i}1">修改</button>
                         <button onclick="deleteWord('${uu.word}')" id="${i}2">删除</button></div>`;
             }
-            sw=sw+"</div>";
+            sw = sw + "</div>";
             jQuery("#data").html(sw);
         })
     }
 </script>
 <script>
-    function changeWord(id,i) {
-        let word=document.getElementById(i).value;
-        let param={
-            "id":id,
-            "word":word
+    function changeWord(id, i) {
+        let word = document.getElementById(i).value;
+        let param = {
+            "id": id,
+            "word": word
         }
-        jQuery.post("/admin/banWords/changeWord",param,function (rst) {
-            if(rst===1){
-                alert("状态："+rst+" 修改成功");
-            }else if(rst===0){
-                alert("状态："+rst+" 修改失败");
-            }else if(rst===2){
-                alert("状态："+rst+" 修改失败，已经有该词语")
-            }else{
-                alert("状态："+rst+" error");
+        jQuery.post("/admin/banWords/changeWord", param, function (rst) {
+            if (rst === 1) {
+                alert("状态：" + rst + " 修改成功");
+            } else if (rst === 0) {
+                alert("状态：" + rst + " 修改失败");
+            } else if (rst === 2) {
+                alert("状态：" + rst + " 修改失败，已经有该词语")
+            } else {
+                alert("状态：" + rst + " error");
             }
         })
     }

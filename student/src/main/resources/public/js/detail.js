@@ -13,22 +13,34 @@ var contestDetailPage = {
         contestDetailPage.data.contest = contest;
         contestDetailPage.data.questions = questions;
         contestDetailPage.data.scoreList = scoreList
-        contestDetailPage.data.questionsAnswer = questions;
-        console.log(contestDetailPage.data.questions)
 
-        for (var i=0;i<contestDetailPage.data.questionsAnswer.length;i++){
-            if (contestDetailPage.data.questionsAnswer[i].type == 'singleChoiceQuestion'){
-                contestDetailPage.data.questionsAnswer[i].answer = '';
-            }else if (contestDetailPage.data.questionsAnswer[i].type == 'judgment'){
-                contestDetailPage.data.questionsAnswer[i].answer = '';
-            }else if (contestDetailPage.data.questionsAnswer[i].type == 'comprehensiveQuestion'){
-                contestDetailPage.data.questionsAnswer[i].answer = '';
+        for (var i=0;i<contestDetailPage.data.questions.length;i++){
+            if (contestDetailPage.data.questions[i].type == 'completion'){
+                var completionAnsList = []
+                for (var j=0;j<contestDetailPage.data.questions[i].answers.length;j++){
+                    completionAnsList.push('')
+                }
+                contestDetailPage.data.questionsAnswer.push(
+                    {'subjectId':contestDetailPage.data.questions[i].id,
+                        'subjectType':contestDetailPage.data.questions[i].type,
+                        'score':-1,
+                    'answerList':completionAnsList})
             }else {
-                contestDetailPage.data.questionsAnswer[i].answers = '';
+                var ansList = []
+                ansList.push('')
+                contestDetailPage.data.questionsAnswer.push(
+                    {'subjectId':contestDetailPage.data.questions[i].id,
+                        'subjectType':contestDetailPage.data.questions[i].type,
+                        'score':-1,
+                        'answerList':ansList})
             }
         }
 
-        //console.log(contestDetailPage.data.questions);
+        var nowTime = new Date();
+        var nowTimeStamp = nowTime.getTime()
+        if (nowTimeStamp>(contestDetailPage.data.contest.startTime+contestDetailPage.data.contest.testTime*60000)){
+            window.location.href = '/student/exam/list?cno='+contestDetailPage.data.contest.classID
+        }
 
         //TODO::考试时间倒计时
         $("#contestTimeCountdown").countdown(new Date(contestDetailPage.data.contest.startTime+
@@ -155,44 +167,42 @@ var contestDetailPage = {
 
         //记录答案
         if (contestDetailPage.data.questions[preIndex].type == 'singleChoiceQuestion') {
-            contestDetailPage.data.questionsAnswer[preIndex].answer = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
-                contestDetailPage.data.questionsAnswer[preIndex].answer += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
                 // contestDetailPage.data.questions[preIndex].answer += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'multipleChoiceQuestion') {
-            contestDetailPage.data.questionsAnswer[preIndex].answers = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questionsAnswer[preIndex].answers += $(this).val();
-                contestDetailPage.data.questionsAnswer[preIndex].answers += ',';
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'completion') {
-            contestDetailPage.data.questionsAnswer[preIndex].answers = '';
             for (var i=0;i<contestDetailPage.data.questions[preIndex].answers.length;i++){
                 var answerStr = '#'+i;
-                contestDetailPage.data.questionsAnswer[preIndex].answers += $(answerStr).val();
-                contestDetailPage.data.questionsAnswer[preIndex].answers += ',';
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[i] = $(answerStr).val();
             }
         } else if (contestDetailPage.data.questions[preIndex].type == 'judgment') {
-            contestDetailPage.data.questionsAnswer[preIndex].answer = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questionsAnswer[preIndex].answer += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
                 // contestDetailPage.data.questions[preIndex].answer += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'combinationChoice') {
-            contestDetailPage.data.questionsAnswer[preIndex].answers = '';
+            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questionsAnswer[preIndex].answers += $(this).val();
-                contestDetailPage.data.questionsAnswer[preIndex].answers += ',';
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
+                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += ',';
             });
         } else if (contestDetailPage.data.questions[preIndex].type == 'programProblem') {
-            contestDetailPage.data.questionsAnswer[preIndex].answer = $("#questionAnswer").val();
+            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = $("#questionAnswer").val();
         } else {
             //console.log($("#questionAnswer").val());
-            contestDetailPage.data.questionsAnswer[preIndex].answer = $("#questionAnswer").val();
+            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = $("#questionAnswer").val();
         }
 
         if (contestDetailPage.data.questions[index].type == 'singleChoiceQuestion') {
@@ -213,9 +223,9 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answerList[0] != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questionsAnswer[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answerList[0].indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
@@ -238,9 +248,9 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answers != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answerList[0] != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questionsAnswer[index].answers.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answerList[0].indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
@@ -250,7 +260,7 @@ var contestDetailPage = {
             console.log(contestDetailPage.data.questions[index].answers)
             var selectOptionStr =
                 '  <div class="grouped fields">\n';
-            for (var i=0;i<contestDetailPage.data.questions[0].answers.length;i++){
+            for (var i=0;i<contestDetailPage.data.questions[index].answers.length;i++){
                 selectOptionStr +=
                     '<div class="field">\n' + '('+(i+1)+').&nbsp;&nbsp;'+
                     '   <textarea name="questionAnswer" id="'+i+'"/>\n' +
@@ -261,12 +271,9 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answers != '') {
-                $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questionsAnswer[index].answers.indexOf($(this).val()) != -1) {
-                        $(this).attr("checked", "checked");
-                    }
-                });
+            for (var i=0;i<contestDetailPage.data.questionsAnswer[index].answerList.length;i++){
+                var answerStr = '#'+i;
+                $(answerStr).val(contestDetailPage.data.questionsAnswer[index].answerList[i])
             }
         }else if (contestDetailPage.data.questions[index].type == 'judgment') {
             $('#currentQuetionTitle').html('(判断)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
@@ -287,9 +294,9 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answerList[0] != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questionsAnswer[index].answer.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answerList[0].indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
@@ -321,9 +328,9 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answers != '') {
+            if (contestDetailPage.data.questionsAnswer[index].answerList[0] != '') {
                 $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questionsAnswer[index].answers.indexOf($(this).val()) != -1) {
+                    if (contestDetailPage.data.questionsAnswer[index].answerList[0].indexOf($(this).val()) != -1) {
                         $(this).attr("checked", "checked");
                     }
                 });
@@ -336,12 +343,8 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
-                $.each($("input[name='questionAnswer']"),function(){
-                    if (contestDetailPage.data.questionsAnswer[index].answer.indexOf($(this).val()) != -1) {
-                        $(this).attr("checked", "checked");
-                    }
-                });
+            if (contestDetailPage.data.questionsAnswer[index].answerList[0] != '') {
+                $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[index].answerList[0]);
             }
         }else {
             $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
@@ -351,8 +354,8 @@ var contestDetailPage = {
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
-            if (contestDetailPage.data.questionsAnswer[index].answer != '') {
-                $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[index].answer);
+            if (contestDetailPage.data.questionsAnswer[index].answerList[0] != '') {
+                $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[index].answerList[0]);
             }
         }
 
@@ -362,10 +365,18 @@ var contestDetailPage = {
             var buttonStr = '';
             if (contestDetailPage.data.currentQuestionIndex == i) {
                 buttonStr = '<button class="mini ui positive button" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
-            } else if (contestDetailPage.data.questions[i].answer != '') {
-                // console.log(i);
-                // console.log(contestDetailPage.data.questions[i]);
-                buttonStr = '<button class="mini ui green basic button" onclick="contestDetailPage.targetQuestionAction('+i+')" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
+            } else if (contestDetailPage.data.questionsAnswer[i].answerList[0] != '') {
+                var flag=1;
+                for (var j=0;j<contestDetailPage.data.questionsAnswer[i].answerList.length;j++){
+                    if (contestDetailPage.data.questionsAnswer[i].answerList[j]==''){
+                        flag=0;
+                    }
+                }
+                if (flag==1){
+                    buttonStr = '<button class="mini ui green basic button" onclick="contestDetailPage.targetQuestionAction('+i+')" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
+                }else{
+                    buttonStr = '<button class="mini ui button" onclick="contestDetailPage.targetQuestionAction('+i+')" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
+                }
             } else {
                 buttonStr = '<button class="mini ui button" onclick="contestDetailPage.targetQuestionAction('+i+')" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
             }
@@ -377,20 +388,43 @@ var contestDetailPage = {
     finishContestAction: function () {
         var index = contestDetailPage.data.currentQuestionIndex;
         //记录答案
-        if (contestDetailPage.data.questions[index].questionType == 0) {
-            contestDetailPage.data.questions[index].answer = '';
+        if (contestDetailPage.data.questions[index].type == 'singleChoiceQuestion') {
+            contestDetailPage.data.questionsAnswer[index].answerList[0] = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
-                contestDetailPage.data.questions[index].answer += $(this).val();
+                contestDetailPage.data.questionsAnswer[index].answerList[0] += $(this).val();
+                // contestDetailPage.data.questions[preIndex].answer += ',';
             });
-        } else if (contestDetailPage.data.questions[index].questionType == 1) {
-            contestDetailPage.data.questions[index].answer = '';
+        } else if (contestDetailPage.data.questions[index].type == 'multipleChoiceQuestion') {
+            contestDetailPage.data.questionsAnswer[index].answerList[0] = '';
             $.each($("input[name='questionAnswer']:checked"),function(){
                 //console.log($(this).val());
-                contestDetailPage.data.questions[index].answer += $(this).val();
+                contestDetailPage.data.questionsAnswer[index].answerList[0] += $(this).val();
+                contestDetailPage.data.questionsAnswer[index].answerList[0] += ',';
             });
+        } else if (contestDetailPage.data.questions[index].type == 'completion') {
+            for (var i=0;i<contestDetailPage.data.questions[index].answers.length;i++){
+                var answerStr = '#'+i;
+                contestDetailPage.data.questionsAnswer[index].answerList[i] = $(answerStr).val();
+            }
+        } else if (contestDetailPage.data.questions[index].type == 'judgment') {
+            contestDetailPage.data.questionsAnswer[index].answerList[0] = '';
+            $.each($("input[name='questionAnswer']:checked"),function(){
+                //console.log($(this).val());
+                contestDetailPage.data.questionsAnswer[index].answerList[0] += $(this).val();
+                // contestDetailPage.data.questions[preIndex].answer += ',';
+            });
+        } else if (contestDetailPage.data.questions[index].type == 'combinationChoice') {
+            contestDetailPage.data.questionsAnswer[index].answerList[0] = '';
+            $.each($("input[name='questionAnswer']:checked"),function(){
+                //console.log($(this).val());
+                contestDetailPage.data.questionsAnswer[index].answerList[0] += $(this).val();
+                contestDetailPage.data.questionsAnswer[index].answerList[0] += ',';
+            });
+        } else if (contestDetailPage.data.questions[index].type == 'programProblem') {
+            contestDetailPage.data.questionsAnswer[index].answerList[0] = $("#questionAnswer").val();
         } else {
             //console.log($("#questionAnswer").val());
-            contestDetailPage.data.questions[index].answer = $("#questionAnswer").val();
+            contestDetailPage.data.questionsAnswer[index].answerList[0] = $("#questionAnswer").val();
         }
         //TODO::交卷
         contestDetailPage.submittingContestAction();
@@ -407,46 +441,35 @@ var contestDetailPage = {
              */
             blurring: true,
         }).modal('show');
-        for (var i = 0; i < contestDetailPage.data.questions.length; i++) {
-            console.log(contestDetailPage.data.questions[i].answer);
-        }
 
-        var answerJsonStr = '';
-        for (var i = 0; i < contestDetailPage.data.questions.length; i++) {
-            answerJsonStr += contestDetailPage.data.questions[i].answer;
-            if (i < contestDetailPage.data.questions.length-1) {
-                answerJsonStr += '_~_';
-            }
-        }
-        console.log("answerJson = " + answerJsonStr);
-
+        let data=[]
+        contestDetailPage.data.questionsAnswer.forEach(function(s){
+            data.push(JSON.stringify(s))
+        })
         //向后端API发送答题卡
         $.ajax({
-            url : app.URL.submitGradeUrl(),
+            url : "/student/test/submitExam",
             type : "POST",
-            dataType: "json",
-            contentType : "application/json;charset=UTF-8",
+            traditional: true,
             <!-- 向后端传输的数据 -->
-            data : JSON.stringify({
-                contestId: contestDetailPage.data.contest.id,
-                answerJson: answerJsonStr,
-            }),
+            data : {"answers":data,
+                    "examId":contestDetailPage.data.contest.id},
             success:function(result) {
-                if (result && result['success']) {
+                if (result=='success') {
                 } else {
                     //TODO::发送答题卡出错处理
                     console.log(result.message);
                 }
             },
-            error:function(result){
-                //TODO::发送答题卡出错处理
-                console.log(result.message);
-            }
+            // error:function(result){
+            //     //TODO::发送答题卡出错处理
+            //     console.log(result);
+            // }
         });
 
         setTimeout(function () {
             $("#waitSubmitModal").modal("hide");
-            window.location.href = app.URL.contestIndexUrl();
+            window.location.href = '/student/exam/list?cno='+contestDetailPage.data.contest.classID
         }, 5000);
     },
 

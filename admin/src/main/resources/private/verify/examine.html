@@ -1,51 +1,271 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>审核题目</title>
+    <link rel="stylesheet" href="/bank/css/add.css">
+    <style>
+        #left_side{
+            background: #ccffff;
+            float: left;
+        }
+        #right_side{
+            background: #ffcccc;
+            float: left;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<div id="container">
-    <span>题目描述:</span>
-    <br>
-    <div style="border:1px solid #0f0f0f" th:text="${json}"></div>
-    <span>审核小工具:</span>
-    <br>
-    <div style="border:1px solid #0f0f0f">
+<body>
+<div class="modal" tabindex="-1" id="passDialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="wait()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>您要通过本题吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="wait()">取消</button>
+                <button type="button" class="btn btn-primary" onclick="Pass()">通过</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" id="failDialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="wait()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>不通过将会删除本题目，是否确定？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="wait()">取消</button>
+                <button type="button" class="btn btn-primary" onclick="Fail()">不通过</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" id="sameDialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="wait()">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="sameQuestion">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="wait()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //获取url中的参数
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    //页面加载完毕后向后端获取题目信息
+    $(document).ready(function() {
+        $.ajax({url:"/bank/subject/json?id="+getUrlParam("id"),
+            method:"get",
+            success:function(result)
+            {
+                renderHtml(JSON.parse(result))
+            }});
+    });
+</script>
+<script>
+    //渲染html页面
+    var sub;
+    function renderHtml(subject_obj)
+    {
+        sub=subject_obj;
+        commonRender(subject_obj)
+        let type=subject_obj.type
+        switch (type) {
+            case "singleChoiceQuestion":
+                singleChoiceRender(subject_obj)
+                break
+            case "multipleChoiceQuestion":
+                multipleChoiceRender(subject_obj)
+                break
+            case "completion":
+                completionRender(subject_obj)
+                break
+            case "judgment":
+                judgmentRender(subject_obj)
+                break
+            case "comprehensiveQuestion":
+                comprehensiveQuestionRender(subject_obj)
+                break
+            case "programProblem":
+                programProblemRender(subject_obj)
+                break
+            case "CombinationChoice":
+
+        }
+    }
+
+    //时间转换
+    function rTime(date) {
+        var json_date = new Date(date).toJSON();
+        return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    }
+    //渲染共有的属性
+    function commonRender(subject_obj)
+    {
+        $("#id_info").hide();
+        var date=rTime(subject_obj.date);
+        $("#date_info").html("题目创建时间:"+date)
+        $("#difficulty_info").html("题目难度等级:"+subject_obj.difficulty)
+        // $("#respondentCount_info").html("题目作答次数:"+subject_obj.respondentCount)
+        // $("#correctCount_info").html("作答正确次数:"+subject_obj.correctCount)
+        $("#description_info").html(subject_obj.description)
+    }
+    //渲染单选题
+    function singleChoiceRender(subject_obj)
+    {
+        $("div.unique-info").html("正确答案:"+subject_obj.answer)
+    }
+    //渲染多选题
+    function multipleChoiceRender(subject_obj)
+    {
+        let text="正确答案:"+subject_obj.answers;
+        // for(let ans in subject_obj.answers){
+        //     text+=ans
+        // }
+        $("div.unique-info").html(text)
+    }
+    //渲染判断题
+    function judgmentRender(subject_obj) {
+        //显示答案
+        let answer1 = subject_obj.answer;
+        console.log(answer1);
+        let answer = '';
+        answer = answer + subject_obj.options[answer1 - 1];
+        console.log(answer);
+        //$("div#judgment_answer_info").html("正确答案：" + answer)
+        $("div#judgment_answer_info").html("正确答案：" + subject_obj.answer);
+    }
+    //渲染综合题
+    function comprehensiveQuestionRender(subject_obj)
+    {
+        $("div#comprehensiveQuestion_answer_info").html("正确答案："+subject_obj.answer)
+    }
+    //渲染程序题
+    function programProblemRender(subject_obj)
+    {
+        $("div#programProblem_answer_info").html("正确答案："+subject_obj.answer)
+    }
+    //渲染组合选择题
+    function combinationChoiceRender(subject_obj){
+
+    }
+</script>
+<div class="outer">
+    <div class="upper">
+        <div class="title">
+            <span class="tip">题干</span> </div>
+        <div id="id_info">
+            该题目不存在，请确保url参数正确（如：http://127.0.0.1:8080/admin/subject/detail.html?id=6207b3a80875141b0f368672&type=singleChoice）
+        </div>
+        <div id="description_info" style="border: 1px solid black;background: #f8f8f8">
+
+        </div>
+    </div>
+    <div class="unique-info">
+
+    </div>
+</div>
+<hr/>
+<div class="inner">
+    <span class="title2">题目属性</span>
+    <div class="line"></div>
+    <div id="date_info" ></div>
+    <hr />
+    <div id="difficulty_info" ></div>
+    <hr />
+    <div class="bottom">
+        <span class="title2">审核工具</span>
+        <div class="line"></div>
         <span>敏感词检测</span>
         <span>检测状态:</span><span id="word-check">未检测</span>
-        <button onclick="WordsCheck()">自动检测</button>
+        <button onclick="WordsCheck()" class="btn btn-outline-success">自动检测</button>
         <br>
         <span>题目查重</span>
         <span>检测状态:</span><span id="repeat-check">未检测</span>
-        <button onclick="RepeatCheck()">自动检测</button>
+        <button onclick="RepeatCheck()" class="btn btn-outline-success">自动检测</button>
     </div>
-    <span>操作:</span>
-    <br>
-    <div style="border:1px solid #0f0f0f">
-        <button onclick="Pass()">通过</button>
-        <button onclick="Fail()">不通过</button>
+    <div class="con">
+        <span class="title2">操作</span>
+        <div class="line"></div>
+        <span>敏感词检测</span>
+        <div style="border:1px solid #0f0f0f">
+            <button onclick="passDialog()">通过</button>
+            <button onclick="failDialog()">不通过</button>
+        </div>
     </div>
 </div>
+<hr/>
 </body>
-<script th:inline="javascript">
-    const form = {
-        "id": [[${id}]],
-        "type": [[${type}]]
-    };
-</script>
-<script th:inline="javascript">
+<script>
     function RepeatCheck() {
+        var form={
+            "id": sub.id,
+            "type": sub.type
+        }
         jQuery.post("/admin/examineExercises/repeatCheck",form,function (rst) {
             if(rst===""||rst===null){
                 jQuery("#repeat-check").html("无重复");
             }else{
                 jQuery("#repeat-check").html("有重复");
-                alert(JSON.stringify(rst));
+                var tmp;
+                if(rst.answers!=""){
+                    tmp=rst.answers;
+                }else{
+                    tmp=rst.answer;
+                }
+                var str=`
+                <div class="outer">
+                    <div class="upper">
+                        <div class="title">
+                            <span class="tip">重复题目</span> </div>
+                        <div id="same_info" style="border: 1px solid black;background: #f8f8f8">
+                            <p>${rst.description}</p>
+                        </div>
+                    </div>
+                    <div class="unique-info">
+                        ${tmp}
+                    </div>
+                </div>`;
+                jQuery("#sameQuestion").html(str);
+                jQuery("#sameDialog").modal("show");
             }
         })
     }
     function WordsCheck() {
+        var form={
+            "id": sub.id,
+            "type": sub.type
+        }
         jQuery.post("/admin/examineExercises/wordCheck",form,function (rst) {
             if(rst===true||rst==="true")
             {
@@ -57,9 +277,34 @@
     }
 </script>
 <script>
+    function passDialog() {
+        jQuery("#passDialog").modal('show');
+    }
+    function wait() {
+        jQuery("#passDialog").modal('hide');
+        jQuery("#failDialog").modal('hide');
+        jQuery("#sameDialog").modal('hide');
+    }
     function Pass() {
+        var form={
+            "id": sub.id,
+            "type": sub.type
+        }
         jQuery.post("/admin/examineExercises/pass",form,function (rst) {
-            alert(rst);
+            alert("已通过");
+            location.href="/admin/verify/list";
+        })
+    }
+    function failDialog() {
+        jQuery("#failDialog").modal('show');
+    }
+    function Fail() {
+        var form={
+            "id": sub.id
+        }
+        jQuery.post("/admin/examineExercises/fail",form,function (rst) {
+            alert("不通过");
+            location.href="/admin/verify/list";
         })
     }
 </script>
