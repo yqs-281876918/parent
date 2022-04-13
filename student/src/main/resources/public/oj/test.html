@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+<span>id:</span><input id="id" type="text">
+<span>code:</span><input id="code" type="text">
+<button onclick="submit()">提交</button>
+<script>
+    function submit(){
+        let data={"id":$('#id').val(),"code":$('#code').val()}
+        $.post("/student/oj/test",data,function (ret) {
+            alert(ret)
+        })
+    }
+</script>
+</body>
+</html>
