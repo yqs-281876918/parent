@@ -106,8 +106,9 @@
                         `;
                         jQuery("#accordionExample").html(rightGuide);
                     }else{
+                        // alert(table);
                         table+=`<a href="#mark-${count}">${count+1}</a>`;
-                        jQuery("#a2").html(table);
+                        jQuery("#a"+c).html(table);
                         rightGuide=jQuery("#accordionExample").html();
                     }
                     //显示题目
@@ -179,7 +180,7 @@
                             }else if(back.answers!=undefined){
                                 r+=`
                                 <div id="mark-${count}">
-                                    <div><p class="text-break">题目：${back.description}</p></div>
+                                    <div><p class="text-break">题目${count+1}：${back.description}</p></div>
                                     <div>分值：${scorelist[count]}</div>
                                     <div>学生作答情况：${stuanswer}</div>
                                     <div id="ans${count}">${anser}</div>
