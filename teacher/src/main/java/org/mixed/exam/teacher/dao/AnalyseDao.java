@@ -117,7 +117,7 @@ public class AnalyseDao {
         List<Answer> a = examDetails.get(0).getAnswers();
         return a;
     }
-    //按题型查找一场考试所有题的题型 、 题号 取第一个人的
+    //按题型查找 题型 、 题号 取第一个人的
     public List<Answer> getElseDetail(Integer examId, String type) {
         List<ExamDetail> examDetails = getAll(examId);
         List<Answer> a = examDetails.get(0).getAnswers();
@@ -130,15 +130,20 @@ public class AnalyseDao {
         return b;
     }
     //跟据题目id查找题目描述
-    public String[] getDescription(String[] id){
-        String[] description = new String[id.length];
-        for(int i=0;i<id.length;i++){
-            Query query = new Query(Criteria.where("id").is(id[i]));
-            List<Question> questionList= mongoTemplate.find(query,Question.class,"subjects");
-            description[i]=questionList.get(0).getDescription();
-        }
+    public String getDescription(String id){
+        String description;
+        Query query = new Query(Criteria.where("id").is(id));
+        List<Question> questionList= mongoTemplate.find(query,Question.class,"subjects");
+        description=questionList.get(0).getDescription();
         return description;
     }
 
+    //每道题答对的人数 paerdetal
 
+//    public int[] getsingleRight(Integer examId, String type) {
+//        List<ExamDetail> examDetails = getAll(examId);
+//        for(int i=0;i<examDetails.size();i++){
+//            for()
+//        }
+//    }
 }

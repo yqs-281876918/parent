@@ -96,11 +96,20 @@ public class AnalyseController {
         }
         //选择题型
         else{
-            return analyseService.getElseDetil(pageNum,pageSize,13,"SingleChoiceQuestion");
+            return analyseService.getElseDetil(pageNum,pageSize,examId,type);
         }
     }
-
-    //导出
+    //根据题目id查找题目描述
+    @RequestMapping("/description")
+    public String getDescription(String subjectId){
+        return analyseService.getDescription(subjectId);
+    }
+//    //每道题答对的人数
+//    @RequestMapping("/singleRight")
+//    public int[] singleRight(Integer examId, String type){
+//        return analyseService.getsingleRight(examId,type);
+//    }
+    // 导出
 //    @RequestMapping("/courseScore/export.action")
 //    @ResponseBody
 //    public void export(String code, HttpServletRequest request, HttpServletResponse response){
