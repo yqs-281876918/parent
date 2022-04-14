@@ -13,6 +13,7 @@
     <meta http-equiv="MSThemeCompatible" content="Yes" />
     <meta name="renderer" content="webkit"  />
     <link href="https://itestres.unipus.cn/itest-saas/static/its/lib/sfront/student/css/stu_css.css?v=202203111833" rel="stylesheet">
+    <script src="js/bootstrap-table-expandable.js"></script>
 
     <style>
         .clsTest{
@@ -48,7 +49,7 @@
     </div>
     <div class="questionAnalysis">
         <div class="questionItems">
-            <table class="table table-bordered table-hover table-striped">
+            <table class="table table-hover table-expandable"  style="word-break:break-all; word-wrap:break-all;" >
                 <thead>
                 <tr>
                     <td >题型</td>
@@ -57,10 +58,11 @@
                     <td >答题人数</td>
                     <td >正确人数</td>
                     <td >得分率</td>
-                    <td> </td>
+                    <td> 查看详情</td>
                 </tr>
+
                 </thead>
-                <tbody id="data">
+                <tbody id="data" role="alert" aria-live="polite" aria-relevant="all">
                 </tbody>
                 <tfoot>
                 <tr>
@@ -103,59 +105,95 @@
     var pageSize=10;
     var pageNums=0;
     var BarArr;
+    var subject;
+    var type;
+    var index;
     function init(){
         var examId = sessionStorage.getItem("id");
         var examName=sessionStorage.getItem("examName");
         jQuery("#examName").html(examName);
+        var type1 = $("#choose").val();
 
         var param={
             "pageNum":pageNum,
             "pageSize":pageSize,
             "examId":13,
-            "type":'ALL'
+            //"type":type1
+            type:'ALL'
         };
         jQuery.post("/teacher/analyse/itemDetail",param,function(rst){
+            //返回的是目标题型题目列表
             console.log(rst);
             //BarArr=Array.from(rst);
             BarArr=rst.list;
-            alert(BarArr);
-            alert(BarArr.length);
-
+            //alert(BarArr);
+            //alert(BarArr.length);
             for(var i=0;i<BarArr.length;i++){
+                //每一道题
                 var u=BarArr[i];
-                var subject=u.subjectId;
-                var index=u.
-                console.log(subject);
+                index=i;
+                subject=u.subjectId;
+                type=u.subjectType;
+                if(type==="SingleChoiceQuestion"){type="单选题";}
+                else if(type==="MultipleChoiceQuestion"){type="多选题";}
+                else if(type==="Completion"){type="填空题";}
+                else if(type==="Judgment"){type="判断题";}
+                else if(type==="ComprehensiveQuestion"){type="综合题";}
+                else if(type==="CombinationChoice"){type="综合（组合）选择题";}
+                else if(type==="ProgramProblem"){type="程序题";}
+                //var index=i+1;
 
-                var itemArr = rst.list;
-                var trs=''
-
+                var trs='';
                 var param1={
                     "subjectId":subject
                 };
+
+
                 console.log(param1);
+                //根据id查题目描述
                 jQuery.post("/teacher/analyse/description",param1,function(rst1){
                     console.log(rst1);
+                    //根据id查考试人数
+                    var param2={
+                        "examId":13,
+                        "totalScore":100
+                    };
                     jQuery.post("/teacher/analyse/count",param2,function (rst2){
-                        var total=Arr[0];
-                        for(var i=0;i<itemArr.length;i++){
-                            var u=itemArr[i];
+                        console.log(rst2);
+                        var total=rst2[0];
+                        var param3={
+                            "examId":13,
+                            "subjectId":subject,
+                            "total":rst1
+                        };
+                        //查找作对人数
+                        jQuery.post("/teacher/analyse/getRight",param3,function(rst3){
+                            console.log(rst3);
+                            //var percentage=Math.round(rst3*100)/rst1;
+                            //console.log(percentage);
                             trs+=`
                 <tr>
-                    <td>${type}</td>
-                    <td>1</td>
-                    <td>${rst1}</td>
-                    <td>${total}</td>
-                    <td></td>
+                    <td style="cursor:default;">${type}</td>
+                    <td style="cursor:default;">${index}</td>
+                    <td style="cursor:default;">${rst1}</td>
+                    <td style="cursor:default;">${total}</td>
+                    <td style="cursor:default;">${rst3}</td>
+                    <td style="cursor:default;">${percentage}%</td>
+                    <!--                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">-->
+<!--        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>-->
+<!--        <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>-->
+<!--    </svg>-->
+<!--                    <td class="bi bi-card-text"  data-toggle="tooltip" data-placement="top" data-original-title="查看答题情况"></i>-->
                 </tr>
-                `
-                        }
+                <tr></tr>
+                `;
+                            jQuery('#data').html(trs);
+                        })
                     })
-
-
-
                 })
+
             }
+
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
             jQuery("#pageNum").html(pageNum);

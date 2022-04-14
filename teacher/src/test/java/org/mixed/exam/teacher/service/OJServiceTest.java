@@ -1,6 +1,7 @@
 package org.mixed.exam.teacher.service;
 
 import org.junit.jupiter.api.Test;
+import org.mixed.exam.student.service.OJService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
