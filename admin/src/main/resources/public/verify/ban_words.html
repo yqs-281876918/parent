@@ -100,6 +100,7 @@
                 alert("状态：" + rst + " error");
             }
         })
+        searchWord()
     }
 </script>
 <script>
@@ -116,6 +117,7 @@
                 alert("状态：" + rst + " error");
             }
         })
+        searchWord()
     }
 </script>
 <script>
@@ -125,14 +127,43 @@
         };
         jQuery.get("/admin/banWords/searchWord", param, function (rst) {
             let ar = rst;
-            let sw = "<div>";
+            let sw = "";
+            console.log(ar.length)
             for (let i = 0; i < ar.length; i++) {
-                uu = ar[i];
-                sw = sw + `<div><input name="${i}" id="${i}" type="text" value='` + uu.word + `'>
-                        <button onclick="changeWord('${uu.id}',${i})" type="button" id="${i}1">修改</button>
-                        <button onclick="deleteWord('${uu.word}')" id="${i}2">删除</button></div>`;
+                console.log(i)
+                if (ar.length-i>=3){
+                    sw += `<div>`
+                    for (let j=0;j<3;j++){
+                        uu = ar[i+j];
+                        sw += `<div style="display: inline">
+                        <input name="${i+j}" id="${i+j}" type="text" value='` + uu.word + `'>
+                        <button onclick="changeWord('${uu.id}',${i+j})" type="button" id="${i+j}1">
+                        修改&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                        <button onclick="deleteWord('${uu.word}')" id="${i+j}2">删除</button>
+                      </div>
+                        <div style="display: inline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>`;
+                    }
+                    sw += `</div>\n</br>`
+                    i=i+2;
+                }else{
+                    sw += '<div>'
+                    for (let j=0;j+i<ar.length;j++){
+                        uu = ar[i+j];
+                        sw += `<div style="display: inline;float: left">
+                        <input name="${i+j}" id="${i+j}" type="text" value='` + uu.word + `'>
+                        <button onclick="changeWord('${uu.id}',${i+j})" type="button" id="${i+j}1">修改&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                        <button onclick="deleteWord('${uu.word}')" id="${i+j}2">删除</button>
+                      </div>
+                        <div style="display: inline;float: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>`;
+                    }
+                    sw += `</div>\n</br>`
+                    i=ar.length-1
+                }
+                // sw = sw + `<div><input name="${i}" id="${i}" type="text" value='` + uu.word + `'>
+                //         <button onclick="changeWord('${uu.id}',${i})" type="button" id="${i}1">修改</button>
+                //         <button onclick="deleteWord('${uu.word}')" id="${i}2">删除</button></div>`;
             }
-            sw = sw + "</div>";
+            // sw = sw + "</div>";
             jQuery("#data").html(sw);
         })
     }
