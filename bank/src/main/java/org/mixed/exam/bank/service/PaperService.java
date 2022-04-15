@@ -23,9 +23,13 @@ public class PaperService {
     public List<Paper> getControl(String teacherid){
         return paperDao.getControl(teacherid);
     }
-    //封存
+    //封存试卷
     public void sealed(String id){
         paperDao.sealed(id);
+    }
+    //开放试卷
+    public void openPaper(String id){
+        paperDao.openPaper(id);
     }
     //预览
     public Paper getPaper(String id){
