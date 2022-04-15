@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>题库管理</title>
+    <title>审核列表</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -41,69 +41,13 @@
     </style>
 </head>
 <body>
-
 <div class="outer">
-    <!-- 删除的提示框 -->
-    <div class="modal fade" id="delDialog" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">删除提示</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>您确定要删除题目【<span id="delItemIntroduction"></span>】吗?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary"
-                            onclick="doDelete()">确定</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 删除模态框结束 -->
-
-    <!-- 批量删除的提示框 -->
-    <div class="modal fade" id="delMulDialog" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">删除提示</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>您确定要删除选择的题目吗?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary"
-                            onclick="doDeleteMul()">确定</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 批量删除模态框结束 -->
     <div class="container">
-        <div id="top">
-            <button type="button"
-                    class="btn btn-outline-warning btn-danger"
-                    onclick="showDeleteMulDialog()">批量删除</button>
-        </div>
-
         <div id="middle">
             <form id="Form">
                 <table class="table table-bordered table-hover table-striped">
                     <thead>
                     <tr id="tabletitle" class="unselectable table-bordered">
-                        <th>
-                            <input type="checkbox" id="chAll"
-                                   onclick="selectAllCk(this.checked)">
-                        </th>
                         <th>类型</th>
                         <th>简介</th>
                         <th>创建时间</th>
@@ -136,13 +80,6 @@
     </div>
 </div>
 <script>
-    function selectAllCk(f) {
-        //找页面控件名为input的并且name=ids的控制
-        //设置控件的属性 checked=f
-        jQuery("input[name='itemIds']").prop("checked",f);
-    }
-</script>
-<script>
     var pageNum=1;
     var pageSize=6;
     var pageNums=0;
@@ -152,7 +89,7 @@
             "pageNum":pageNum,
             "pageSize":pageSize
         };
-        jQuery.post("/bank/subject/list",param,function (rst) {
+        jQuery.post("/admin/verify/list",param,function (rst) {
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
             jQuery("#pageNum").html(pageNum);
@@ -187,19 +124,13 @@
                 //使用反引号，用于定义模板
                 trs+=`
                  <tr>
-                    <td>
-                        <input type="checkbox" name="itemIds"
-                            value="${item.id}">
-                    </td>
                     <td>${itemType}</td>
                     <td>${item.introduction}</td>
                     <td>${subjectDate}</td>
                     <td>${item.difficulty}</td>
                     <td>
                         <a href="javascript:void(0)" class="btn btn-primary"
-                            onclick="showSubjectDetail('${item.id}')">详情</a>
-                        <a href="javascript:void(0)" class="btn btn-danger"
-                            onclick="showDeleteDialog('${item.id}','${item.introduction}')">删除</a>
+                            onclick="showSubjectDetail('${item.id}')">审核</a>
                     </td>
                 </tr>
                 `;
@@ -259,65 +190,8 @@
     }
 </script>
 <script>
-    //存放用户的userId
-    var id;
-    function showDeleteDialog(itemId , introduction) {
-        id=itemId;
-        //给模态框中的span赋值
-        jQuery("#delItemIntroduction").html(introduction);
-        jQuery("#delDialog").modal('show');
-    }
-    function doDelete() {
-        jQuery("#delDialog").modal('hide');
-        $.post("/bank/subject/delete",{"id":id},function (rst) {
-
-            if(rst=='success')
-            {
-                alert("删除成功!");
-                //设置显示数据的页面为第一页
-                //读取数据
-                init();
-            }else{
-                alert("删除失败!");
-            }
-        })
-    }
-    // function deleteSubject(obj,id){
-    //     $.post("/bank/subject/delete",{"id":id},function () {
-    //     })
-    // }
-</script>
-<script>
-    //批量删除操作
-    function showDeleteMulDialog() {
-        //获取input标签中name=ids，并且被选中的控件，的个数
-        var arrs=jQuery("input[name='itemIds']:checked").length;
-        if(arrs>0)
-        {
-            jQuery("#delMulDialog").modal('show');
-        }else{
-            alert("请选择要删除的数据!");
-        }
-    }
-
-    function doDeleteMul() {
-        jQuery("#delMulDialog").modal('hide');
-        //获取选择的复选框中的值
-        var form=jQuery("#Form").serialize();
-        jQuery.post("/bank/subject/mulDelete",form,function (rst) {
-            if(rst=='success')
-            {
-                alert("删除成功!");
-                init();
-            }else{
-                alert("删除失败!");
-            }
-        })
-    }
-</script>
-<script>
     function showSubjectDetail(id){
-        window.location.href = 'detail.html?id='+id;
+        window.location.href = 'examine.html?id='+id;
     }
     function timestampToTime(timestamp) {
         var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000

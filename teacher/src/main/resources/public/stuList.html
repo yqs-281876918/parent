@@ -32,10 +32,21 @@
         float: right;
     }
     body{
-        background-color: #fff9ed;
+        background-color: #fdfdfd;
     }
     table{
         background-color: #f3fdff;
+    }
+    .outer {
+        padding: 40px;
+        box-sizing: border-box;
+        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+        border-radius: 3px;
+        width:1000px;
+        margin-left: 40px;
+        margin-right: 40px;
+        margin-top: 40px;
+        background: #f1f1f1;
     }
     #tabletitle{
         background-color: #9d9d9d;
@@ -47,37 +58,39 @@
         padding: 10px 20px;
     }
 </style>
-
-<div id="container">
-    <div id="top">
-        <button type="button"
-                class="btn btn-default "
-                onclick="table()">导出成绩单</button>
-    </div>
-    <div id="middle">
-        <form id="Form">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="table" class="table table-striped mb-0" align="center">
-                                <thead>
-                                <tr>
-                                    <td align="center" colspan="3">考试排名</td>
-                                    <td align="center" colspan="3">学生姓名</td>
-                                    <td align="center" colspan="3">总分</td>
-                                    <td align="center" colspan="3">切屏次数</td>
-                                </tr>
-                                </thead>
-                                <tbody id="data">
-                                </tbody>
-                            </table>
+<div class="outer">
+    <div id="container">
+        <div id="top">
+            <button type="button"
+                    class="btn btn-default "
+                    onclick="table()">导出成绩单</button>
+        </div>
+        <div id="middle">
+            <form id="Form">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="table" class="table table-striped mb-0" align="center">
+                                    <thead>
+                                    <tr>
+                                        <td align="center" colspan="3">考试排名</td>
+                                        <td align="center" colspan="3">学生姓名</td>
+                                        <td align="center" colspan="3">总分</td>
+                                        <td align="center" colspan="3">切屏次数</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="data">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+    <div style="clear: both"></div>
 </div>
 <script>
     function init() {
@@ -95,8 +108,6 @@
                 //获取每一行对应的用户对象
                 var u=rst[i];
                 count++;
-                //循环一次一行数据
-                //使用反引号,用于定义模板
                 trs+=`
                     <tr>
                         <td align="center" colspan="3">${count}</td>
@@ -106,7 +117,6 @@
 
                     </tr>
                     `;
-
             }
             //把根据数据构建的行添加到表格
             jQuery("#data").html(trs);
@@ -119,72 +129,6 @@
 
 </script>
 
-<!--导出-->
 
-<!--<script>-->
-<!--    function table(){-->
-<!--        swal({-->
-<!--                title: "是否确认导出",-->
-<!--                text: "(注意：请确定要导出的资产信息，导出的内容为当前列表的所有搜索结果)",-->
-<!--                type: "info",-->
-<!--                showCancelButton: true,-->
-<!--                confirmButtonColor: "#5cb85c",-->
-<!--                confirmButtonText: "确认",-->
-<!--                cancelButtonText: "取消",-->
-<!--                closeOnConfirm: true,-->
-<!--                closeOnCancel: true-->
-<!--            },-->
-<!--            function(isConfirm) {-->
-<!--                if (isConfirm) {-->
-<!--                    perExportData();-->
-<!--                }-->
-<!--            });-->
-<!--    }-->
-<!--    function perExportData() {-->
-<!--        // 获取展示的列-->
-<!--        var columnList = $("#table").bootstrapTable('getVisibleColumns');-->
-<!--        var data = {};-->
-<!--        var consume_start = $("#consume_start").val();-->
-<!--        var consume_end = $("#consume_end").val();-->
-<!--        var columnsArr = new Array();-->
-<!--        var columnNamesArr = new Array();-->
-<!--        // 跳过选择框-->
-<!--        for (var i = 1; i < columnList.length; i++) {-->
-<!--            columnsArr.push(columnList[i].field.trim());-->
-<!--            columnNamesArr.push(columnList[i].title.trim());-->
-<!--        }-->
-<!--        data.columns = columnsArr.join(',');-->
-<!--        data.columnNames = columnNamesArr.join(',');-->
-
-<!--        if ( !! consume_start) {-->
-<!--            data.consume_start = consume_start;-->
-<!--        }-->
-<!--        if ( !! consume_end) {-->
-<!--            data.consume_end = consume_end;-->
-<!--        }-->
-<!--        postDownLoadFile({-->
-<!--            url: 'AnalyseController/export',-->
-<!--            data: data,-->
-<!--            method: 'post'-->
-<!--        });-->
-<!--    }-->
-
-<!--    function postDownLoadFile(options) {-->
-<!--        var config = $.extend(true, {-->
-<!--                method: 'post'-->
-<!--            },-->
-<!--            options);-->
-<!--        var $iframe = $('<iframe id="down-file-iframe" />');-->
-<!--        var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');-->
-<!--        $form.attr('action', config.url);-->
-<!--        for (var key in config.data) {-->
-<!--            $form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');-->
-<!--        }-->
-<!--        $iframe.append($form);-->
-<!--        $(document.body).append($iframe);-->
-<!--        $form[0].submit();-->
-<!--        $iframe.remove();-->
-<!--    }-->
-<!--</script>-->
 </body>
 </html>
