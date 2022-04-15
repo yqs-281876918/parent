@@ -105,7 +105,7 @@
                     <form id="editDialogForm">
                         <input type="hidden" name="userName" id="userName1">
                         <div class="form-group row">
-                            <label class="col-form-label col-3 text-right">用户姓名:</label>
+                            <label class="col-form-label col-3 text-right">用户名:</label>
                             <div class="col-8">
                                 <input type="text" id="edit-username" name="edit-username"
                                        class="form-control">
@@ -171,7 +171,7 @@
                     <form id="addDialogForm">
                         <input type="hidden" name="add-userName" id="add-userName">
                         <div class="form-group row">
-                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户姓名:</label>
+                            <label class="col-form-label col-3 text-right">&nbsp;&nbsp;&nbsp;&nbsp;用户名:</label>
                             <div class="col-8">
                                 <input type="text" id="add-name" name="add-name"
                                        class="form-control">
@@ -341,6 +341,39 @@
     }
 </script>
 <script>
+    function ClearForm(id) {
+        var objId = document.getElementById(id);
+        if (objId == undefined) {
+            return;
+        }
+        for (var i = 0; i < objId.elements.length; i++) {
+            if (objId.elements[i].type == "text") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "password") {
+                objId.elements[i].value = "";
+            }
+            else if (objId.elements[i].type == "radio") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "checkbox") {
+                objId.elements[i].checked = false;
+            }
+            else if (objId.elements[i].type == "select-one") {
+                objId.elements[i].options[0].selected = true;
+            }
+            else if (objId.elements[i].type == "select-multiple") {
+                for (var j = 0; j < objId.elements[i].options.length; j++) {
+                    objId.elements[i].options[j].selected = false;
+                }
+            }
+            else if (objId.elements[i].type == "textarea") {
+                objId.elements[i].value = "";
+            }
+        }
+    }
+</script>
+<script>
     var pageNum=1;
     var pageSize=10;
     var pageNums=0;
@@ -378,9 +411,9 @@
                         <td onclick="gotorole('${u.username}'))">${u.telephone}</td>
 
                         <td>
-                            <a href="#"
+                            <a href="javascript:void(0)"
                             onclick="showDeleteDialog('${u.username}')">删除</a>
-                        <a href="#"
+                        <a href="javascript:void(0)"
                             onclick="showEditDialog('${u.username}','${u.realName}',
                             '${u.role}','${u.email}','${u.telephone}')">编辑</a>
                         </td>
@@ -557,6 +590,7 @@
     //添加操作
     function showAddDialog()
     {
+        ClearForm("addDialogForm")
         jQuery("#addDialog").modal('show');
     }
     function check(){
@@ -566,30 +600,30 @@
             document.getElementById("add-name").focus();
             return false;
         }
-        str=document.getElementById("add-realName").value;
-        if(str.length<1){
-            alert("请输入真实姓名");
-            document.getElementById("add-realName").focus();
-            return false;
-        }
+        // str=document.getElementById("add-realName").value;
+        // if(str.length<1){
+        //     alert("请输入真实姓名");
+        //     document.getElementById("add-realName").focus();
+        //     return false;
+        // }
         str=document.getElementById("add-password").value;
         if(str.length<1){
             alert("请输入密码");
             document.getElementById("add-password").focus();
             return false;
         }
-        str=document.getElementById("add-email").value;
-        if(str.length<1){
-            alert("请输入可使用的邮箱");
-            document.getElementById("add-email").focus();
-            return false;
-        }
-        str=document.getElementById("add-telephone").value;
-        if(str.length<1){
-            alert("请输入可使用的手机号码");
-            document.getElementById("add-telephone").focus();
-            return false;
-        }
+        // str=document.getElementById("add-email").value;
+        // if(str.length<1){
+        //     alert("请输入可使用的邮箱");
+        //     document.getElementById("add-email").focus();
+        //     return false;
+        // }
+        // str=document.getElementById("add-telephone").value;
+        // if(str.length<1){
+        //     alert("请输入可使用的手机号码");
+        //     document.getElementById("add-telephone").focus();
+        //     return false;
+        // }
         str=document.getElementById("add-role").value;
         if(str.length<1){
             alert("请选择用户身份");
@@ -664,9 +698,9 @@
                         <td onclick="gotorole('${u.username}'))">${u.role}</td>
                         <td onclick="gotorole('${u.username}'))">${u.email}</td>
                         <td onclick="gotorole('${u.username}'))">${u.telephone}</td>
-                            <a href="#"
+                            <a href="javascript:void(0)"
                             onclick="showDeleteDialog('${u.username}')">删除</a>
-                        <a href="#"
+                        <a href="javascript:void(0)"
                             onclick="showEditDialog('${u.username}','${u.realName}',
                             '${u.role}','${u.email}','${u.telephone}')">编辑</a>
                         </td>
