@@ -65,9 +65,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.2.1</version>
-            <scope>compile</scope>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -78,8 +77,24 @@
             <artifactId>auth-api</artifactId>
             <version>0.0.1</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.mixed.exam</groupId>
+            <artifactId>student</artifactId>
+            <version>0.0.1</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- 文件上传 -->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpmime</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.poi</groupId>-->
+<!--            <artifactId>poi-ooxml</artifactId>-->
+<!--            <version>3.17</version>-->
+<!--        </dependency>-->
 
+    </dependencies>
     <build>
         <plugins>
             <plugin>

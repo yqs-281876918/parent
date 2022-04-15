@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/reviewPaper.css">
 </head>
 
 <body onload="init()">
@@ -30,17 +31,22 @@
     </div>
 </div>
 <div id="container">
-    //信息
-    <div id="info"></div>
-    //导航
-    <div class="accordion" id="accordionExample" style="width:20%; height:80%;">
-    </div>
-    //主界面
-    <div id="review">
 
+    <div id="thiner"></div>
+    <div class="accordion" id="accordionExample"></div>
+    <div id="infoBG"></div>
+    <div id="info">
     </div>
-    <button onclick="finishReview()">完成</button>
-    <button onclick="b()">返回</button>
+    <div id="inforight">
+    </div>
+    <div id="review">
+        <div id="inner"></div>
+    </div>
+
+    <div>
+        <button onclick="finishReview()" id="finishButton">完成</button>
+        <button onclick="b()" id="backButton">返回</button>
+    </div>
 </div>
 </body>
 <script>
@@ -75,10 +81,14 @@
                 var c=0;
                 var count=0;
                 var information=`
-                <div>答题人：${rst.username}</div>
-                <div>科目：${sessionStorage.getItem("examName")}</div>
-                <div>切屏次数：${rst.antiCount}</div>
-                <div id="scoreGot">考试得分：${rst.totalScore}</div>
+                <table>
+                <tr>
+                    <td><div>答题人：${rst.username}</div></td>
+                    <td><div>切屏次数：${rst.antiCount}</div></td>
+                    <td><div>科目：${sessionStorage.getItem("examName")}</div></td>
+                    <td><div id="scoreGot">考试得分：${rst.totalScore}</div></td>
+                    </tr>
+                </tablecellpadding>
                 `;
                 var r=``;
                 jQuery("#info").html(information);
@@ -87,13 +97,35 @@
                         //jQuery("#"+c).html(table);
                         c++;
                         table=``;
-                        table+=`<a href="#mark-${count}">${count+1}</a>`;
+                        if(subject[i].score==-1){
+                            table+=`<a id="carda${count}" class="buttonR" href="#mark-${count}">${count+1}</a>`;
+                        }else {
+                            table+=`<a id="carda${count}" class="buttonG" href="#mark-${count}">${count+1}</a>`;
+                        }
+                        var st=null;
+                        if(subject[i].subjectType=="SingleChoiceQuestion"||subject[i].subjectType=="singleChoiceQuestion"){
+                            st="单选题";
+                        }else if(subject[i].subjectType=="MultipleChoiceQuestion"||subject[i].subjectType=="multipleChoiceQuestion"){
+                            st="多选题";
+                        }else if(subject[i].subjectType=="Judgment"||subject[i].subjectType=="judgment"){
+                            st="判断题";
+                        }else if(subject[i].subjectType=="ComprehensiveQuestion"||subject[i].subjectType=="comprehensiveQuestion"){
+                            st="综合题";
+                        }else if(subject[i].subjectType=="Completion"||subject[i].subjectType=="completion"){
+                            st="填空题";
+                        }else if(subject[i].subjectType=="CombinationChoice"||subject[i].subjectType=="combinationChoice"){
+                            st="组合题";
+                        }else if(subject[i].subjectType=="ProgramProblem"||subject[i].subjectType=="programProblem"){
+                            st="程序题";
+                        }else{
+                            st="未知题型";
+                        }
                         rightGuide+=`
                         <div class="card">
                             <div class="card-header" id="heading${c}">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse${c}" aria-expanded="true" aria-controls="collapse${c}">
-                                        ${subject[i].subjectType}
+                                <h2 class="mb-0 getwhite">
+                                    <button class="btn btn-link btn-block text-left setbut" type="button" data-toggle="collapse" data-target="#collapse${c}" aria-expanded="true" aria-controls="collapse${c}">
+                                        ${st}
                                     </button>
                                 </h2>
                             </div>
@@ -107,7 +139,12 @@
                         jQuery("#accordionExample").html(rightGuide);
                     }else{
                         // alert(table);
-                        table+=`<a href="#mark-${count}">${count+1}</a>`;
+                        if(subject[i].score==-1){
+                            table+=`<a id="carda${count}" class="buttonR" href="#mark-${count}">${count+1}</a>`;
+                        }else {
+                            table+=`<a id="carda${count}" class="buttonG" href="#mark-${count}">${count+1}</a>`;
+                        }
+                        // table+=`<a class="button" href="#mark-${count}">${count+1}</a>`;
                         jQuery("#a"+c).html(table);
                         rightGuide=jQuery("#accordionExample").html();
                     }
@@ -165,27 +202,34 @@
 
                             }
 //subject[i].answerList
+                            var tmpscore;
+                            if(subject[i].score==-1){
+                                tmpscore="";
+                            }else {
+                                tmpscore=subject[i].score;
+                            }
                             if(back.answer!=undefined){
+
                                 r+=`
-                                <div id="mark-${count}">
-                                    <div><p class="text-break">题目${count+1}：${back.description}</p></div>
-                                    <div>分值：${scorelist[count]}</div>
-                                    <div>学生作答情况：${stuanswer}</div>
-                                    <div id="ans${count}">${anser}</div>
-                                    <div>
-                                        得分判定:<input type="text" id="score${count}" value="${subject[i].score}" onchange="changeScore(${count})"/>
+                                <div id="mark-${count}" class="q">
+                                    <div><p class="text-break question_title"> 题目${count+1}：<p class="question_description">${back.description}</p></p></div>
+                                    <div class="question_score">分值：${scorelist[count]}</div>
+                                    <div class="student_answer">学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}" class="question_answer">${anser}</div>
+                                    <div class="score_input">
+                                        得分判定:<input type="text" id="score${count}" value="${tmpscore}" onchange="changeScore(${count})"/>
                                     </div>
                                 </div>
                                 `;
                             }else if(back.answers!=undefined){
                                 r+=`
-                                <div id="mark-${count}">
-                                    <div><p class="text-break">题目${count+1}：${back.description}</p></div>
-                                    <div>分值：${scorelist[count]}</div>
-                                    <div>学生作答情况：${stuanswer}</div>
-                                    <div id="ans${count}">${anser}</div>
-                                    <div>
-                                        得分判定:<input type="text" id="score${count}" value="${subject[i].score}" onchange="changeScore(${count})"/>
+                                <div id="mark-${count}" class="q">
+                                    <div><p class="text-break question_title"> 题目${count+1}：<p>${back.description}</p></p></div>
+                                    <div class="question_score">分值：${scorelist[count]}</div>
+                                    <div class="student_answer">学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}" class="question_answer">${anser}</div>
+                                    <div class="score_input">
+                                        得分判定:<input type="text" id="score${count}" value="${tmpscore}" onchange="changeScore(${count})"/>
                                     </div>
                                 </div>
                                 `;
@@ -195,7 +239,7 @@
                     })
                     count++;
                 }
-                jQuery("#review").html(r);
+                jQuery("#inner").html(r);
                 //jQuery("#accordionExample").html(rightGuide);
             }
         })
@@ -253,6 +297,12 @@
                 jQuery("#scoreGot").html("考试得分："+totalScore);
             }
         })
+        //更新导航栏按钮颜色
+        if(subject[id].score==-1){
+            jQuery("#carda"+id).attr("class","buttonR");
+        }else {
+            jQuery("#carda"+id).attr("class","buttonG");
+        }
 
     }
 </script>
@@ -296,4 +346,6 @@
         location.href="paperList.html";
     }
 </script>
+<!--clock-->
+
 </html>

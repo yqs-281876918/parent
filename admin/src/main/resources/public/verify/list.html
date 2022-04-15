@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>审核列表</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        a.hand:hover   {cursor:hand}
+    </style>
+    <style type="text/css">
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        #top{
+            padding: 10px 20px;
+            text-align: right;
+        }
+        #page_div #left{
+            float: left;
+        }
+        #page_div #right{
+            float: right;
+        }
+        .outer {
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+            border-radius: 10px;
+            width:1000px;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 40px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="outer">
+    <div class="container">
+        <div id="middle">
+            <form id="Form">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr id="tabletitle" class="unselectable table-bordered">
+                        <th>类型</th>
+                        <th>简介</th>
+                        <th>创建时间</th>
+                        <th>难度</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="data">
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            <div id="page_div">
+                                <div id="left">
+                                    <span id="pageNum"></span>/<span id="pages"></span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    共<span id="totals"></span>条
+                                </div>
+                                <div id="right">
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var pageNum=1;
+    var pageSize=6;
+    var pageNums=0;
+
+    function init() {
+        var param={
+            "pageNum":pageNum,
+            "pageSize":pageSize
+        };
+        jQuery.post("/admin/verify/list",param,function (rst) {
+            pageNums=rst.pages;
+            jQuery("#pages").html(pageNums);
+            jQuery("#pageNum").html(pageNum);
+            jQuery("#totals").html(rst.total);
+            //把查询的数据显示的表格tbody位置
+            //1.获取查询的数据
+            var arrs=rst.list;
+            var trs='';
+            for(var i=0;i<arrs.length;i++)
+            {
+                //获取每一行对应的用户对象
+                var item=arrs[i];
+                var itemType = '';
+                if (item.type=='singleChoiceQuestion'){
+                    itemType = '单选题'
+                }else if (item.type=='multipleChoiceQuestion'){
+                    itemType = '多选题'
+                }else if (item.type=='completion'){
+                    itemType = '填空题'
+                }else if (item.type=='judgment'){
+                    itemType = '判断题'
+                }else if (item.type=='combinationChoice'){
+                    itemType = '组合选择题'
+                }else if (item.type=='comprehensiveQuestion'){
+                    itemType = '综合题'
+                }else {
+                    itemType = '程序题'
+                }
+                var itemDate = new Date(item.date)
+                var subjectDate =timestampToTime(itemDate.getTime());
+                //循环一次，在页面中产生一行数据
+                //使用反引号，用于定义模板
+                trs+=`
+                 <tr>
+                    <td>${itemType}</td>
+                    <td>${item.introduction}</td>
+                    <td>${subjectDate}</td>
+                    <td>${item.difficulty}</td>
+                    <td>
+                        <a href="javascript:void(0)" class="btn btn-primary"
+                            onclick="showSubjectDetail('${item.id}')">审核</a>
+                    </td>
+                </tr>
+                `;
+            }
+            //把根据数据构建的tr添加到表格中
+            jQuery("#data").html(trs);
+            //=======================
+            //设置页码
+            var nums=rst.navigatepageNums;
+            var nav=`
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a href="javascript:void(0)" class="page-link"
+                            onclick="pageUtil(${pageNum-1})">上一页</a>
+                    </li>
+                   `;
+            //循环读取页码
+            for(var i=0;i<nums.length;i++)
+            {
+                nav+=`
+                        <li class="page-item ${pageNum==nums[i]?'active':''}">
+                            <a href="javascript:void(0)" class="page-link"
+                                onclick="pageUtil(${nums[i]})">${nums[i]}</a>
+                        </li>
+                    `;
+            }
+            nav+=`
+                    <li class="page-item">
+                        <a href="#" class="page-link"
+                            onclick="pageUtil(${pageNum+1})">下一页</a>
+                    </li>
+                </ul>
+            `;
+            jQuery("#right").html(nav);
+        })
+    }
+
+    //页面加载完毕执行init方法
+    jQuery(function () {
+        init();
+    });
+</script>
+<script>
+    //完成分页操作
+    //要显示数据的页码
+    function pageUtil(num) {
+        if(num<=1)
+        {
+            num=1;
+        }
+        if(num>=pageNums)
+        {
+            num=pageNums;
+        }
+        pageNum=num;
+        init();
+    }
+</script>
+<script>
+    function showSubjectDetail(id){
+        window.location.href = 'examine.html?id='+id;
+    }
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        console.log(date)
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        // var h = date.getHours() + ':';
+        // var m = date.getMinutes() + ':';
+        // var s = date.getSeconds();
+        return Y+M+D;
+    }
+</script>
+</body>
+</html>
