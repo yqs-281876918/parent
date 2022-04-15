@@ -9,7 +9,7 @@
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.common.min.js"></script>
 </head>
 <body onload="init()">
-<div id="container" style="height: 400px">
+<div id="container" >
     <div id="choose type">
         <select id="choose" name="choose" class="form-control">
             <option value="ALL" selected = "selected">全部题型</option>
@@ -24,8 +24,8 @@
     </div>
 
 </div>
-<div id="pie" class="pie"></div>
-<div id="bar" class="bar"></div>
+<div id="pie" class="pie" style="height:400px"></div>
+<div id="bar" class="bar" style="height:400px"></div>
 <script>
     var Barlist;
 

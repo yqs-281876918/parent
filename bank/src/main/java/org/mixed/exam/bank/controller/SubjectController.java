@@ -124,4 +124,12 @@ public class SubjectController {
         subjectDao.deleteSubject(id);
         return "success";
     }
+    @ResponseBody
+    @PostMapping("subject/mulDelete")
+    public String mulDelete(String[] itemIds){
+        for (String id:itemIds){
+            subjectDao.deleteSubject(id);
+        }
+        return "success";
+    }
 }

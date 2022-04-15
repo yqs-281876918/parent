@@ -1,13 +1,14 @@
 package org.mixed.exam.bank.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.mixed.exam.bank.dao.SubjectDao;
 import org.mixed.exam.bank.pojo.vo.SubjectItem;
 import org.mixed.exam.bank.service.SubjectItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -26,11 +27,12 @@ public class SubjectItemController
     {
         return subjectItemService.getItems();
     }
-    @GetMapping("subject/list")
-    public List<SubjectItem> list(Model model)
+    @ResponseBody
+    @RequestMapping("/subject/list")
+    public PageInfo<SubjectItem> list(int pageNum, int pageSize)
     {
-        List<SubjectItem> items = subjectItemService.getItems();
-        model.addAttribute("items",items);
-        return subjectItemService.getItems();
+        PageInfo<SubjectItem> page=null;
+        page=subjectItemService.getSubjectItems(pageNum,pageSize);
+        return page;
     }
 }

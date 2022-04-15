@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Objects;
 
 
 @Repository
@@ -117,7 +117,7 @@ public class AnalyseDao {
         List<Answer> a = examDetails.get(0).getAnswers();
         return a;
     }
-    //按题型查找一场考试所有题的题型 、 题号 取第一个人的
+    //按题型查找 题型 、 题号 取第一个人的
     public List<Answer> getElseDetail(Integer examId, String type) {
         List<ExamDetail> examDetails = getAll(examId);
         List<Answer> a = examDetails.get(0).getAnswers();
@@ -130,15 +130,40 @@ public class AnalyseDao {
         return b;
     }
     //跟据题目id查找题目描述
-    public String[] getDescription(String[] id){
-        String[] description = new String[id.length];
-        for(int i=0;i<id.length;i++){
-            Query query = new Query(Criteria.where("id").is(id[i]));
-            List<Question> questionList= mongoTemplate.find(query,Question.class,"subjects");
-            description[i]=questionList.get(0).getDescription();
-        }
+    public String getDescription(String id){
+        String description;
+        Query query = new Query(Criteria.where("id").is(id));
+        List<Question> questionList= mongoTemplate.find(query,Question.class,"subjects");
+        description=questionList.get(0).getDescription();
         return description;
     }
 
+    //每道题答对的人数 paerdetal
+    public int getsingleRight(Integer examId, String subjectId) {
+        //考试的人
+        List<ExamDetail> examDetails = getAll(examId);
 
+        //先得到scorelist 每个题的满分
+        String sql="SELECT scoreList FROM exam WHERE id="+examId+";";
+        List<Map<String, Object>> scorelist=jdbcTemplate.queryForList(sql);
+        //System.out.println(scorelist.get(0).get("scoreList"));
+        String sl= String.valueOf(scorelist.get(0).get("scoreList"));
+        String[] arr=sl.split(",");
+
+        int num=0;
+        for(int i=0;i<examDetails.size();i++){
+            List<Answer> a = examDetails.get(i).getAnswers();
+            for(int j=0;j<a.size();j++){
+                if(Objects.equals(a.get(j).getSubjectId(), subjectId)){
+                    System.out.println(Integer.parseInt(arr[i]));
+                    if(a.get(j).getScore()==Integer.parseInt(arr[i])){
+                        num++;
+                    }
+                    break;
+                }
+            }
+
+        }
+        return num;
+    }
 }

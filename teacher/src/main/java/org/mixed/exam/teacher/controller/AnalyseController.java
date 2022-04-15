@@ -73,6 +73,7 @@ public class AnalyseController {
     }
     @RequestMapping("/avg")
     public float avg(Integer examId){return analyseService.avg(examId);}
+
     @RequestMapping("/percentage")
     public float[] percentage(Integer examId,Integer totalScore){
        System.out.println(totalScore);
@@ -87,7 +88,7 @@ public class AnalyseController {
         return percentage;
     }
     //跟据
-   //试题分析详情
+   //试题分析详情 查找第一个人的目标题型的题型、题号
     @RequestMapping("/itemDetail")
     public PageInfo<Answer> itemDetail(int pageNum, int pageSize, Integer examId, String type){
         //全部题型
@@ -96,11 +97,24 @@ public class AnalyseController {
         }
         //选择题型
         else{
-            return analyseService.getElseDetil(pageNum,pageSize,13,"SingleChoiceQuestion");
+            return analyseService.getElseDetil(pageNum,pageSize,examId,type);
         }
     }
-
-    //导出
+    //根据题目id查找题目描述
+    @RequestMapping("/description")
+    public String getDescription(String subjectId){
+        return analyseService.getDescription(subjectId);
+    }
+    //每道题答对的人数
+    @RequestMapping("/getRight")
+    public int[] singleRight(Integer examId, String subjectId,Integer total){
+        int right=analyseService.getsingleRight(examId,subjectId);
+        int per=(int)right/total;
+        int[] result={right,per};
+        System.out.println(result);
+        return result;
+    }
+    // 导出
 //    @RequestMapping("/courseScore/export.action")
 //    @ResponseBody
 //    public void export(String code, HttpServletRequest request, HttpServletResponse response){

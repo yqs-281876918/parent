@@ -60,8 +60,9 @@
             case "programProblem":
                 programProblemRender(subject_obj)
                 break
-            case "CombinationChoice":
-
+            case "combinationChoice":
+                combinationChoiceRender(subject_obj)
+                break
         }
     }
     //渲染共有的属性
@@ -83,35 +84,56 @@
     function multipleChoiceRender(subject_obj)
     {
         let text="正确答案:"
-        for(let ans in subject_obj.answers){
-            text+=ans
+        for(let i=0;i<subject_obj.answers.length;i++){
+            text += subject_obj.answers[i]
         }
         $("div.unique-info").html(text)
     }
     //渲染判断题
     function judgmentRender(subject_obj) {
         //显示答案
-        let answer1 = subject_obj.answer;
-        console.log(answer1);
-        let answer = '';
-        answer = answer + subject_obj.options[answer1 - 1];
-        console.log(answer);
-        $("div#judgment_answer_info").html("正确答案：" + answer)
+        let answer = subject_obj.answer;
+
+        $("div.unique-info").html("正确答案：" + answer)
 
     }
     //渲染综合题
     function comprehensiveQuestionRender(subject_obj)
     {
-        $("div#comprehensiveQuestion_answer_info").html("正确答案："+subject_obj.answer)
+        $("div.unique-info").html("正确答案："+subject_obj.answer)
     }
     //渲染程序题
     function programProblemRender(subject_obj)
     {
-        $("div#programProblem_answer_info").html("正确答案："+subject_obj.answer)
+        $("div.unique-info").html("正确答案："+subject_obj.answer)
     }
     //渲染组合选择题
     function combinationChoiceRender(subject_obj){
-
+        let answer = ''
+        var answerLength = subject_obj.answers[subject_obj.answers.length-1].split("-")[0];
+        console.log(answerLength)
+        var answerList = [];
+        for (var i=0;i<answerLength;i++){
+            answerList.push('')
+        }
+        console.log(subject_obj.answers)
+        for (var i=0;i<subject_obj.answers.length;i++){
+            var index = subject_obj.answers[i].split("-")[0];
+            answerList[index-1] += subject_obj.answers[i].split("-")[1]
+        }
+        console.log(answerList)
+        for (var i=0;i<answerLength ;i++){
+            answer += (i+1)+".  "+answerList[i]+"</br>"
+        }
+        $("div.unique-info").html("正确答案："+answer)
+    }
+    //渲染填空题
+    function completionRender(subject_obj){
+        let answer = ''
+        for (var i=0;i<subject_obj.answers.length;i++){
+            answer += (i+1)+".  "+subject_obj.answers[i]+"</br>"
+        }
+        $("div.unique-info").html("正确答案："+answer)
     }
 </script>
 <div class="outer">
