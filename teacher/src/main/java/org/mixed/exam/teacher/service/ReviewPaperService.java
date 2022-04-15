@@ -76,4 +76,8 @@ public class ReviewPaperService {
     public void changeTotalScore(String id, int totalscore) {
         reviewPaperDao.changeTotalScore(id,totalscore);
     }
+
+    public Exam getExam(int examId) {
+        return reviewPaperDao.getExam(examId);
+    }
 }
