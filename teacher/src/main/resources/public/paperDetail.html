@@ -105,14 +105,15 @@
     var pageSize=10;
     var pageNums=0;
     var BarArr;
-    var subject;
+    //var subject;
     var type;
     var index;
+
     function init(){
         var examId = sessionStorage.getItem("id");
         var examName=sessionStorage.getItem("examName");
         jQuery("#examName").html(examName);
-        var type1 = $("#choose").val();
+        var type = $("#choose").val();
 
         var param={
             "pageNum":pageNum,
@@ -122,6 +123,7 @@
             type:'ALL'
         };
         jQuery.post("/teacher/analyse/itemDetail",param,function(rst){
+
             //返回的是目标题型题目列表
             console.log(rst);
             //BarArr=Array.from(rst);
@@ -132,22 +134,22 @@
                 //每一道题
                 var u=BarArr[i];
                 index=i;
-                subject=u.subjectId;
-                type=u.subjectType;
-                if(type==="SingleChoiceQuestion"){type="单选题";}
-                else if(type==="MultipleChoiceQuestion"){type="多选题";}
-                else if(type==="Completion"){type="填空题";}
-                else if(type==="Judgment"){type="判断题";}
-                else if(type==="ComprehensiveQuestion"){type="综合题";}
-                else if(type==="CombinationChoice"){type="综合（组合）选择题";}
-                else if(type==="ProgramProblem"){type="程序题";}
+                var subject=u.subjectId;
+                var type1=u.subjectType;
+                console.log(type1);
+                if(type1==="SingleChoiceQuestion"){type1="单选题";}
+                else if(type1==="MultipleChoiceQuestion"){type1="多选题";}
+                else if(type1==="Completion"){type1="填空题";}
+                else if(type1==="Judgment"){type1="判断题";}
+                else if(type1==="ComprehensiveQuestion"){type1="综合题";}
+                else if(type1==="CombinationChoice"){type1="综合（组合）选择题";}
+                else if(type1==="ProgramProblem"){type1="程序题";}
                 //var index=i+1;
 
                 var trs='';
                 var param1={
                     "subjectId":subject
                 };
-
 
                 console.log(param1);
                 //根据id查题目描述
@@ -164,20 +166,24 @@
                         var param3={
                             "examId":13,
                             "subjectId":subject,
-                            "total":rst1
+                            "total":total
                         };
                         //查找作对人数
                         jQuery.post("/teacher/analyse/getRight",param3,function(rst3){
                             console.log(rst3);
+                            var arr1=rst3;
+                            console.log(arr1);
+                            var right=arr1[0];
+                            var percentage=arr1[1];
                             //var percentage=Math.round(rst3*100)/rst1;
                             //console.log(percentage);
                             trs+=`
                 <tr>
-                    <td style="cursor:default;">${type}</td>
+                    <td style="cursor:default;">${type1}</td>
                     <td style="cursor:default;">${index}</td>
                     <td style="cursor:default;">${rst1}</td>
                     <td style="cursor:default;">${total}</td>
-                    <td style="cursor:default;">${rst3}</td>
+                    <td style="cursor:default;">${right}</td>
                     <td style="cursor:default;">${percentage}%</td>
                     <!--                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">-->
 <!--        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>-->
