@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.mongodb.DBObject;
 import com.mongodb.client.result.DeleteResult;
+import org.mixed.exam.bank.api.pojo.po.Exam;
 import org.mixed.exam.bank.api.pojo.po.Judgment;
 import org.mixed.exam.bank.api.pojo.po.MultipleChoiceQuestion;
 import org.mixed.exam.bank.api.pojo.po.SingleChoiceQuestion;
@@ -29,6 +30,12 @@ public class ReviewPaperDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public Exam getExam(int id){
+        String sql = "select * from exam where id="+id+";";
+        List<Map<String, Object>> e = jdbcTemplate.queryForList(sql);
+        Exam back = (Exam) e.get(0).get("Exam");
+        return back;
+    }
     //ReviewPaper
     public String[] getScoreList(String id){
         ExamDetail e=mongoTemplate.findById(id,ExamDetail.class,"examDetail");
