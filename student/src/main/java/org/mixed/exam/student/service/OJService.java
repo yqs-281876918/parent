@@ -25,6 +25,11 @@ public class OJService
         String path = "D:/code/"+userName+"/"+id;
         File file = new File(path);
         file.mkdirs();
+        //删除class文件
+        File classFile=new File(path+"/Main.class");
+        if(classFile.exists()){
+            classFile.delete();
+        }
         File codeFile=new File(path+"/Main.java");
         try {
             OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(codeFile));
@@ -42,6 +47,9 @@ public class OJService
             compileJava.command("javac", path + "/Main.java");
             Process compile_app = compileJava.start();
             compile_app.waitFor();
+            if(!classFile.exists()){
+                return -1;
+            }
             //判断测试样例
             int length=programProblem.getInputs().size();
             for(int i=0;i<length;i++) {

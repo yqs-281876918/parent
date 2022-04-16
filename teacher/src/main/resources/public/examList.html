@@ -32,23 +32,19 @@
     #page_div #right{
         float: right;
     }
-    body{
-        background-color: #fff9ed;
+    .outer {
+        padding: 40px;
+        box-sizing: border-box;
+        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+        border-radius: 10px;
+        width:1000px;
+        margin-left: 40px;
+        margin-right: 40px;
+        margin-top: 40px;
     }
-    table{
-        background-color: #f3fdff;
-    }
-    #tabletitle{
-        background-color: #9d9d9d;
-    }
-    #tablebottom{
-        background-color: #fff9ed;
-    }
-    #search{
-        padding: 10px 20px;
-    }
-</style>
 
+</style>
+<div class="outer">
 <!-- 批量选择删除的提示框 -->
 <div class="modal" id="delMulDialog" tabindex="-1">
     <div class="modal-dialog ">
@@ -163,6 +159,7 @@
         </form>
     </div>
 
+</div>
 </div>
 <!--复选框-->
 <script>

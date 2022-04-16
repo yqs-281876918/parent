@@ -436,8 +436,9 @@
             for(var i=0;i<nums.length;i++){
                 nav+=`
             <li class="page-item ${pageNum==nums[i]?'active':''}">
-                                    <a href="javascript:void(0)" class="page-link">${nums[i]}</a>
-                                </li>
+                            <a href="javascript:void(0)" class="page-link"
+                                onclick="pageUtil(${nums[i]})">${nums[i]}</a>
+                        </li>
 
             `;
             }

@@ -94,7 +94,7 @@
                         <div class="bj-date">
                             <span class="start">班级邀请码：<span class="sdate" id="invitation"></span></span>
                         </div>
-                        <a href="javascript:void(0)" class="libj clsTest" >该班级测试</a>
+                        <a href="javascript:void(0)" class="libj clsTest" onclick="goExamList()">该班级测试</a>
                         <a href="javascript:void(0)" class="libj outCls" onclick="showDeleteClassDialog()">删除班级</a>
                     </div>
                     <div class="bj-message detail-bj">
@@ -295,6 +295,12 @@
                 alert("移除失败！请检查该同学是否还在班级内！")
             }
         })
+    }
+</script>
+<script>
+    function goExamList(){
+        var cno = sessionStorage.getItem("cno")
+        window.location.href='../examList.html';
     }
 </script>
 </body>
