@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <title>发布考试</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/teacher/assets/css/wui.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/teacher/assets/js/format.js"></script>
+    <script type="text/javascript" src="/teacher/assets/js/angular.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/teacher/assets/js/wui-date.js" charset="utf-8"></script>
+
 </head>
-<body>
+<body >
 <script>
+
+    var app = angular.module("app",["wui.date"]);
+    var date=$("#date").val();
+    console.log(date);
     function addClass (obj)
     {
+
         const index = obj.selectedIndex;
         let classID = obj.options[index].value;
         let className = $('#class-selector').find("option:selected").text()
@@ -30,7 +39,18 @@
                 <span>开始时间</span>
             </div>
             <div class="col-md-6">
-                <input name="startTime" type="text" class="form-control" placeholder="xxxx-xx-xx xx:xx:xx">
+                <div ng-app="app" class="wui-area">
+<!--                    <h4 class="h4">选择年月日 时分秒</h4>-->
+<!--                    <p>输出格式yyyy-mm-dd hh:mm:ss</p>-->
+                    <wui-date
+                            format="yyyy-mm-dd hh:mm:ss"
+                            placeholder="请选择或输入日期"
+                            id="date4"
+                            btns="{'ok':'确定','now':'此刻'}"
+                            ng-model="date4"
+                    >
+                    </wui-date>
+                </div>
             </div>
         </div>
         <div class="row">
