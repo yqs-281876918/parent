@@ -11,10 +11,23 @@
     <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
     <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<style>
+    .outer {
+        padding: 40px;
 
+        box-sizing: border-box;
+        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+        border-radius: 10px;
+        width:1000px;
+        margin-left: 40px;
+        margin-right: 40px;
+        margin-top: 40px;
+    }
+</style>
 </head>
 <body>
 <!--添加课程的模态框-->
+<div class="outer">
 <div class="modal fade" id="addCourseDialog" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -86,7 +99,7 @@
 <div class="accordion" id="accordionExample">
 
 </div>
-
+</div>
 <script>
     function showAddCourseDialog(){
         jQuery("#addCourseDialog").modal('show');

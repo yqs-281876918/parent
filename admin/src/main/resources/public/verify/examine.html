@@ -14,11 +14,19 @@
             float: left;
         }
     </style>
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+<!--    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
+<!--    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 </head>
 <body>
+<!-- 新 Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <div class="modal" tabindex="-1" id="passDialog">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -119,8 +127,9 @@
             case "programProblem":
                 programProblemRender(subject_obj)
                 break
-            case "CombinationChoice":
-
+            case "combinationChoice":
+                combinationChoiceRender(subject_obj)
+                break
         }
     }
 
@@ -148,36 +157,57 @@
     //渲染多选题
     function multipleChoiceRender(subject_obj)
     {
-        let text="正确答案:"+subject_obj.answers;
-        // for(let ans in subject_obj.answers){
-        //     text+=ans
-        // }
+        let text="正确答案:"
+        for(let i=0;i<subject_obj.answers.length;i++){
+            text += subject_obj.answers[i]
+        }
         $("div.unique-info").html(text)
     }
     //渲染判断题
     function judgmentRender(subject_obj) {
         //显示答案
-        let answer1 = subject_obj.answer;
-        console.log(answer1);
-        let answer = '';
-        answer = answer + subject_obj.options[answer1 - 1];
-        console.log(answer);
-        //$("div#judgment_answer_info").html("正确答案：" + answer)
-        $("div#judgment_answer_info").html("正确答案：" + subject_obj.answer);
+        let answer = subject_obj.answer;
+
+        $("div.unique-info").html("正确答案：" + answer)
+
     }
     //渲染综合题
     function comprehensiveQuestionRender(subject_obj)
     {
-        $("div#comprehensiveQuestion_answer_info").html("正确答案："+subject_obj.answer)
+        $("div.unique-info").html("正确答案："+subject_obj.answer)
     }
     //渲染程序题
     function programProblemRender(subject_obj)
     {
-        $("div#programProblem_answer_info").html("正确答案："+subject_obj.answer)
+        $("div.unique-info").html("正确答案："+subject_obj.answer)
     }
     //渲染组合选择题
     function combinationChoiceRender(subject_obj){
-
+        let answer = ''
+        var answerLength = subject_obj.answers[subject_obj.answers.length-1].split("-")[0];
+        console.log(answerLength)
+        var answerList = [];
+        for (var i=0;i<answerLength;i++){
+            answerList.push('')
+        }
+        console.log(subject_obj.answers)
+        for (var i=0;i<subject_obj.answers.length;i++){
+            var index = subject_obj.answers[i].split("-")[0];
+            answerList[index-1] += subject_obj.answers[i].split("-")[1]
+        }
+        console.log(answerList)
+        for (var i=0;i<answerLength ;i++){
+            answer += (i+1)+".  "+answerList[i]+"</br>"
+        }
+        $("div.unique-info").html("正确答案："+answer)
+    }
+    //渲染填空题
+    function completionRender(subject_obj){
+        let answer = ''
+        for (var i=0;i<subject_obj.answers.length;i++){
+            answer += (i+1)+".  "+subject_obj.answers[i]+"</br>"
+        }
+        $("div.unique-info").html("正确答案："+answer)
     }
 </script>
 <div class="outer">
@@ -219,8 +249,8 @@
         <div class="line"></div>
         <span>敏感词检测</span>
         <div style="border:1px solid #0f0f0f">
-            <button onclick="passDialog()">通过</button>
-            <button onclick="failDialog()">不通过</button>
+            <button onclick="passDialog()" class="btn btn-primary">通过</button>
+            <button onclick="failDialog()" class="btn btn-danger">不通过</button>
         </div>
     </div>
 </div>
@@ -292,7 +322,7 @@
         }
         jQuery.post("/admin/examineExercises/pass",form,function (rst) {
             alert("已通过");
-            location.href="/admin/verify/list";
+            location.href="/admin/verify/list.html";
         })
     }
     function failDialog() {
@@ -304,7 +334,7 @@
         }
         jQuery.post("/admin/examineExercises/fail",form,function (rst) {
             alert("不通过");
-            location.href="/admin/verify/list";
+            location.href="/admin/verify/list.html";
         })
     }
 </script>

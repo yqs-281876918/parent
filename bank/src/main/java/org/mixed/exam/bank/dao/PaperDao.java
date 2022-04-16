@@ -33,10 +33,16 @@ public class PaperDao {
     public List<Paper> getControl(String teacherid){
         return null;
     }
-    //封存
+    //封存试卷
     public void sealed(String id){
         Query query = Query.query(Criteria.where("id").is(id));
         Update update = Update.update("open",false);
+        mongoTemplate.updateFirst(query, update, Paper.class,DOCUMENT_NAME);
+    }
+    //开放试卷
+    public void openPaper(String id){
+        Query query = Query.query(Criteria.where("id").is(id));
+        Update update = Update.update("open",true);
         mongoTemplate.updateFirst(query, update, Paper.class,DOCUMENT_NAME);
     }
     //通过id取一个试卷
