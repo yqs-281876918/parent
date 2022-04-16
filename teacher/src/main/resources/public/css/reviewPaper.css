@@ -17,6 +17,18 @@
     right: 3%;
     top: 2%;
     box-shadow: 10px 10px 5px #888888;
+
+    OVERFLOW-Y: scroll;
+    scrollbar-face-color:#B3DDF7;
+    scrollbar-shadow-color:#B3DDF7;
+    scrollbar-highlight-color:#B3DDF7;
+    scrollbar-3dlight-color:#EBEBE4;
+    scrollbar-darkshadow-color:#EBEBE4;
+    scrollbar-track-color:#F4F4F0;
+    scrollbar-arrow-color:#000000;
+}
+#accordionExample::-webkit-scrollbar{
+    display: none;
 }
 
 #info{
@@ -167,27 +179,36 @@ a{
     border: #1db9aa;
     display: block;
     text-align: center;
-    width: 30px;
-    height: 30px;
+    line-height:18px;
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+    left: 4px;
+
 }
 
 a.buttonR{
-     background-color: #f6a7b3;
+    background-color: #f6a7b3;
 
-     background-image:-webkit-linear-gradient(top, #f6a7b3, #f0a3af);
-     background-image:-moz-linear-gradient(top, #f6a7b3, #f0a3af);
-     background-image:linear-gradient(top, #f6a7b3, #f0a3af);
+    background-image:-webkit-linear-gradient(top, #f6a7b3, #f0a3af);
+    background-image:-moz-linear-gradient(top, #f6a7b3, #f0a3af);
+    background-image:linear-gradient(top, #f6a7b3, #f0a3af);
 
-     border:1px solid #eb9ba7;
-     border-radius:2px;
+    border:1px solid #eb9ba7;
+    border-radius:2px;
 
-     box-shadow:0 2px 2px #ccc;
+    box-shadow:0 2px 2px #ccc;
 
-     color:#fff;
-     text-decoration: none !important;
-     padding:15px 20px;
-     display:inline-block;
-     cursor:pointer;
+    color:#fff;
+    text-decoration: none !important;
+    padding:18px 18px;
+    display:inline-block;
+    cursor:pointer;
+
+    line-height:18px;
+    font-size:14px;
+    text-align: center;
+    zoom: 1;
  }
 a.buttonG{
     background-color: limegreen;
@@ -203,17 +224,22 @@ a.buttonG{
 
     color:#fff;
     text-decoration: none !important;
-    padding:15px 20px;
+    padding:18px 18px;
     display:inline-block;
     cursor:pointer;
+
+    line-height:18px;
+    font-size:14px;
+    text-align: center;
+    zoom: 1;
 }
 
-#inforight{
-    position: absolute;
-    top: 5px;
-    right: 25%;
-    height: 141px;
-    font-size:20px;
-}
+/*#inforight{*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    right: 25%;*/
+/*    height: 141px;*/
+/*    font-size:20px;*/
+/*}*/
 
 

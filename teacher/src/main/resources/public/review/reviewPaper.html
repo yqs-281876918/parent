@@ -37,8 +37,8 @@
     <div id="infoBG"></div>
     <div id="info">
     </div>
-    <div id="inforight">
-    </div>
+<!--    <div id="inforight">-->
+<!--    </div>-->
     <div id="review">
         <div id="inner"></div>
     </div>
@@ -137,6 +137,7 @@
                         </div>
                         `;
                         jQuery("#accordionExample").html(rightGuide);
+
                     }else{
                         // alert(table);
                         if(subject[i].score==-1){
@@ -148,6 +149,7 @@
                         jQuery("#a"+c).html(table);
                         rightGuide=jQuery("#accordionExample").html();
                     }
+
                     //显示题目
                     console.log(subject[i].answerList);
                     jQuery.ajax({
@@ -212,7 +214,7 @@
 
                                 r+=`
                                 <div id="mark-${count}" class="q">
-                                    <div><p class="text-break question_title"> 题目${count+1}：<p class="question_description">${back.description}</p></p></div>
+                                    <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p class="question_description">${back.description}</p></p></div>
                                     <div class="question_score">分值：${scorelist[count]}</div>
                                     <div class="student_answer">学生作答情况：${stuanswer}</div>
                                     <div id="ans${count}" class="question_answer">${anser}</div>
@@ -224,7 +226,7 @@
                             }else if(back.answers!=undefined){
                                 r+=`
                                 <div id="mark-${count}" class="q">
-                                    <div><p class="text-break question_title"> 题目${count+1}：<p>${back.description}</p></p></div>
+                                    <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p>${back.description}</p></p></div>
                                     <div class="question_score">分值：${scorelist[count]}</div>
                                     <div class="student_answer">学生作答情况：${stuanswer}</div>
                                     <div id="ans${count}" class="question_answer">${anser}</div>
@@ -243,9 +245,10 @@
                 //jQuery("#accordionExample").html(rightGuide);
             }
         })
-
     }
+    $('.collapse').collapse();
 </script>
+
 <script>
     function changeScore(id) {
         var score = parseInt(jQuery("#score"+id).val());

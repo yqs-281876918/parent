@@ -7,25 +7,74 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.common.min.js"></script>
+    <style> .outer {
+        padding: 40px;
+        box-sizing: border-box;
+        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+        border-radius: 3px;
+        width:1000px;
+        margin-left: 40px;
+        margin-right: 40px;
+        margin-top: 40px;
+        background: #f1f1f1;
+    }
+    .nav
+    {
+        padding: 5px 14px;
+        font-size: 15px;
+        margin-right: 12px;
+        display: inline-block;
+        box-sizing:border-box;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #dedede;
+        float: left;
+    }
+    .dhl{
+        background: #ffffff;
+        border: 0.5px solid #dedede;
+
+    }
+    .bar{
+        width: 600px;
+        float: left;
+        margin: 10px;
+    }
+    .pie{
+        width: 600px;
+        float: left;
+        margin: 10px;
+    }
+    </style>
 </head>
 <body onload="init()">
-<div id="container" >
-    <div id="choose type">
-        <select id="choose" name="choose" class="form-control">
-            <option value="ALL" selected = "selected">全部题型</option>
-            <option value="SingleChoiceQuestion" >单选题</option>
-            <option value="MultipleChoiceQuestion">多选题</option>
-            <option value="Completion">填空题</option>
-            <option value="Judgment">判断题</option>
-            <option value="ComprehensiveQuestion">综合题</option>
-            <option value="CombinationChoice">综合（组合）选择题</option>
-            <option value="ProgramProblem">程序题</option>
-        </select>
+<div class="outer">
+    <div id="container" >
+        <div id="choose type">
+            <select id="choose" name="choose" class="form-control">
+                <option value="ALL" selected = "selected">全部题型</option>
+                <option value="SingleChoiceQuestion" >单选题</option>
+                <option value="MultipleChoiceQuestion">多选题</option>
+                <option value="Completion">填空题</option>
+                <option value="Judgment">判断题</option>
+                <option value="ComprehensiveQuestion">综合题</option>
+                <option value="CombinationChoice">综合（组合）选择题</option>
+                <option value="ProgramProblem">程序题</option>
+            </select>
+        </div>
     </div>
-
+    <div class="dhl">
+        <div class="nav">
+            <button onclick="showPie()">饼图</button>
+        </div>
+        <div class="nav">
+            <button onclick="showBar()">柱状图</button>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div id="pie" hidden="hidden" class="pie" style="height:400px"></div>
+    <div id="bar" class="bar" style="height:400px"></div>
+    <div style="clear: both"></div>
 </div>
-<div id="pie" class="pie" style="height:400px"></div>
-<div id="bar" class="bar" style="height:400px"></div>
 <script>
     var Barlist;
 
@@ -40,7 +89,7 @@
         var myChart = echarts.init(document.getElementById('pie'));
         // 指定图表的配置项和数据
         var option = {
-            backgroundColor:'#FAFAD2',
+            backgroundColor:'#ffffff',
             title: {
                 text: '各分数段比例统计',
                 left: 'center',
@@ -114,6 +163,7 @@
         var myChart1 = echarts.init(document.getElementById('bar'));
         // 指定图表的配置项和数据
         var option1 = {
+            backgroundColor:'#ffffff',
             title: {
                 text: '各分数段比例统计'
             },
@@ -146,6 +196,16 @@
             console.log(option1);
             myChart1.setOption(option1);
         })
+    }
+</script>
+<script>
+    function showPie() {
+        $("#pie").show()
+        $("#bar").hide()
+    }
+    function showBar() {
+        $("#pie").hide()
+        $("#bar").show()
 
     }
 </script>
