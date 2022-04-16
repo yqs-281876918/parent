@@ -2,52 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>考试列表</title>
-    <meta charset="UTF-8">
-    <title>role</title>
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>MIXED考试平台</title>
+    <meta name="MSSmartTagsPreventParsing" content="True" />
+    <meta http-equiv="MSThemeCompatible" content="Yes" />
+    <meta name="renderer" content="webkit"  />
+    <link href="../css/stu_css.css" rel="stylesheet">
+    <style>
+        #delete{
+            padding: 10px 20px;
+            text-align: right;
+            float: right;
+        }
+    </style>
+
 </head>
 <body onload="init()">
-<style type="text/css">
-    a.hand:hover   {cursor:hand}
-</style>
-<style type="text/css">
-    .unselectable {
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-    #top{
-        padding: 10px 20px;
-        text-align: right;
-    }
-    #page_div #left{
-        float: left;
-    }
-    #page_div #right{
-        float: right;
-    }
-    body{
-        background-color: #fff9ed;
-    }
-    table{
-        background-color: #f3fdff;
-    }
-    #tabletitle{
-        background-color: #9d9d9d;
-    }
-    #tablebottom{
-        background-color: #fff9ed;
-    }
-    #search{
-        padding: 10px 20px;
-    }
-</style>
+<!-- 新 Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <!-- 批量选择删除的提示框 -->
 <div class="modal" id="delMulDialog" tabindex="-1">
@@ -61,7 +41,7 @@
                 </button>
             </div>
             <div class="alert alert-warning" role="alert">
-                您确定要删除选中项吗？
+                您确定要删除选中的考试吗？
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
@@ -112,90 +92,50 @@
     </div>
 </div>
 <!--搜索模态框结束-->
-<div id="container">
-    <div id="top">
-        <button type="button"
-                class="btn btn-default "
-                onclick="showSearchDialog()">搜索考试</button>
-        <button type="button"
-                class="btn btn-outline-warning btn-danger"
-                onclick="showDeleteDialog()">删除考试</button>
-    </div>
-    <div id="middle">
-        <form id="Form">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped mb-0" align="center">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <input type="checkbox" id="chAll"
-                                               onclick="selectAll(this.checked)">
-                                    </th>
-                                    <th align="right" colspan="3">考试名称</th>
-                                    <th align="right" colspan="1">考试时间</th>
-                                    <th align="right" colspan="1">考试时长</th>
-                                    <th align="right" colspan="1">考试总分</th>
-                                    <th align="right" colspan="5">考试简介</th>
-                                    <th align="right" colspan="2">批阅进度</th>
-                                    <th align="right" colspan="2">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody id="data">
-                                </tbody>
-                                <tfoot>
-                                <tr id="table bottom" class="table-bordered">
-                                    <td colspan=5">
-                                        <div id="page_div">
-                                            <div id="right">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
+<div id="wrap">
+    <div id="header">
+        <div class="itest-logo"></div>
+        <span class="itestName">MIXED考试平台</span>
+        <ul class="h-list">
+            <li class="level1 ">
+                <a  class="fir le-bg">我的班级</a>
+            </li>
+        </ul>
+        <div class="per-infor" style="top:0px">
+            <!--            <img  id="userlogo3" src="" class="person-head" style="width:30px;height:30px;border-radius: 50%;">-->
+            <a href="#" class="infor dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="userName"></a>
+
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">个人中心</a>
+                <a class="dropdown-item" href="#">退出登录</a>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div id="test-con">
+        <div class="now-his">
+            <a  class="now select">历史考试</a>
+        </div>
+        <div class="clear"></div>
+
+        <div id="container"></div>
 </div>
-<!--复选框-->
-<script>
-    function selectAll(f) {
-        //找页面控件名为input的并且name=users的控制
-        //设置控件的属性 checked=f
-        jQuery("input[name='exams']").prop("checked",f);
-    }
-</script>
+
 <script>
     var pageNum=1;
     var pageSize=10;
     var pageNums=0;
-
     var classId=sessionStorage.getItem("classId");
     function init() {
-        // var param={
-        //     "pageNum":pageNum,
-        //     "pageSize":pageSize,
-        //     "classId":2
-        // };
-        //console.log(param);
         jQuery.ajax({
             type: 'post',
             url: '/teacher/analyse/findAll',
             async: false,
-            data: {'pageNum': pageNum, 'pageSize': pageSize, 'classId': 2},
+            data: {'pageNum': pageNum, 'pageSize': pageSize, 'classId': classId},
             success: function (rst) {
-                console.log(rst);
-                pageNums = rst.pages;
-                jQuery("#pages").html(pageNums);
-                jQuery("#pageNum").html(pageNum);
-                jQuery("#totalnum").html(rst.total);
+                console.log(rst)
                 //alert(rst);
                 //1、查询查询的数据
                 var arrs = rst.list;
@@ -203,7 +143,6 @@
                 for (var i = 0; i < arrs.length; i++) {
                     //获取每一行对应的用户对象
                     var u = arrs[i];
-                    var id=u.id;
                     //考试id
                     jQuery.ajax({
                         type: 'get',
@@ -218,73 +157,44 @@
                                 finish = "已完成批阅";
                             }
                             trs += `
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="ids" value="${u.id}">
-                                </td>
+                    <div class="card" id="${u.id}">
+                        <div class="card-header">
+                            <input type="hidden" value="${u.examName}">
+                        </div>
+                        <div class="card-body">
+                            <div style="display: inline-block">
+                                <h5 class="card-title">
+                                    <a href="#" onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">
+                                     ${u.examName}</a>
+                                </h5>
+                             </div>
+                        </div>
+                        <div id="delete" style="display: inline-block">
+                            <a href="#" class="btn btn-danger"
+                                onclick="showDeleteDialog('${u.id}')">
+                                删除考试</a>
+                                <a href="#" class="btn btn-green"
+                                   onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
+                                <a href="#" class="btn btn-blue"
+                                   onclick="review('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
+                        </div>
+                        <p class="card-text" onclick="find('${u.id}')">开始时间：${u.startTime}</p>
+                        <p class="card-text" onclick="find('${u.id}')">测试时间：${u.testTime}</p>
+                        <p class="card-text" onclick="find('${u.id}')">总分：${u.totalScore}</p>
+                        <p class="card-text" >批阅进度：${finish}</p>
 
-                                <td colspan="3" onclick="find('${u.id}')">${u.examName}</td>
-                                <td colspan="1" onclick="find('${u.id}')">${u.startTime}</td>
-                                <td colspan="1" onclick="find('${u.id}')">${u.testTime}</td>
-                                <td colspan="1" onclick="find('${u.id}')">${u.totalScore}</td>
-                                <td colspan="5" onclick="find('${u.id}')">${u.introduce}</td>
-                                <td colspan="5" >${finish}</td>
-                                <td colspan="2">
-                                    <a href="#"
-                                        onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
-                                        <a href="#"
-                                        onclick="review('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
-
-                                </td>
-
-
-                            </tr>
-                            `;
+                    </div>
+                            `
                         }
-
-                        // var param1={
-                        //     "id":id
-                        // };
-                        // console.log(param1);
-
-                        //循环一次一行数据
-                        //使用反引号,用于定义模板
-
                     })
-
                 }
-                jQuery("#data").html(trs);
-
-                //把根据数据构建的行添加到表格
-                var nums = rst.navigatepageNums;
-                var nav = `
-                <ul class="pagination">
-                                     <li class="page-item">
-                                            <a href="#" class="page-link"
-                                            onclick="pageUtil(${pageNum - 1})">上一页</a>
-                                        </li>
-                                        `;
-                for (var i = 0; i < nums.length; i++) {
-                    nav += `
-                    <li class="page-item ${pageNum == nums[i] ? 'active' : ''}">
-                                            <a href="#" class="page-link">${nums[i]}</a>
-                                        </li>
-
-                    `;
-                }
-
-                nav += `
-                                        <li class="page-item">
-                                            <a href="#" class="page-link"
-                                            onclick="pageUtil(${pageNum + 1})">下一页</a>
-                                        </li>
-                                    </ul>
-                `;
-                jQuery("#right").html(nav);
-
+                jQuery("#container").html(trs);
             }
         })
     }
+    jQuery(function (){
+        init();
+    })
 
 </script>
 <!--find-->
@@ -371,26 +281,19 @@
 <!--删除-->
 <!--showDeleteMulDialog-->
 <script>
-    function showDeleteDialog() {
-        var arrs=jQuery("input[name='ids']:checked").length;
-        if(arrs>0){
-            jQuery("#delMulDialog").modal('show');
-        }else{
-            alert("您还未选择要删除的考试");
-        }
+    var deleteid;
+    function showDeleteDialog(id) {
+        deleteid=id;
+        jQuery("#delMulDialog").modal('show');
     }
-</script>
-<script>
+
     function doDeleteMul() {
         jQuery("#delMulDialog").modal('hide');
-        //获取选择的复选框中的值
-        var form=jQuery("#Form").serialize();
-        jQuery.post("/teacher/analyse/delete",form,function (rst) {
+        jQuery.post("/teacher/analyse/delete",{'id':deleteid},function (rst) {
             console.log(rst);
             if(rst>0)
             {
                 alert("删除成功!");
-                pageNum=1;
                 init();
             }else{
                 alert("删除失败!");

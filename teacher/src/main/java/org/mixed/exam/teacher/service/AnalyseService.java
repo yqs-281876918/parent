@@ -39,9 +39,9 @@ public class AnalyseService {
         page=new PageInfo<Exam>(exams,4);
         return page;
     }
-    public int delete(int[] ids){
+    public int delete(int id){
         int row=-1;
-        row=analyseMapper.delete(ids);
+        row=analyseMapper.delete(id);
         return row;
     }
     public PageInfo<Exam> Search(int pageNum, int pageSize,String examName){
@@ -188,6 +188,31 @@ public class AnalyseService {
     //判断批阅是否完成
     public int finish(Integer id) {
         return analyseDao.right(id);
+    }
+
+    public int[] getscores_detail(Integer examId, String type) {
+        float[] list1=analyseDao.getscores(examId,type);
+        float sum=list1[list1.length-1];
+        //System.out.println(sum);
+        int per1=0,per2=0,per3=0,per4=0;
+        for(int i=0;i<list1.length-1;i++){
+            float per= (float)( Math.round(list1[i]*100/sum)/100.0);
+            //System.out.println(per);
+            if(per>=0&&per<=0.25){
+                per1++;
+            }
+            if(per>0.25&&per<=0.50){
+                per2++;
+            }
+            if(per>0.50&&per<=0.75){
+                per3++;
+            }
+            if(per>0.75&&per<=1.00){
+                per4++;
+            }
+        }
+        int[] percentage1={per1,per2,per3,per4};
+        return percentage1;
     }
 
 //    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){

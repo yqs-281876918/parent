@@ -25,11 +25,7 @@
         delete
         from exam
         <where>
-            id in
-            <foreach collection="array" item="id"
-                     open="(" close=")" separator=",">
-                #{id}
-            </foreach>
+            id =#{id}
         </where>
     </delete>
 </mapper>

@@ -31,9 +31,9 @@ public class AnalyseController {
         return page;
     }
     @RequestMapping("/delete")
-    public int delete(int[] ids){//删除
+    public int delete(int id){//删除
         int row=0;
-        row=analyseService.delete((ids));
+        row=analyseService.delete((id));
         return row;
     }
     @RequestMapping("/Search")
@@ -83,8 +83,13 @@ public class AnalyseController {
     //填空题分数段统计
     @RequestMapping("/apart-percentage")
     public int[] single(Integer examId,String type){
-        int[] percentage=analyseService.getscores(13, "SingleChoiceQuestion");
-
+        int[] percentage=analyseService.getscores(examId, type);
+        return percentage;
+    }
+    //填空题分数段统计
+    @RequestMapping("/apart-percentage1")
+    public int[] single_detail(Integer examId,String type){
+        int[] percentage=analyseService.getscores_detail(examId,type);
         return percentage;
     }
     //跟据
