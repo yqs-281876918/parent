@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,20 +30,14 @@ public class AnalyseService {
     @Autowired
     private AnalyseDao analyseDao;
 
-    public PageInfo<Exam> findAll(int pageNum, int pageSize){
-        PageInfo<Exam> page=null;
-        //设置分页
-        PageHelper.startPage(pageNum,pageSize);
-        //查询需要的数据
-        List<Exam> exams= analyseMapper.findAll();
-        //users表示页面中呈现的数据
-        //4表示页码个数
-        page=new PageInfo<Exam>(exams,4);
-        return page;
+    public List<Exam> findAll(int classId){
+        List<Exam> exams= analyseMapper.findAll(classId);
+
+        return exams;
     }
-    public int delete(int[] ids){
+    public int delete(int id){
         int row=-1;
-        row=analyseMapper.delete(ids);
+        row=analyseMapper.delete(id);
         return row;
     }
     public PageInfo<Exam> Search(int pageNum, int pageSize,String examName){
@@ -98,7 +94,7 @@ public class AnalyseService {
             sum=sum+examDetails.get(i).getTotalScore();
             count++;
         }
-        avg=sum/count;
+        avg= (float)( Math.round(sum*100/count)/100.0);
         return avg;
 
     }
@@ -183,6 +179,36 @@ public class AnalyseService {
    // 每道题答对的人数
     public int getsingleRight(Integer examId, String subjectId) {
         return analyseDao.getsingleRight(examId,subjectId);
+    }
+
+    //判断批阅是否完成
+    public int finish(Integer id) {
+        return analyseDao.right(id);
+    }
+
+    public int[] getscores_detail(Integer examId, String type) {
+        float[] list1=analyseDao.getscores(examId,type);
+        float sum=list1[list1.length-1];
+        //System.out.println(sum);
+        int per1=0,per2=0,per3=0,per4=0;
+        for(int i=0;i<list1.length-1;i++){
+            float per= (float)( Math.round(list1[i]*100/sum)/100.0);
+            //System.out.println(per);
+            if(per>=0&&per<=0.25){
+                per1++;
+            }
+            if(per>0.25&&per<=0.50){
+                per2++;
+            }
+            if(per>0.50&&per<=0.75){
+                per3++;
+            }
+            if(per>0.75&&per<=1.00){
+                per4++;
+            }
+        }
+        int[] percentage1={per1,per2,per3,per4};
+        return percentage1;
     }
 
 //    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){

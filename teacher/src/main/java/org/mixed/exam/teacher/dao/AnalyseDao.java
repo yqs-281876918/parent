@@ -166,4 +166,16 @@ public class AnalyseDao {
         }
         return num;
     }
+    //判断批阅是否完成
+    public int right(Integer id) {
+        List<ExamDetail> examDetails = getAll(id);
+        int flag=1;
+        for(int i=0;i<examDetails.size();i++){
+            if(examDetails.get(i).getFinishReview()==0){
+                flag=0;
+                break;
+            }
+        }
+        return flag;
+    }
 }

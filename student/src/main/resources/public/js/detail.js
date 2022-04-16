@@ -143,7 +143,10 @@ var contestDetailPage = {
             $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  name="questionAnswer" id="questionAnswer" rows="20"></textarea>\n' +
-                '                    </div>';
+                '                    </div>\n' +
+                '<button class="ui basic loading button" onclick="contestDetailPage.submitCode()">提交代码</button>\n' +
+                '<div class="programProblemCodeSCore">\n' +
+                '</div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
         } else {
             $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
@@ -339,7 +342,12 @@ var contestDetailPage = {
             $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  name="questionAnswer" id="questionAnswer" rows="20"></textarea>\n' +
-                '                    </div>';
+                '                   </div>\n' +
+                '<div id="programProblemButton">\n' +
+                '<button class="ui positive basic button" onclick="contestDetailPage.submitCode()">提交代码</button>\n' +
+                '</div>\n' +
+                '<div id="programProblemCodeSCore">\n' +
+                '</div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
 
             //显示之前作答区的答案
@@ -428,6 +436,29 @@ var contestDetailPage = {
         }
         //TODO::交卷
         contestDetailPage.submittingContestAction();
+    },
+    //代码评判
+    submitCode: function (){
+        var code = $("#questionAnswer").val();
+        var programProblemButton = '<button class="ui basic loading button">提交代码</button>'
+        $("#programProblemButton").html(programProblemButton)
+        var id = contestDetailPage.data.questionsAnswer[contestDetailPage.data.currentQuestionIndex].subjectId
+        jQuery.post("/student/oj/judge",{'code':code,'id':id},function (rst){
+            if (rst==-1){
+                var codeResult = '得分：0分！出现语法错误！'
+                $("#programProblemCodeSCore").html(codeResult);
+                programProblemButton = '<button class="ui positive basic button" onclick="contestDetailPage.submitCode()">提交代码</button>'
+                $("#programProblemButton").html(programProblemButton)
+            }else{
+                var caseNum = contestDetailPage.data.questions[contestDetailPage.data.currentQuestionIndex].inputs.length
+                var score = rst/caseNum * contestDetailPage.data.scoreList[contestDetailPage.data.currentQuestionIndex]
+                var codeResult = '得分：'+score+'分！通过测试用例 '+rst+'/'+caseNum;
+                $("#programProblemCodeSCore").html(codeResult);
+                contestDetailPage.data.questionsAnswer[contestDetailPage.data.currentQuestionIndex].score = score
+                programProblemButton = '<button class="ui positive basic button" onclick="contestDetailPage.submitCode()">提交代码</button>'
+                $("#programProblemButton").html(programProblemButton)
+            }
+        })
     },
     //正在交卷
     submittingContestAction: function () {

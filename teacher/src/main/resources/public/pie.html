@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>成绩分析</title>
+    <meta charset="UTF-8">
+    <title>analyse</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <link rel="stylesheet" href="assets/css/analyse.css">
+</head>
+<body onload="init()">
+<!-- 新 Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<div id="box1" class="pie" style="height:400px"></div>
+<div id="box2" class="pie" style="height:400px"></div>
+<div id="box3" class="pie" style="height:400px"></div>
+<script>
+    function init(){
+        var examId = sessionStorage.getItem("id");
+        var totalScore=sessionStorage.getItem("totalScore");
+
+        var param1={
+            "examId":examId,
+            "totalScore":totalScore
+        };
+        console.log(param1);
+
+        //及格率的图
+        var myChart = echarts.init(document.getElementById('box1'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: ''
+            },
+            series: [{
+                name: '比例',
+                type: 'pie',
+                colorByPoint: true,
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: false,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}%' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'及格率',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    },
+                    {
+                        value: '',
+                        name: '',
+
+                    }
+
+                ]
+            }]
+        };
+
+        jQuery.post("/teacher/analyse/percentage",param1,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            var pass1=0;
+            pass1=pass1+BarArr[3]+BarArr[4];
+            personNum=BarArr[5];
+            pass1=Math.floor(pass1*100/personNum);
+            console.log(pass1);
+            console.log(personNum);
+            option.series[0].data.push(pass1);
+            var unpass1=100-pass1;
+            console.log(unpass1);
+            option.series[0].data.push(unpass1);
+            myChart.setOption(option);
+        })
+
+        //优良率的图
+        var myChart2 = echarts.init(document.getElementById('box2'));
+        // 指定图表的配置项和数据
+        var option2 = {
+            title: {
+                text: ''
+            },
+            series: [{
+                name: '比例',
+                type: 'pie',
+                colorByPoint: true,
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: true,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}%' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'优良率',
+                    },
+                    {
+                        value: '',
+                        name: '',
+                    }
+
+                ]
+            }]
+        };
+        jQuery.post("/teacher/analyse/percentage",param1,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            var excellent=BarArr[4];
+            personNum=BarArr[5];
+            excellent = Math.floor(excellent*100/personNum);
+            option2.series[0].data.push(excellent);
+            var unexe=100-excellent;
+            option2.series[0].data.push(unexe);
+            myChart2.setOption(option2);
+        })
+
+
+        //平均分的图
+        var myChart3 = echarts.init(document.getElementById('box3'));
+        // 指定图表的配置项和数据
+        var option3 = {
+            title: {
+                text: ''
+            },
+            series: [{
+                name: '比例',
+                type: 'pie',
+                colorByPoint: true,
+                center: ['50%', '50%'], // 饼图的圆心坐标
+                radius: ['60%', '70%'],
+                avoidLabelOverlap: false,
+                hoverAnimation: false,
+                label: { //  饼图图形上的文本标签
+                    normal: { // normal 是图形在默认状态下的样式
+                        show: true,
+                        position: 'center',
+                        color: '#000000',
+                        fontSize: 14,
+                        fontWeight: 'bold',
+                        formatter: '{b}\n{c}' // {b}:数据名； {c}：数据值； {d}：百分比
+                    }
+                },
+                data: [
+                    {
+                        value: '',
+                        name:'平均分',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        }
+                    },
+                    {
+                        value: '',
+                        name: '',
+                        label: {
+                            normal: {
+                                show: false
+                            }
+                        }
+                    }
+
+                ]
+            }]
+        };
+        var param3={
+            "examId":examId
+        };
+        jQuery.post("/teacher/analyse/avg",param3,function (avg){
+            var avg1=avg;
+            console.log(avg1);
+            option3.series[0].data.push(avg1);
+            var unavg=100-avg1;
+            option3.series[0].data.push(unavg);
+            myChart3.setOption(option3);
+        })
+    }
+</script>
+</body>
+</html>
