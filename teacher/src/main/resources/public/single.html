@@ -12,7 +12,7 @@
         box-sizing: border-box;
         box-shadow: 0 15px 25px rgb(0 0 0 /50%);
         border-radius: 3px;
-
+        width:1000px;
         margin-left: 40px;
         margin-right: 40px;
         margin-top: 40px;
@@ -64,14 +64,14 @@
     </div>
     <div class="dhl">
         <div class="nav">
-            <a  href="#">饼图</a>
+            <button onclick="showPie()">饼图</button>
         </div>
         <div class="nav">
-            <a href="#">柱状图</a>
+            <button onclick="showBar()">柱状图</button>
         </div>
         <div style="clear: both"></div>
     </div>
-    <div id="pie" class="pie" style="height:400px"></div>
+    <div id="pie" hidden="hidden" class="pie" style="height:400px"></div>
     <div id="bar" class="bar" style="height:400px"></div>
     <div style="clear: both"></div>
 </div>
@@ -196,6 +196,17 @@
             console.log(option1);
             myChart1.setOption(option1);
         })
+    }
+</script>
+<script>
+    function showPie() {
+        $("#pie").show()
+        $("#bar").hide()
+    }
+    function showBar() {
+        $("#pie").hide()
+        $("#bar").show()
+
     }
 </script>
 </body>

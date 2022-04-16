@@ -28,12 +28,12 @@ public class AnalyseService {
     @Autowired
     private AnalyseDao analyseDao;
 
-    public PageInfo<Exam> findAll(int pageNum, int pageSize){
+    public PageInfo<Exam> findAll(int pageNum, int pageSize,int classId){
         PageInfo<Exam> page=null;
         //设置分页
         PageHelper.startPage(pageNum,pageSize);
         //查询需要的数据
-        List<Exam> exams= analyseMapper.findAll();
+        List<Exam> exams= analyseMapper.findAll(classId);
         //users表示页面中呈现的数据
         //4表示页码个数
         page=new PageInfo<Exam>(exams,4);
@@ -183,6 +183,11 @@ public class AnalyseService {
    // 每道题答对的人数
     public int getsingleRight(Integer examId, String subjectId) {
         return analyseDao.getsingleRight(examId,subjectId);
+    }
+
+    //判断批阅是否完成
+    public int finish(Integer id) {
+        return analyseDao.right(id);
     }
 
 //    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
