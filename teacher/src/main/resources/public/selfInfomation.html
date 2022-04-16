@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/selfInfomation.css">
+</head>
+<body onload="init()">
+<!--更改密码-->
+<div class="modal" tabindex="-1" id="passwordDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabe0">更改密码</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="hideDialog('passwordDialog')">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="oldpassword" class="col-form-label">旧密码:</label>
+                        <input type="text" class="form-control" id="oldpassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="newpassword" class="col-form-label">新密码:</label>
+                        <input type="text" class="form-control" id="newpassword">
+                    </div>
+                    <div class="form-group">
+                        <label for="againpassword" class="col-form-label">再次输入新密码:</label>
+                        <input type="text" class="form-control" id="againpassword">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('passwordDialog')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="passwordchange()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--&lt;!&ndash;用户名dialog&ndash;&gt;-->
+<!--<div class="modal" tabindex="-1" id="usernameDialog">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="exampleModalLabel">更改用户名</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true" onclick="hideDialog('exampleModalLabel')">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <form>-->
+<!--                    <div class="form-group">-->
+<!--                        <label for="newuserName" class="col-form-label">新用户名:</label>-->
+<!--                        <input type="text" class="form-control" id="newuserName">-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('usernameDialog')">取消</button>-->
+<!--                <button type="button" class="btn btn-primary" onclick="usernamechange()">确定</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--邮箱dialog-->
+<div class="modal" tabindex="-1" id="emailDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabe2">更改邮箱</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="hideDialog('emailDialog')">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="newemail" class="col-form-label">新邮箱:</label>
+                        <input type="email" class="form-control" id="newemail">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('emailDialog')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="emailchange()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--手机号dialog-->
+<div class="modal" tabindex="-1" id="telephoneDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabe3">更改手机号</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="hideDialog('telephoneDialog')">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="newtelephone" class="col-form-label">新手机号:</label>
+                        <input type="text" class="form-control" id="newtelephone">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('telephoneDialog')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="telephonechange()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--姓名dialog-->
+<div class="modal" tabindex="-1" id="realnameDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabe4">更改姓名</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="hideDialog('realnameDialog')">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="newrealname" class="col-form-label">新姓名:</label>
+                        <input type="text" class="form-control" id="newrealname">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('realnameDialog')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="realnamechange()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--性别dialog-->
+<div class="modal" tabindex="-1" id="sexDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabe5">更改性别</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="hideDialog('sexDialog')">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="setsex" class="col-form-label">性别:</label>
+                        <input type="radio" name="radio" id="setsex" value="1">男
+                        <input type="radio" name="radio" value="0">女
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('sexDialog')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="sexchange()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--年龄dialog-->
+<div class="modal" tabindex="-1" id="ageDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabe6">更改年龄</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" onclick="hideDialog('ageDialog')">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="setage" class="col-form-label">年龄:</label>
+                        <input type="number" class="form-control" id="setage">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog('ageDialog')">取消</button>
+                <button type="button" class="btn btn-primary" onclick="agechange()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="thin"></div>
+    <div id="tab">
+        <table id="first">
+            <tr><td id="info1">&nbsp;&nbsp;&nbsp;&nbsp;基本信息</td></tr>
+            <tr>
+                <td>用户名：</td>
+                <td id="userName"></td>
+                <!--            <td><button onclick="changeUserName()">修改</button></td>-->
+            </tr>
+            <tr>
+                <td>邮箱：</td>
+                <td id="email"></td>
+                <td><button class="mid" onclick="changeEmail()">修改</button></td>
+            </tr>
+            <tr>
+                <td>手机号：</td>
+                <td id="telephone"></td>
+                <td><button class="mid" onclick="changeTelephone()">修改</button></td>
+            </tr>
+        </table>
+        <table id="second">
+            <tr><td id="info2">&nbsp;&nbsp;&nbsp;&nbsp;个人信息</td></tr>
+            <tr>
+                <td>姓名：</td>
+                <td id="realname"></td>
+                <td><button class="mid" onclick="changeRealName()">修改</button></td>
+            </tr>
+            <tr>
+                <td>性别：</td>
+                <td id="sex"></td>
+                <td><button class="mid" onclick="changeSex()">修改</button></td>
+            </tr>
+            <tr>
+                <td>年龄：</td>
+                <td id="age"></td>
+                <td><button class="mid" onclick="changeAge()">修改</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="mid" onclick="changePassword()">修改密码</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+    var username;
+    function init() {
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/selfInfomation/getInfomation',
+            data:{},
+            success:function (rst) {
+                username=rst.username;
+                jQuery("#userName").html(rst.username);
+                jQuery("#email").html(rst.email);
+                jQuery("#telephone").html(rst.telephone);
+                jQuery("#realname").html(rst.realName);
+                if(rst.sex==1){
+                    jQuery("#sex").html("男")
+                }else if(rst.sex==0){
+                    jQuery("#sex").html("女")
+                }else {
+                    jQuery("#sex").html("未设定")
+                }
+                jQuery("#age").html(rst.age);
+
+            }
+        })
+    }
+</script>
+<script>
+    function hideDialog(dia) {
+        jQuery("#"+dia).hide();
+    }
+</script>
+<script>
+    // function changeUserName() {
+    //     jQuery("#usernameDialog").show();
+    // }
+    function changeEmail() {
+        jQuery("#emailDialog").show();
+    }
+    function changeTelephone() {
+        jQuery("#telephoneDialog").show();
+    }
+    function changeRealName() {
+        jQuery("#realnameDialog").show();
+    }
+    function changeSex() {
+        jQuery("#sexDialog").show();
+    }
+    function changeAge() {
+        jQuery("#ageDialog").show();
+    }
+    function changePassword() {
+        jQuery("#passwordDialog").show();
+    }
+</script>
+<script>
+    function passwordchange() {
+        var oldpassword=jQuery("#oldpassword").val();
+        var newpassword=jQuery("#newpassword").val();
+        var againpassword=jQuery("#againpassword").val();
+        //先看两次新密码是否一致
+        if(newpassword!==againpassword){
+            alert("您输入的两次密码不同，请输入相同密码");
+            return;
+        }else {
+            //看旧的密码是否正确
+            var realoldpassword=null;
+            jQuery.ajax({
+                type: 'post',
+                url: '/teacher/selfInfomation/getInfomation',
+                data:{
+                    "userName" : username
+                },
+                async: false,
+                success:function (rst) {
+                    realoldpassword=rst.password;
+                }
+            })
+            jQuery.ajax({
+                type: 'post',
+                url: '/teacher/selfInfomation/getEncode',
+                data:{
+                    "p" : oldpassword
+                },
+                async: false,
+                success:function (rst) {
+                    oldpassword=rst;
+                }
+            })
+            console.log(oldpassword);
+            console.log(realoldpassword);
+            if(oldpassword!=realoldpassword){
+                alert("旧密码输入错误");
+                jQuery("#oldpassword").val("");
+                return;
+            }else{
+                //存入新密码
+                jQuery.ajax({
+                    type: 'post',
+                    url: '/teacher/selfInfomation/changePassword',
+                    data:{
+                        "userName" : username,
+                        "newPassword" : newpassword
+                    },
+                    success:function () {
+                        alert("更改成功");
+                        init();
+                        hideDialog("passwordDialog");
+                    }
+                })
+            }
+        }
+    }
+    // function usernamechange() {
+    //     var newusername=jQuery("#newuserName").val();
+    //     //判断是否重复
+    //     jQuery.ajax({
+    //         type: 'post',
+    //         url: '/teacher/selfInfomation/isUsed',
+    //         data:{
+    //             "userName" : newusername
+    //         },
+    //         success :function (rst) {
+    //             if(rst==1){
+    //                 alert("用户名重复，请更换用户名");
+    //             }else if(rst==0){
+    //                 jQuery.ajax({
+    //                     type: 'post',
+    //                     url: '/teacher/selfInfomation/changeUserName',
+    //                     data:{
+    //                         "userName" : username,
+    //                         "newUserName" : newusername
+    //                     },
+    //                     success:function () {
+    //                         alert("更改成功");
+    //                         init();
+    //                     }
+    //                 })
+    //             }
+    //         }
+    //     })
+    // }
+    function emailchange() {
+        var newemail=jQuery("#newemail").val();
+        if(newemail.match(/^\w+@\w+\.\w+$/i)){
+            jQuery.ajax({
+                type: 'post',
+                url: '/teacher/selfInfomation/changeEmail',
+                data:{
+                    "userName" : username,
+                    "newEmail" : newemail
+                },
+                success:function () {
+                    alert("更改成功");
+                    init();
+                    hideDialog("emailDialog");
+                }
+            })
+        }else{
+            alert('邮箱格式错误！')
+            return;
+        }
+    }
+    function telephonechange() {
+        var newtelephone=jQuery("#newtelephone").val();
+        if(checkMobile(newtelephone)){
+            jQuery.ajax({
+                type: 'post',
+                url: '/teacher/selfInfomation/changeTelephone',
+                data:{
+                    "userName" : username,
+                    "newTelephone" : newtelephone
+                },
+                success:function () {
+                    alert("更改成功");
+                    init();
+                    hideDialog("telephoneDialog");
+                }
+            })
+        }else{
+            alert("请输入正确的手机号码");
+        }
+    }
+    function realnamechange() {
+        var newrealname=jQuery("#newrealname").val();
+        jQuery.ajax({
+            type: 'post',
+            url: '/teacher/selfInfomation/changeRealName',
+            data:{
+                "userName" : username,
+                "newRealName" : newrealname
+            },
+            success:function () {
+                alert("更改成功");
+                init();
+                hideDialog("realnameDialog");
+            }
+        })
+    }
+    function sexchange() {
+        var newsex=$("input[name='radio']:checked").val();
+        jQuery.ajax({
+            type: 'post',
+            url: '/teacher/selfInfomation/changeSex',
+            data:{
+                "userName" : username,
+                "newSex" : newsex
+            },
+            success:function () {
+                alert("更改成功");
+                init();
+                hideDialog("sexDialog");
+            }
+        })
+    }
+    function agechange() {
+        var newage=jQuery("#setage").val();
+        jQuery.ajax({
+            type: 'post',
+            url: '/teacher/selfInfomation/changeAge',
+            data:{
+                "userName" : username,
+                "newAge" : newage
+            },
+            success:function () {
+                alert("更改成功");
+                init();
+                hideDialog("ageDialog");
+            }
+        })
+    }
+</script>
+<script>
+    function checkMobile(s){
+        var length = s.length;
+        if(length == 11 && /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(14[0-9]{1})|)+\d{8})$/.test(s) )
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+</html>

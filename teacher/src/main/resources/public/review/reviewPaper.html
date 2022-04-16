@@ -17,7 +17,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">提示</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true" onclick="hideDialog()">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
@@ -149,7 +149,7 @@
                         jQuery("#a"+c).html(table);
                         rightGuide=jQuery("#accordionExample").html();
                     }
-
+                    $('.collapse').collapse();
                     //显示题目
                     console.log(subject[i].answerList);
                     jQuery.ajax({
@@ -246,7 +246,7 @@
             }
         })
     }
-    $('.collapse').collapse();
+
 </script>
 
 <script>
