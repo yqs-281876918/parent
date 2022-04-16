@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface AnalyseMapper {
     //查找所有符合条件的考试
-    List<Exam> findAll();
+    List<Exam> findAll(int classID);
 
     //删除考试
     int delete(int[] ids);
@@ -18,6 +18,4 @@ public interface AnalyseMapper {
     //查找考试 模糊查询
     List<Exam> Search(String examName);
 
-    //mysql找出每道题的总分
-    public String findscoreList(Integer examId);
 }

@@ -25,9 +25,9 @@ public class AnalyseController {
     @Autowired
     AnalyseService analyseService;
     @RequestMapping("/findAll")
-    public PageInfo<Exam> findAll(int pageNum, int pageSize){
+    public PageInfo<Exam> findAll(int pageNum, int pageSize,int classId){
         PageInfo<Exam> page=null;
-        page=analyseService.findAll(pageNum,pageSize);
+        page=analyseService.findAll(pageNum,pageSize,classId);
         return page;
     }
     @RequestMapping("/delete")
@@ -113,6 +113,11 @@ public class AnalyseController {
         int[] result={right,per};
         System.out.println(result);
         return result;
+    }
+    //判断批阅是否完成
+    @RequestMapping("/finish")
+    public int finish(Integer id){
+        return analyseService.finish(id);
     }
 
     // 导出

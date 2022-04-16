@@ -6,7 +6,7 @@
         SELECT
             id,paperID,examName,startTime,totalScore,introduce,testTime,lateTime,submitTime,classID,antiSettings,introduce
         from exam
-        WHERE classID='2'
+        WHERE classID=#{classID}
     </select>
     <select id="Search"
             resultType="org.mixed.exam.bank.api.pojo.po.Exam">
