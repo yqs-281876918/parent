@@ -124,21 +124,21 @@
 </div>
 
 <script>
-    var pageNum=1;
-    var pageSize=10;
-    var pageNums=0;
+    // var pageNum=1;
+    // var pageSize=10;
+    // var pageNums=0;
     var classId=sessionStorage.getItem("classId");
     function init() {
         jQuery.ajax({
             type: 'post',
             url: '/teacher/analyse/findAll',
             async: false,
-            data: {'pageNum': pageNum, 'pageSize': pageSize, 'classId': classId},
+            data: {'classId': classId},
             success: function (rst) {
                 console.log(rst)
                 //alert(rst);
                 //1、查询查询的数据
-                var arrs = rst.list;
+                var arrs = rst;
                 var trs = "";
                 for (var i = 0; i < arrs.length; i++) {
                     //获取每一行对应的用户对象
@@ -209,7 +209,7 @@
             type:'post',
             url:'/teacher/analyse/findAll',
             async:false,
-            data:{'pageNum':pageNum,'pageSize':pageSize,'classId':id},
+            data:{'classId':id},
             success:function (rst) {
                 console.log(rst);
                 var ar = rst;
@@ -234,45 +234,6 @@
             }
 
         })
-        // var examName;
-        // var startTime;
-        // var testTime;
-        // var introduce;
-        // var totalScore;
-        // var finish;
-        // jQuery.post("/teacher/analyse/findAll",param,function(rst){
-        //     console.log(rst);
-        //     //alert("查询到了");
-        //     var ar=rst;
-        //     var uu;
-        //     for(var i=0;i<ar.length;i++){
-        //         uu=ar[i];
-        //         id=uu.id;
-        //         examName=uu.examName;
-        //         startTime=uu.startTime;
-        //         testTime=uu.testTime;
-        //         introduce=uu.introduce;
-        //         totalScore=uu.totalScore;
-        //         var param1={
-        //             "id":13
-        //         };
-        //         jQuery.post("/teacher/analyse/finish",param1,function (rst1){
-        //             if(rst1===0){
-        //                 finish="未完成批阅";
-        //             }
-        //             else if(rst1===1){
-        //                 finish="已完成批阅";
-        //             }
-        //             console.log(finish);
-        //         })
-        //         var param2={"id":id,"examName":examName,"startTime":startTime,"testTime":testTime,"introduce":introduce,"totalSCore":totalScore};
-        //         window.sessionStorage.setItem("examName",param2.examName);
-        //         window.sessionStorage.setItem("startTime",param2.startTime);
-        //         window.sessionStorage.setItem("testTime",param2.testTime);
-        //         window.sessionStorage.setItem("introduce",param2.introduce);
-        //         window.sessionStorage.setItem("totalScore",param2.totalSCore);
-        //     }
-        // })
 
     }
 

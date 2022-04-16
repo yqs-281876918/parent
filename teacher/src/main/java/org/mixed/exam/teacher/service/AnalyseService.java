@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,16 +30,10 @@ public class AnalyseService {
     @Autowired
     private AnalyseDao analyseDao;
 
-    public PageInfo<Exam> findAll(int pageNum, int pageSize,int classId){
-        PageInfo<Exam> page=null;
-        //设置分页
-        PageHelper.startPage(pageNum,pageSize);
-        //查询需要的数据
+    public List<Exam> findAll(int classId){
         List<Exam> exams= analyseMapper.findAll(classId);
-        //users表示页面中呈现的数据
-        //4表示页码个数
-        page=new PageInfo<Exam>(exams,4);
-        return page;
+
+        return exams;
     }
     public int delete(int id){
         int row=-1;
@@ -98,7 +94,7 @@ public class AnalyseService {
             sum=sum+examDetails.get(i).getTotalScore();
             count++;
         }
-        avg=sum/count;
+        avg= (float)( Math.round(sum*100/count)/100.0);
         return avg;
 
     }

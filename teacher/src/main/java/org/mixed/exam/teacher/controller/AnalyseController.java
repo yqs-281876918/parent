@@ -16,7 +16,9 @@ import org.thymeleaf.spring5.context.IThymeleafBindStatus;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,10 +27,15 @@ public class AnalyseController {
     @Autowired
     AnalyseService analyseService;
     @RequestMapping("/findAll")
-    public PageInfo<Exam> findAll(int pageNum, int pageSize,int classId){
-        PageInfo<Exam> page=null;
-        page=analyseService.findAll(pageNum,pageSize,classId);
-        return page;
+    public List<Exam> findAll(int classId){
+        List<Exam> exams=analyseService.findAll(classId);
+//        for(int i=0;i<exams.size();i++){
+//            Date date = new Date();
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            long time=exams.get(i).getStartTime();
+//            String =dateFormat.format(new Date(Long.parseLong(String.valueOf(time))));
+//        }
+        return exams;
     }
     @RequestMapping("/delete")
     public int delete(int id){//删除
