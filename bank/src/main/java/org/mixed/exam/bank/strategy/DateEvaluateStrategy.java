@@ -10,8 +10,8 @@ public class DateEvaluateStrategy extends EvaluateStrategy{
     @Override
     public void evaluate(IntelligentService.Individual individual, IntelligentParam param, List<Question> subjects)
     {
-        long from = param.getBegin_day();
-        long to = param.getEnd_day();
+        long from = param.getBeginDay().getTime();
+        long to = param.getEndDay().getTime();
         int hitCount=0;
         for(int i=0;i<individual.length;i++)
         {
