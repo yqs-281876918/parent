@@ -98,7 +98,7 @@
 
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">个人中心</a>
-                <a class="dropdown-item" href="#">退出登录</a>
+                <a class="dropdown-item" href="/login/sign_out">退出登录</a>
 
             </div>
         </div>
@@ -159,13 +159,13 @@
         <div class="card-body">
             <div style="display: inline-block">
                 <h5 class="card-title">
-                    <a href="#" onclick="goClassDetail('${chooseClass.cno}','${clazz.invitation}',
+                    <a href="javascript:void(0)" onclick="goClassDetail('${chooseClass.cno}','${clazz.invitation}',
                     '${creator}','${clazz.cname}','${userNm}')">
                     ${clazz.cname}</a>
                 </h5>
             </div>
             <div id="delete" style="display: inline-block">
-                <a href="#" class="btn btn-danger"
+                <a href="javascript:void(0)" class="btn btn-danger"
                 onclick="showDeleteClassDialog('${chooseClass.cno}','${chooseClass.sname}','${clazz.cname}')">
                 退出班级</a>
             </div>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>发布考试</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/teacher/assets/js/format.js"></script>
+</head>
+<body>
+<script>
+    function addClass (obj)
+    {
+        const index = obj.selectedIndex;
+        let classID = obj.options[index].value;
+        let className = $('#class-selector').find("option:selected").text()
+        let li="<li class='list-group-item'><input name='classIDs' value='{0}' hidden='hidden'>" +
+            "{1}<button onclick='delObj(this)' class='btn-danger'>-</button></li>"
+        $('#class-list').append(li.format(classID,className));
+    }
+    function delObj(obj){
+        $(obj).parent().remove()
+    }
+</script>
+<form action="/teacher/exam/publish" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <span>开始时间</span>
+            </div>
+            <div class="col-md-6">
+                <input name="startTime" type="text" class="form-control" placeholder="xxxx-xx-xx xx:xx:xx">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span>答题时长</span>
+            </div>
+            <div class="col-md-6">
+                <input name="testTime" type="text" class="form-control" placeholder="单位:分钟">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span>迟到时间</span>
+            </div>
+            <div class="col-md-6">
+                <input name="lateTime" type="text" class="form-control" placeholder="开考多久关闭进入 单位:分钟">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span>限时提交</span>
+            </div>
+            <div class="col-md-6">
+                <input name="submitTime" type="text" class="form-control" placeholder="允许提前多久提交试卷 单位:分钟">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span>考试对象</span>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control course" onchange="addClass(this)" id="class-selector">
+                    <option th:each="class,state : ${classes}" th:value="${class.cno}" th:text="${class.cname}"></option>
+                </select>
+            </div>
+            <div class="col-md-12">
+                <ul class="list-group" id="class-list">
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span>反作弊设置</span>
+            </div>
+            <div class="col-md-2">
+                <div class="checkbox">
+                    <label>
+                        <input name="antiSettings" value="anti-copy" type="checkbox">禁止复制
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="checkbox">
+                    <label>
+                        <input name="antiSettings" value="anti-paste" type="checkbox">禁止粘贴
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="checkbox">
+                    <label>
+                        <input name="antiSettings" value="anti-tab" type="checkbox">切屏监测
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn-success">提交</button>
+            </div>
+            <div class="col-md-1">
+                <button class="btn-success"><a href="/teacher/exam/paper_list" target="_self">返回</a></button>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
