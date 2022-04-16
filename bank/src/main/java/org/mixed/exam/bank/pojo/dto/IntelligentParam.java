@@ -7,48 +7,41 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 public class IntelligentParam
 {
     private String courseID;//试卷所属学课
-    private long begin_day;//开始时间戳
-    private long end_day;//结束时间戳
+    private Date beginDay;//开始时间戳
+    private Date endDay;//结束时间戳
     private double difficulty;//试卷整体难度[1~5]
-    private List<SubjectDistribution> distributions;//题型要求
+    private Map<String,Integer> distribution;//题型要求
     private List<String> keys;//知识点涵盖
-    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-    public void setBeginDay(Date date)
-    {
-        begin_day=date.getTime();
-    }
+    private static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
     public void setBeginDay(String date)
     {
         try {
-            begin_day = sdf.parse(date).getTime();
+            beginDay = sdf.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }
-    public void setEndDay(Date date)
-    {
-        end_day=date.getTime();
     }
     public void setEndDay(String date)
     {
         try {
-            end_day = sdf.parse(date).getTime();
+            endDay = sdf.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
-    public int getCount()
+    public int getSubjectCount()
     {
         int count=0;
-        for(SubjectDistribution sd : distributions)
+        for(String key : distribution.keySet())
         {
-            count+=sd.getCount();
+            count+=distribution.get(key);
         }
         return count;
     }

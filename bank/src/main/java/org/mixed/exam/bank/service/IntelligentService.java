@@ -5,6 +5,7 @@ import org.mixed.exam.bank.pojo.po.Paper;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.strategy.EvaluateStrategy;
 import org.mixed.exam.bank.util.MathUtil;
+import org.mixed.exam.bank.util.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,40 +14,32 @@ import java.util.*;
 @Service
 public class IntelligentService
 {
-    private IntelligentParam param;
     @Autowired
     private QuerySubjectService querySubjectService;
 
     //初始化种群
-    private void initIndividual(List<Individual> individuals,IntelligentParam param,int size)
+    private void initIndividual(List<Individual> individuals,int size)
     {
         for(int i=0;i<size;i++)
         {
-            individuals.add(getRandomIndividual(param));
+            individuals.add(getRandomIndividual());
         }
     }
 
     //随机生成个体
-    private Individual getRandomIndividual(IntelligentParam param)
+    private Individual getRandomIndividual()
     {
-        List<IntelligentParam.SubjectDistribution> distributions = param.getDistributions();
+        int geneCount=MathUtil.getRandomInt(1,subjects.size());
         Individual individual = new Individual(subjects.size());
-        for(int i=0;i<distributions.size();i++)
-        {
-            String type=distributions.get(i).getType();
-            int count = distributions.get(i).getCount();
-            Set<Integer> repeat = new HashSet<>();
-            while (count-- >0)
-            {
-                int length=subjectsMap.get(type).size();
-                int genePosAtMap= MathUtil.getRandomInt(0,length-1);
-                while (repeat.contains(genePosAtMap))
-                {
-                    genePosAtMap=MathUtil.getRandomInt(0,length-1);
-                }
-                repeat.add(genePosAtMap);
-                Question q_to_add=subjectsMap.get(type).get(genePosAtMap);
-                individual.setGene(subjects.indexOf(q_to_add),1);
+        while (geneCount-- > 0){
+            List<Integer> nums = new ArrayList<>();
+            for (int i=0;i<subjects.size();i++){
+                nums.add(i);
+            }
+            while (nums.size()>0){
+                int num_pos = MathUtil.getRandomInt(0,nums.size()-1);
+                int gene_pos = nums.remove(num_pos);
+                individual.setGene(gene_pos,1);
             }
         }
         return individual;
@@ -130,11 +123,18 @@ public class IntelligentService
     //变异
     private void variation(List<Individual> individuals,double variationRate,double strength)
     {
+        sortIndividuals(individuals);
         int variationCount=(int)(individuals.size()*variationRate);
-        while (variationCount-- > 0)
+        if(variationCount==0){
+            variationCount=1;
+        }
+        for(int i=1;i<=variationCount;i++)
         {
-            Individual individual = individuals.get(MathUtil.getRandomInt(0, individuals.size() - 1));
+            Individual individual = individuals.get(individuals.size()-i);
             int count = (int)(individual.length*strength);
+            if(count==0){
+                count=1;
+            }
             while (count-- > 0)
             {
                 individual.setGene(MathUtil.getRandomInt(0,individual.length-1),
@@ -143,9 +143,12 @@ public class IntelligentService
         }
     }
 
+    private void sortIndividuals(List<Individual> individuals){
+        Collections.sort(individuals);
+    }
     private void printIndividuals(List<Individual> individuals,int generation)
     {
-        Collections.sort(individuals);
+        sortIndividuals(individuals);
         System.out.println("----------------------------------------------------------------------------------");
         System.out.println("generation:"+generation);
         System.out.println("total:"+individuals.size());
@@ -153,44 +156,33 @@ public class IntelligentService
         System.out.println("average:"+calAverageFitness(individuals));
     }
 
-    private static int INIT_INDIVIDUAL_SIZE=50;
+    private static int INIT_INDIVIDUAL_SIZE=100;
+    private static int GENERATION_COUNT=200;
     //构建试卷
     public Paper build(IntelligentParam param) {
-        this.param=param;
-        initSubjectInfo(param.getCourseID());
+        initSubjectInfo(param);
         List<Individual> individuals = new ArrayList<>();
-        initIndividual(individuals,param, INIT_INDIVIDUAL_SIZE);
-        for(int generation=1;generation<=50;generation++)
+        initIndividual(individuals, INIT_INDIVIDUAL_SIZE);
+        for(int generation=1;generation<=GENERATION_COUNT;generation++)
         {
-            evaluate(individuals,param);
             printIndividuals(individuals,generation);
+            evaluate(individuals,param);
             eliminate(individuals);
-            cross(individuals,50-individuals.size());
+            cross(individuals,INIT_INDIVIDUAL_SIZE-individuals.size());
             variation(individuals,0.1,0.05);//变异
-            try {
-                Thread.sleep(1000);
-            }catch (Exception e)
-            {
-                e.printStackTrace();
-            }
         }
         return null;
     }
 
     private List<Question> subjects;
-    private Map<String,List<Question>> subjectsMap=new HashMap<>();
-    private void initSubjectInfo(String courseID)
+    private void initSubjectInfo(IntelligentParam param)
     {
-        subjects = querySubjectService.getSubjects(
-                null,null,null,null,String.valueOf(courseID),null,null);
-        for(Question q : subjects)
-        {
-            String type = q.getType();
-            if(!subjectsMap.containsKey(type))
-            {
-                subjectsMap.put(type,new ArrayList<>());
-            }
-            subjectsMap.get(type).add(q);
+        subjects = new ArrayList<>();
+        List<String> types= SubjectUtil.getTypeList();
+        for(String type:types){
+            List<Question> tempList=querySubjectService.getSubjects(type,null,null,null,
+                    String.valueOf(param.getCourseID()),null,null);
+            subjects.addAll(tempList);
         }
     }
     public static class Individual implements Comparable<Individual>
@@ -252,7 +244,7 @@ public class IntelligentService
             sb.append(']');
             return sb.toString();
         }
-        public int fitness;
+        public double fitness;
         public void unsetFitness()
         {
             fitness=0;
@@ -265,7 +257,13 @@ public class IntelligentService
 
         @Override
         public int compareTo(Individual i) {
-            return fitness-i.fitness;
+            if(fitness<i.fitness){
+                return -1;
+            }
+            if(fitness==i.fitness){
+                return 0;
+            }
+            return 1;
         }
 
         @Override
