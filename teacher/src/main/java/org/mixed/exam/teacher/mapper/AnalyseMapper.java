@@ -13,7 +13,7 @@ public interface AnalyseMapper {
     List<Exam> findAll(int classID);
 
     //删除考试
-    int delete(int[] ids);
+    int delete(int id);
 
     //查找考试 模糊查询
     List<Exam> Search(String examName);
