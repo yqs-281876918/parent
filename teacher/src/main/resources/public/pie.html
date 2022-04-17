@@ -40,6 +40,7 @@
         var myChart = echarts.init(document.getElementById('box1'));
         // 指定图表的配置项和数据
         var option = {
+            color:['#FD1B40','#eeeeee'],
             title: {
                 text: ''
             },
@@ -51,24 +52,30 @@
                 radius: ['60%', '70%'],
                 avoidLabelOverlap: false,
                 hoverAnimation: false,
-                label: { //  饼图图形上的文本标签
-                    normal: { // normal 是图形在默认状态下的样式
-                        show: false,
-                        position: 'center',
-                        color: '#000000',
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        formatter: '{b}\n{c}%' // {b}:数据名； {c}：数据值； {d}：百分比
+                label: {
+                    show: false,
+                    position: 'center',
+                    formatter: '{b}\n{c}%'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '20',
+                        fontWeight: 'bold'
                     }
+                },
+                labelLine: {
+                    show: false
                 },
                 data: [
                     {
                         value: '',
                         name:'及格率',
+                        selected:true,
                         label: {
-                            normal: {
-                                show: true
-                            }
+                            show:true,     //默认显示第一块
+                            fontSize: '20',
+                            fontWeight: 'bold'
                         }
                     },
                     {
@@ -164,6 +171,7 @@
         var myChart3 = echarts.init(document.getElementById('box3'));
         // 指定图表的配置项和数据
         var option3 = {
+            color:['#C47AFF','#eeeeee'],
             title: {
                 text: ''
             },
@@ -175,24 +183,30 @@
                 radius: ['60%', '70%'],
                 avoidLabelOverlap: false,
                 hoverAnimation: false,
-                label: { //  饼图图形上的文本标签
-                    normal: { // normal 是图形在默认状态下的样式
+                label: {
+                    show: false,
+                    position: 'center',
+                    formatter: '{b}\n{c}'
+                },
+                emphasis: {
+                    label: {
                         show: true,
-                        position: 'center',
-                        color: '#000000',
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        formatter: '{b}\n{c}' // {b}:数据名； {c}：数据值； {d}：百分比
+                        fontSize: '20',
+                        fontWeight: 'bold'
                     }
+                },
+                labelLine: {
+                    show: false
                 },
                 data: [
                     {
                         value: '',
                         name:'平均分',
+                        selected:true,
                         label: {
-                            normal: {
-                                show: true
-                            }
+                            show:true,     //默认显示第一块
+                            fontSize: '20',
+                            fontWeight: 'bold'
                         }
                     },
                     {
