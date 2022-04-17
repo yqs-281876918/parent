@@ -74,5 +74,10 @@ public class SelfInfomaitonController {
     public String getEncode(@RequestParam("p")String o){
         return selfInfomaitonService.getEncode(o);
     }
-
+    @ResponseBody
+    @RequestMapping("/selfInfomation/match")
+    public boolean match(@RequestParam("p")String o,
+                        @RequestParam("realoldpassword")String realoldpassword){
+        return selfInfomaitonService.match(o,realoldpassword);
+    }
 }
