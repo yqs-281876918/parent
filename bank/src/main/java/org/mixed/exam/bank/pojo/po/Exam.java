@@ -17,7 +17,7 @@ public class Exam
     private Integer lateTime;
     private Integer submitTime;
     private Integer classID;
-    private String[] antiSettings;
+    private String antiSettings;
     private String introduce;
     private Integer status;//考试状态
     private Integer studentScore;//学生分数

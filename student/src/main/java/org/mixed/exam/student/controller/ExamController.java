@@ -9,10 +9,7 @@ import org.mixed.exam.student.service.ExamService;
 import org.mixed.exam.student.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -51,9 +48,11 @@ public class ExamController {
     @RequestMapping("/test/submitExam")
     public String submitExam(@RequestParam("answers") List<String> answers_json,
                              @RequestParam("examId") Integer examId,
+                             @RequestParam("antiCount") Integer antiCount,
                              HttpServletRequest request){
         ExamDetail examDetail = new ExamDetail();
         examDetail.setExamId(examId);
+        examDetail.setAntiCount(antiCount);
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {
@@ -70,14 +69,17 @@ public class ExamController {
         for (Answer answer:answers){
             if (answer.getSubjectType().equals("completion")){
 
-            }else {
+            }else if (answer.getSubjectType().equals("comprehensiveQuestion")){
+
+            } else if (answer.getSubjectType().equals("programProblem")){
+
+            }else{
                 String ans = answer.getAnswerList().get(0);
                 String[] list = ans.split(",");
                 List<String> answerList = new ArrayList<>();
                 for (int i=0;i<list.length;i++){
                     answerList.add(list[i]);
                 }
-                System.out.println(answerList);
                 answer.setAnswerList(answerList);
             }
         }
