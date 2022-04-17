@@ -33,5 +33,9 @@
         from chooseClass,users
         where cno = #{cno} AND sname = users.username
     </select>
+    <select id="stuList" resultType="org.mixed.exam.auth.api.po.Users">
+        select users.*
+        from chooseClass,users where cno=#{classID} and chooseClass.sname=users.username;
+    </select>
 
 </mapper>

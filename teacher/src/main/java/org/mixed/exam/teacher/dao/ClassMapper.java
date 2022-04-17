@@ -3,6 +3,7 @@ package org.mixed.exam.teacher.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.mixed.exam.auth.api.po.Users;
 import org.mixed.exam.teacher.pojo.po.ChooseClass;
 import org.mixed.exam.teacher.pojo.po.Class;
 import org.springframework.stereotype.Repository;
@@ -24,4 +25,6 @@ public interface ClassMapper {
     List<ChooseClass> getClassDetail(long cno);
     //删除某学生
     int deleteStudent(ChooseClass chooseClass);
+    //获取班级学生列表
+    List<Users> stuList(Integer classID);
 }

@@ -49,4 +49,8 @@ public class SelfInfomaitonService {
     public String getEncode(String o) {
         return selfInfomationDao.getEncode(o);
     }
+
+    public boolean match(String o, String realoldpassword) {
+        return selfInfomationDao.match(o,realoldpassword);
+    }
 }

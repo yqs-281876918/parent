@@ -14,10 +14,11 @@ public interface ExamClient
 {
     @ResponseBody
     @PostMapping("/bank/exam/submit")
-    void submit(@RequestParam("startTime") String startTime,@RequestParam("testTime") Integer testTime,
+    void submit(@RequestParam("startTime") Long startTime,@RequestParam("testTime") Integer testTime,
                 @RequestParam("lateTime") Integer lateTime,@RequestParam("submitTime") Integer submitTime,
                 @RequestParam("paperID") String paperID,@RequestParam("classID") Integer classID,
-                @RequestParam("antiSettings") String antiSettings);
+                @RequestParam("antiSettings") String antiSettings,@RequestParam("examName") String examName,
+                @RequestParam("introduce") String introduce);
     @ResponseBody
     @GetMapping("/bank/exam/list")
     List<Exam> list(@RequestParam("userName") String userName);
