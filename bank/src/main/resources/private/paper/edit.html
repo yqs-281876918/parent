@@ -6,8 +6,24 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        a.hand:hover   {cursor:hand}
+    </style>
+    <style type="text/css">
+        .outer {
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+            border-radius: 10px;
+            width:1000px;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
+<div class="outer">
 <div class="container">
     <form id="paper-form">
         <div class="form-group">
@@ -62,7 +78,7 @@
                     <tr th:each="item,itemStat : ${subjectItems}">
                         <td th:text="${item.type}"></td>
                         <td th:text="${item.introduction}"></td>
-                        <td th:text="${item.date}"></td>
+                        <td th:id="${item.id}"></td>
                         <td th:text="${item.difficulty}"></td>
                         <td>
                             <a th:href="@{/subject/detail.html(id=${item.id})}" target="_blank">详情</a>
@@ -80,6 +96,7 @@
         </div>
     </form>
     <button onclick="submit()">更新</button>
+</div>
 </div>
 <script th:inline="javascript">
     $(function () {
@@ -110,6 +127,26 @@
             display=true
         }
     }
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        // var h = date.getHours() + ':';
+        // var m = date.getMinutes() + ':';
+        // var s = date.getSeconds();
+        return Y+M+D;
+    }
+    jQuery(function (){
+        var subjectList = [[${subjectItems}]]
+        for (var i=0;i<subjectList.length;i++){
+            var loccation = "#"+subjectList[i].id
+            var itemDate = new Date(subjectList[i].date)
+            var subjectDate =timestampToTime(itemDate.getTime());
+            $(loccation).html(subjectDate)
+        }
+    })
+
 </script>
 </body>
 </html>

@@ -11,7 +11,8 @@ import java.util.List;
 public interface ExamMapper
 {
     void addExam(Long startTime, Integer testTime, Integer lateTime, Integer submitTime,
-                 String paperID,Integer classID,String antiSettings,String examName,String introduce);
+                 String paperID,Integer classID,String antiSettings,String examName,
+                 String introduce,String scoreList,Integer totalScore);
     List<Exam> list(String userName);
     Exam getByID(Integer id);
 }

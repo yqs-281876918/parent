@@ -65,11 +65,24 @@
                 break
         }
     }
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        console.log(date)
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        // var h = date.getHours() + ':';
+        // var m = date.getMinutes() + ':';
+        // var s = date.getSeconds();
+        return Y+M+D;
+    }
     //渲染共有的属性
     function commonRender(subject_obj)
     {
+        var itemDate = new Date(subject_obj.date)
+        var subjectDate =timestampToTime(itemDate.getTime());
         $("#id_info").html("题目编号:"+subject_obj.id)
-        $("#date_info").html("题目创建时间:"+subject_obj.date)
+        $("#date_info").html("题目创建时间:"+subjectDate)
         $("#difficulty_info").html("题目难度等级:"+subject_obj.difficulty)
         $("#respondentCount_info").html("题目作答次数:"+subject_obj.respondentCount)
         $("#correctCount_info").html("作答正确次数:"+subject_obj.correctCount)

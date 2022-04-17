@@ -11,8 +11,32 @@
     <script type="text/javascript" src="/teacher/assets/js/angular.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="/teacher/assets/js/wui-date.js" charset="utf-8"></script>
 
+    <style type="text/css">
+        a.hand:hover   {cursor:hand}
+    </style>
+    <style type="text/css">
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .outer {
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+            border-radius: 10px;
+            width:1000px;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 40px;
+        }
+
+    </style>
 </head>
 <body >
+<div class="outer">
 <script>
 
     var app = angular.module("app",["wui.date"]);
@@ -32,7 +56,7 @@
         $(obj).parent().remove()
     }
 </script>
-<form action="/teacher/exam/publish" method="post">
+<form th:id="examData">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -100,6 +124,7 @@
             </div>
             <div class="col-md-6">
                 <select class="form-control course" onchange="addClass(this)" id="class-selector">
+                    <option></option>
                     <option th:each="class,state : ${classes}" th:value="${class.cno}" th:text="${class.cname}"></option>
                 </select>
             </div>
@@ -135,17 +160,57 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-12">
+                <span>分数设置</span>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>难度</th>
+                        <th>分数</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStat : ${subjects}">
+                        <td th:text="${item.type}"></td>
+                        <td th:text="${item.difficulty}"></td>
+                        <td>
+                            <input name="scoreList" type="text" class="form-control">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="row">
             <div class="col-md-10">
             </div>
             <div class="col-md-1">
-                <button type="submit" class="btn-success">提交</button>
+                <button onclick="submitExam()" class="btn-success">提交</button>
             </div>
             <div class="col-md-1">
-                <button class="btn-success"><a href="/teacher/exam/paper_list" target="_self">返回</a></button>
+                <button class="btn-success"><a href="/teacher/exam/paper_list.html" target="_self">返回</a></button>
             </div>
         </div>
     </div>
     <input type="hidden" name="paperID" th:value="${paperID}">
 </form>
+</div>
+<script th:inline="javascript">
+    function submitExam(){
+        var param = jQuery("#examData").serialize();
+        jQuery.post("/teacher/exam/publish",param,function (rst){
+            console.log(rst)
+            alert('考试发布成功')
+            if (rst=='success'){
+                console.log(rst)
+                alert('考试发布成功')
+            }else {
+                alert('考试发布失败')
+            }
+        })
+    }
+</script>
 </body>
 </html>

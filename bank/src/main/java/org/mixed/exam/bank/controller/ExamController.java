@@ -19,9 +19,9 @@ public class ExamController
     @PostMapping("/exam/submit")
     public void submit(Long startTime, Integer testTime, Integer lateTime, Integer submitTime,
                        String paperID,Integer classID,String antiSettings,
-                       String examName,String introduce)
+                       String examName,String introduce,String score,Integer totalScore)
     {
-        examMapper.addExam(startTime,testTime,lateTime,submitTime,paperID,classID,antiSettings,examName,introduce);
+        examMapper.addExam(startTime,testTime,lateTime,submitTime,paperID,classID,antiSettings,examName,introduce,score,totalScore);
     }
     @ResponseBody
     @GetMapping("/exam/list")
