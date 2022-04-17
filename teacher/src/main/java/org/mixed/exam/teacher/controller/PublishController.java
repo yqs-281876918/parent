@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +32,17 @@ public class PublishController
     @ResponseBody
     @PostMapping("/exam/publish")
     public String publish(String startTime, Integer testTime, Integer lateTime, Integer submitTime,
-                          String paperID,HttpServletRequest request,String examName,String introduce)
+                          String paperID, HttpServletRequest request, String examName, String introduce,
+                          @RequestParam("scoreList") List<String> scoreList)
     {
+        String score = "";
+        Integer totalScore = 0;
+        for (String s:scoreList){
+            score += s;
+            score += ",";
+            totalScore += Integer.parseInt(s);
+        }
+        score = score.substring(0,score.length()-1);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         long _startTime = 0L;
         try {
@@ -55,7 +65,7 @@ public class PublishController
         for(String classID:classIDs)
         {
             examClient.submit(_startTime,testTime,lateTime,submitTime,paperID,
-                    Integer.parseInt(classID),String.join(",",antiSettings),examName,introduce);
+                    Integer.parseInt(classID),String.join(",",antiSettings),examName,introduce,score,totalScore);
         }
         return "success";
     }

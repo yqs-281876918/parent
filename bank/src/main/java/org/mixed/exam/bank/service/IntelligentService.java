@@ -156,7 +156,7 @@ public class IntelligentService
     private static int INIT_INDIVIDUAL_SIZE=100;
     private static int GENERATION_COUNT=200;
     //构建试卷
-    public Paper build(IntelligentParam param) {
+    public List<String> build(IntelligentParam param) {
         initSubjectInfo(param);
         List<Individual> individuals = new ArrayList<>();
         initIndividual(individuals, INIT_INDIVIDUAL_SIZE);
@@ -176,7 +176,26 @@ public class IntelligentService
             variation(individuals,0.05,0.2);//变异
             cross(individuals,INIT_INDIVIDUAL_SIZE-individuals.size());
         }
-        return null;
+        List<String> ans = new ArrayList<>();
+        Individual best = individuals.get(individuals.size()-1);
+        Map<String,Integer> distribution = new HashMap<>();
+        for(String type : param.getDistribution().keySet()){
+            distribution.put(type,param.getDistribution().get(type));
+        }
+        for(int i=0;i<best.length;i++){
+            if(best.getGene(i)==0){
+                continue;
+            }
+            Question q = subjects.get(i);
+            if(!distribution.containsKey(q.getType())){
+                continue;
+            }
+            if(distribution.get(q.getType())>0){
+                ans.add(q.getId());
+                distribution.put(q.getType(),distribution.get(q.getType())-1);
+            }
+        }
+        return ans;
     }
 
     private List<Question> subjects;

@@ -18,7 +18,8 @@ public interface ExamClient
                 @RequestParam("lateTime") Integer lateTime,@RequestParam("submitTime") Integer submitTime,
                 @RequestParam("paperID") String paperID,@RequestParam("classID") Integer classID,
                 @RequestParam("antiSettings") String antiSettings,@RequestParam("examName") String examName,
-                @RequestParam("introduce") String introduce);
+                @RequestParam("introduce") String introduce,@RequestParam("score") String score,
+                @RequestParam("totalScore") Integer totalScore);
     @ResponseBody
     @GetMapping("/bank/exam/list")
     List<Exam> list(@RequestParam("userName") String userName);

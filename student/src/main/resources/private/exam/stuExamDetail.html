@@ -125,6 +125,8 @@
                     </div>
                     <div class="extra content">
                         <button type="button" onclick="contestDetailPage.finishContestAction()" class="ui positive button">交卷</button>
+                        <button type="button" onclick="contestDetailPage.saveMyAnswers()" class="ui positive button">保存答案</button>
+
                     </div>
                 </div>
             </div>
@@ -166,12 +168,48 @@
     /*<![CDATA[*/
     // var contextPath = [[${#httpServletRequest.getContextPath()}]];
     $(function(){
+        // document.body.oncopy = document.selection.empty();
+        // document.οncοntextmenu=function(e){return false;}
+        // document.onpaste=function(e){return false;}
+        // $('body').bind("selectstart",function(){return false;});
+        // document.addEventListener('visibilitychange', () => {
+        //     if (document.visibilityState === 'hidden') {
+        //         return
+        //     }
+        //     contestDetailPage.data.antiCount++;
+        //     console.log(contestDetailPage.data.antiCount)
+        // })
         let contest = [[${exam}]];
         let questions = [[${subjects}]]
-        // app.init(contextPath);
         let score = contest.scoreList
         let scoreList = score.split(",")
-        contestDetailPage.init(contest, questions,scoreList);
+        let examDetailStatus = [[${examDetailState}]]
+        if (examDetailStatus==1){
+            let examDetail = [[${examDetail}]]
+            contestDetailPage.initAgain(contest, questions, scoreList,examDetail);
+
+        }else{
+            contestDetailPage.init(contest, questions,scoreList);
+        }
+        if (contest.antiSettings.indexOf("anti-copy")!=-1){
+            console.log('anti-copy')
+            document.οncοntextmenu=function(e){return false;}
+            $('body').bind("selectstart",function(){return false;});
+        }
+        if (contest.antiSettings.indexOf("anti-paste")!=-1){
+            console.log('anti-paste')
+            document.onpaste=function(e){return false;}
+            $('body').bind("selectstart",function(){return false;});
+        }
+        if (contest.antiSettings.indexOf("anti-tab")!=-1){
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden') {
+                    return
+                }
+                contestDetailPage.data.antiCount++;
+                console.log(contestDetailPage.data.antiCount)
+            })
+        }
     });
     /*]]>*/
 </script>

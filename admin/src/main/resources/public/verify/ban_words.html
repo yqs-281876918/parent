@@ -26,8 +26,8 @@
             border-top: 1px solid #dedede;
         }
         .button_add1{
-
-            background: #ffffff;
+            color: white;
+            background: limegreen;
             display: inline-block;
             padding: 6px 10px;
             margin-bottom: 0;
@@ -61,15 +61,63 @@
             border: 1px solid transparent;
             border-radius: 4px;
         }
+        body{
+            OVERFLOW-Y: scroll;
+            scrollbar-face-color:#B3DDF7;
+            scrollbar-shadow-color:#B3DDF7;
+            scrollbar-highlight-color:#B3DDF7;
+            scrollbar-3dlight-color:#EBEBE4;
+            scrollbar-darkshadow-color:#EBEBE4;
+            scrollbar-track-color:#F4F4F0;
+            scrollbar-arrow-color:#000000;
+        }
+        body::-webkit-scrollbar{
+            display: none;
+        }
+        #top{
+            width: 92%;
+            height: 5%;
+            margin-bottom: 7%;
+            left: 0px;
+            top: 0px;
+            position: fixed;
+            background: white;
+            box-shadow: 10px 10px 5px #888888;
+            /*flex 布局*/
+            display: flex;
+            /*实现垂直居中*/
+            align-items: center;
+            /*实现水平居中*/
+            justify-content: center;
+        }
+        .innerinput{
+            -webkit-transition: width 0.4s ease-in-out;
+            transition: width 0.4s ease-in-out;
+        }
+        input[type=text]:hover {
+            border-color: #5bc0de;
+        }
+        .ch:hover{
+            background: green;
+            color: white;
+        }
+        .de:hover{
+            background: red;
+            color: white;
+        }
     </style>
 </head>
 <body onload="searchWord()">
-<div class="outer">
+<div id="outtop">
     <div id="top">
-        违禁词：<input type="text" name="word">
-        <button class="button_add1" id="search" onclick="searchWord()">搜索</button>
+        搜索违禁词：<input type="text" name="word">&nbsp;
+        <button class="button_add1" id="search" onclick="searchWord()">搜索</button>&nbsp;
+        <button class="button_add1" id="cancel" onclick="cancel()">取消</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;添加违禁词：<input type="text" name="addword">&nbsp;
         <button class="button_add2" id="add_word" onclick="addWord()">添加</button>
     </div>
+</div>
+<div class="outer">
     <div id="mid">
         <form id="newsForm">
             <div class="line">
@@ -86,18 +134,19 @@
 <script>
     function addWord() {
         let param = {
-            "word": $("input[name='word']").val()
+            "word": $("input[name='addword']").val()
         };
         jQuery.post("/admin/banWords/addWord", param, function (rst) {
             if (rst === 1) {
-                alert("状态：" + rst + " 添加成功");
+                alert(" 添加成功");
+                $("input[name='addword']").val("");
                 searchWord()
             } else if (rst === 0) {
-                alert("状态：" + rst + " 添加失败");
+                alert(" 添加失败");
             } else if (rst === 2) {
-                alert("状态：" + rst + " 添加失败，已经有该词语")
+                alert(" 添加失败，已经有该词语")
             } else {
-                alert("状态：" + rst + " error");
+                alert(" error");
             }
         })
         searchWord()
@@ -110,11 +159,11 @@
         };
         jQuery.post("/admin/banWords/deleteWord", param, function (rst) {
             if (rst === 1) {
-                alert("状态：" + rst + " 删除成功");
+                alert( "删除成功");
             } else if (rst === 0) {
-                alert("状态：" + rst + " 删除失败");
+                alert(" 删除失败");
             } else {
-                alert("状态：" + rst + " error");
+                alert(" error");
             }
         })
         searchWord()
@@ -136,10 +185,10 @@
                     for (let j=0;j<3;j++){
                         uu = ar[i+j];
                         sw += `<div style="display: inline">
-                        <input name="${i+j}" id="${i+j}" type="text" value='` + uu.word + `'>
-                        <button onclick="changeWord('${uu.id}',${i+j})" type="button" id="${i+j}1">
+                        <input class="innerinput" name="${i+j}" id="${i+j}" type="text" value='` + uu.word + `'>
+                        <button onclick="changeWord('${uu.id}',${i+j})" type="button" id="${i+j}1" class="ch">
                         修改&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                        <button onclick="deleteWord('${uu.word}')" id="${i+j}2">删除</button>
+                        <button onclick="deleteWord('${uu.word}')" id="${i+j}2" class="de">删除</button>
                       </div>
                         <div style="display: inline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>`;
                     }
@@ -150,9 +199,9 @@
                     for (let j=0;j+i<ar.length;j++){
                         uu = ar[i+j];
                         sw += `<div style="display: inline;float: left">
-                        <input name="${i+j}" id="${i+j}" type="text" value='` + uu.word + `'>
-                        <button onclick="changeWord('${uu.id}',${i+j})" type="button" id="${i+j}1">修改&nbsp;&nbsp;&nbsp;&nbsp;</button>
-                        <button onclick="deleteWord('${uu.word}')" id="${i+j}2">删除</button>
+                        <input class="innerinput" name="${i+j}" id="${i+j}" type="text" value='` + uu.word + `'>
+                        <button onclick="changeWord('${uu.id}',${i+j})" type="button" id="${i+j}1" class="ch">修改&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                        <button onclick="deleteWord('${uu.word}')" id="${i+j}2" class="de">删除</button>
                       </div>
                         <div style="display: inline;float: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>`;
                     }
@@ -177,15 +226,21 @@
         }
         jQuery.post("/admin/banWords/changeWord", param, function (rst) {
             if (rst === 1) {
-                alert("状态：" + rst + " 修改成功");
+                alert(" 修改成功");
             } else if (rst === 0) {
-                alert("状态：" + rst + " 修改失败");
+                alert(" 修改失败");
             } else if (rst === 2) {
-                alert("状态：" + rst + " 修改失败，已经有该词语")
+                alert(" 修改失败，已经有该词语")
             } else {
-                alert("状态：" + rst + " error");
+                alert(" error");
             }
         })
+    }
+</script>
+<script>
+    function cancel() {
+        $("input[name='word']").val("");
+        searchWord();
     }
 </script>
 </html>
