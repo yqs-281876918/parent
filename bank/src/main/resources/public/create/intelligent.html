@@ -206,11 +206,11 @@
         </div>
         <div class="col-md-6">
             <label>预期平均分(百分制):</label>
-            <input type="text" class="form-control" placeholder="用1~100表示" value="80">
+            <input type="text" id="ex_avg" class="form-control" placeholder="用1~100表示" value="80">
         </div>
         <div class="col-md-6">
             <label>试卷总分</label>
-            <input type="text" class="form-control" placeholder="用1~100表示" value="100">
+            <input type="text" id="total" class="form-control" placeholder="用1~100表示" value="100">
         </div>
         <div class="col-md-12">
             <label>知识点涵盖面</label>
@@ -229,7 +229,10 @@
 </div>
 <script>
     function submit(){
-
+        let courseID=$('#courseID').val()
+        let ex_avg=$('#ex_avg').val()
+        let total=$('#total').val()
+        let foreWord=$('#foreWord').val()
     }
 </script>
 </body>
