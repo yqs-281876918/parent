@@ -31,7 +31,7 @@
             {
                 return
             }
-            const ul = $('#course_selector');
+            const ul = $('#courseID');
             const length = objs.length;
             paper.courseID=objs[0].id
             for(let i=0; i<length; i++)
@@ -53,16 +53,17 @@
         if(from===2&&to===3)
         {
             paper.foreWord=$('#foreWord').val()
-            var length=subject_types.length;
-            var ul=$('#type-list-group')
-            for(var i=0;i<length;i++)
+            let length=subject_types.length;
+            let ul=$('#type-list-group')
+            ul.empty()
+            for(let i=0;i<length;i++)
             {
-                var type=subject_types[i]
+                let type=subject_types[i]
                 const _i=i;
                 $.ajax({url:"/bank/api/subject/count",data:{"type":type,"courseID":paper.courseID},
                     success:function (rst){
                         type_count[_i]=rst
-                        var li="<li class=\"list-group-item\">{0}(数量:{1})" +
+                        let li="<li class=\"list-group-item\">{0}(数量:{1})" +
                             "<button onclick='addType({2})' class='pull-right btn-success'>+</button></li>"
                         ul.append(li.format(subject_types_chn[_i],rst,_i))
                     },async:true})
@@ -90,7 +91,7 @@
             "<button class='btn-warning pull-right' onclick='sinkItem({1})'>↓</button>" +
             "<button class='btn-success pull-right' onclick='floatItem({2})'>↑</button>"+
             "<button class='btn-default pull-right' onclick='addCount({3})'>+</button>" +
-            "<div id='typeCount{4}' class='pull-right'>{5}题</div>" +
+            "<div id='typeCount{4}' class='pull-right'>{5}</div>" +
             "<button class='btn-info pull-right' onclick='subCount({6})'>-</button>" +
             "</li>"
         for(let i=0;i<length;i++)
@@ -138,12 +139,12 @@
     function updateKeys() {
         $.ajax({url:"/admin/api/knowledge",data:{"courseID":paper.courseID},success:function (list) {
                 keys=list
-                let li="<li class='list-group-item'><input type='checkbox'><label>{0}</label></li>"
+                let li="<li class='list-group-item'><input name='key' value='{1}' type='checkbox'><label>{0}</label></li>"
                 let ul=$("ul.keys")
                 ul.empty()
                 for(let i=0;i<keys.length;i++)
                 {
-                    ul.append(li.format(keys[i].classifyName))
+                    ul.append(li.format(keys[i].classifyName,keys[i].id))
                 }
             }})
     }
@@ -233,6 +234,27 @@
         let ex_avg=$('#ex_avg').val()
         let total=$('#total').val()
         let foreWord=$('#foreWord').val()
+        let data={"courseID":courseID,"ex_avg":ex_avg,"total":total,"foreWord":foreWord}
+        let length=type_distribution.length;
+        for(let i=0;i<length;i++){
+            data[subject_types[type_distribution[i][0]]]=type_distribution[i][1]
+        }
+        let keys=[]
+        let checkboxes=$("input[name=key]:checked")
+        length=checkboxes.length
+        for(let i=0;i<length;i++){
+            let checkbox=checkboxes.eq(i)
+            keys.push(checkbox.val())
+        }
+        data["keys"]=keys
+        $.post("/bank/paper/build",data,function (code) {
+            if(code==="200"){
+                alert("组卷成功!")
+                window.location.reload()
+            }else {
+                alert("组卷失败!")
+            }
+        })
     }
 </script>
 </body>
