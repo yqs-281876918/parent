@@ -30,10 +30,10 @@ public class AnalyseController {
     public List<Exam> findAll(int classId){
         List<Exam> exams=analyseService.findAll(classId);
 //        for(int i=0;i<exams.size();i++){
-//            Date date = new Date();
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //            long time=exams.get(i).getStartTime();
-//            String =dateFormat.format(new Date(Long.parseLong(String.valueOf(time))));
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            String s=dateFormat.format(new Date(Long.parseLong(String.valueOf(time))));
+//
 //        }
         return exams;
     }
