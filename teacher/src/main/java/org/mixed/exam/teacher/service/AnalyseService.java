@@ -177,7 +177,7 @@ public class AnalyseService {
 
 
    // 每道题答对的人数
-    public int getsingleRight(Integer examId, String subjectId) {
+    public float getsingleRight(Integer examId, String subjectId) {
         return analyseDao.getsingleRight(examId,subjectId);
     }
 
@@ -211,6 +211,10 @@ public class AnalyseService {
         return percentage1;
     }
 
+    public int[] ABCD(String subjectId, Integer examId,String type) {
+        return analyseDao.ABCD("6230373c52629445954bd649",13,"SingleChoiceQuestion");
+    }
+
 //    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
 //        PageInfo<Answer> pageInfo = null;
 //        PageHelper.startPage(pageNum,pageSize);
@@ -226,3 +230,4 @@ public class AnalyseService {
 
 
 }
+

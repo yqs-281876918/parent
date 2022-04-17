@@ -34,36 +34,56 @@
 </head>
 <body onload="init()">
 <div id="container">
-    <div class="examContentTitle content examName" id="examName">的试题分析</div>
-    <div id="choose type" class="questionSelDept dropdown selDept pull-left dropdownBtn open">
-        <select id="choose" name="choose" class="form-control">
-            <option value="All" selected = "selected">全部题型</option>
-            <option value="SingleChoiceQuestion">单选题</option>
-            <option value="MultipleChoiceQuestion">多选题</option>
-            <option value="Completion">填空题</option>
-            <option value="Judgment">判断题</option>
-            <option value="ComprehensiveQuestion">综合题</option>
-            <option value="CombinationChoice">综合（组合）选择题</option>
-            <option value="ProgramProblem">程序题</option>
-        </select>
+    <div class="h4" class="examContentTitle content examName" id="examName">的试题分析</div>
+    <div class="choose">
+        <div id="choose type" class="questionSelDept dropdown selDept pull-left dropdownBtn open">
+            <select id="choose" name="choose" class="form-control">
+                <option value="All" selected = "selected">全部题型</option>
+                <option value="SingleChoiceQuestion">单选题</option>
+                <option value="MultipleChoiceQuestion">多选题</option>
+                <option value="Completion">填空题</option>
+                <option value="Judgment">判断题</option>
+                <option value="ComprehensiveQuestion">综合题</option>
+                <option value="CombinationChoice">综合（组合）选择题</option>
+                <option value="ProgramProblem">程序题</option>
+            </select>
+        </div>
     </div>
+
     <div class="questionAnalysis">
         <div class="questionItems">
-            <table class="table table-hover table-expandable"  style="word-break:break-all; word-wrap:break-all;" >
-                <thead>
-                <tr>
-                    <td >题型</td>
-                    <td >题号</td>
-                    <td >题目内容</td>
-                    <td >答题人数</td>
-                    <td >正确人数</td>
-                    <td >得分率</td>
-                    <td> 查看详情</td>
-                </tr>
+            <ul>
+                <li >题型</li>
+                <li >题号</li>
+                <li >题目内容</li>
+                <li >答题人数</li>
+                <li >正确人数</li>
+                <li >得分率</li>
+                <li > 查看详情</li>
+            </ul>
+        </div>
+        <div class="panel-group allContent" id="allContent" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default everyContent">
+                <div class="panel-heading" role="tab" id="heading">
+                </div>
+            </div>
+        </div>
+        <div id="data">
 
-                </thead>
-                <tbody id="data" role="alert" aria-live="polite" aria-relevant="all">
-                </tbody>
+        </div>
+        <div class="collapse" id="collapseExample">
+
+        </div>
+
+<!--                <tbody  role="alert" aria-live="polite" aria-relevant="all">-->
+<!--                <div id="data">-->
+<!--                </div>-->
+<!--                <div class="collapse" id="collapseExample">-->
+<!--                    <div class="card card-body">-->
+<!--                        Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                </tbody>-->
                 <tfoot>
                 <tr>
                     <td colspan="6">
@@ -82,21 +102,6 @@
                 </tfoot>
             </table>
         </div>
-<!--        <div class="panel-group allContent" id="allContent" role="tablist" aria-multiselectable="true">-->
-<!--            <div class="panel panel-default everyContent">-->
-<!--                <div class="panel-heading" role="tab" id="heading">-->
-<!--                    <ul></ul>-->
-<!--                </div>-->
-<!--                <div id="collapse detail" class="collapse show" role="tabpanel" aria-labelledby="heading" aria-expanded="true" style>-->
-<!--                    <div class="panel-body">-->
-<!--                        <div class="questionDetail clear title" >-->
-<!--                            <td class="questionLeft titleAnswer pull-left">答题情况</td>-->
-<!--                            <td class-="questionRight titleScore pull-left">得分率</td>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
 
     </div>
 </div>
@@ -105,36 +110,34 @@
     var pageSize=10;
     var pageNums=0;
     var BarArr;
-    //var subject;
     var type;
     var index;
 
     function init(){
         var examId = sessionStorage.getItem("id");
         var examName=sessionStorage.getItem("examName");
+        var totalScore=sessionStorage.getItem("totalScore");
         jQuery("#examName").html(examName);
         var type = $("#choose").val();
+        console.log(type);
 
         var param={
             "pageNum":pageNum,
             "pageSize":pageSize,
             "examId":13,
             //"type":type1
-            type:'ALL'
+            "type":'ALL'
         };
+        console.log(param);
         jQuery.post("/teacher/analyse/itemDetail",param,function(rst){
-
             //返回的是目标题型题目列表
             console.log(rst);
             //BarArr=Array.from(rst);
             BarArr=rst.list;
-            //alert(BarArr);
-            //alert(BarArr.length);
             for(var i=0;i<BarArr.length;i++){
                 //每一道题
                 var u=BarArr[i];
                 index=i;
-                var subject=u.subjectId;
                 var type1=u.subjectType;
                 console.log(type1);
                 if(type1==="SingleChoiceQuestion"){type1="单选题";}
@@ -148,7 +151,7 @@
 
                 var trs='';
                 var param1={
-                    "subjectId":subject
+                    "subjectId":u.subjectId
                 };
 
                 console.log(param1);
@@ -165,7 +168,7 @@
                         var total=rst2[0];
                         var param3={
                             "examId":13,
-                            "subjectId":subject,
+                            "subjectId":u.subjectId,
                             "total":total
                         };
                         //查找作对人数
@@ -175,29 +178,49 @@
                             console.log(arr1);
                             var right=arr1[0];
                             var percentage=arr1[1];
+                            var param4={
+                                "subjectId":u.subjectId,
+                                "examId":13,
+                                "type":u.subjectType
+                            };
+                            console.log(param4);
+                            jQuery.post("/teacher/analyse/ABCD",param4,function(rst4){
+                                console.log(rst4);
+                            })
                             //var percentage=Math.round(rst3*100)/rst1;
                             //console.log(percentage);
                             trs+=`
-                <tr>
-                    <td style="cursor:default;">${type1}</td>
-                    <td style="cursor:default;">${index}</td>
-                    <td style="cursor:default;">${rst1}</td>
-                    <td style="cursor:default;">${total}</td>
-                    <td style="cursor:default;">${right}</td>
-                    <td style="cursor:default;">${percentage}%</td>
-                    <!--                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">-->
-<!--        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>-->
-<!--        <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>-->
-<!--    </svg>-->
-<!--                    <td class="bi bi-card-text"  data-toggle="tooltip" data-placement="top" data-original-title="查看答题情况"></i>-->
-                </tr>
-                <tr></tr>
+
+                <ul>
+                    <li style="cursor:default;">${type1}</li>
+                    <li style="cursor:default;">${index}</li>
+                    <li style="cursor:default;">${rst1}</li>
+                    <li style="cursor:default;">${total}</li>
+                    <li style="cursor:default;">${right}</li>
+                    <li style="cursor:default;">${percentage}%</li>
+                    <li>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+                        查看详情
+                        </button>
+                    </li>
+                </ul>
+
+
                 `;
-                            jQuery('#data').html(trs);
+                            var trs1='';
+                            trs1+=`
+
+
+                <div class="collapse" id="collapseExample">
+                    <li>${rst1}</li>
+               </div>
+
+                `;
+                            jQuery('#allContent').html(trs);
+                            jQuery('#collapseExample').html(trs1);
                         })
                     })
                 })
-
             }
 
             pageNums=rst.pages;

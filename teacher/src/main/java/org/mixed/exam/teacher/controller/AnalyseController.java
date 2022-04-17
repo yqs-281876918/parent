@@ -119,10 +119,10 @@ public class AnalyseController {
     }
     //每道题答对的人数
     @RequestMapping("/getRight")
-    public int[] singleRight(Integer examId, String subjectId,Integer total){
-        int right=analyseService.getsingleRight(examId,subjectId);
-        int per=(int)right/total;
-        int[] result={right,per};
+    public float[] singleRight(Integer examId, String subjectId,Integer total){
+        float right=analyseService.getsingleRight(examId,subjectId);
+        float per= (float)( Math.round(right*100.0/total));
+        float[] result={right,per};
         System.out.println(result);
         return result;
     }
@@ -132,18 +132,10 @@ public class AnalyseController {
         return analyseService.finish(id);
     }
 
-    // 导出
-//    @RequestMapping("/courseScore/export.action")
-//    @ResponseBody
-//    public void export(String code, HttpServletRequest request, HttpServletResponse response){
-//        String thecoursename = analyseService.getNameByCode(code);
-//        Score score = new Score();
-//        score.setCode(code);
-//        List<CourseScore> courseScoreList = scoreDao.selectCourseScoreList(score);
-//        ExportExcel<CourseScore> ee = new ExportExcel<CourseScore>();
-//        String[] headers = {"编号", "学年", "学号", "姓名", "班级", "成绩"};
-//        String fileName = thecoursename + "课程成绩表";
-//        ee.exportExcel(headers, courseScoreList, fileName, response);
-//
-//    }
+    //详情
+    @RequestMapping("/ABCD")
+    public int[] ABCD(String subjectId,Integer examId,String type){
+        return analyseService.ABCD(subjectId,examId,type);
+    }
+
 }

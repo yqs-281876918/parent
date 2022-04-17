@@ -1,6 +1,7 @@
 package org.mixed.exam.teacher.dao;
 
 
+import org.mixed.exam.bank.api.pojo.po.MultipleChoiceQuestion;
 import org.mixed.exam.bank.api.pojo.po.Question;
 import org.mixed.exam.bank.api.pojo.po.exam.Answer;
 import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
@@ -139,7 +140,7 @@ public class AnalyseDao {
     }
 
     //每道题答对的人数 paerdetal
-    public int getsingleRight(Integer examId, String subjectId) {
+    public float getsingleRight(Integer examId, String subjectId) {
         //考试的人
         List<ExamDetail> examDetails = getAll(examId);
 
@@ -150,16 +151,15 @@ public class AnalyseDao {
         String sl= String.valueOf(scorelist.get(0).get("scoreList"));
         String[] arr=sl.split(",");
 
-        int num=0;
+        float num=0;
         for(int i=0;i<examDetails.size();i++){
             List<Answer> a = examDetails.get(i).getAnswers();
             for(int j=0;j<a.size();j++){
                 if(Objects.equals(a.get(j).getSubjectId(), subjectId)){
-                    System.out.println(Integer.parseInt(arr[i]));
-                    if(a.get(j).getScore()==Integer.parseInt(arr[i])){
+                    //System.out.println(Integer.parseInt(arr[j]));
+                    if(a.get(j).getScore()==Integer.parseInt(arr[j])){
                         num++;
                     }
-                    break;
                 }
             }
 
@@ -177,5 +177,95 @@ public class AnalyseDao {
             }
         }
         return flag;
+    }
+
+    public int[] ABCD(String subjectId, Integer examId,String type) {
+        //考试的人
+        List<ExamDetail> examDetails = getAll(examId);
+
+        if (type.equals("SingleChoiceQuestion")) {
+            int num1 = 0, num2 = 0, num3 = 0, num4 = 0;
+            int[] num = {num1, num2, num3, num4};
+            for (int i = 0; i < examDetails.size(); i++) {
+                List<Answer> a = examDetails.get(i).getAnswers();
+                for (int j = 0; j < a.size(); j++) {
+                    if (Objects.equals(a.get(j).getSubjectId(), subjectId)) {
+                        List<String> b = a.get(j).getAnswerList();
+                        for (int k = 0; k < b.size(); k++) {
+                            if (Objects.equals(b.get(k), "A")) {
+                                num1++;
+                            }
+                            if (Objects.equals(b.get(k), "B")) {
+                                num2++;
+                            }
+                            if (Objects.equals(b.get(k), "C")) {
+                                num3++;
+                            }
+                            if (Objects.equals(b.get(k), "D")) {
+                                num4++;
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(num);
+            return num;
+
+        } else if (type.equals("MultipleChoiceQuestion")) {
+            int num5 = 0, num6 = 0, num7 = 0, num8 = 0;
+            int[] num1 = new int[]{num5, num6, num7, num8};
+            for (int i = 0; i < examDetails.size(); i++) {
+                List<Answer> a = examDetails.get(i).getAnswers();
+                for (int j = 0; j < a.size(); j++) {
+                    if (Objects.equals(a.get(j).getSubjectId(), subjectId)) {
+                        List<String> b = a.get(j).getAnswerList();
+                        for (int k = 0; k < b.size(); k++) {
+                            if (Objects.equals(b.get(k), "A")) {
+                                num5++;
+                            }
+                            if (Objects.equals(b.get(k), "B")) {
+                                num6++;
+                            }
+                            if (Objects.equals(b.get(k), "C")) {
+                                num7++;
+                            }
+                            if (Objects.equals(b.get(k), "D")) {
+                                num8++;
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(num1);
+            return num1;
+
+        } else if (type.equals("Judgment")) {
+            int num11 = 0, num22 = 0;
+            int[] num3 = new int[]{num11, num22};
+            for (int i = 0; i < examDetails.size(); i++) {
+                List<Answer> a = examDetails.get(i).getAnswers();
+                for (int j = 0; j < a.size(); j++) {
+                    if (Objects.equals(a.get(j).getSubjectId(), subjectId)) {
+                        List<String> b = a.get(j).getAnswerList();
+                        for (int k = 0; k < b.size(); k++) {
+                            if (Objects.equals(b.get(k), "T")) {
+                                num11++;
+                            }
+                            if (Objects.equals(b.get(k), "F")) {
+                                num22++;
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(num3);
+            return num3;
+
+
+        } else {
+            int[] num4 = new int[]{0};
+            return num4;
+        }
+
     }
 }
