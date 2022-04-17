@@ -98,9 +98,9 @@
                         c++;
                         table=``;
                         if(subject[i].score==-1){
-                            table+=`<a id="carda${count}" class="buttonR" href="#mark-${count}">${count+1}</a>`;
+                            table+=`<a id="carda${count}" class="buttonR" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
                         }else {
-                            table+=`<a id="carda${count}" class="buttonG" href="#mark-${count}">${count+1}</a>`;
+                            table+=`<a id="carda${count}" class="buttonG" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
                         }
                         var st=null;
                         if(subject[i].subjectType=="SingleChoiceQuestion"||subject[i].subjectType=="singleChoiceQuestion"){
@@ -141,9 +141,9 @@
                     }else{
                         // alert(table);
                         if(subject[i].score==-1){
-                            table+=`<a id="carda${count}" class="buttonR" href="#mark-${count}">${count+1}</a>`;
+                            table+=`<a id="carda${count}" class="buttonR" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
                         }else {
-                            table+=`<a id="carda${count}" class="buttonG" href="#mark-${count}">${count+1}</a>`;
+                            table+=`<a id="carda${count}" class="buttonG" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
                         }
                         // table+=`<a class="button" href="#mark-${count}">${count+1}</a>`;
                         jQuery("#a"+c).html(table);
@@ -178,14 +178,14 @@
                                     stuanswer=subject[i].answerList;
                                     break;
                                 case "completion":
-                                    anser="正确答案："+back.answer;
+                                    anser="正确答案："+back.answers;
                                     stuanswer=subject[i].answerList;
                                     break
                                 case "judgment":
                                     let answer1 = back.answer;
                                     let answer = '';
                                     answer = answer + back.options[answer1 - 1];
-                                    anser="正确答案："+answer;
+                                    anser="正确答案："+answer1;
 
                                     let a = subject[i].answerList;
                                     let as = '';
@@ -349,6 +349,12 @@
         location.href="paperList.html";
     }
 </script>
-<!--clock-->
+<script>
+    function clickanchor(idName) {
+
+        document.querySelector(idName).scrollIntoView({ behavior:"smooth"});
+
+    }
+</script>
 
 </html>

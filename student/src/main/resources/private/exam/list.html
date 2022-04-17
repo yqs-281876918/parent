@@ -69,7 +69,7 @@
                                 <span th:if="${item.status == 3}">已结束</span>
                                 <span th:if="${item.status == 4}">已完成,待批阅</span>
                                 <span th:if="${item.status == 5}" th:text="${item.studentScore}"></span>
-                                <a th:if="${item.status == 5}" th:href="@{/exam/stuExam(id=${item.id})}">回顾测试</a>
+                                <a th:if="${item.status == 5}" th:href="@{../examDetail.html(id=${item.id})}">回顾测试</a>
                             </td>
                         </tr>
                         </tbody>

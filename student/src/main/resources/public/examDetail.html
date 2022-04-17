@@ -2,17 +2,368 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>测试</title>
+    <title>考试详情回顾</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/examDetial.css">
 </head>
-<body>
-<!-- 新 Bootstrap4 核心 CSS 文件 -->
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-成功进入测试
+<body onload="init()">
+
+<!--<div class="modal" tabindex="-1" id="dialog1">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title">提示</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true" onclick="hideDialog()">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <p>本试卷还未批完是否提交？</p>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="hideDialog()">取消</button>-->
+<!--                <button type="button" class="btn btn-primary" onclick="goback()">确定</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div id="container">
+
+    <div id="thiner"></div>
+    <div class="accordion" id="accordionExample"></div>
+    <div id="infoBG"></div>
+    <div id="info">
+    </div>
+    <!--    <div id="inforight">-->
+    <!--    </div>-->
+    <div id="review">
+        <div id="inner"></div>
+    </div>
+
+    <div>
+<!--        <button onclick="finishReview()" id="finishButton">完成</button>-->
+        <button onclick="goback()" id="backButton">返回</button>
+    </div>
+</div>
 </body>
+<script>
+    var subject;
+    var txt;
+    var scorelist;
+    function init(){
+        var loc=location.href;
+        var n1 = loc.length;
+        var n2 = loc.indexOf('=');
+
+        var t = decodeURI(loc.substr(n2+1,n1-n2));
+        var txt;
+        //通过examid和username获取examdetial id
+        jQuery.ajax({
+            type:'post',
+            url:'/student/ExamDetial/getDetialId',
+            async:false,
+            data:{
+                'id':t
+            },
+            success: function (rst) {
+                console.log(rst);
+                txt=rst;
+            }
+        })
+        // txt=window.sessionStorage.getItem("detialId");
+        console.log(txt);
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/getScoreList',
+            async : false,
+            data:{'id':txt},
+            success:function (rst) {
+                scorelist=rst;
+            }
+        })
+        jQuery.ajax({
+            type:'post',
+            url:'/teacher/reviewpaper/autoandget',
+            data:{'id':txt},
+            success:function (rst) {
+                console.log(rst);
+                var rightGuide=``;
+                var table=``;
+                subject=rst.answers;
+                var c=0;
+                var count=0;
+                var information=`
+                <table>
+                <tr>
+                    <td><div>答题人：${rst.username}</div></td>
+                    <td><div>切屏次数：${rst.antiCount}</div></td>
+                    <td><div>科目：${sessionStorage.getItem("examName")}</div></td>
+                    <td><div id="scoreGot">考试得分：${rst.totalScore}</div></td>
+                    </tr>
+                </tablecellpadding>
+                `;
+                var r=``;
+                jQuery("#info").html(information);
+                for(var i=0;i<subject.length;i++){
+                    if((i>=1&&subject[i].subjectType!=subject[i-1].subjectType)||i==0){
+                        //jQuery("#"+c).html(table);
+                        c++;
+                        table=``;
+                        //href="#mark-${count}"
+                        if(subject[i].score==scorelist[count]){
+                            table+=`<a id="carda${count}" class="buttonG" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
+                        }else {
+                            table+=`<a id="carda${count}" class="buttonR" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
+                        }
+                        var st=null;
+                        if(subject[i].subjectType=="SingleChoiceQuestion"||subject[i].subjectType=="singleChoiceQuestion"){
+                            st="单选题";
+                        }else if(subject[i].subjectType=="MultipleChoiceQuestion"||subject[i].subjectType=="multipleChoiceQuestion"){
+                            st="多选题";
+                        }else if(subject[i].subjectType=="Judgment"||subject[i].subjectType=="judgment"){
+                            st="判断题";
+                        }else if(subject[i].subjectType=="ComprehensiveQuestion"||subject[i].subjectType=="comprehensiveQuestion"){
+                            st="综合题";
+                        }else if(subject[i].subjectType=="Completion"||subject[i].subjectType=="completion"){
+                            st="填空题";
+                        }else if(subject[i].subjectType=="CombinationChoice"||subject[i].subjectType=="combinationChoice"){
+                            st="组合题";
+                        }else if(subject[i].subjectType=="ProgramProblem"||subject[i].subjectType=="programProblem"){
+                            st="程序题";
+                        }else{
+                            st="未知题型";
+                        }
+                        rightGuide+=`
+                        <div class="card">
+                            <div class="card-header" id="heading${c}">
+                                <h2 class="mb-0 getwhite">
+                                    <button class="btn btn-link btn-block text-left setbut" type="button" data-toggle="collapse" data-target="#collapse${c}" aria-expanded="true" aria-controls="collapse${c}">
+                                        ${st}
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapse${c}" class="collapse" aria-labelledby="heading${c}" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <div id="a${c}">${table}</div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        jQuery("#accordionExample").html(rightGuide);
+
+                    }else{
+                        // alert(table);
+                        if(subject[i].score==scorelist[count]){
+                            table+=`<a id="carda${count}" class="buttonG" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
+                        }else {
+                            table+=`<a id="carda${count}" class="buttonR" onclick="clickanchor('#mark-${count}')">${count+1}</a>`;
+                        }
+                        // table+=`<a class="button" href="#mark-${count}">${count+1}</a>`;
+                        jQuery("#a"+c).html(table);
+                        rightGuide=jQuery("#accordionExample").html();
+                    }
+                    $('.collapse').collapse();
+                    //显示题目
+                    console.log(subject[i].answerList);
+                    jQuery.ajax({
+                        type:'get',
+                        url:'/bank/subject/json',
+                        async : false,
+                        data:{'id':subject[i].subjectId},
+                        success:function (back) {
+                            back = eval('('+back+')');
+                            var anser;
+                            var stuanswer;
+                            switch (back.type) {
+                                case "singleChoiceQuestion":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "multipleChoiceQuestion":
+                                    anser="正确答案："+back.answers;
+                                    stuanswer="";
+                                    // for(let ans in back.answers){
+                                    //     anser+=ans;
+                                    // }
+                                    // for(let ans2 in subject[i].answerList){
+                                    //     stuanswer+=ans2;
+                                    // }
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "completion":
+                                    anser="正确答案："+back.answers;
+                                    stuanswer=subject[i].answerList;
+                                    break
+                                case "judgment":
+                                    let answer1 = back.answer;
+                                    let answer = '';
+                                    answer = answer + back.options[answer1 - 1];
+                                    anser="正确答案："+answer1;
+
+                                    let a = subject[i].answerList;
+                                    let as = '';
+                                    as = as + subject[i].options[a - 1];
+                                    stuanswer=as;
+                                    break;
+                                case "comprehensiveQuestion":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "programProblem":
+                                    anser="正确答案："+back.answer;
+                                    stuanswer=subject[i].answerList;
+                                    break;
+                                case "CombinationChoice":
+
+                            }
+//subject[i].answerList
+                            var tmpscore;
+                            if(subject[i].score==-1){
+                                tmpscore="";
+                            }else {
+                                tmpscore=subject[i].score;
+                            }
+                            if(back.answer!=undefined){
+
+                                r+=`
+                                <div id="mark-${count}" class="q">
+                                    <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p class="question_description">${back.description}</p></p></div>
+                                    <div class="question_score">分值：${scorelist[count]}</div>
+                                    <div class="student_answer">学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}" class="question_answer">${anser}</div>
+                                    <div class="score_input">
+                                        得分判定:<input readonly="readonly" type="text" id="score${count}" value="${tmpscore}" onchange="changeScore(${count})"/>
+                                    </div>
+                                </div>
+                                `;
+                            }else if(back.answers!=undefined){
+                                r+=`
+                                <div id="mark-${count}" class="q">
+                                    <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p>${back.description}</p></p></div>
+                                    <div class="question_score">分值：${scorelist[count]}</div>
+                                    <div class="student_answer">学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}" class="question_answer">${anser}</div>
+                                    <div class="score_input">
+                                        得分判定:<input readonly="readonly" type="text" id="score${count}" value="${tmpscore}" onchange="changeScore(${count})"/>
+                                    </div>
+                                </div>
+                                `;
+                            }
+
+                        }
+                    })
+                    count++;
+                }
+                jQuery("#inner").html(r);
+                //jQuery("#accordionExample").html(rightGuide);
+            }
+        })
+    }
+
+</script>
+
+<!--<script>-->
+<!--    function changeScore(id) {-->
+<!--        var score = parseInt(jQuery("#score"+id).val());-->
+<!--        if (!isNaN(score)) { //数字-->
+
+<!--        }-->
+<!--        else//字符-->
+<!--        {-->
+<!--            alert("请输入合适的数字");-->
+<!--            jQuery("#score"+id).val(subject[id].score);-->
+<!--            return;-->
+<!--        }-->
+<!--        if(score<0){-->
+<!--            alert("分值请勿低于0");-->
+<!--            jQuery("#score"+id).val(0);-->
+<!--            score=0;-->
+<!--        }else if(score>scorelist[id]){-->
+<!--            alert("分值请勿超过最大分值");-->
+<!--            jQuery("#score"+id).val(scorelist[id]);-->
+<!--            score=scorelist[id];-->
+<!--        }-->
+<!--        subject[id].score=score;-->
+<!--        console.log(subject);-->
+<!--        jQuery.ajax({-->
+<!--            type:'post',-->
+<!--            url:'/teacher/reviewpaper/changeScore',-->
+<!--            async : false,-->
+<!--            data:{-->
+<!--                'id':txt,-->
+<!--                'Answer':JSON.stringify(subject)-->
+<!--            },-->
+<!--            success:function (rst) {-->
+
+<!--            }-->
+<!--        })-->
+<!--        var totalScore=parseInt(0);-->
+<!--        for(var i=0;i<subject.length;i++){-->
+<!--            totalScore=totalScore+parseInt(subject[i].score);-->
+<!--        }-->
+<!--        jQuery.ajax({-->
+<!--            type:'post',-->
+<!--            url:'/teacher/reviewpaper/changeTotalScore',-->
+<!--            async : false,-->
+<!--            data:{-->
+<!--                'id':txt,-->
+<!--                'score':totalScore-->
+<!--            },-->
+<!--            success:function (rst) {-->
+<!--                jQuery("#scoreGot").html("考试得分："+totalScore);-->
+<!--            }-->
+<!--        })-->
+<!--        //更新导航栏按钮颜色-->
+<!--        if(subject[id].score==-1){-->
+<!--            jQuery("#carda"+id).attr("class","buttonR");-->
+<!--        }else {-->
+<!--            jQuery("#carda"+id).attr("class","buttonG");-->
+<!--        }-->
+
+<!--    }-->
+<!--</script>-->
+<!--<script>-->
+<!--    function FR() {-->
+<!--        jQuery("#dialog1").show();-->
+<!--    }-->
+<!--</script>-->
+<!--<script>-->
+<!--    function hideDialog() {-->
+<!--        jQuery("#dialog1").hide();-->
+<!--    }-->
+<!--</script>-->
+<script>
+    function goback() {
+        location.href="class/classDetail.html";
+    }
+</script>
+<!--<script>-->
+<!--    function finishReview() {-->
+<!--        for(var i=0;i<subject.length;i++){-->
+<!--            if(subject[i].score==-1){-->
+<!--                FR();-->
+<!--                return;-->
+<!--            }-->
+<!--        }-->
+<!--        jQuery.ajax({-->
+<!--            type:'post',-->
+<!--            url:'/teacher/reviewpaper/finishReview',-->
+<!--            data:{-->
+<!--                'id':txt-->
+<!--            },-->
+<!--            success:function (rst) {-->
+<!--                location.href="paperList.html";-->
+<!--            }-->
+<!--        })-->
+<!--    }-->
+<!--</script>-->
+<script>
+    function clickanchor(idName) {
+
+        document.querySelector(idName).scrollIntoView({ behavior:"smooth"});
+
+    }
+</script>
 </html>
