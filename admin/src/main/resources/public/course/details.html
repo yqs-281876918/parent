@@ -211,9 +211,27 @@
             var trs = '';
             for(var i=0; i<rst.length; i++){
                 var u= rst[i];
+                var st=null;
+                if(u.type=="SingleChoiceQuestion"||u.type=="singleChoiceQuestion"){
+                    st="单选题";
+                }else if(u.type=="MultipleChoiceQuestion"||u.type=="multipleChoiceQuestion"){
+                    st="多选题";
+                }else if(u.type=="Judgment"||u.type=="judgment"){
+                    st="判断题";
+                }else if(u.type=="ComprehensiveQuestion"||u.type=="comprehensiveQuestion"){
+                    st="综合题";
+                }else if(u.type=="Completion"||u.type=="completion"){
+                    st="填空题";
+                }else if(u.type=="CombinationChoice"||u.type=="combinationChoice"){
+                    st="组合题";
+                }else if(u.type=="ProgramProblem"||u.type=="programProblem"){
+                    st="程序题";
+                }else{
+                    st="未知题型";
+                }
                 trs = `
 <div id="${u.id}">
-    ${u.type}&nbsp&nbsp&nbsp&nbsp难度级别：${u.difficulty}&nbsp&nbsp&nbsp&nbsp ${u.introduction}
+    ${st}&nbsp&nbsp&nbsp&nbsp难度级别：${u.difficulty}&nbsp&nbsp&nbsp&nbsp ${u.introduction}
 </div>
                 `
                 var location = "#"+u.class2ndID;
