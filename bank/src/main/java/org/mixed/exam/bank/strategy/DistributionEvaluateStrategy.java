@@ -16,21 +16,22 @@ public class DistributionEvaluateStrategy extends EvaluateStrategy
         for(String type : param.getDistribution().keySet()){
             distribution.put(type,param.getDistribution().get(type));
         }
-        double score = 100.0;
-        double unit = 100.0/param.getSubjectCount();
-        for (int i=0;i<individual.length;i++){
-            Question q = subjects.get(i);
-            if(!distribution.containsKey(q.getType())){
-                score-=unit;
+        for(int i=0;i<subjects.size();i++){
+            if(individual.getGene(i)==0){
                 continue;
             }
-            int count = distribution.get(q.getType());
-            distribution.put(q.getType(),count-1);
+            Question q = subjects.get(i);
+            if(distribution.containsKey(q.getType())){
+                distribution.put(q.getType(),distribution.get(q.getType())-1);
+            }
         }
-        for (String type : param.getDistribution().keySet()){
-            int count = distribution.get(type);
-            score-=Math.abs(count)*unit;
+        double score=100;
+        for(String key : distribution.keySet()){
+            if(distribution.get(key)>0){
+                score=0;
+                break;
+            }
         }
-        individual.fitness+=score>0?score:0;
+        individual.fitness+=score;
     }
 }

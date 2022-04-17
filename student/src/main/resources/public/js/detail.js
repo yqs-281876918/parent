@@ -8,6 +8,7 @@ var contestDetailPage = {
         scoreList: [],
         questionsAnswer: [],
         currentQuestionIndex: 0,
+        antiCount: 0,
     },
     init: function (contest, questions,scoreList) {
         contestDetailPage.data.contest = contest;
@@ -35,7 +36,18 @@ var contestDetailPage = {
                         'answerList':ansList})
             }
         }
+        contestDetailPage.showInit();
+    },
+    initAgain: function (contest, questions,scoreList,examDetail) {
+        contestDetailPage.data.contest = contest;
+        contestDetailPage.data.questions = questions;
+        contestDetailPage.data.scoreList = scoreList
 
+        contestDetailPage.data.questionsAnswer = examDetail.answers
+        contestDetailPage.data.antiCount = examDetail.antiCount
+        contestDetailPage.showInit();
+    },
+    showInit: function (){
         var nowTime = new Date();
         var nowTimeStamp = nowTime.getTime()
         if (nowTimeStamp>(contestDetailPage.data.contest.startTime+contestDetailPage.data.contest.testTime*60000)){
@@ -70,6 +82,14 @@ var contestDetailPage = {
                 '    </div>\n' +
                 '  </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
+            //显示之前作答区的答案
+            if (contestDetailPage.data.questionsAnswer[0].answerList[0] != '') {
+                $.each($("input[name='questionAnswer']"),function(){
+                    if (contestDetailPage.data.questionsAnswer[0].answerList[0].indexOf($(this).val()) != -1) {
+                        $(this).attr("checked", "checked");
+                    }
+                });
+            }
         } else if (contestDetailPage.data.questions[0].type == 'multipleChoiceQuestion') {
             $('#currentQuetionTitle').html('(多选)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr =
@@ -86,6 +106,15 @@ var contestDetailPage = {
                 '    </div>\n' +
                 '  </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
+
+            //显示之前作答区的答案
+            if (contestDetailPage.data.questionsAnswer[0].answerList[0] != '') {
+                $.each($("input[name='questionAnswer']"),function(){
+                    if (contestDetailPage.data.questionsAnswer[0].answerList[0].indexOf($(this).val()) != -1) {
+                        $(this).attr("checked", "checked");
+                    }
+                });
+            }
         } else if (contestDetailPage.data.questions[0].type == 'completion') {
             $('#currentQuetionTitle').html('(填空)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr =
@@ -99,6 +128,12 @@ var contestDetailPage = {
             selectOptionStr +=
                 '    </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
+
+            //显示之前作答区的答案
+            for (var i=0;i<contestDetailPage.data.questionsAnswer[0].answerList.length;i++){
+                var answerStr = '#'+i;
+                $(answerStr).val(contestDetailPage.data.questionsAnswer[0].answerList[i])
+            }
         } else if (contestDetailPage.data.questions[0].type == 'judgment') {
             $('#currentQuetionTitle').html('(判断)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr = '<div class="grouped fields">\n' +
@@ -116,6 +151,15 @@ var contestDetailPage = {
                 '    </div>\n' +
                 '  </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
+
+            //显示之前作答区的答案
+            if (contestDetailPage.data.questionsAnswer[0].answerList[0] != '') {
+                $.each($("input[name='questionAnswer']"),function(){
+                    if (contestDetailPage.data.questionsAnswer[0].answerList[0].indexOf($(this).val()) != -1) {
+                        $(this).attr("checked", "checked");
+                    }
+                });
+            }
         } else if (contestDetailPage.data.questions[0].type == 'combinationChoice') {
             $('#currentQuetionTitle').html('(组合选择)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var topics = contestDetailPage.data.questions[0].answers;
@@ -139,6 +183,15 @@ var contestDetailPage = {
                     '  </div>';
             }
             $('#currentQuestionAnswer').html(selectOptionStr);
+
+            //显示之前作答区的答案
+            if (contestDetailPage.data.questionsAnswer[0].answerList[0] != '') {
+                $.each($("input[name='questionAnswer']"),function(){
+                    if (contestDetailPage.data.questionsAnswer[0].answerList[0].indexOf($(this).val()) != -1) {
+                        $(this).attr("checked", "checked");
+                    }
+                });
+            }
         } else if (contestDetailPage.data.questions[0].type == 'programProblem') {
             $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr = '<div class="field">\n' +
@@ -148,65 +201,31 @@ var contestDetailPage = {
                 '<div class="programProblemCodeSCore">\n' +
                 '</div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
+
+            //显示之前作答区的答案
+            if (contestDetailPage.data.questionsAnswer[0].answerList[0] != '') {
+                $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[0].answerList[0]);
+            }
         } else {
             $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  id="questionAnswer" rows="20"></textarea>\n' +
                 '                    </div>';
             $('#currentQuestionAnswer').html(selectOptionStr);
+
+            //显示之前作答区的答案
+            if (contestDetailPage.data.questionsAnswer[0].answerList[0] != '') {
+                $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[0].answerList[0]);
+            }
         }
-        var currentQuestionButtonStr = '';
-        for (var i = 0; i < questions.length; i++) {
-            var buttonStr = '';
-            if (contestDetailPage.data.currentQuestionIndex == i) buttonStr = '<button class="mini ui positive button" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
-            else buttonStr = '<button class="mini ui button" onclick="contestDetailPage.targetQuestionAction('+i+')" style="margin-top: 10px;margin-left: 5px;">'+(i+1)+'</button>';
-            currentQuestionButtonStr += buttonStr;
-        }
-        $('#currentQuestionButton').html(currentQuestionButtonStr);
+        //显示按钮
+        contestDetailPage.buttonShow()
     },
     targetQuestionAction: function (index) {
-        var preIndex = contestDetailPage.data.currentQuestionIndex;
-        contestDetailPage.data.currentQuestionIndex = index;
-
         //记录答案
-        if (contestDetailPage.data.questions[preIndex].type == 'singleChoiceQuestion') {
-            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
-            $.each($("input[name='questionAnswer']:checked"),function(){
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
-                // contestDetailPage.data.questions[preIndex].answer += ',';
-            });
-        } else if (contestDetailPage.data.questions[preIndex].type == 'multipleChoiceQuestion') {
-            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
-            $.each($("input[name='questionAnswer']:checked"),function(){
-                //console.log($(this).val());
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += ',';
-            });
-        } else if (contestDetailPage.data.questions[preIndex].type == 'completion') {
-            for (var i=0;i<contestDetailPage.data.questions[preIndex].answers.length;i++){
-                var answerStr = '#'+i;
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[i] = $(answerStr).val();
-            }
-        } else if (contestDetailPage.data.questions[preIndex].type == 'judgment') {
-            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
-            $.each($("input[name='questionAnswer']:checked"),function(){
-                //console.log($(this).val());
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
-                // contestDetailPage.data.questions[preIndex].answer += ',';
-            });
-        } else if (contestDetailPage.data.questions[preIndex].type == 'combinationChoice') {
-            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = '';
-            $.each($("input[name='questionAnswer']:checked"),function(){
-                //console.log($(this).val());
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += $(this).val();
-                contestDetailPage.data.questionsAnswer[preIndex].answerList[0] += ',';
-            });
-        } else if (contestDetailPage.data.questions[preIndex].type == 'programProblem') {
-            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = $("#questionAnswer").val();
-        } else {
-            //console.log($("#questionAnswer").val());
-            contestDetailPage.data.questionsAnswer[preIndex].answerList[0] = $("#questionAnswer").val();
-        }
+        contestDetailPage.saveCurrentAnswer()
+
+        contestDetailPage.data.currentQuestionIndex = index;
 
         if (contestDetailPage.data.questions[index].type == 'singleChoiceQuestion') {
             $('#currentQuetionTitle').html('(单选)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
@@ -260,7 +279,6 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[index].type == 'completion') {
             $('#currentQuetionTitle').html('(填空)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
-            console.log(contestDetailPage.data.questions[index].answers)
             var selectOptionStr =
                 '  <div class="grouped fields">\n';
             for (var i=0;i<contestDetailPage.data.questions[index].answers.length;i++){
@@ -366,8 +384,12 @@ var contestDetailPage = {
                 $('#questionAnswer').val(contestDetailPage.data.questionsAnswer[index].answerList[0]);
             }
         }
+        contestDetailPage.buttonShow()
+        contestDetailPage.saveMyAnswers();
 
-
+    },
+    //按钮显示
+    buttonShow: function (){
         var currentQuestionButtonStr = '';
         for (var i = 0; i < contestDetailPage.data.questions.length; i++) {
             var buttonStr = '';
@@ -392,8 +414,14 @@ var contestDetailPage = {
         }
         $('#currentQuestionButton').html(currentQuestionButtonStr);
     },
-    //交卷事假触发
+    //交卷事件触发
     finishContestAction: function () {
+        contestDetailPage.saveCurrentAnswer();
+        //TODO::交卷
+        contestDetailPage.submittingContestAction();
+    },
+    //保存当前题目答案
+    saveCurrentAnswer:function (){
         var index = contestDetailPage.data.currentQuestionIndex;
         //记录答案
         if (contestDetailPage.data.questions[index].type == 'singleChoiceQuestion') {
@@ -434,8 +462,27 @@ var contestDetailPage = {
             //console.log($("#questionAnswer").val());
             contestDetailPage.data.questionsAnswer[index].answerList[0] = $("#questionAnswer").val();
         }
-        //TODO::交卷
-        contestDetailPage.submittingContestAction();
+    },
+    //向后端提交答卷，保证可靠性
+    saveMyAnswers: function (){
+        contestDetailPage.saveCurrentAnswer()
+        let data=[]
+        contestDetailPage.data.questionsAnswer.forEach(function(s){
+            data.push(JSON.stringify(s))
+        })
+        //向后端API发送答题卡
+        $.ajax({
+            url : "/student/test/saveMyAnswer",
+            type : "POST",
+            traditional: true,
+            <!-- 向后端传输的数据 -->
+            data : {"answers":data,
+                "examId":contestDetailPage.data.contest.id,
+                "antiCount":contestDetailPage.data.antiCount},
+            success:function() {
+                console.log('保存成功')
+            },
+        });
     },
     //代码评判
     submitCode: function (){
@@ -444,7 +491,7 @@ var contestDetailPage = {
         $("#programProblemButton").html(programProblemButton)
         var id = contestDetailPage.data.questionsAnswer[contestDetailPage.data.currentQuestionIndex].subjectId
         jQuery.post("/student/oj/judge",{'code':code,'id':id},function (rst){
-            if (rst==-1){
+            if (rst == -1){
                 var codeResult = '得分：0分！出现语法错误！'
                 $("#programProblemCodeSCore").html(codeResult);
                 programProblemButton = '<button class="ui positive basic button" onclick="contestDetailPage.submitCode()">提交代码</button>'
@@ -484,7 +531,8 @@ var contestDetailPage = {
             traditional: true,
             <!-- 向后端传输的数据 -->
             data : {"answers":data,
-                    "examId":contestDetailPage.data.contest.id},
+                    "examId":contestDetailPage.data.contest.id,
+                    "antiCount":contestDetailPage.data.antiCount},
             success:function(result) {
                 if (result=='success') {
                 } else {

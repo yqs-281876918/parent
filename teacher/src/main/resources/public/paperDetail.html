@@ -62,18 +62,11 @@
                 <li > 查看详情</li>
             </ul>
         </div>
-        <div class="panel-group allContent" id="allContent" role="tablist" aria-multiselectable="true">
-            <div class="panel panel-default everyContent">
-                <div class="panel-heading" role="tab" id="heading">
-                </div>
-            </div>
-        </div>
+
         <div id="data">
 
         </div>
-        <div class="collapse" id="collapseExample">
 
-        </div>
 
 <!--                <tbody  role="alert" aria-live="polite" aria-relevant="all">-->
 <!--                <div id="data">-->
@@ -113,126 +106,220 @@
     var type;
     var index;
 
-    function init(){
-        var examId = sessionStorage.getItem("id");
+    $(() => {
+        $('#choose').change(() => {
+            var type = $("#choose").val();
+            init(type);
+        })
+    })
+    function init(type){
+        var examId = sessionStorage.getItem("examId");
         var examName=sessionStorage.getItem("examName");
         var totalScore=sessionStorage.getItem("totalScore");
         jQuery("#examName").html(examName);
-        var type = $("#choose").val();
+
         console.log(type);
 
-        var param={
-            "pageNum":pageNum,
-            "pageSize":pageSize,
-            "examId":13,
-            //"type":type1
-            "type":'ALL'
-        };
-        console.log(param);
-        jQuery.post("/teacher/analyse/itemDetail",param,function(rst){
-            //返回的是目标题型题目列表
-            console.log(rst);
-            //BarArr=Array.from(rst);
-            BarArr=rst.list;
-            for(var i=0;i<BarArr.length;i++){
-                //每一道题
-                var u=BarArr[i];
-                index=i;
-                var type1=u.subjectType;
-                console.log(type1);
-                if(type1==="SingleChoiceQuestion"){type1="单选题";}
-                else if(type1==="MultipleChoiceQuestion"){type1="多选题";}
-                else if(type1==="Completion"){type1="填空题";}
-                else if(type1==="Judgment"){type1="判断题";}
-                else if(type1==="ComprehensiveQuestion"){type1="综合题";}
-                else if(type1==="CombinationChoice"){type1="综合（组合）选择题";}
-                else if(type1==="ProgramProblem"){type1="程序题";}
-                //var index=i+1;
+        // var param={
+        //     "pageNum":pageNum,
+        //     "pageSize":pageSize,
+        //     "examId":examId,
+        //     //"type":type1
+        //     "type":'ALL'
+        // };
+        // console.log(param);
+        jQuery.ajax({
+            type: 'post',
+            url: '/teacher/analyse/itemDetail',
+            async: false,
+            data: {"pageNum":pageNum, "pageSize":pageSize, "examId":examId, "type":'ALL'},
+            success: function (rst) {
 
-                var trs='';
-                var param1={
-                    "subjectId":u.subjectId
-                };
+            }
+        })
+        jQuery.ajax({
+            type: 'post',
+            url: '/teacher/analyse/itemDetail',
+            async: false,
+            data: {"pageNum":pageNum, "pageSize":pageSize, "examId":examId, "type":'ALL'},
+            success: function (rst) {
+                //返回的是目标题型题目列表
+                console.log(rst);
+                //BarArr=Array.from(rst);
+                BarArr = rst.list;
+                for (var i = 0; i < BarArr.length; i++) {
+                    //每一道题
+                    var u = BarArr[i];
+                    index = i;
+                    var type1 = u.subjectType;
+                    console.log(type1);
+                    if (type1 === "SingleChoiceQuestion") {
+                        type1 = "单选题";
+                    } else if (type1 === "MultipleChoiceQuestion") {
+                        type1 = "多选题";
+                    } else if (type1 === "Completion") {
+                        type1 = "填空题";
+                    } else if (type1 === "Judgment") {
+                        type1 = "判断题";
+                    } else if (type1 === "ComprehensiveQuestion") {
+                        type1 = "综合题";
+                    } else if (type1 === "CombinationChoice") {
+                        type1 = "综合（组合）选择题";
+                    } else if (type1 === "ProgramProblem") {
+                        type1 = "程序题";
+                    }
+                    //var index=i+1;
 
-                console.log(param1);
-                //根据id查题目描述
-                jQuery.post("/teacher/analyse/description",param1,function(rst1){
-                    console.log(rst1);
-                    //根据id查考试人数
-                    var param2={
-                        "examId":13,
-                        "totalScore":100
-                    };
-                    jQuery.post("/teacher/analyse/count",param2,function (rst2){
-                        console.log(rst2);
-                        var total=rst2[0];
-                        var param3={
-                            "examId":13,
-                            "subjectId":u.subjectId,
-                            "total":total
-                        };
-                        //查找作对人数
-                        jQuery.post("/teacher/analyse/getRight",param3,function(rst3){
-                            console.log(rst3);
-                            var arr1=rst3;
-                            console.log(arr1);
-                            var right=arr1[0];
-                            var percentage=arr1[1];
-                            var param4={
-                                "subjectId":u.subjectId,
-                                "examId":13,
-                                "type":u.subjectType
-                            };
-                            console.log(param4);
-                            jQuery.post("/teacher/analyse/ABCD",param4,function(rst4){
-                                console.log(rst4);
-                            })
-                            //var percentage=Math.round(rst3*100)/rst1;
-                            //console.log(percentage);
-                            trs+=`
+                    var trs = '';
+                    jQuery.ajax({
+                        type: 'post',
+                        url: '/teacher/analyse/description',
+                        async: false,
+                        data: {"subjectId": u.subjectId},
+                        success: function (rst1) {
+                            console.log(rst1);
+                            jQuery.ajax({
+                                type: 'post',
+                                url: '/teacher/analyse/count',
+                                async: false,
+                                data: {"examId": examId, "totalScore": totalScore},
+                                success: function (rst2) {
+                                    console.log(rst2);
+                                    var total = rst2[0];
+                                    jQuery.ajax({
+                                        type: 'post',
+                                        url: '/teacher/analyse/getRight',
+                                        async: false,
+                                        data: {"examId": examId, "subjectId": u.subjectId, "total": total},
+                                        success: function (rst3) {
+                                            console.log(rst3);
+                                            var arr1 = rst3;
+                                            console.log(arr1);
+                                            var right = arr1[0];
+                                            var percentage = arr1[1];
+                                            jQuery.ajax({
+                                                type: 'post',
+                                                url: '/teacher/analyse/ABCD',
+                                                async: false,
+                                                data: {"subjectId": u.subjectId, "examId": examId, "type": u.subjectType},
+                                                success: function (rst4) {
+                                                    trs = `
 
                 <ul>
-                    <li style="cursor:default;">${type1}</li>
-                    <li style="cursor:default;">${index}</li>
-                    <li style="cursor:default;">${rst1}</li>
-                    <li style="cursor:default;">${total}</li>
-                    <li style="cursor:default;">${right}</li>
-                    <li style="cursor:default;">${percentage}%</li>
-                    <li>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" href="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
-                        查看详情
-                        </button>
-                    </li>
+                    <li style="cursor:default;display: inline">${type1}</li>
+                    <li style="cursor:default;display: inline"">${index}</li>
+                    <li style="cursor:default;display: inline"">${rst1}</li>
+                    <li style="cursor:default;display: inline"">${total}</li>
+                    <li style="cursor:default;display: inline"">${right}</li>
+                    <li style="cursor:default;display: inline"">${percentage}%</li>
                 </ul>
+                <ul>
+                <div class="card">
+    <div class="card-header" id="heading${u.subjectId}">
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                <div>
+                    查看详情
+                </div>
+            </button>
+        </h2>
+    </div>
+    <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
+        <div class="card-body" id="${u.subjectId}">
+        111
+        </div>
+    </div>
+</div>
+</ul>
 
 
                 `;
-                            var trs1='';
-                            trs1+=`
+                                                    jQuery('#data').append(trs);
+                                                }
+                                            })
+                                        }
 
-
-                <div class="collapse" id="collapseExample">
-                    <li>${rst1}</li>
-               </div>
-
-                `;
-                            jQuery('#allContent').html(trs);
-                            jQuery('#collapseExample').html(trs1);
-                        })
+                                    })
+                                }
+                            })
+                        }
                     })
-                })
+//                 jQuery.post("/teacher/analyse/description",param1,function(rst1){
+//                     console.log(rst1);
+//                     //根据id查考试人数
+//                     var param2={
+//                         "examId":examId,
+//                         "totalScore":100
+//                     };
+//                     jQuery.post("/teacher/analyse/count",param2,function (rst2){
+//                         console.log(rst2);
+//                         var total=rst2[0];
+//                         var param3={
+//                             "examId":examId,
+//                             "subjectId":u.subjectId,
+//                             "total":total
+//                         };
+//                         //查找作对人数
+//                         jQuery.post("/teacher/analyse/getRight",param3,function(rst3){
+//                             console.log(rst3);
+//                             var arr1=rst3;
+//                             console.log(arr1);
+//                             var right=arr1[0];
+//                             var percentage=arr1[1];
+//                             var param4={
+//                                 "subjectId":u.subjectId,
+//                                 "examId":examId,
+//                                 "type":u.subjectType
+//                             };
+//                             console.log(param4);
+//                             jQuery.post("/teacher/analyse/ABCD",param4,function(rst4){
+//                                 console.log(rst4);
+//                             })
+//                             //var percentage=Math.round(rst3*100)/rst1;
+//                             //console.log(percentage);
+//                             trs =`
+//
+//                 <ul>
+//                     <li style="cursor:default;display: inline">${type1}</li>
+//                     <li style="cursor:default;display: inline"">${index}</li>
+//                     <li style="cursor:default;display: inline"">${rst1}</li>
+//                     <li style="cursor:default;display: inline"">${total}</li>
+//                     <li style="cursor:default;display: inline"">${right}</li>
+//                     <li style="cursor:default;display: inline"">${percentage}%</li>
+//                 </ul>
+//                 <ul>
+//                 <div class="card">
+//     <div class="card-header" id="heading${u.subjectId}">
+//         <h2 class="mb-0">
+//             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+//                 <div>
+//                     查看详情
+//                 </div>
+//             </button>
+//         </h2>
+//     </div>
+//     <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
+//         <div class="card-body" id="${u.subjectId}">
+//         111
+//         </div>
+//     </div>
+// </div>
+// </ul>
+//
+//
+//                 `;
+//                             jQuery('#data').append(trs);
+//
+//                         })
+//                     })
+//                 })
+//             }
+
+                }
             }
-
-            pageNums=rst.pages;
-            jQuery("#pages").html(pageNums);
-            jQuery("#pageNum").html(pageNum);
-            jQuery("#totals").html(rst.total);
-
-
-
-
         })
     }
+
 </script>
 
 </body>

@@ -154,13 +154,13 @@
             <h4>请选择需要组卷的学课</h4>
         </div>
         <div class="col-md-12">
-            <select class="form-control course" onchange="onSelectCourse(this)" id="course_selector">
+            <select id="courseID" class="form-control course" onchange="onSelectCourse(this)" id="course_selector">
             </select>
             <button type="button" class="btn btn-primary" onclick="step(1,2)">下一步</button>
         </div>
     </div>
     <div class="step2 row" hidden="hidden">
-        <div class="col-md-12">
+        <div  class="col-md-12">
             <h3>请设置试卷前言</h3>
         </div>
         <div class="col-md-12">
@@ -206,11 +206,11 @@
         </div>
         <div class="col-md-6">
             <label>预期平均分(百分制):</label>
-            <input type="text" class="form-control" placeholder="用1~100表示" value="80">
+            <input type="text" id="ex_avg" class="form-control" placeholder="用1~100表示" value="80">
         </div>
         <div class="col-md-6">
             <label>试卷总分</label>
-            <input type="text" class="form-control" placeholder="用1~100表示" value="100">
+            <input type="text" id="total" class="form-control" placeholder="用1~100表示" value="100">
         </div>
         <div class="col-md-12">
             <label>知识点涵盖面</label>
@@ -223,9 +223,17 @@
             <button type="button" class="btn btn-primary" onclick="step(4,3)">上一步</button>
         </div>
         <div class="col-md-1">
-            <button type="button" class="btn btn-success">开始组卷</button>
+            <button type="button" class="btn btn-success" onclick="submit()">开始组卷</button>
         </div>
     </div>
 </div>
+<script>
+    function submit(){
+        let courseID=$('#courseID').val()
+        let ex_avg=$('#ex_avg').val()
+        let total=$('#total').val()
+        let foreWord=$('#foreWord').val()
+    }
+</script>
 </body>
 </html>

@@ -133,7 +133,7 @@
             type: 'post',
             url: '/teacher/analyse/findAll',
             async: false,
-            data: {'classId':2},
+            data: {'classId':classId},
             success: function (rst) {
                 console.log(rst)
                 //alert(rst);
@@ -144,6 +144,9 @@
                     //获取每一行对应的用户对象
                     var u = arrs[i];
                     //考试id
+                    var Date = u.startTime;
+                    var Date1=timestampToTime(Date);
+                    console.log(Date1);
                     jQuery.ajax({
                         type: 'get',
                         url: '/teacher/analyse/finish',
@@ -174,11 +177,11 @@
                                 onclick="showDeleteDialog('${u.id}')">
                                 删除考试</a>
                                 <a href="#" class="btn btn-green"
-                                   onclick="analyse('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
+                                   onclick="analyse('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
                                 <a href="#" class="btn btn-blue"
-                                   onclick="review('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
+                                   onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
                         </div>
-                        <p class="card-text" onclick="find('${u.id}')">开始时间：${u.startTime}</p>
+                        <p class="card-text" onclick="find('${u.id}')">开始时间：${Date1}</p>
                         <p class="card-text" onclick="find('${u.id}')">测试时间：${u.testTime}</p>
                         <p class="card-text" onclick="find('${u.id}')">总分：${u.totalScore}</p>
                         <p class="card-text" >批阅进度：${finish}</p>
@@ -234,6 +237,20 @@
             }
 
         })
+
+    }
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+        var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+        var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+
+        var strDate = Y+M+D+h+m+s;
+        return strDate;
 
     }
 

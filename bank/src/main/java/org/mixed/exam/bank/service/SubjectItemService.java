@@ -2,9 +2,11 @@ package org.mixed.exam.bank.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
+import org.checkerframework.checker.units.qual.A;
 import org.mixed.exam.bank.dao.SubjectDao;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.pojo.vo.SubjectItem;
+import org.mixed.exam.bank.util.StringUtil;
 import org.mixed.exam.bank.util.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,10 @@ public class SubjectItemService
 {
     @Autowired
     private SubjectDao subjectDao;
+    public SubjectItem getItem(String id){
+        Question q = StringUtil.json2Object(subjectDao.getSubjectByID(id),Question.class);
+        return new SubjectItem(q);
+    }
     public List<SubjectItem> getItems()
     {
         List<SubjectItem> items=new ArrayList<>();
