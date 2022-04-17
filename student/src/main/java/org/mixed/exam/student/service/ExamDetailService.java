@@ -19,4 +19,9 @@ public class ExamDetailService {
     public List<ExamDetail> selectExamDetail(String username,Integer examId){
         return examDetailDao.selectExamDetail(username,examId);
     }
+
+
+    public String getDetialId(int examid, String parseUsername) {
+        return examDetailDao.getDetialId(examid,parseUsername);
+    }
 }
