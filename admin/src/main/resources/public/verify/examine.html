@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>审核题目</title>
-    <link rel="stylesheet" href="/bank/css/add.css">
+    <link rel="stylesheet" href="../css/add.css">
     <style>
         #left_side{
             background: #ccffff;
@@ -66,8 +66,8 @@
     </div>
 </div>
 <div class="modal" tabindex="-1" id="sameDialog">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content ">
             <div class="modal-header">
                 <h5 class="modal-title">提示</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -247,10 +247,10 @@
     <div class="con">
         <span class="title2">操作</span>
         <div class="line"></div>
-        <span>敏感词检测</span>
         <div style="border:1px solid #0f0f0f">
-            <button onclick="passDialog()" class="btn btn-primary">通过</button>
+            <button onclick="passDialog()" class="btn btn-success">通过</button>
             <button onclick="failDialog()" class="btn btn-danger">不通过</button>
+            <button onclick="back()" class="btn btn-info">返回</button>
         </div>
     </div>
 </div>
@@ -336,6 +336,9 @@
             alert("不通过");
             location.href="/admin/verify/list.html";
         })
+    }
+    function back() {
+        location.href="list.html";
     }
 </script>
 </html>
