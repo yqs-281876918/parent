@@ -18,7 +18,7 @@ public class IntelligentController
     @GetMapping("build")
     public void build()
     {
-//        IntelligentParam param = new IntelligentParam();
+        IntelligentParam param = new IntelligentParam();
 //        param.setDifficulty(4.2);
 //        param.setCourseID("622dbb040913ed05f6402c8b");
 //        param.setKeys(Arrays.asList("622dcb956fdcc85405ef85ad", "623074271aabf7331f816aad", "62304bf274a387398923fe3b"));

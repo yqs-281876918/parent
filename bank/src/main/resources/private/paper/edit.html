@@ -51,7 +51,6 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>类型</th>
                         <th>简介</th>
                         <th>创建时间</th>
@@ -61,7 +60,6 @@
                     </thead>
                     <tbody>
                     <tr th:each="item,itemStat : ${subjectItems}">
-                        <td class="id" th:text="${item.id}"></td>
                         <td th:text="${item.type}"></td>
                         <td th:text="${item.introduction}"></td>
                         <td th:text="${item.date}"></td>

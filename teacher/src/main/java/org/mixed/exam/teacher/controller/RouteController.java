@@ -49,8 +49,6 @@ public class RouteController
         List<Class> classes=classMapper.getClasses(teaName);
         model.addAttribute("paperID",paperID);
         model.addAttribute("classes",classes);
-        System.out.println(classes);
-        System.out.println(paperID);
         return "exam/publish.html";
     }
 }

@@ -36,6 +36,22 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
+                <span>测试名称</span>
+            </div>
+            <div class="col-md-6">
+                <input name="examName" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <span>测试介绍</span>
+            </div>
+            <div class="col-md-6">
+                <input name="introduce" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <span>开始时间</span>
             </div>
             <div class="col-md-6">
@@ -48,6 +64,7 @@
                             id="date4"
                             btns="{'ok':'确定','now':'此刻'}"
                             ng-model="date4"
+                            name="startTime"
                     >
                     </wui-date>
                 </div>
@@ -128,6 +145,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="paperID" th:value="${paperID}">
 </form>
 </body>
 </html>

@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface ExamMapper
 {
-    void addExam(String startTime, Integer testTime, Integer lateTime, Integer submitTime,
-                 String paperID,Integer classID,String antiSettings);
+    void addExam(Long startTime, Integer testTime, Integer lateTime, Integer submitTime,
+                 String paperID,Integer classID,String antiSettings,String examName,String introduce);
     List<Exam> list(String userName);
     Exam getByID(Integer id);
 }
