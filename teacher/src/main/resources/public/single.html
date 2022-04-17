@@ -49,18 +49,20 @@
 <body onload="init()">
 <div class="outer">
     <div id="container" >
-        <div id="choose type">
+        <div id="choose type">请选择题型：
             <select id="choose" name="choose" class="form-control">
-                <option value="ALL" selected = "selected">全部题型</option>
-                <option value="SingleChoiceQuestion" >单选题</option>
+                <option value="SingleChoiceQuestion" selected="selected">单选题</option>
                 <option value="MultipleChoiceQuestion">多选题</option>
                 <option value="Completion">填空题</option>
                 <option value="Judgment">判断题</option>
                 <option value="ComprehensiveQuestion">综合题</option>
                 <option value="CombinationChoice">综合（组合）选择题</option>
                 <option value="ProgramProblem">程序题</option>
+
             </select>
+
         </div>
+
     </div>
     <div class="dhl">
         <div class="nav">
@@ -74,17 +76,22 @@
     <div id="pie" hidden="hidden" class="pie" style="height:400px"></div>
     <div id="bar" class="bar" style="height:400px"></div>
     <div style="clear: both"></div>
+
+
 </div>
 <script>
     var Barlist;
 
     function init(){
+        var type=$("choose").val();
         //var examId = sessionStorage.getItem("examId");
         //var totalScore = sessionStorage.getItem("totalScore");
         //var personNum = sessionStorage.getItem("personNum");
+        jQuery("#select_id").change(function(){});
+
         var param={
             "examId":13,
-            "type":'SingleChoiceQuestion'
+            "type":type
         };
         var myChart = echarts.init(document.getElementById('pie'));
         // 指定图表的配置项和数据
@@ -109,8 +116,8 @@
                 left: '70%',  //图例距离左的距离
                 y: 'center',  //图例上下居中
             },
-            color:['rgb(203,55,255)', 'rgb(149,162,255)', 'rgb(58,186,255)',
-                'rgb(119,168,249)', 'rgb(235,161,159)'],
+            color:['rgb(0,205,0)', 'rgb(238,201,0)', 'rgb(92,172,238)',
+                'rgb(559,18,9)', 'rgb(255,127,80)'],
             series : [
                 {
                     name: "分数段人数",
@@ -120,10 +127,10 @@
                     radius : '60%',
                     center: ['50%', '50%'],
                     data: [
-                        {name: '0.0-25.0',value: ''},
-                        {name: "25.0-50.0",value: '' },
-                        {name: "50.0-75.0",value: '' },
-                        {name: "75.0-100.0",value: ''}
+                        {name: '0%-25%',value: ''},
+                        {name: "25%-50%",value: '' },
+                        {name: "50%-75%",value: '' },
+                        {name: "75%-100%",value: ''}
                     ],
                     itemStyle:{
                         normal:{
@@ -211,3 +218,4 @@
 </script>
 </body>
 </html>
+

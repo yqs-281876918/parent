@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.mixed.exam.bank.dao.ExamMapper">
     <insert id="addExam">
-        insert into exam(paperID,testTime,startTime,lateTime,submitTime,classID,antiSettings)
-        values(#{paperID},#{testTime},#{startTime},#{lateTime},#{submitTime},#{classID},#{antiSettings})
+        insert into exam(paperID,testTime,startTime,lateTime,submitTime,classID,antiSettings,examName,introduce)
+        values(#{paperID},#{testTime},#{startTime},#{lateTime},#{submitTime},#{classID},#{antiSettings},#{examName},#{introduce})
     </insert>
     <select resultType="org.mixed.exam.bank.pojo.po.Exam" id="list">
         select exam.* from chooseClass,exam where #{userName}=chooseClass.sname and chooseClass.cno=exam.classID

@@ -53,9 +53,10 @@
                 avoidLabelOverlap: false,
                 hoverAnimation: false,
                 label: {
-                    show: false,
                     position: 'center',
-                    formatter: '{b}\n{c}%'
+                    fontSize: '20',
+                    fontWeight: 'bold',
+                    formatter: '{b}\n{c}\%'
                 },
                 emphasis: {
                     label: {
@@ -69,11 +70,10 @@
                 },
                 data: [
                     {
-                        value: '',
                         name:'及格率',
-                        selected:true,
+                        value: '',
                         label: {
-                            show:true,     //默认显示第一块
+                            show: true,
                             fontSize: '20',
                             fontWeight: 'bold'
                         }
@@ -81,7 +81,9 @@
                     {
                         value: '',
                         name: '',
-
+                        label:{
+                            show:false    //默认显示第一块
+                        }
                     }
 
                 ]
@@ -121,9 +123,10 @@
                 avoidLabelOverlap: false,
                 hoverAnimation: false,
                 label: {
-                    show: false,
                     position: 'center',
-                    formatter: '{b}\n{c}%'
+                    fontSize: '20',
+                    fontWeight: 'bold',
+                    formatter: '{b}\n{c}\%'
                 },
                 emphasis: {
                     label: {
@@ -137,9 +140,8 @@
                 },
                 data: [
                     {
-                        value: '',
                         name:'优良率',
-                        selected:true,
+                        value: '',
                         label:{
                             show:true,     //默认显示第一块
                             fontSize: '20',
@@ -149,6 +151,10 @@
                     {
                         value: '',
                         name: '',
+                        label:{
+                            show:false    //默认显示第一块
+
+                        }
                     }
 
                 ]
@@ -184,7 +190,6 @@
                 avoidLabelOverlap: false,
                 hoverAnimation: false,
                 label: {
-                    show: false,
                     position: 'center',
                     formatter: '{b}\n{c}'
                 },

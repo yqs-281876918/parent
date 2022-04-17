@@ -81,4 +81,8 @@ public class SelfInfomationDao {
     public String getEncode(String o) {
         return (new BCryptPasswordEncoder()).encode(o);
     }
+
+    public boolean match(String o, String realoldpassword) {
+        return (new BCryptPasswordEncoder()).matches(o,realoldpassword);
+    }
 }

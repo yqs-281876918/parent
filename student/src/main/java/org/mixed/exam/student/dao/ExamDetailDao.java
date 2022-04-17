@@ -24,4 +24,10 @@ public class ExamDetailDao {
         Query query = new Query(Criteria.where("username").is(username).and("examId").is(examId));
         return mongoTemplate.find(query,ExamDetail.class,"examDetail");
     }
+
+    public String getDetialId(int examid, String parseUsername) {
+        Query query = new Query(Criteria.where("username").is(parseUsername).and("examId").is(examid));
+        List<ExamDetail> e=mongoTemplate.find(query,ExamDetail.class,"examDetail");
+        return e.get(0).getId();
+    }
 }

@@ -63,7 +63,7 @@
         <div id="top">
             <button type="button"
                     class="btn btn-default "
-                    onclick="table()">导出成绩单</button>
+                    onclick="table(examId)">导出成绩单</button>
         </div>
         <div id="middle">
             <form id="Form">
@@ -126,6 +126,17 @@
     jQuery(function () {
         init();
     })
+
+</script>
+<script>
+    function table(examId){
+        var param={
+            "examId":examId
+        };
+        jQuery.post("excel/export/{id}",param,function (rst){
+
+        })
+    }
 
 </script>
 

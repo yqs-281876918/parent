@@ -17,8 +17,8 @@ public class IntelligentServiceTest {
     @Test
     void buildTest() {
         IntelligentParam param = new IntelligentParam();
-        param.setBeginDay("2010-2-5 00:00:00");
-        param.setEndDay("2017-9-28 00:00:00");
+        param.setBeginDay("2000-2-5 00:00:00");
+        param.setEndDay("2022-9-28 00:00:00");
         param.setDifficulty(4);
         param.setCourseID("622dbb040913ed05f6402c8b");
         Map<String,Integer> distribution = new HashMap<>();

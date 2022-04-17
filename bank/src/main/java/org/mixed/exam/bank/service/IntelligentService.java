@@ -31,16 +31,14 @@ public class IntelligentService
     {
         int geneCount=MathUtil.getRandomInt(1,subjects.size());
         Individual individual = new Individual(subjects.size());
+        List<Integer> nums = new ArrayList<>();
+        for (int i=0;i<subjects.size();i++){
+            nums.add(i);
+        }
         while (geneCount-- > 0){
-            List<Integer> nums = new ArrayList<>();
-            for (int i=0;i<subjects.size();i++){
-                nums.add(i);
-            }
-            while (nums.size()>0){
-                int num_pos = MathUtil.getRandomInt(0,nums.size()-1);
-                int gene_pos = nums.remove(num_pos);
-                individual.setGene(gene_pos,1);
-            }
+            int num_pos = MathUtil.getRandomInt(0,nums.size()-1);
+            int gene_pos = nums.remove(num_pos);
+            individual.setGene(gene_pos,1);
         }
         return individual;
     }
@@ -128,9 +126,9 @@ public class IntelligentService
         if(variationCount==0){
             variationCount=1;
         }
-        for(int i=1;i<=variationCount;i++)
+        for(int i=0;i<=variationCount;i++)
         {
-            Individual individual = individuals.get(individuals.size()-i);
+            Individual individual = individuals.get(i);
             int count = (int)(individual.length*strength);
             if(count==0){
                 count=1;
@@ -148,7 +146,6 @@ public class IntelligentService
     }
     private void printIndividuals(List<Individual> individuals,int generation)
     {
-        sortIndividuals(individuals);
         System.out.println("----------------------------------------------------------------------------------");
         System.out.println("generation:"+generation);
         System.out.println("total:"+individuals.size());
@@ -163,13 +160,21 @@ public class IntelligentService
         initSubjectInfo(param);
         List<Individual> individuals = new ArrayList<>();
         initIndividual(individuals, INIT_INDIVIDUAL_SIZE);
-        for(int generation=1;generation<=GENERATION_COUNT;generation++)
+        int generation=1;
+        while (true)
         {
-            printIndividuals(individuals,generation);
             evaluate(individuals,param);
+            sortIndividuals(individuals);
+            printIndividuals(individuals,generation++);
+            if(generation<=400&&individuals.get(individuals.size()-1).fitness>=399.4){
+                break;
+            }
+            if(generation>400){
+                break;
+            }
             eliminate(individuals);
+            variation(individuals,0.05,0.2);//变异
             cross(individuals,INIT_INDIVIDUAL_SIZE-individuals.size());
-            variation(individuals,0.1,0.05);//变异
         }
         return null;
     }
