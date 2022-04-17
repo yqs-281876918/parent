@@ -33,7 +33,7 @@
         float: right;
     }
     body{
-        background-color: #fff9ed;
+        background-color: whitesmoke;
     }
     table{
         background-color: #f3fdff;
@@ -42,7 +42,7 @@
         background-color: #9d9d9d;
     }
     #tablebottom{
-        background-color: #fff9ed;
+        background-color: whitesmoke;
     }
     #search{
         padding: 10px 20px;
@@ -136,7 +136,7 @@
                                     </th>
                                     <th align="right" colspan="3">考试名称</th>
                                     <th align="right" colspan="1">考试人</th>
-                                    <th align="right" colspan="1">考试时间</th>
+                                    <th align="right" colspan="1">考试时间(分钟)</th>
                                     <th align="right" colspan="1">考试得分</th>
                                     <th align="right" colspan="5">切屏次数</th>
                                     <th align="right" colspan="1">批阅状态</th>
@@ -200,6 +200,14 @@
                 //获取每一行对应的用户对象
                 var u=arrs[i];
                 //循环一次一行数据
+                var ff=null;
+                if(u.finishReview==1){
+                    ff="已批阅";
+                }else if(u.finishReview==0){
+                    ff="待批阅";
+                }else{
+                    ff="特殊状态";
+                }
                 trs+=`
                     <tr>
                         <td>
@@ -211,7 +219,7 @@
                         <td colspan="1" onclick="find('${u.id}'))">${testTime}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${u.totalScore}</td>
                         <td colspan="5" onclick="find('${u.id}'))">${u.antiCount}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.finishReview}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${ff}</td>
                         <td colspan="2">
                                 <a href="#"
                                 onclick="review('${u.id}','${examName}','${totalScore}')">批阅试卷</a>
@@ -341,6 +349,14 @@
                 var trs="";
                 for(var i=0;i<arrs.length;i++) {
                     var u=arrs[i];
+                    var ff=null;
+                    if(u.finishReview==1){
+                        ff="已批阅";
+                    }else if(u.finishReview==0){
+                        ff="待批阅";
+                    }else {
+                        ff="特殊状态";
+                    }
                     trs+=`
                     <tr>
                         <td>
@@ -352,7 +368,7 @@
                         <td colspan="1" onclick="find('${u.id}'))">${testTime}</td>
                         <td colspan="1" onclick="find('${u.id}'))">${totalScore}</td>
                         <td colspan="5" onclick="find('${u.id}'))">${u.antiCount}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.finishReview}</td>
+                        <td colspan="1" onclick="find('${u.id}'))">${ff}</td>
                         <td colspan="2">
                             <a href="#"
                                 onclick="intoread('${u.id}','${u.totalSCore}')">进入批阅</a>

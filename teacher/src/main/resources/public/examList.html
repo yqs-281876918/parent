@@ -127,13 +127,13 @@
     // var pageNum=1;
     // var pageSize=10;
     // var pageNums=0;
-    var classId=sessionStorage.getItem("classId");
+    var classId=sessionStorage.getItem("cno");
     function init() {
         jQuery.ajax({
             type: 'post',
             url: '/teacher/analyse/findAll',
             async: false,
-            data: {'classId': classId},
+            data: {'classId': 2},
             success: function (rst) {
                 console.log(rst)
                 //alert(rst);
@@ -390,4 +390,5 @@
 </script>
 </div>
 </body>
+
 </html>
