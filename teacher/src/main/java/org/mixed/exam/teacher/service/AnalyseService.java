@@ -156,20 +156,22 @@ public class AnalyseService {
     }
     //查找一场考试所有题的题型 、 题号
     public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
-        PageInfo<Answer> pageInfo = null;
+        PageInfo<Answer> page = null;
         PageHelper.startPage(pageNum,pageSize);
         List<Answer> a = analyseDao.getAllDetail(examId);
-        pageInfo=new PageInfo<Answer>(a,5);
-        return pageInfo;
+        page=new PageInfo<>(a,4);
+        return page;
     }
+
     //按题型查找
     public PageInfo<Answer> getElseDetil(int pageNum, int pageSize, Integer examId,String type) {
         PageInfo<Answer> pageInfo = null;
         PageHelper.startPage(pageNum,pageSize);
         List<Answer> a = analyseDao.getElseDetail(examId,type);
-        pageInfo=new PageInfo<Answer>(a,5);
+        pageInfo=new PageInfo<>(a,4);
         return pageInfo;
     }
+
     //根据题目id查找题目描述
     public String getDescription(String subjectId){
         return analyseDao.getDescription(subjectId);
@@ -212,7 +214,7 @@ public class AnalyseService {
     }
 
     public int[] ABCD(String subjectId, Integer examId,String type) {
-        return analyseDao.ABCD("6230373c52629445954bd649",13,"SingleChoiceQuestion");
+        return analyseDao.ABCD(subjectId,examId,type);
     }
 
 //    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
