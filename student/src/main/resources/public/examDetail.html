@@ -99,7 +99,7 @@
                 <tr>
                     <td><div>答题人：${rst.username}</div></td>
                     <td><div>切屏次数：${rst.antiCount}</div></td>
-                    <td><div>科目：${sessionStorage.getItem("examName")}</div></td>
+
                     <td><div id="scoreGot">考试得分：${rst.totalScore}</div></td>
                     </tr>
                 </tablecellpadding>
@@ -212,7 +212,7 @@
                                     stuanswer=subject[i].answerList;
                                     break;
                                 case "programProblem":
-                                    anser="正确答案："+back.answer;
+                                    anser="正确答案："+"略";
                                     stuanswer=subject[i].answerList;
                                     break;
                                 case "CombinationChoice":
@@ -239,6 +239,18 @@
                                 </div>
                                 `;
                             }else if(back.answers!=undefined){
+                                r+=`
+                                <div id="mark-${count}" class="q">
+                                    <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p>${back.description}</p></p></div>
+                                    <div class="question_score">分值：${scorelist[count]}</div>
+                                    <div class="student_answer">学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}" class="question_answer">${anser}</div>
+                                    <div class="score_input">
+                                        得分判定:<input readonly="readonly" type="text" id="score${count}" value="${tmpscore}" onchange="changeScore(${count})"/>
+                                    </div>
+                                </div>
+                                `;
+                            }else{
                                 r+=`
                                 <div id="mark-${count}" class="q">
                                     <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p>${back.description}</p></p></div>
