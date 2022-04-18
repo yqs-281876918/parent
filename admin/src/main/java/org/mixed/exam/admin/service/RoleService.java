@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.admin.mapper.RoleMapper;
 import org.mixed.exam.admin.pojo.dto.usersDto;
-import org.mixed.exam.admin.pojo.po.users;
+import org.mixed.exam.auth.api.po.Users;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,12 +15,12 @@ public class RoleService {
     @Resource
     private RoleMapper rolemapper;
 
-    public PageInfo<users> findAll(int pageNum, int pageSize){
-        PageInfo<users> page=null;
+    public PageInfo<Users> findAll(int pageNum, int pageSize){
+        PageInfo<Users> page=null;
         //设置分页
         PageHelper.startPage(pageNum,pageSize);
         //查询需要的数据
-        List<users> users= rolemapper.findAll();
+        List<Users> users= rolemapper.findAll();
         //users表示页面中呈现的数据
         //4表示页码个数
         page=new PageInfo<>(users,4);
@@ -49,12 +49,12 @@ public class RoleService {
         row=rolemapper.Insert(dto);
         return row;
     }
-    public PageInfo<users> Search(int pageNum, int pageSize,usersDto dto){
-        PageInfo<users> page=null;
+    public PageInfo<Users> Search(int pageNum, int pageSize,usersDto dto){
+        PageInfo<Users> page=null;
         //设置分页
         PageHelper.startPage(pageNum,pageSize);
         //查询需要的数据
-        List<users> users= rolemapper.Search(dto);
+        List<Users> users= rolemapper.Search(dto);
         System.out.println(users.get(0).getRealName());
         //users表示页面中呈现的数据
         //4表示页码个数
