@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.mixed.exam.admin.mapper.RoleMapper">
     <insert id="Insert"
-    parameterType="org.mixed.exam.admin.pojo.dto.usersDto">
+    parameterType="org.mixed.exam.auth.api.po.Users">
         insert into users
             (username, password, realName, role,email,telephone)
         values(#{username},#{password},#{realName},#{role},#{email},#{telephone})
@@ -25,7 +25,7 @@
         from users
         where username=#{username}
     </update>
-    <update id="UpdateInfo" parameterType="org.mixed.exam.admin.pojo.dto.usersDto">
+    <update id="UpdateInfo" parameterType="org.mixed.exam.auth.api.po.Users">
         update users
         set username=#{username},
             realName=#{realName},
@@ -44,7 +44,7 @@
     </select>
     <select id="Search"
             resultType="org.mixed.exam.auth.api.po.Users"
-            parameterType="org.mixed.exam.admin.pojo.dto.usersDto">
+            parameterType="org.mixed.exam.auth.api.po.Users">
         SELECT *
         from users
         <where>

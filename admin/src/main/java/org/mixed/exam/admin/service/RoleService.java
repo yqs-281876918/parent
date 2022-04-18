@@ -3,7 +3,6 @@ package org.mixed.exam.admin.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.admin.mapper.RoleMapper;
-import org.mixed.exam.admin.pojo.dto.usersDto;
 import org.mixed.exam.auth.api.po.Users;
 import org.springframework.stereotype.Service;
 
@@ -39,17 +38,17 @@ public class RoleService {
         return row;
     }
     //编辑
-    public int UpdateInfo(usersDto dto){
+    public int UpdateInfo(Users dto){
         int row=0;
         row=rolemapper.UpdateInfo(dto);
         return row;
     }
-    public int Insert(usersDto dto){
+    public int Insert(Users dto){
         int row=0;
         row=rolemapper.Insert(dto);
         return row;
     }
-    public PageInfo<Users> Search(int pageNum, int pageSize,usersDto dto){
+    public PageInfo<Users> Search(int pageNum, int pageSize,Users dto){
         PageInfo<Users> page=null;
         //设置分页
         PageHelper.startPage(pageNum,pageSize);

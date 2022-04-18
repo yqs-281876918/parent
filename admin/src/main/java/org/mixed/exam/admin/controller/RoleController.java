@@ -1,7 +1,6 @@
 package org.mixed.exam.admin.controller;
 
 import com.github.pagehelper.PageInfo;
-import org.mixed.exam.admin.pojo.dto.usersDto;
 import org.mixed.exam.admin.service.RoleService;
 import org.mixed.exam.auth.api.po.Users;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +34,19 @@ public class RoleController {
         return row;
     }
     @RequestMapping("/updateInfo")
-    public int updateInfo(usersDto dto){
+    public int updateInfo(Users dto){
         int row=0;
         row=roleService.UpdateInfo(dto);
         return row;
     }
     @RequestMapping("/Insert")
-    public int Insert(usersDto dto){
+    public int Insert(Users dto){
         int row=0;
         row=roleService.Insert(dto);
         return row;
     }
     @RequestMapping("/Search")
-    public PageInfo<Users> Search(int pageNum, int pageSize,usersDto dto){
+    public PageInfo<Users> Search(int pageNum, int pageSize,Users dto){
         PageInfo<Users> page=null;
         page=roleService.Search(pageNum,pageSize,dto);
         return page;
