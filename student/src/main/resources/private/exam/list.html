@@ -67,7 +67,7 @@
                             <td th:text="${#dates.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${item.testTime}"></td>
                             <td th:text="${item.lateTime}"></td>
-
+                            <td th:text="${item.submitTime}"></td>
                             <td th:text="${item.introduce}"></td>
                             <td>
                                 <span th:if="${item.status == 1}">未开始</span>

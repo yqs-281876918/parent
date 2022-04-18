@@ -68,6 +68,14 @@ var contestDetailPage = {
 
         if (contestDetailPage.data.questions[0].type == 'singleChoiceQuestion') {
             $('#currentQuetionTitle').html('(单选)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr =
                 '  <div class="grouped fields">\n' +
                 '    <div class="field">\n';
@@ -92,6 +100,14 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[0].type == 'multipleChoiceQuestion') {
             $('#currentQuetionTitle').html('(多选)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr =
                 '  <div class="grouped fields">\n' +
                 '    <div class="field">\n';
@@ -117,6 +133,15 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[0].type == 'completion') {
             $('#currentQuetionTitle').html('(填空)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
+
             var selectOptionStr =
                 '  <div class="grouped fields">\n';
             for (var i=0;i<contestDetailPage.data.questions[0].answers.length;i++){
@@ -136,6 +161,14 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[0].type == 'judgment') {
             $('#currentQuetionTitle').html('(判断)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr = '<div class="grouped fields">\n' +
                 '    <div class="field">\n' +
                 '      <div class="ui toggle checkbox">\n' +
@@ -162,6 +195,14 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[0].type == 'combinationChoice') {
             $('#currentQuetionTitle').html('(组合选择)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var topics = contestDetailPage.data.questions[0].answers;
             var answerLength = topics.length;
             var topic = topics[answerLength-1]
@@ -194,6 +235,14 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[0].type == 'programProblem') {
             $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  name="questionAnswer" id="questionAnswer" rows="20"></textarea>\n' +
                 '                    </div>\n' +
@@ -208,6 +257,14 @@ var contestDetailPage = {
             }
         } else {
             $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[0]+'分)'+contestDetailPage.data.questions[0].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[0].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[0].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  id="questionAnswer" rows="20"></textarea>\n' +
                 '                    </div>';
@@ -229,6 +286,14 @@ var contestDetailPage = {
 
         if (contestDetailPage.data.questions[index].type == 'singleChoiceQuestion') {
             $('#currentQuetionTitle').html('(单选)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr =
                 '  <div class="grouped fields">\n' +
                 '    <div class="field">\n';
@@ -254,6 +319,14 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[index].type == 'multipleChoiceQuestion') {
             $('#currentQuetionTitle').html('(多选)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr =
                 '  <div class="grouped fields">\n' +
                 '    <div class="field">\n';
@@ -279,6 +352,14 @@ var contestDetailPage = {
             }
         } else if (contestDetailPage.data.questions[index].type == 'completion') {
             $('#currentQuetionTitle').html('(填空)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr =
                 '  <div class="grouped fields">\n';
             for (var i=0;i<contestDetailPage.data.questions[index].answers.length;i++){
@@ -298,6 +379,14 @@ var contestDetailPage = {
             }
         }else if (contestDetailPage.data.questions[index].type == 'judgment') {
             $('#currentQuetionTitle').html('(判断)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr = '<div class="grouped fields">\n' +
                 '    <div class="field">\n' +
                 '      <div class="ui toggle checkbox">\n' +
@@ -324,6 +413,14 @@ var contestDetailPage = {
             }
         }else if (contestDetailPage.data.questions[index].type == 'combinationChoice') {
             $('#currentQuetionTitle').html('(组合选择)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var topics = contestDetailPage.data.questions[index].answers;
             var answerLength = topics.length;
             var topic = topics[answerLength-1]
@@ -358,6 +455,14 @@ var contestDetailPage = {
             }
         }else if (contestDetailPage.data.questions[index].type == 'programProblem') {
             $('#currentQuetionTitle').html('(程序题)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  name="questionAnswer" id="questionAnswer" rows="20"></textarea>\n' +
                 '                   </div>\n' +
@@ -374,6 +479,14 @@ var contestDetailPage = {
             }
         }else {
             $('#currentQuetionTitle').html('(综合题)'+'('+contestDetailPage.data.scoreList[index]+'分)'+contestDetailPage.data.questions[index].description);
+            var files = '</br>'
+            for (var len=0;len<contestDetailPage.data.questions[index].fileUrls.length;len++){
+                var file = contestDetailPage.data.questions[index].fileUrls[len];
+                files += `
+                <a href="${file}">题目附件</a>
+                `
+            }
+            $('#currentQuetionTitle').append(files);
             var selectOptionStr = '<div class="field">\n' +
                 '                        <textarea  id="questionAnswer" rows="20"></textarea>\n' +
                 '                    </div>';
@@ -509,6 +622,12 @@ var contestDetailPage = {
     },
     //正在交卷
     submittingContestAction: function () {
+        var nowTime = new Date();
+        var nowTimeStamp = nowTime.getTime()
+        if (nowTimeStamp<=(contestDetailPage.data.contest.startTime+contestDetailPage.data.contest.testTime*60000-contestDetailPage.data.contest.submitTime*60000)){
+            alert('未到交卷时间！')
+            return
+        }
         $('#waitSubmitModal').modal({
             /**
              * 必须点击相关按钮才能关闭

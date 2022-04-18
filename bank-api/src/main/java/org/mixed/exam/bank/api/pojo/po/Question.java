@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Question
     private String introduction="暂无简介";//题目简介，用于显示题目列表时使用
     private String creator;//创建人
     private String description="null";//题目描述
-    private List<String> fileUrls;
+    private List<String> fileUrls = new ArrayList<>();
     //获得正确率
     public double getCorrectRate()
     {
