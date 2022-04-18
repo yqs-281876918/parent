@@ -61,10 +61,6 @@
 <div class="outer">
     <div id="container">
         <div id="top">
-            <a class="download" href="./teacher/excel/export">导出成绩单</a>
-<!--            <button type="button"-->
-<!--                    class="btn btn-default "-->
-<!--                    onclick="table()">导出成绩单</button>-->
         </div>
         <div id="middle">
             <form id="Form">
@@ -72,18 +68,19 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="table" class="table table-striped mb-0" align="center">
-                                    <thead>
-                                    <tr>
-                                        <td align="center" colspan="3">考试排名</td>
-                                        <td align="center" colspan="3">学生姓名</td>
-                                        <td align="center" colspan="3">总分</td>
-                                        <td align="center" colspan="3">切屏次数</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="data">
-                                    </tbody>
-                                </table>
+                                    <a id="export"></a>
+                                    <table id="table" class="table table-striped mb-0" align="center">
+                                        <thead>
+                                        <tr>
+                                            <td align="center" colspan="3">考试排名</td>
+                                            <td align="center" colspan="3">学生姓名</td>
+                                            <td align="center" colspan="3">总分</td>
+                                            <td align="center" colspan="3">切屏次数</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="data">
+                                        </tbody>
+                                    </table>
                             </div>
                         </div>
                     </div>
@@ -104,6 +101,7 @@
             console.log(rst);
             //1、查询查询的数据
             var trs="";
+            var trs1="";
             var count=0;
             for(var i=0;i<rst.length;i++) {
                 //获取每一行对应的用户对象
@@ -118,9 +116,14 @@
 
                     </tr>
                     `;
+
+                trs1+=`
+                    <a className="download" href="./excel/export/${examId}">导出成绩单</a>
+                    `;
             }
             //把根据数据构建的行添加到表格
             jQuery("#data").html(trs);
+            jQuery("#top").html(trs1);
         })
 
     }
