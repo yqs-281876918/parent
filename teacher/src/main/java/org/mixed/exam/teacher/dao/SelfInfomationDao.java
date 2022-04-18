@@ -1,7 +1,5 @@
 package org.mixed.exam.teacher.dao;
 
-import org.mixed.exam.auth.api.po.Users;
-import org.mixed.exam.bank.api.pojo.po.Exam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -85,4 +83,5 @@ public class SelfInfomationDao {
     public boolean match(String o, String realoldpassword) {
         return (new BCryptPasswordEncoder()).matches(o,realoldpassword);
     }
+
 }
