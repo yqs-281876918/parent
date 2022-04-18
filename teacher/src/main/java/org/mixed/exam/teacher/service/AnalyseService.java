@@ -159,7 +159,7 @@ public class AnalyseService {
         PageInfo<Answer> page = null;
         PageHelper.startPage(pageNum,pageSize);
         List<Answer> a = analyseDao.getAllDetail(examId);
-        page=new PageInfo<>(a,4);
+        page=new PageInfo<>(a,5);
         return page;
     }
 
@@ -168,13 +168,14 @@ public class AnalyseService {
         PageInfo<Answer> pageInfo = null;
         PageHelper.startPage(pageNum,pageSize);
         List<Answer> a = analyseDao.getElseDetail(examId,type);
-        pageInfo=new PageInfo<>(a,4);
+        pageInfo=new PageInfo<>(a,5);
         return pageInfo;
     }
 
     //根据题目id查找题目描述
-    public String getDescription(String subjectId){
-        return analyseDao.getDescription(subjectId);
+    public List<Question> getDescription(String subjectId){
+         return analyseDao.getDescription(subjectId);
+
     }
 
 
@@ -217,18 +218,7 @@ public class AnalyseService {
         return analyseDao.ABCD(subjectId,examId,type);
     }
 
-//    public PageInfo<Answer> getAllDetail(int pageNum, int pageSize,Integer examId){
-//        PageInfo<Answer> pageInfo = null;
-//        PageHelper.startPage(pageNum,pageSize);
-//        List<Answer> a = analyseDao.getAllDetail(examId);
-//        String[] id = new String[a.size()];
-//        for(int i=0;i<a.size();i++){
-//            id[i]= a.get(i).getSubjectId();
-//        }
-//        String[] q = analyseDao.getDescription(id);
-//        pageInfo=new PageInfo<Answer>(a,5);
-//        return pageInfo;
-//    }
+
 
 
 }

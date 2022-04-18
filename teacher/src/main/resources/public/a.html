@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>成绩分析</title>
+    <meta charset="UTF-8">
+    <title>analyse</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <link rel="stylesheet" href="assets/css/analyse.css">
+</head>
+<body onload="init()">
+<style type="text/css">
+    a.hand:hover   {cursor:hand}
+    .pie {
+        width:160px;
+        height:160px;
+        margin: 70px 70px;
+        float: left;
+    }
+</style>
+<div class="outer">
+    <div class="dhl">
+        <div class="nav">
+            <a  href="#">成绩分析</a>
+        </div>
+        <div class="nav">
+            <a href="stuList.html">学员信息</a>
+        </div>
+        <div class="nav">
+            <a href="paperDetail.html">试题分析</a>
+        </div>
+    </div>
+    </br>
+    </br>
+
+    <div class="exam shadow-lg p-3 mb-5 bg-white rounded" >
+        <div class="scoreAnalysis">
+            <div class="examContentWrap">
+                <div id="examId"></div>
+                <div class="examContentTitle content examName" id="examName">考试科目</div>
+                <div class="examContent">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-row">
+                                <span class="title">总分:</span>
+                                <span id="examTotalScore"></span>分
+                            </div>
+                            <div class="form-row">
+                                <span class="title">及格分:</span>
+                                <span id="passMark"></span>分
+                            </div>
+                            <div class="form-row">
+                                <span class="title">应考人数:</span>
+                                <span id="examineNums"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-row">
+                                <span class="title">开始时间:</span>
+                                <span id="examTimeInterval"></span>
+                            </div>
+                            <div class="form-row">
+                                <span class="title">答题时长:</span>
+                                <span id="examTime">分钟</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--全班成绩统计-->
+        <div class="inner">
+            <div class="score tabContent" >
+                <div class="scoreAnalysisFun clear">
+                    <div class="scoreAnalysisGrid">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <td >应考人数</td>
+                                <td >及格率</td>
+                                <td >最高分</td>
+                                <td >最低分</td>
+                                <td >平均分</td>
+                            </tr>
+                            </thead>
+
+                            <tbody id="data">
+                            </tbody>
+
+                            <tfoot>
+                            <tr id="table bottom" class="table-bordered">
+                                <td colspan=5">
+                                    <div id="page_div">
+                                        <div id="right">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </br>
+        <div class="dhl">
+            <div class="nav2">
+                <a  href="#">饼图</a>
+            </div>
+            <div class="nav2">
+                <a href="paper.html" target="main">总分分数段</a>
+            </div>
+            <div class="nav2">
+                <a href="single.html" target="main">分题型统计</a>
+            </div>
+
+        </div>
+
+        <div id="bottom">
+            <iframe src="pie.html"
+                    width=700px height=700px frameborder="no"
+                    name="main"></iframe>
+        </div>
+
+    </div>
+    <div style="clear:both"></div>
+</div>
+
+<script>
+    var Barlist=[];
+    var Arr=[];
+    var BarArr;
+    var personNum;
+    function init() {
+        var examId = sessionStorage.getItem("id");
+        var examName = sessionStorage.getItem("examName");
+        var startTime = sessionStorage.getItem("startTime");
+        var endTime = sessionStorage.getItem("endTime");
+        var testTime = sessionStorage.getItem("testTime");
+        var totalScore = sessionStorage.getItem("totalScore");
+
+        sessionStorage.setItem("examId", examId);
+        sessionStorage.setItem("totalScore", totalScore);
+        sessionStorage.setItem("examName", examName);
+        jQuery("#examName").html(examName);
+        jQuery("#examTimeInterval").html(startTime);
+        jQuery("#endTime").html(endTime);
+        jQuery("#examTime").html(testTime);
+        jQuery("#examTotalScore").html(totalScore);
+        jQuery("#passMark").html(totalScore * 0.6);
+
+
+        var param = {
+            "examId": examId,
+            "totalScore": totalScore,
+        };
+        //console.log(param);
+
+        var max;
+        var min;
+        var avg;
+        var pass;
+        jQuery.post("/teacher/analyse/count", param, function (rst) {
+            Arr = rst;
+            personNum = Arr[0];
+            window.sessionStorage.setItem("personNum", personNum);
+            max = Arr[1];
+            min = Arr[2];
+            avg = Arr[3];
+            var pass = 0;
+            pass = pass + Arr[7] + Arr[8];
+            pass = Math.floor(pass * 100 / personNum);
+            jQuery("#examineNums").html(personNum);
+            jQuery("#maxScore").html(max);
+            jQuery("#minScore").html(min);
+            jQuery("#avgScore").html(avg);
+            var trs = "";
+            trs += `
+            <tr>
+                <td>${personNum}</td>
+                <td>${pass}%</td>
+                <td>${max}</td>
+                <td>${min}</td>
+                <td>${avg}</td>
+            </tr>
+            `;
+            jQuery('#data').html(trs);
+        })
+    }
+
+</script>
+
+</body>
+
+
+</html>

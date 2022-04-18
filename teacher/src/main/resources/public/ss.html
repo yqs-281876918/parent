@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.common.min.js"></script>
+    <style> .outer {
+        padding: 40px;
+        box-sizing: border-box;
+        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+        border-radius: 3px;
+        width:1000px;
+        margin-left: 40px;
+        margin-right: 40px;
+        margin-top: 40px;
+        background: #f1f1f1;
+    }
+    .nav
+    {
+        padding: 5px 14px;
+        font-size: 15px;
+        margin-right: 12px;
+        display: inline-block;
+        box-sizing:border-box;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #dedede;
+        float: left;
+    }
+    .dhl{
+        background: #ffffff;
+        border: 0.5px solid #dedede;
+
+    }
+    .bar{
+        width: 600px;
+        float: left;
+        margin: 10px;
+    }
+    .pie{
+        width: 600px;
+        float: left;
+        margin: 10px;
+    }
+    </style>
+</head>
+<body onload="init()">
+<div class="outer">
+    <div id="container" >
+        <div id="choose type">请选择题型：
+            <select id="choose" name="choose" class="form-control">
+                <option value="singleChoiceQuestion" selected = "selected">单选题</option>
+                <option value="multipleChoiceQuestion">多选题</option>
+                <option value="completion">填空题</option>
+                <option value="judgment">判断题</option>
+                <option value="comprehensiveQuestion">综合题</option>
+                <option value="combinationChoice">综合（组合）选择题</option>
+                <option value="programProblem">程序题</option>
+
+            </select>
+
+        </div>
+
+    </div>
+    <div class="dhl">
+        <div class="nav">
+            <button onclick="showPie()">饼图</button>
+        </div>
+        <div class="nav">
+            <button onclick="showBar()">柱状图</button>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div id="pie" hidden="hidden" class="pie" style="height:400px"></div>
+    <div id="bar" class="bar" style="height:400px"></div>
+    <div style="clear: both"></div>
+
+
+</div>
+<script>
+    var Barlist;
+    $(() => {
+        $('#choose').change(() => {
+            init();
+        })
+    })
+    function init(){
+        var type=$("choose").val();
+        var examId = sessionStorage.getItem("examId");
+        var totalScore = sessionStorage.getItem("totalScore");
+        var personNum = sessionStorage.getItem("personNum");
+        jQuery("#select_id").change(function(){});
+
+        var param={
+            "examId":examId,
+            "type":type
+        };
+        var myChart = echarts.init(document.getElementById('pie'));
+        // 指定图表的配置项和数据
+        var option = {
+            backgroundColor:'#ffffff',
+            title: {
+                text: '各分数段比例统计',
+                left: 'center',
+                //标题栏的高度，值越大，距离顶部的距离越大
+                top: 20,
+                //标题栏字体的颜色
+                textStyle: {
+                    color: '#ccc'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                // formatter: '{a} <br/>{b} : {c}'
+            },
+            legend: {
+                orient: 'vertical',
+                left: '70%',  //图例距离左的距离
+                y: 'center',  //图例上下居中
+            },
+            color:['rgb(0,205,0)', 'rgb(238,201,0)', 'rgb(92,172,238)',
+                'rgb(559,18,9)', 'rgb(255,127,80)'],
+            series : [
+                {
+                    name: "分数段人数",
+                    type:'pie',
+                    // clockwise:'true',
+                    startAngle:'0',
+                    radius : '60%',
+                    center: ['50%', '50%'],
+                    data: [
+                        {name: '0%-25%',value: ''},
+                        {name: "25%-50%",value: '' },
+                        {name: "50%-75%",value: '' },
+                        {name: "75%-100%",value: ''}
+                    ],
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                position:'inner',
+                                textStyle: {
+                                    fontSize:10,
+                                }
+                            },
+                            labelLine:{
+                                show:true,
+                            }
+                        }
+                    }
+
+                }
+            ],
+
+        };
+
+        console.log(param);
+        jQuery.post("/teacher/analyse/apart-percentage",param,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            console.log(BarArr);
+            for(var i=0;i<BarArr.length;i++){
+                //option.series[0].data.push(BarArr[i]);
+                option.series[0].data[i].value=BarArr[i];
+            }
+            console.log(option);
+            myChart.setOption(option);
+        })
+
+
+        //条形图
+        var myChart1 = echarts.init(document.getElementById('bar'));
+        // 指定图表的配置项和数据
+        var option1 = {
+            backgroundColor:'#ffffff',
+            title: {
+                text: '各分数段比例统计'
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
+            },
+            legend: {
+                data:['比例']
+            },
+            xAxis: {
+                data: ["0-25%","25%-50%","50%-75%","75%-100%"]
+            },
+            yAxis: {},
+            series: [{
+                name: '比例',
+                type: 'bar',
+                colorByPoint: true,
+                data: [],
+            }]
+        };
+        console.log(param);
+        jQuery.post("/teacher/analyse/apart-percentage",param,function(rst){
+            console.log(rst);
+            BarArr=rst;
+            console.log(BarArr);
+            for(var i=0;i<BarArr.length;i++){
+                option1.series[0].data.push(BarArr[i]);
+            }
+            console.log(option1);
+            myChart1.setOption(option1);
+        })
+    }
+</script>
+<script>
+    function showPie() {
+        $("#pie").show()
+        $("#bar").hide()
+    }
+    function showBar() {
+        $("#pie").hide()
+        $("#bar").show()
+
+    }
+</script>
+</body>
+</html>
+

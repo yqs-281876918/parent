@@ -129,7 +129,7 @@
             async: false,
             data: {'classId':classId},
             success: function (rst) {
-                console.log(rst)
+                //console.log(rst)
                 //alert(rst);
                 //1、查询查询的数据
                 var arrs = rst;
@@ -140,7 +140,6 @@
                     //考试id
                     var Date = u.startTime;
                     var Date1=timestampToTime(Date);
-                    console.log(Date1);
                     jQuery.ajax({
                         type: 'get',
                         url: '/teacher/analyse/finish',
@@ -249,7 +248,7 @@
                         "startTime": uu.startTime,
                         "testTime": uu.testTime,
                         "introduce": uu.introduce,
-                        "totalSCore": uu.totalScore,
+                        "totalSCore": uu.totalScore
 
                     };
                     window.sessionStorage.setItem("examName", param2.examName);
@@ -396,12 +395,13 @@
 </script>
 <!--搜索结束-->
 <script>
-    function analyse(id,examName,startTime,testTime,totalScore){
+    function analyse(id,examName,startTime,testTime,endTime,totalScore){
         sessionStorage.setItem("id",id);
         sessionStorage.setItem("examName",examName);
         sessionStorage.setItem("startTime",startTime);
         sessionStorage.setItem("testTime",testTime);
         sessionStorage.setItem("totalScore",totalScore);
+        sessionStorage.setItem("endTime",endTime);
         window.location.href="analyse.html";
     }
     function review(id,examName,startTime,testTime,totalScore){

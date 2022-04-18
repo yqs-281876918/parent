@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -122,21 +124,28 @@ public class AnalyseDao {
     public List<Answer> getElseDetail(Integer examId, String type) {
         List<ExamDetail> examDetails = getAll(examId);
         List<Answer> a = examDetails.get(0).getAnswers();
-        List<Answer> b = null;
+        //System.out.println(a);
+        List<Answer> b = new ArrayList<>();
+        //System.out.println(a.size());
+       // System.out.println(type);
         for(int i=0;i<a.size();i++){
+            //System.out.println(a.get(i).getSubjectType());
             if(a.get(i).getSubjectType().equals(type)){
+                //System.out.println(1);
                 b.add(a.get(i));
             }
         }
+        //System.out.println(b);
         return b;
     }
     //跟据题目id查找题目描述
-    public String getDescription(String id){
+    public List<Question> getDescription(String id){
+        System.out.println(id);
         String description;
         Query query = new Query(Criteria.where("id").is(id));
         List<Question> questionList= mongoTemplate.find(query,Question.class,"subjects");
-        description=questionList.get(0).getDescription();
-        return description;
+        //description=questionList.get(0).getDescription();
+        return questionList;
     }
 
     //每道题答对的人数 paerdetal
@@ -183,37 +192,41 @@ public class AnalyseDao {
         //考试的人
         List<ExamDetail> examDetails = getAll(examId);
 
-        if (type.equals("SingleChoiceQuestion")) {
+        if (type.equals("singleChoiceQuestion")) {
+            System.out.println(666);
             int num1 = 0, num2 = 0, num3 = 0, num4 = 0;
-            int[] num = {num1, num2, num3, num4};
             for (int i = 0; i < examDetails.size(); i++) {
                 List<Answer> a = examDetails.get(i).getAnswers();
+                System.out.println(a);
+
                 for (int j = 0; j < a.size(); j++) {
                     if (Objects.equals(a.get(j).getSubjectId(), subjectId)) {
                         List<String> b = a.get(j).getAnswerList();
+                        System.out.println(b);
                         for (int k = 0; k < b.size(); k++) {
                             if (Objects.equals(b.get(k), "A")) {
                                 num1++;
                             }
-                            if (Objects.equals(b.get(k), "B")) {
+                            else if (Objects.equals(b.get(k), "B")) {
                                 num2++;
                             }
-                            if (Objects.equals(b.get(k), "C")) {
+                            else if (Objects.equals(b.get(k), "C")) {
                                 num3++;
                             }
-                            if (Objects.equals(b.get(k), "D")) {
+                            else if (Objects.equals(b.get(k), "D")) {
                                 num4++;
                             }
                         }
                     }
                 }
             }
+            int[] num = {num1, num2, num3, num4};
             System.out.println(num);
             return num;
 
-        } else if (type.equals("MultipleChoiceQuestion")) {
+        } else if (type.equals("multipleChoiceQuestion")) {
             int num5 = 0, num6 = 0, num7 = 0, num8 = 0;
-            int[] num1 = new int[]{num5, num6, num7, num8};
+
             for (int i = 0; i < examDetails.size(); i++) {
                 List<Answer> a = examDetails.get(i).getAnswers();
                 for (int j = 0; j < a.size(); j++) {
@@ -236,12 +249,13 @@ public class AnalyseDao {
                     }
                 }
             }
+            int[] num1 = new int[]{num5, num6, num7, num8};
             System.out.println(num1);
             return num1;
 
-        } else if (type.equals("Judgment")) {
+        } else if (type.equals("judgment")) {
             int num11 = 0, num22 = 0;
-            int[] num3 = new int[]{num11, num22};
+
             for (int i = 0; i < examDetails.size(); i++) {
                 List<Answer> a = examDetails.get(i).getAnswers();
                 for (int j = 0; j < a.size(); j++) {
@@ -258,6 +272,7 @@ public class AnalyseDao {
                     }
                 }
             }
+            int[] num3 = new int[]{num11, num22};
             System.out.println(num3);
             return num3;
 
