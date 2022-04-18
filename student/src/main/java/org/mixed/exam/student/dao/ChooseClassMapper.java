@@ -2,6 +2,7 @@ package org.mixed.exam.student.dao;
 
 import feign.Param;
 import org.apache.ibatis.annotations.Mapper;
+import org.mixed.exam.auth.api.po.Users;
 import org.mixed.exam.student.pojo.po.ChooseClass;
 import org.mixed.exam.student.pojo.po.Class;
 import org.springframework.stereotype.Repository;
@@ -24,5 +25,5 @@ public interface ChooseClassMapper {
     //班级人员信息详情
     List<ChooseClass> getClassDetail(long cno);
     //得到用户真实姓名
-    String getRealName(String username);
+    Users getRealName(String username);
 }

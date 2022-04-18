@@ -49,7 +49,7 @@ public class RouteController
                 userName = AuthUtil.parseUsername(jwt);
             }
         }
-        String realName = classService.getRealName(userName);
+        String realName = classService.getRealName(userName).getRealName();
         if (realName==null){
             realName = userName;
         }

@@ -87,9 +87,9 @@
     <div id="header">
         <div class="itest-logo"></div>
         <span class="itestName">MIXED考试平台</span>
-        <ul class="h-list">
+        <ul class="h-list" id="buttonSet">
             <li class="level1 ">
-                <a  class="fir le-bg">我的班级</a>
+                <a  class="fir le-bg">首页</a>
             </li>
         </ul>
         <div class="per-infor" style="top:0px">
@@ -97,7 +97,7 @@
             <a href="#" class="infor dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="userName"></a>
 
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">个人中心</a>
+                <a class="dropdown-item" href="../selfInfomation.html">个人中心</a>
                 <a class="dropdown-item" href="/login/sign_out">退出登录</a>
 
             </div>
@@ -139,8 +139,17 @@
         jQuery.post("/student/class/findAll",function (rst){
             var trs = ''
             var userNm = ''
-            jQuery.post("/student/class/realName",function (userName){
-                $("#userName").html(userName)
+            jQuery.post("/student/class/realName",function (user){
+                $("#userName").html(user.realName)
+                if (user.role=='adm'){
+                    var buttonSet = ''
+                    buttonSet = `
+            <li class="level1 ">
+                <a  class="fir" href="/admin/index.html">管理员端</a>
+            </li>
+                    `
+                    $('#buttonSet').append(buttonSet);
+                }
             })
             for (var i=0;i<rst.length;i++){
                 var chooseClass = rst[i]
@@ -178,6 +187,7 @@
             }
             jQuery("#container").html(trs)
         })
+        jQuery.post
     }
     jQuery(function (){
         init();

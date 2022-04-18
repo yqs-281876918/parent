@@ -59,8 +59,8 @@
         from chooseClass,users
         where cno = #{cno} AND sname = users.username
     </select>
-    <select id="getRealName" resultType="java.lang.String">
-        select realName
+    <select id="getRealName" resultType="org.mixed.exam.auth.api.po.Users">
+        select *
         from users
         where username = #{username}
     </select>

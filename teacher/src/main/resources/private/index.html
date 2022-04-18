@@ -121,6 +121,12 @@
                 </ul>
             </li>
             <li>
+                <a href="/teacher/selfInfomation.html" target="main">
+                    <i class="entypo-newspaper"></i>
+                    <span>个人中心</span>
+                </a>
+            </li>
+            <li>
                 <a href="/login/sign_out">
                     <i class="entypo-newspaper"></i>
                     <span>退出登录</span>
@@ -273,6 +279,24 @@
 <script src="/teacher/assets/js/neon-chat.js"></script>
 <script src="/teacher/assets/js/neon-custom.js"></script>
 <script src="/teacher/assets/js/neon-demo.js"></script>
+<script>
+    jQuery(function (){
+        jQuery.post("/teacher/users/detail",function (user){
+            if (user.role=='adm'){
+                var buttonSet = ''
+                buttonSet = `
+            <li>
+                <a href="/admin/index.html">
+                    <i class="entypo-newspaper"></i>
+                    <span>管理员端</span>
+                </a>
+            </li>
+                `
+                $('#main-menu').append(buttonSet);
+            }
+        })
+    })
+</script>
 
 </body>
 </html>

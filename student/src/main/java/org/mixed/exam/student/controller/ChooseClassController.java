@@ -3,6 +3,7 @@ package org.mixed.exam.student.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.mixed.exam.auth.api.AuthUtil;
+import org.mixed.exam.auth.api.po.Users;
 import org.mixed.exam.student.pojo.po.ChooseClass;
 import org.mixed.exam.student.pojo.po.Class;
 import org.mixed.exam.student.service.ChooseClassService;
@@ -71,7 +72,7 @@ public class ChooseClassController {
     }
     //得到学生真实姓名
     @RequestMapping("/class/realName")
-    public String getRealName(HttpServletRequest request){
+    public Users getRealName(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         String sname = null;
         for (Cookie cookie : cookies) {
@@ -81,11 +82,11 @@ public class ChooseClassController {
                 sname = userName;
             }
         }
-        if (classService.getRealName(sname)!=null){
-            return classService.getRealName(sname);
-        }else {
-            return sname;
+        Users users = classService.getRealName(sname);
+        if (users.getRealName()==null){
+            users.setRealName(sname);
         }
+        return users;
     }
     //学生退出班级
     @RequestMapping("/class/quit")

@@ -2,6 +2,7 @@ package org.mixed.exam.student.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.mixed.exam.auth.api.po.Users;
 import org.mixed.exam.student.dao.ChooseClassMapper;
 import org.mixed.exam.student.pojo.po.ChooseClass;
 import org.mixed.exam.student.pojo.po.Class;
@@ -27,7 +28,7 @@ public class ChooseClassService {
         return chooseClassMapper.selectAllClass(sname);
     }
     //得到学生真实姓名
-    public String getRealName(String username){
+    public Users getRealName(String username){
         return chooseClassMapper.getRealName(username);
     }
     //学生退出班级
