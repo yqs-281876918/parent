@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@PreAuthorize("hasAnyRole('ROLE_adm','ROLE_tea1','ROLE_tea2')")
+@PreAuthorize("hasAnyRole('ROLE_adm','ROLE_tea1','ROLE_tea2','ROLE_stu')")
 public class ExamController
 {
     @Autowired

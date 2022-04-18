@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-@PreAuthorize("hasAnyRole('ROLE_adm')")
+@PreAuthorize("hasAnyRole('ROLE_adm','ROLE_tea1','ROLE_tea2')")
 public class ApiController
 {
     @Autowired

@@ -120,6 +120,10 @@
     margin-top: 40px;
     background: #f1f1f1;
 }
+#bottom{
+    height: 920px;
+    width: 920px;
+}
 .top{
 
     height: auto;
