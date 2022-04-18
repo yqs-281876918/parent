@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import org.mixed.exam.admin.mapper.RoleMapper;
 import org.mixed.exam.admin.pojo.dto.usersDto;
 import org.mixed.exam.admin.pojo.po.users;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,8 +46,6 @@ public class RoleService {
     }
     public int Insert(usersDto dto){
         int row=0;
-        String password=(new BCryptPasswordEncoder()).encode(dto.getPassword());
-        dto.setPassword(password);
         row=rolemapper.Insert(dto);
         return row;
     }
