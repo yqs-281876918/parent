@@ -26,10 +26,12 @@
         <association property="users" javaType="org.mixed.exam.auth.api.po.Users">
             <id property="username" column="username"/>
             <result property="realName" column="realName"/>
+            <result property="email" column="email"/>
+            <result property="sex" column="sex"/>
         </association>
     </resultMap>
     <select id="getClassDetail" resultMap="chooseStudentDetail">
-        select sname, data, realName
+        select sname, data, realName,email,sex
         from chooseClass,users
         where cno = #{cno} AND sname = users.username
     </select>

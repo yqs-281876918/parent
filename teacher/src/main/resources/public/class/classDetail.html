@@ -186,15 +186,25 @@
             trs = ''
             for (var i=0;i<studentArrs.length;i++){
                 var s = studentArrs[i];
-                console.log(s.users.realName)
+                var sex = '';
+                if (s.users.sex==0){
+                    sex = '女'
+                }
+                if (s.users.sex==1){
+                    sex = '男'
+                }
+                var email = s.users.email
+                if (email==null){
+                    email = ''
+                }
                 trs += `
 <tr>
     <td style="cursor:default;">&nbsp;${i+1}&nbsp;</td>
     <td style="cursor:default;">${s.sname}</td>
     <td style="cursor:default;">${s.users.realName}</td>
     <td style="cursor:default;">${s.data}</td>
-    <td style="cursor:default;" class="student"></td>
-    <td style="cursor:default;"></td>
+    <td style="cursor:default;" class="student">${sex}</td>
+    <td style="cursor:default;">${email}</td>
     <td style="cursor:default;" nowrap>
         <a href="#" style="color: #d42020" onclick="showDeleteStudentDialog('${s.sname}','${s.users.realName}')">删除学生</a>
     </td>
