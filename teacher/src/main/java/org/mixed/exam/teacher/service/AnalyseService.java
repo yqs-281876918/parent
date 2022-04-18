@@ -218,8 +218,9 @@ public class AnalyseService {
         return analyseDao.ABCD(subjectId,examId,type);
     }
 
-
-
-
+ //考试真实人数
+    public int realNum(Integer examId) {
+        return analyseDao.realNum(examId);
+    }
 }
 

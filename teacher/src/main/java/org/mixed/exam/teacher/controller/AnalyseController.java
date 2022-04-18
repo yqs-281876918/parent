@@ -49,12 +49,13 @@ public class AnalyseController {
     }
     @RequestMapping("/count")
     public float[] count(Integer examId,Integer totalScore){
-        float[] count=new float[9];
+        float[] count=new float[10];
         float[] per=new float[5];
         count[0]=analyseService.count(examId);
         count[1]=analyseService.max(examId);
         count[2]=analyseService.min(examId);
         count[3]=analyseService.avg(examId);
+        count[9]=analyseService.realNum(examId);
         per=analyseService.percentage(examId,totalScore);
         int num=4;
         for(int i=0;i<per.length-1;i++){
@@ -138,6 +139,11 @@ public class AnalyseController {
         System.out.println(type);
         System.out.println(examId);
         return analyseService.ABCD(subjectId,examId,type);
+    }
+    //实际考试
+    @RequestMapping("/realNum")
+    public int realNum(Integer examId){
+        return analyseService.realNum(examId);
     }
 
 }

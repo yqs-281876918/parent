@@ -283,4 +283,9 @@ public class AnalyseDao {
         }
 
     }
+
+    public int realNum(Integer examId) {
+        List<ExamDetail> examDetails = getAll(examId);
+        return examDetails.size();
+    }
 }
