@@ -22,6 +22,7 @@
 <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <div class="pie_">
+
     <div id="box1" class="pie" style="height:400px"></div>
     <div id="box2" class="pie" style="height:400px"></div>
     <div id="box3" class="pie" style="height:400px"></div>
@@ -41,55 +42,108 @@
         //及格率的图
         var myChart = echarts.init(document.getElementById('box1'));
         // 指定图表的配置项和数据
+        // var option = {
+        //     color:['#FD1B40','#eeeeee'],
+        //     title: {
+        //         text: ''
+        //     },
+        //     series: [{
+        //         name: '比例',
+        //         type: 'pie',
+        //         colorByPoint: true,
+        //         center: ['50%', '50%'], // 饼图的圆心坐标
+        //         radius: ['60%', '70%'],
+        //         avoidLabelOverlap: false,
+        //         hoverAnimation: false,
+        //         label: {
+        //             position: 'center',
+        //             fontSize: '20',
+        //             fontWeight: 'bold',
+        //             formatter: '{b}\n{c}\%'
+        //         },
+        //         emphasis: {
+        //             label: {
+        //                 show: true,
+        //                 fontSize: '20',
+        //                 fontWeight: 'bold'
+        //             }
+        //         },
+        //         labelLine: {
+        //             show: false
+        //         },
+        //         data: [
+        //             {
+        //                 name:'及格率',
+        //                 value: '',
+        //                 label: {
+        //                     show: true,
+        //                     fontSize: '20',
+        //                     fontWeight: 'bold'
+        //                 }
+        //             },
+        //             {
+        //                 value: '',
+        //                 name: '',
+        //                 label:{
+        //                     show:false    //默认显示第一块
+        //                 }
+        //             }
+        //
+        //         ]
+        //     }]
+        // };
         var option = {
-            color:['#FD1B40','#eeeeee'],
+            backgroundColor:'#ffffff',
             title: {
-                text: ''
+                text: '及格率',
+                left: 'center',
+                //标题栏的高度，值越大，距离顶部的距离越大
+                top: 20,
+                //标题栏字体的颜色
+                textStyle: {
+                    color: '#ccc'
+                }
             },
-            series: [{
-                name: '比例',
-                type: 'pie',
-                colorByPoint: true,
-                center: ['50%', '50%'], // 饼图的圆心坐标
-                radius: ['60%', '70%'],
-                avoidLabelOverlap: false,
-                hoverAnimation: false,
-                label: {
-                    position: 'center',
-                    fontSize: '20',
-                    fontWeight: 'bold',
-                    formatter: '{b}\n{c}\%'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '20',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {
-                        name:'及格率',
-                        value: '',
-                        label: {
-                            show: true,
-                            fontSize: '20',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    {
-                        value: '',
-                        name: '',
-                        label:{
-                            show:false    //默认显示第一块
+            tooltip: {
+                trigger: 'item',
+                // formatter: '{a} <br/>{b} : {c}'
+            },
+            legend: {
+                orient: 'vertical',
+                left: '70%',  //图例距离左的距离
+                y: 'center',  //图例上下居中
+            },
+            color:['rgb(255,250,205)', 'rgb(255,106,106)'],
+            series : [
+                {
+                    name: "及格率",
+                    type:'pie',
+                    // clockwise:'true',
+                    startAngle:'0',
+                    radius : '40%',
+                    center: ['50%', '50%'],
+                    data: [
+                        {name: '及格率',value: ''},
+                        {name: "",value: '' },
+                    ],
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                position:'inner',
+                                textStyle: {
+                                    fontSize:10,
+                                }
+                            },
+                            labelLine:{
+                                show:true,
+                            }
                         }
                     }
 
-                ]
-            }]
+                }
+            ],
+
         };
 
         jQuery.post("/teacher/analyse/percentage",param1,function(rst){
@@ -106,62 +160,116 @@
             console.log(unpass1);
             option.series[0].data.push(unpass1);
             myChart.setOption(option);
-        })
+        });
 
         //优良率的图
         var myChart2 = echarts.init(document.getElementById('box2'));
         // 指定图表的配置项和数据
         var option2 = {
-            color:['#5fb878','#eeeeee'],
+            backgroundColor:'#ffffff',
             title: {
-                text: ''
+                text: '优良率',
+                left: 'center',
+                //标题栏的高度，值越大，距离顶部的距离越大
+                top: 20,
+                //标题栏字体的颜色
+                textStyle: {
+                    color: '#ccc'
+                }
             },
-            series: [{
-                name: '比例',
-                type: 'pie',
-                colorByPoint: true,
-                center: ['50%', '50%'], // 饼图的圆心坐标
-                radius: ['60%', '70%'],
-                avoidLabelOverlap: false,
-                hoverAnimation: false,
-                label: {
-                    position: 'center',
-                    fontSize: '20',
-                    fontWeight: 'bold',
-                    formatter: '{b}\n{c}\%'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '20',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {
-                        name:'优良率',
-                        value: '',
-                        label:{
-                            show:true,     //默认显示第一块
-                            fontSize: '20',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    {
-                        value: '',
-                        name: '',
-                        label:{
-                            show:false    //默认显示第一块
-
+            tooltip: {
+                trigger: 'item',
+                // formatter: '{a} <br/>{b} : {c}'
+            },
+            legend: {
+                orient: 'vertical',
+                left: '70%',  //图例距离左的距离
+                y: 'center',  //图例上下居中
+            },
+            color:['rgb(173,255,47)', 'rgb(255,136,139)'],
+            series : [
+                {
+                    name: "优良率",
+                    type:'pie',
+                    // clockwise:'true',
+                    startAngle:'0',
+                    radius : '40%',
+                    center: ['50%', '50%'],
+                    data: [
+                        {name: '优良率',value: ''},
+                        {name: "",value: '' },
+                    ],
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                position:'inner',
+                                textStyle: {
+                                    fontSize:10,
+                                }
+                            },
+                            labelLine:{
+                                show:true,
+                            }
                         }
                     }
 
-                ]
-            }]
+                }
+            ],
+
         };
+        // var option2 = {
+        //     color:['#5fb878','#eeeeee'],
+        //     title: {
+        //         text: ''
+        //     },
+        //     series: [{
+        //         name: '比例',
+        //         type: 'pie',
+        //         colorByPoint: true,
+        //         center: ['50%', '50%'], // 饼图的圆心坐标
+        //         radius: ['60%', '70%'],
+        //         avoidLabelOverlap: false,
+        //         hoverAnimation: false,
+        //         label: {
+        //             position: 'center',
+        //             fontSize: '20',
+        //             fontWeight: 'bold',
+        //             // formatter: '{b}\n{c}\%'
+        //         },
+        //         emphasis: {
+        //             label: {
+        //                 show: true,
+        //                 fontSize: '20',
+        //                 fontWeight: 'bold'
+        //             }
+        //         },
+        //         labelLine: {
+        //             show: false
+        //         },
+        //         data: [
+        //             {
+        //                 name:'优良率',
+        //                 value: '',
+        //                 label:{
+        //                     show:true,     //默认显示第一块
+        //                     fontSize: '20',
+        //                     fontWeight: 'bold',
+        //                     formatter: '{b}\n{c}\%'
+        //                 }
+        //             },
+        //             {
+        //                 value: '',
+        //                 name: '',
+        //                 label:{
+        //                     show:false    //默认显示第一块
+        //                 }
+        //             }
+        //
+        //         ]
+        //     }]
+        // };
+
         jQuery.post("/teacher/analyse/percentage",param1,function(rst){
             console.log(rst);
             BarArr=rst;
@@ -172,62 +280,64 @@
             var unexe=100-excellent;
             option2.series[0].data.push(unexe);
             myChart2.setOption(option2);
-        })
+        });
 
 
         //平均分的图
         var myChart3 = echarts.init(document.getElementById('box3'));
         // 指定图表的配置项和数据
         var option3 = {
-            color:['#C47AFF','#eeeeee'],
+            backgroundColor:'#ffffff',
             title: {
-                text: ''
+                text: '平均分',
+                left: 'center',
+                //标题栏的高度，值越大，距离顶部的距离越大
+                top: 20,
+                //标题栏字体的颜色
+                textStyle: {
+                    color: '#ccc'
+                }
             },
-            series: [{
-                name: '比例',
-                type: 'pie',
-                colorByPoint: true,
-                center: ['50%', '50%'], // 饼图的圆心坐标
-                radius: ['60%', '70%'],
-                avoidLabelOverlap: false,
-                hoverAnimation: false,
-                label: {
-                    position: 'center',
-                    formatter: '{b}\n{c}'
-                },
-                emphasis: {
-                    label: {
-                        show: true,
-                        fontSize: '20',
-                        fontWeight: 'bold'
-                    }
-                },
-                labelLine: {
-                    show: false
-                },
-                data: [
-                    {
-                        value: '',
-                        name:'平均分',
-                        selected:true,
-                        label: {
-                            show:true,     //默认显示第一块
-                            fontSize: '20',
-                            fontWeight: 'bold'
-                        }
-                    },
-                    {
-                        value: '',
-                        name: '',
-                        label: {
-                            normal: {
-                                show: false
+            tooltip: {
+                trigger: 'item',
+                // formatter: '{a} <br/>{b} : {c}'
+            },
+            legend: {
+                orient: 'vertical',
+                left: '70%',  //图例距离左的距离
+                y: 'center',  //图例上下居中
+            },
+            color:['rgb(171,130,255)', 'rgb(238,210,238)'],
+            series : [
+                {
+                    name: "平均分",
+                    type:'pie',
+                    // clockwise:'true',
+                    startAngle:'0',
+                    radius : '40%',
+                    center: ['50%', '50%'],
+                    data: [
+                        {name: '平均分',value: ''},
+                        {name: "",value: '' },
+                    ],
+                    itemStyle:{
+                        normal:{
+                            label:{
+                                show:true,
+                                position:'inner',
+                                textStyle: {
+                                    fontSize:10,
+                                }
+                            },
+                            labelLine:{
+                                show:true,
                             }
                         }
                     }
 
-                ]
-            }]
+                }
+            ],
+
         };
         var param3={
             "examId":examId
@@ -240,6 +350,8 @@
             option3.series[0].data.push(unavg);
             myChart3.setOption(option3);
         })
+
+
     }
 </script>
 </body>
