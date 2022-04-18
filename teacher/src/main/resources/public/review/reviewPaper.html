@@ -197,7 +197,7 @@
                                     stuanswer=subject[i].answerList;
                                     break;
                                 case "programProblem":
-                                    anser="正确答案："+back.answer;
+                                    anser="正确答案："+"略";
                                     stuanswer=subject[i].answerList;
                                     break;
                                 case "combinationChoice":
@@ -225,6 +225,18 @@
                                 </div>
                                 `;
                             }else if(back.answers!=undefined){
+                                r+=`
+                                <div id="mark-${count}" class="q">
+                                    <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p>${back.description}</p></p></div>
+                                    <div class="question_score">分值：${scorelist[count]}</div>
+                                    <div class="student_answer">学生作答情况：${stuanswer}</div>
+                                    <div id="ans${count}" class="question_answer">${anser}</div>
+                                    <div class="score_input">
+                                        得分判定:<input type="text" id="score${count}" value="${tmpscore}" onchange="changeScore(${count})"/>
+                                    </div>
+                                </div>
+                                `;
+                            }else {
                                 r+=`
                                 <div id="mark-${count}" class="q">
                                     <div><p class="text-break question_title">&nbsp;&nbsp;题目${count+1}：<p>${back.description}</p></p></div>

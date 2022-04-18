@@ -96,12 +96,17 @@
         var param={
             "examId":examId
         };
+
         jQuery.post("/teacher/analyse/findStuList",param,function (rst) {
             //alert(rst);
             console.log(rst);
             //1、查询查询的数据
             var trs="";
             var trs1="";
+            trs1+=`
+                    <a className="download" href="./excel/export/${examId}">导出成绩单</a>
+                    <button class="btn btn-warning" onclick="ba()">返回</button>
+                    `;
             var count=0;
             for(var i=0;i<rst.length;i++) {
                 //获取每一行对应的用户对象
@@ -117,9 +122,7 @@
                     </tr>
                     `;
 
-                trs1+=`
-                    <a className="download" href="./excel/export/${examId}">导出成绩单</a>
-                    `;
+
             }
             //把根据数据构建的行添加到表格
             jQuery("#data").html(trs);
@@ -132,7 +135,11 @@
     })
 
 </script>
-
+<script>
+    function ba() {
+        location.href="analyse.html";
+    }
+</script>
 
 
 </body>
