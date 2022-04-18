@@ -131,19 +131,19 @@
                     var u = BarArr[i];
                     var type1 = u.subjectType;
                     //console.log(type1);
-                    if (type1 === "SingleChoiceQuestion") {
+                    if (type1 === "singleChoiceQuestion") {
                         type1 = "单选题";
-                    } else if (type1 === "MultipleChoiceQuestion") {
+                    } else if (type1 === "multipleChoiceQuestion") {
                         type1 = "多选题";
-                    } else if (type1 === "Completion") {
+                    } else if (type1 === "completion") {
                         type1 = "填空题";
-                    } else if (type1 === "Judgment") {
+                    } else if (type1 === "judgment") {
                         type1 = "判断题";
-                    } else if (type1 === "ComprehensiveQuestion") {
+                    } else if (type1 === "comprehensiveQuestion") {
                         type1 = "综合题";
-                    } else if (type1 === "CombinationChoice") {
+                    } else if (type1 === "combinationChoice") {
                         type1 = "综合（组合）选择题";
-                    } else if (type1 === "ProgramProblem") {
+                    } else if (type1 === "programProblem") {
                         type1 = "程序题";
                     }
                     jQuery.ajax({
@@ -191,9 +191,8 @@
                 <div class="card">
                     <div class="card-header" id="heading${u.subjectId}">
                         <div style="display: inline-block">
-                        <h7 class="card-title">${introduction}</h7>
+                        <h4 class="card-title">${introduction}</h4>
                         </div>
-
                         <p class="card-text">题目类型：单选题</p>
                         <p class="card-text">答题人数：${total}</p>
                         <p class="card-text">答对人数：${right}</p>
@@ -212,10 +211,10 @@
                         <div class="card-body" id="${u.subjectId}">
                            <div class="card-text">${description}</div>
                                 <ul>
-                                <li>A: ${arr4[0]}</li>
-                                <li>B: ${arr4[1]}</li>
-                                <li>C: ${arr4[2]}</li>
-                                <li>D: ${arr4[3]}</li>
+                                <li>选择A的人数: ${arr4[0]}</li>
+                                <li>选择B的人数: ${arr4[1]}</li>
+                                <li>选择C的人数: ${arr4[2]}</li>
+                                <li>选择D的人数: ${arr4[3]}</li>
                                 </ul>
                          </div>
                         </div>
@@ -254,10 +253,10 @@
                         <div class="card-body" id="${u.subjectId}">
                            <div class="card-text">${description}</div>
                                 <ul>
-                                <li>A: ${arr4[0]}</li>
-                                <li>B: ${arr4[1]}</li>
-                                <li>C: ${arr4[2]}</li>
-                                <li>D: ${arr4[3]}</li>
+                                <li>选择A的人数: ${arr4[0]}</li>
+                                <li>选择B的人数: ${arr4[1]}</li>
+                                <li>选择C的人数: ${arr4[2]}</li>
+                                <li>选择D的人数: ${arr4[3]}</li>
                                 </ul>
                          </div>
                         </div>
@@ -297,8 +296,8 @@
                         <div class="card-body" id="${u.subjectId}">
                            <div class="card-text">${description}</div>
                                 <ul>
-                                <li>√: ${arr4[0]}</li>
-                                <li>×: ${arr4[1]}</li>
+                                <li>选择√的人数: ${arr4[0]}</li>
+                                <li>选择×的人数: ${arr4[1]}</li>
                                 </ul>
                          </div>
                         </div>

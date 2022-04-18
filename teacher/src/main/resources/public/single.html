@@ -52,13 +52,13 @@
     <div id="container" >
         <div id="choose type">请选择题型：
             <select id="choose" name="choose" class="form-control">
-                <option value="SingleChoiceQuestion" selected="selected">单选题</option>
-                <option value="MultipleChoiceQuestion">多选题</option>
-                <option value="Completion">填空题</option>
-                <option value="Judgment">判断题</option>
-                <option value="ComprehensiveQuestion">综合题</option>
-                <option value="CombinationChoice">综合（组合）选择题</option>
-                <option value="ProgramProblem">程序题</option>
+                <option value="singleChoiceQuestion" selected = "selected">单选题</option>
+                <option value="multipleChoiceQuestion">多选题</option>
+                <option value="completion">填空题</option>
+                <option value="judgment">判断题</option>
+                <option value="comprehensiveQuestion">综合题</option>
+                <option value="combinationChoice">综合（组合）选择题</option>
+                <option value="programProblem">程序题</option>
 
             </select>
 
@@ -82,6 +82,7 @@
 </div>
 <script>
     var Barlist;
+    var type='ALL';
     $(() => {
         $('#choose').change(() => {
             init();

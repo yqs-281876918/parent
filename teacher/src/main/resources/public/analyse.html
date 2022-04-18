@@ -53,32 +53,24 @@
                                 <span class="title">及格分:</span>
                                 <span id="passMark"></span>分
                             </div>
-
-                            <div class="form-row">
-                                <span class="title">答题时长:</span>
-                                <span id="examTime"></span>
-                            </div>
-                            <div class="form-row">
-                                <span class="title">考试时间:</span>
-                                <span id="examTimeInterval"></span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
                             <div class="form-row">
                                 <span class="title">应考人数:</span>
                                 <span id="examineNums"></span>
                             </div>
+
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-row">
-                                <span class="title">平均分:</span>
-                                <span id="avgScore"></span>分
+                                <span class="title">开始时间:</span>
+                                <span id="examTimeInterval"></span>
                             </div>
                             <div class="form-row">
-                                <span class="title">最高分:</span>
-                                <span id="maxScore"></span>分
+                                <span class="title">答题时长:</span>
+                                <span id="examTime">分钟</span>
                             </div>
                             <div class="form-row">
-                                <span class="title">最低分:</span>
-                                <span id="minScore"></span>分
+                                <span class="title">实考人数:</span>
+                                <span id="realNum"></span>
                             </div>
 
                         </div>
@@ -91,11 +83,11 @@
             <div class="score tabContent" >
                 <div class="scoreAnalysisFun clear">
                     <div class="scoreAnalysisGrid">
-                        <button type="button" class="btn btn-default export scoreExport pull-right" id="scoreExport">导出答题情况</button>
                         <table class="table table-bordered table-hover table-striped">
                             <thead>
                             <tr>
                                 <td >应考人数</td>
+                                <td >实考人数</td>
                                 <td >及格率</td>
                                 <td >最高分</td>
                                 <td >最低分</td>
@@ -164,6 +156,7 @@
         sessionStorage.setItem("examName", examName);
         jQuery("#examName").html(examName);
         jQuery("#examTimeInterval").html(startTime);
+
         jQuery("#examTime").html(testTime);
         jQuery("#examTotalScore").html(totalScore);
         jQuery("#passMark").html(totalScore * 0.6);
@@ -171,9 +164,9 @@
 
         var param = {
             "examId": examId,
-            "totalScore": totalScore,
+            "totalScore": totalScore
         };
-        console.log(param);
+        //console.log(param);
 
         var max;
         var min;
@@ -186,10 +179,12 @@
             max = Arr[1];
             min = Arr[2];
             avg = Arr[3];
+            var realNum=Arr[9];
             var pass = 0;
             pass = pass + Arr[7] + Arr[8];
             pass = Math.floor(pass * 100 / personNum);
             jQuery("#examineNums").html(personNum);
+            jQuery("#realNum").html(realNum);
             jQuery("#maxScore").html(max);
             jQuery("#minScore").html(min);
             jQuery("#avgScore").html(avg);
@@ -197,6 +192,7 @@
             trs += `
             <tr>
                 <td>${personNum}</td>
+                <td>${realNum}</td>
                 <td>${pass}%</td>
                 <td>${max}</td>
                 <td>${min}</td>

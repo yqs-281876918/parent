@@ -32,7 +32,7 @@ public class AnalyseController {
     @RequestMapping("/findAll")
     public List<Exam> findAll(int classId){
         List<Exam> exams=analyseService.findAll(classId);
-
+        System.out.println(exams);
         return exams;
     }
     @RequestMapping("/delete")
