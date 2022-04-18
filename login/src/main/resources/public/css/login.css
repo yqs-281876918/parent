@@ -45,6 +45,18 @@ input[type=text]{
     outline:none;
     background:transparent;
 }/*表单设置*/
+input[type=password]{
+    width: 100%;
+    padding: 10px 0;
+    font-side:20px;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom:30px;/*输入框设置*/
+    border:none;
+    border-bottom:1px solid #fff;
+    outline:none;
+    background:transparent;
+}/*表单设置*/
 #denglu{
     text-align:center;
     padding:10px;
