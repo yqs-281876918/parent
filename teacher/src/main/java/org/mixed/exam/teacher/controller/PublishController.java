@@ -62,6 +62,9 @@ public class PublishController
         }
         emailService.send(emailDtos);
         String[] antiSettings = request.getParameterValues("antiSettings");
+        if(antiSettings==null){
+            antiSettings=new String[]{};
+        }
         for(String classID:classIDs)
         {
             examClient.submit(_startTime,testTime,lateTime,submitTime,paperID,
