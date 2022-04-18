@@ -151,9 +151,6 @@
         var testTime = sessionStorage.getItem("testTime");
         var totalScore = sessionStorage.getItem("totalScore");
 
-        sessionStorage.setItem("examId", examId);
-        sessionStorage.setItem("totalScore", totalScore);
-        sessionStorage.setItem("examName", examName);
         jQuery("#examName").html(examName);
         jQuery("#examTimeInterval").html(startTime);
 
@@ -164,7 +161,7 @@
 
         var param = {
             "examId": examId,
-            "totalScore": 100
+            "totalScore": totalScore
         };
         //console.log(param);
 
