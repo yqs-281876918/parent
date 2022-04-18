@@ -1,4 +1,4 @@
-package org.mixed.exam.teacher.interceptor;
+package org.mixed.exam.teacher.pojo.interceptor;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

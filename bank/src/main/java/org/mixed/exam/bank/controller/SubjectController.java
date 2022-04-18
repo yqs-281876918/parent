@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@PreAuthorize("hasAnyRole('ROLE_adm,ROLE_tea2')")
+//@PreAuthorize("hasAnyRole('ROLE_adm,ROLE_tea2')")
 public class SubjectController {
     @Autowired
     private SubjectDao subjectDao;

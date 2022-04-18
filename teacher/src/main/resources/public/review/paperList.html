@@ -120,6 +120,9 @@
         <button type="button"
                 class="btn btn-outline-warning btn-danger"
                 onclick="showDeleteDialog()">删除考试</button>
+        <button type="button"
+                class="btn btn-outline-warning btn-warning"
+                onclick="backupper()">返回</button>
     </div>
     <div id="middle">
         <form id="Form">
@@ -415,6 +418,12 @@
         })
     }
 </script>
+<script>
+    function backupper() {
+        location.href="../examList.html";
+    }
+</script>
+
 <!--搜索结束-->
 <script>
     function review(id,examName,totalScore){

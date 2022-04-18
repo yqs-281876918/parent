@@ -1,23 +1,12 @@
 package org.mixed.exam.admin.controller;
 
-import com.ctc.wstx.util.StringUtil;
 import com.github.pagehelper.PageInfo;
-import net.sf.jsqlparser.Model;
-import org.mixed.exam.admin.pojo.dto.usersDto;
-import org.mixed.exam.admin.pojo.po.users;
 import org.mixed.exam.admin.service.RoleService;
+import org.mixed.exam.auth.api.po.Users;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/Role")
@@ -26,9 +15,9 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping("/findAll")
-    public PageInfo<users> findAll(int pageNum, int pageSize){
+    public PageInfo<Users> findAll(int pageNum, int pageSize){
 //        String user=request.getParameter("username");
-        PageInfo<users> page=null;
+        PageInfo<Users> page=null;
         page=roleService.findAll(pageNum,pageSize);
         return page;
     }
@@ -45,20 +34,20 @@ public class RoleController {
         return row;
     }
     @RequestMapping("/updateInfo")
-    public int updateInfo(usersDto dto){
+    public int updateInfo(Users dto){
         int row=0;
         row=roleService.UpdateInfo(dto);
         return row;
     }
     @RequestMapping("/Insert")
-    public int Insert(usersDto dto){
+    public int Insert(Users dto){
         int row=0;
         row=roleService.Insert(dto);
         return row;
     }
     @RequestMapping("/Search")
-    public PageInfo<users> Search(int pageNum, int pageSize,usersDto dto){
-        PageInfo<users> page=null;
+    public PageInfo<Users> Search(int pageNum, int pageSize,Users dto){
+        PageInfo<Users> page=null;
         page=roleService.Search(pageNum,pageSize,dto);
         return page;
     }
