@@ -81,7 +81,7 @@
     {
         var itemDate = new Date(subject_obj.date)
         var subjectDate =timestampToTime(itemDate.getTime());
-        $("#id_info").html("题目编号:"+subject_obj.id)
+        $("#id_info").html("");
         $("#date_info").html("题目创建时间:"+subjectDate)
         $("#difficulty_info").html("题目难度等级:"+subject_obj.difficulty)
         $("#respondentCount_info").html("题目作答次数:"+subject_obj.respondentCount)
