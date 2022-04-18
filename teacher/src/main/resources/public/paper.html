@@ -64,16 +64,14 @@
     <div style="clear: both"></div>
 </div>
 <script>
-
-    var BarArr=[];
     function init(){
         var examId = sessionStorage.getItem("examId");
         var totalScore = sessionStorage.getItem("totalScore");
         var personNum = sessionStorage.getItem("personNum");
         var param={
-            "examId":13,
-            "totalScore":100,
-            "personNum":6
+            "examId":examId,
+            "totalScore":totalScore,
+            "personNum":personNum
         };
         console.log(param);
         console.log(personNum);
@@ -81,6 +79,7 @@
         var myChart = echarts.init(document.getElementById('pie'));
         // 指定图表的配置项和数据
         var option = {
+            backgroundColor:'#ffffff',
             title: {
                 text: '各分数段比例统计',
                 left: 'center',
@@ -88,7 +87,7 @@
                 top: 20,
                 //标题栏字体的颜色
                 textStyle: {
-                    color: 'rgb(0,0,0)'
+                    color: '#ccc'
                 }
             },
             tooltip: {

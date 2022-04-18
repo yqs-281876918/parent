@@ -81,16 +81,20 @@
 </div>
 <script>
     var Barlist;
-
+    $(() => {
+        $('#choose').change(() => {
+            init();
+        })
+    })
     function init(){
         var type=$("choose").val();
-        //var examId = sessionStorage.getItem("examId");
-        //var totalScore = sessionStorage.getItem("totalScore");
-        //var personNum = sessionStorage.getItem("personNum");
+        var examId = sessionStorage.getItem("examId");
+        var totalScore = sessionStorage.getItem("totalScore");
+        var personNum = sessionStorage.getItem("personNum");
         jQuery("#select_id").change(function(){});
 
         var param={
-            "examId":13,
+            "examId":examId,
             "type":type
         };
         var myChart = echarts.init(document.getElementById('pie'));
