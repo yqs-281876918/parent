@@ -1,6 +1,7 @@
 package org.mixed.exam.teacher.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.bank.api.pojo.po.Exam;
 import org.mixed.exam.bank.api.pojo.po.Question;
 import org.mixed.exam.bank.api.pojo.po.exam.Answer;
@@ -14,13 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.thymeleaf.spring5.context.IThymeleafBindStatus;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/analyse")
 public class AnalyseController {
@@ -29,12 +32,7 @@ public class AnalyseController {
     @RequestMapping("/findAll")
     public List<Exam> findAll(int classId){
         List<Exam> exams=analyseService.findAll(classId);
-//        for(int i=0;i<exams.size();i++){
-//            long time=exams.get(i).getStartTime();
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            String s=dateFormat.format(new Date(Long.parseLong(String.valueOf(time))));
-//
-//        }
+
         return exams;
     }
     @RequestMapping("/delete")
@@ -51,12 +49,13 @@ public class AnalyseController {
     }
     @RequestMapping("/count")
     public float[] count(Integer examId,Integer totalScore){
-        float[] count=new float[9];
+        float[] count=new float[10];
         float[] per=new float[5];
         count[0]=analyseService.count(examId);
         count[1]=analyseService.max(examId);
         count[2]=analyseService.min(examId);
         count[3]=analyseService.avg(examId);
+        count[9]=analyseService.realNum(examId);
         per=analyseService.percentage(examId,totalScore);
         int num=4;
         for(int i=0;i<per.length-1;i++){
@@ -114,7 +113,8 @@ public class AnalyseController {
     }
     //根据题目id查找题目描述
     @RequestMapping("/description")
-    public String getDescription(String subjectId){
+    public List<Question> getDescription(String subjectId){
+
         return analyseService.getDescription(subjectId);
     }
     //每道题答对的人数
@@ -123,7 +123,7 @@ public class AnalyseController {
         float right=analyseService.getsingleRight(examId,subjectId);
         float per= (float)( Math.round(right*100.0/total));
         float[] result={right,per};
-        System.out.println(result);
+        //System.out.println(result);
         return result;
     }
     //判断批阅是否完成
@@ -133,9 +133,17 @@ public class AnalyseController {
     }
 
     //详情
-    @RequestMapping("/ABCD")
+    @RequestMapping("/ABD")
     public int[] ABCD(String subjectId,Integer examId,String type){
+        System.out.println(subjectId);
+        System.out.println(type);
+        System.out.println(examId);
         return analyseService.ABCD(subjectId,examId,type);
+    }
+    //实际考试
+    @RequestMapping("/realNum")
+    public int realNum(Integer examId){
+        return analyseService.realNum(examId);
     }
 
 }

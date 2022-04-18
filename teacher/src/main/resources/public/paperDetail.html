@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>试题分析</title>
-
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
+    <meta name="MSSmartTagsPreventParsing" content="True" />
+    <meta http-equiv="MSThemeCompatible" content="Yes" />
+    <meta name="renderer" content="webkit"  />
+    <link href="https://itestres.unipus.cn/itest-saas/static/its/lib/sfront/student/css/stu_css.css?v=202203111833" rel="stylesheet">
+    <script src="js/bootstrap-table-expandable.js"></script>
 
     <style>
         .clsTest{
@@ -12,6 +22,12 @@
         }
         .h4{
             cursor: pointer;
+        }
+        #page_div #left{
+            float: left;
+        }
+        #page_div #right{
+            float: right;
         }
 
         unselectable {
@@ -36,56 +52,50 @@
     </style>
 
 </head>
+
+
 <body onload="init()">
-<!-- 新 Bootstrap4 核心 CSS 文件 -->
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <div class="outer">
-<div id="container">
-    <div class="h4" class="examContentTitle content examName" id="examName">的试题分析</div>
-    <div class="choose">
-        <div id="choose type" class="questionSelDept dropdown selDept pull-left dropdownBtn open">
-            <select id="choose" name="choose" class="form-control">
-                <option value="All" selected = "selected">全部题型</option>
-                <option value="SingleChoiceQuestion">单选题</option>
-                <option value="MultipleChoiceQuestion">多选题</option>
-                <option value="Completion">填空题</option>
-                <option value="Judgment">判断题</option>
-                <option value="ComprehensiveQuestion">综合题</option>
-                <option value="CombinationChoice">综合（组合）选择题</option>
-                <option value="ProgramProblem">程序题</option>
-            </select>
-        </div>
-    </div>
-    </br>
-    <div class="questionAnalysis">
-        <div id="data" style="margin-top: 20px">
-        </div>
-        <div id="page_div">
-            <div id="left">
-                <span id="pageNum"></span>/<span id="pages"></span>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                共<span id="totals"></span>道题目
-            </div>
-            <div id="right">
+    <div id="container">
+        <div class="h4" class="examContentTitle content examName" id="examName">的试题分析</div>
+            <div class="choose">
+                <div id="choose type" class="questionSelDept dropdown selDept pull-left dropdownBtn open">
+                    <select id="choose" name="choose" class="form-control">
+                        <option value="ALL" selected="selected">全部题型</option>
+                        <option value="singleChoiceQuestion">单选题</option>
+                        <option value="multipleChoiceQuestion">多选题</option>
+                        <option value="completion">填空题</option>
+                        <option value="judgment">判断题</option>
+                        <option value="comprehensiveQuestion">综合题</option>
+                        <option value="combinationChoice">综合（组合）选择题</option>
+                        <option value="programProblem">程序题</option>
+                    </select>
+                </div>
+             </div>
+        </br>
+        <div class="questionAnalysis">
+            <div id="data" style="margin-top: 20px"></div>
+            </br>
+                <div id="page_div">
+                    <div id="left">
+                        <span id="pageNum"></span>/<span id="pages"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp
+                        共<span id="totals"></span>道题目
+                    </div>
 
+                    <div id="right"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <script>
     var pageNum=1;
     var pageSize=10;
     var pageNums=0;
     var BarArr;
-    var type;
+    var type= 'ALL';
     var index;
 
     $(() => {
@@ -101,25 +111,26 @@
         jQuery("#examName").html(examName);
         var trs = '';
         console.log(type);
-        // var param={
-        //     "examId":examId, "type":type
-        // };
-        // console.log(param);
+
         jQuery.ajax({
             type: 'post',
             url: '/teacher/analyse/itemDetail',
             async: false,
             data: {"pageNum":pageNum, "pageSize":pageSize, "examId":examId, "type":type},
             success: function (rst) {
-                console.log(data);
+                pageNums=rst.pages;
+                jQuery("#pages").html(pageNums);
+                jQuery("#pageNum").html(pageNum);
+                jQuery("#totals").html(rst.total);
+                //console.log(data);
                 //返回的是目标题型题目列表
-                console.log(rst);
+                //console.log(rst);
                 BarArr = rst.list;
                 for (var i = 0; i < BarArr.length; i++) {
                     //每一道题
                     var u = BarArr[i];
                     var type1 = u.subjectType;
-                    console.log(type1);
+                    //console.log(type1);
                     if (type1 === "SingleChoiceQuestion") {
                         type1 = "单选题";
                     } else if (type1 === "MultipleChoiceQuestion") {
@@ -141,7 +152,9 @@
                         async: false,
                         data: {"subjectId": u.subjectId},
                         success: function (rst1) {
-                            console.log(rst1);
+                            console.log(rst1[0]);
+                            var introduction=rst1[0].introduction;
+                            var description=rst1[0].description;
                             jQuery.ajax({
                                 type: 'post',
                                 url: '/teacher/analyse/count',
@@ -156,40 +169,178 @@
                                         async: false,
                                         data: {"examId": examId, "subjectId": u.subjectId, "total": total},
                                         success: function (rst3) {
-                                            console.log(rst3);
+                                            //console.log(rst3);
                                             var arr1 = rst3;
-                                            console.log(arr1);
+                                            //console.log(arr1);
                                             var right = arr1[0];
                                             var percentage = arr1[1];
                                             jQuery.ajax({
                                                 type: 'post',
-                                                url: '/teacher/analyse/ABCD',
+                                                url: '/teacher/analyse/ABD',
                                                 async: false,
                                                 data: {"subjectId": u.subjectId, "examId": examId, "type": u.subjectType},
                                                 success: function (rst4) {
-                                                    if(u.subjectType.equals("SingleChoiceQuestion")){
+                                                    var arr4=rst4;
+                                                    console.log(rst4);
+                                                    if(u.subjectType==="singleChoiceQuestion"){
+                                                        console.log(1)
                                                         trs += `
 
 
 
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-header" id="heading${u.subjectId}">
                         <div style="display: inline-block">
-                        <h4 class="card-title">${rst1}</h4>
+                        <h7 class="card-title">${introduction}</h7>
+                        </div>
+
+                        <p class="card-text">题目类型：单选题</p>
+                        <p class="card-text">答题人数：${total}</p>
+                        <p class="card-text">答对人数：${right}</p>
+                        <p class="card-text">得分率：${percentage}%</p>
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                                <div>
+                                    查看详情
+                                </div>
+                            </button>
+                        </h2>
+
                     </div>
-                    <p class="card-text">题目类型：${type1}</p>
-                    <p class="card-text">答题人数：${total}</p>
-                    <p class="card-text">答对人数：${right}</p>
-                    <p class="card-text">得分率：${percentage}%</p>
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
-                        查看详情
-                    </button>
+
                     <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
                         <div class="card-body" id="${u.subjectId}">
-                                <li>A: ${rst[0]}</li>
+                           <div class="card-text">${description}</div>
+                                <ul>
+                                <li>A: ${arr4[0]}</li>
+                                <li>B: ${arr4[1]}</li>
+                                <li>C: ${arr4[2]}</li>
+                                <li>D: ${arr4[3]}</li>
+                                </ul>
+                         </div>
                         </div>
+                  </div>
+
+                </div>
+
+                `;
+                                                    }
+                                                    else if(u.subjectType==="multipleChoiceQuestion"){
+                                                        console.log(1)
+                                                        trs += `
+
+
+
+                <div class="card">
+                    <div class="card-header" id="heading${u.subjectId}">
+                        <div style="display: inline-block">
+                        <h7 class="card-title">${introduction}</h7>
+                        </div>
+                        <p class="card-text">题目类型：多选题</p>
+                        <p class="card-text">答题人数：${total}</p>
+                        <p class="card-text">答对人数：${right}</p>
+                        <p class="card-text">得分率：${percentage}%</p>
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                                <div>
+                                    查看详情
+                                </div>
+                            </button>
+                        </h2>
+
                     </div>
+
+                    <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
+                        <div class="card-body" id="${u.subjectId}">
+                           <div class="card-text">${description}</div>
+                                <ul>
+                                <li>A: ${arr4[0]}</li>
+                                <li>B: ${arr4[1]}</li>
+                                <li>C: ${arr4[2]}</li>
+                                <li>D: ${arr4[3]}</li>
+                                </ul>
+                         </div>
+                        </div>
+                  </div>
+
+                </div>
+
+                `;
+                                                    }
+                                                    else if(u.subjectType==="judgment"){
+                                                        console.log(1)
+                                                        trs += `
+
+
+
+                <div class="card">
+                    <div class="card-header" id="heading${u.subjectId}">
+                        <div style="display: inline-block">
+                        <h7 class="card-title">${introduction}</h7>
+                        </div>
+
+                        <p class="card-text">题目类型：判断题</p>
+                        <p class="card-text">答题人数：${total}</p>
+                        <p class="card-text">答对人数：${right}</p>
+                        <p class="card-text">得分率：${percentage}%</p>
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                                <div>
+                                    查看详情
+                                </div>
+                            </button>
+                        </h2>
+
                     </div>
+
+                    <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
+                        <div class="card-body" id="${u.subjectId}">
+                           <div class="card-text">${description}</div>
+                                <ul>
+                                <li>√: ${arr4[0]}</li>
+                                <li>×: ${arr4[1]}</li>
+                                </ul>
+                         </div>
+                        </div>
+                  </div>
+
+                </div>
+
+                `;
+                                                    }
+                                                        else{
+
+                                                            trs += `
+
+
+
+                <div class="card">
+                    <div class="card-header" id="heading${u.subjectId}">
+                        <div style="display: inline-block">
+                        <h7 class="card-title">${introduction}</h7>
+                        </div>
+
+                        <p class="card-text">题目类型：${type1}</p>
+                        <p class="card-text">答题人数：${total}</p>
+                        <p class="card-text">答对人数：${right}</p>
+                        <p class="card-text">得分率：${percentage}%</p>
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                                <div>
+                                    查看详情
+                                </div>
+                            </button>
+                        </h2>
+
+                    </div>
+
+                    <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
+                        <div class="card-body" id="${u.subjectId}">
+                           <div class="card-text">${description}</div>
+
+                         </div>
+                        </div>
+                  </div>
 
                 </div>
 

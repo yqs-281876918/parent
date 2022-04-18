@@ -129,7 +129,7 @@
             async: false,
             data: {'classId':classId},
             success: function (rst) {
-                console.log(rst)
+                //console.log(rst)
                 //alert(rst);
                 //1、查询查询的数据
                 var arrs = rst;
@@ -140,7 +140,6 @@
                     //考试id
                     var Date = u.startTime;
                     var Date1=timestampToTime(Date);
-                    console.log(Date1);
                     jQuery.ajax({
                         type: 'get',
                         url: '/teacher/analyse/finish',
@@ -166,8 +165,7 @@
                                 <a href="#" class="btn btn-outline-danger btn-sm"
                                     onclick="showDeleteDialog('${u.id}')">
                                     删除考试</a>
-                                <a href="#" class="btn btn-outline-success btn-sm"
-                                   onclick="analyse('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
+
                                 <a href="#" class="btn btn-outline-warning btn-sm"
                                    onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
                             </div>
@@ -249,8 +247,7 @@
                         "startTime": uu.startTime,
                         "testTime": uu.testTime,
                         "introduce": uu.introduce,
-                        "totalSCore": uu.totalScore,
-
+                        "totalSCore": uu.totalScore
                     };
                     window.sessionStorage.setItem("examName", param2.examName);
                     window.sessionStorage.setItem("startTime", param2.startTime);
@@ -396,15 +393,19 @@
 </script>
 <!--搜索结束-->
 <script>
-    function analyse(id,examName,startTime,testTime,totalScore){
-        sessionStorage.setItem("id",id);
+    function analyse(id,examName,startTime,testTime,endTime,totalScore){
+        console.log(id,totalScore);
+        find(id);
+        window.sessionStorage.setItem("id",id);
         sessionStorage.setItem("examName",examName);
         sessionStorage.setItem("startTime",startTime);
         sessionStorage.setItem("testTime",testTime);
-        sessionStorage.setItem("totalScore",totalScore);
+        window.sessionStorage.setItem("totalScore",totalScore);
+        sessionStorage.setItem("endTime",endTime);
         window.location.href="analyse.html";
     }
     function review(id,examName,startTime,testTime,totalScore){
+        find(id);
         sessionStorage.setItem("id",id);
         sessionStorage.setItem("examName",examName);
         sessionStorage.setItem("startTime",startTime);

@@ -61,9 +61,10 @@
 <div class="outer">
     <div id="container">
         <div id="top">
-            <button type="button"
-                    class="btn btn-default "
-                    onclick="table(examId)">导出成绩单</button>
+            <a class="download" href="./teacher/excel/export">导出成绩单</a>
+<!--            <button type="button"-->
+<!--                    class="btn btn-default "-->
+<!--                    onclick="table()">导出成绩单</button>-->
         </div>
         <div id="middle">
             <form id="Form">
@@ -128,17 +129,7 @@
     })
 
 </script>
-<script>
-    function table(examId){
-        var param={
-            "examId":examId
-        };
-        jQuery.post("excel/export/{id}",param,function (rst){
 
-        })
-    }
-
-</script>
 
 
 </body>
