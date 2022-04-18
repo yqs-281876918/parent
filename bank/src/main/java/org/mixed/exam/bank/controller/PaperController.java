@@ -29,7 +29,7 @@ public class PaperController {
     public String addPaper(@RequestParam("foreWord") String foreWord,
                            @RequestParam("subjectIDs") List<String> subjectIDs,
                            @RequestParam("courseID") String courseID,
-                           @RequestParam("difficulty") Integer difficulty,
+                           @RequestParam("difficulty") Double difficulty,
                            @CookieValue("token")String token){
         Paper paper=new Paper();
         paper.setForeWord(foreWord);

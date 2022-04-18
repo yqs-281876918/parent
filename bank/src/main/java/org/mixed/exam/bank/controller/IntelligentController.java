@@ -4,6 +4,7 @@ import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.bank.dao.PaperDao;
 import org.mixed.exam.bank.pojo.dto.IntelligentParam;
 import org.mixed.exam.bank.pojo.po.Paper;
+import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.service.IntelligentService;
 import org.mixed.exam.bank.service.PaperService;
 import org.mixed.exam.bank.util.SubjectUtil;
@@ -48,7 +49,15 @@ public class IntelligentController
             distribution.put(type,Integer.valueOf(strings[0]));
         }
         param.setDistribution(distribution);
-        List<String> subjectIDs = intelligentService.build(param);
+        List<Question> subjects = intelligentService.build(param);
+        double diff=0;
+
+        List<String> subjectIDs = new ArrayList<>();
+        for(Question q : subjects){
+            diff+=q.getDifficulty();
+            subjectIDs.add(q.getId());
+        }
+        paper.setDifficulty(diff/subjects.size());
         paper.setSubjectIDs(subjectIDs);
         paperDao.add(paper);
         return "200";

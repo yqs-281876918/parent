@@ -10,7 +10,7 @@ public class PaperItem
 {
     private String id;
     private String foreWord;//前言
-    private Integer difficulty=-1;//试卷难度
+    private Double difficulty=-1.0;//试卷难度
     private Date date=new Date();//试卷创建时间
     private String creator;//创建人
     public PaperItem(){}

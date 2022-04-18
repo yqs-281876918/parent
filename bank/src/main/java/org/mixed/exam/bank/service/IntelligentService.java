@@ -156,7 +156,7 @@ public class IntelligentService
     private static int INIT_INDIVIDUAL_SIZE=100;
     private static int GENERATION_COUNT=200;
     //构建试卷
-    public List<String> build(IntelligentParam param) {
+    public List<Question> build(IntelligentParam param) {
         initSubjectInfo(param);
         List<Individual> individuals = new ArrayList<>();
         initIndividual(individuals, INIT_INDIVIDUAL_SIZE);
@@ -176,7 +176,7 @@ public class IntelligentService
             variation(individuals,0.05,0.2);//变异
             cross(individuals,INIT_INDIVIDUAL_SIZE-individuals.size());
         }
-        List<String> ans = new ArrayList<>();
+        List<Question> ans = new ArrayList<>();
         Individual best = individuals.get(individuals.size()-1);
         Map<String,Integer> distribution = new HashMap<>();
         for(String type : param.getDistribution().keySet()){
@@ -191,7 +191,7 @@ public class IntelligentService
                 continue;
             }
             if(distribution.get(q.getType())>0){
-                ans.add(q.getId());
+                ans.add(q);
                 distribution.put(q.getType(),distribution.get(q.getType())-1);
             }
         }
