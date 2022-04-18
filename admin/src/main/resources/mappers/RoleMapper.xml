@@ -36,16 +36,16 @@
 
     </update>
 
-    <select id="findAll" resultType="org.mixed.exam.admin.pojo.dto.usersDto">
+    <select id="findAll" resultType="org.mixed.exam.auth.api.po.Users">
         SELECT
-            username,realName,role,email,telephone
+            *
         from users
 
     </select>
     <select id="Search"
-            resultType="org.mixed.exam.admin.pojo.po.users"
+            resultType="org.mixed.exam.auth.api.po.Users"
             parameterType="org.mixed.exam.admin.pojo.dto.usersDto">
-        SELECT username,realName,role
+        SELECT *
         from users
         <where>
             <if test="username!=null and username!=''">

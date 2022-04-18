@@ -674,6 +674,7 @@
             "pageNum":pageNum,
             "pageSize":pageSize,
         }
+        console.log(data)
         jQuery.post("/admin/Role/Search", data, function (rst) {
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
@@ -703,6 +704,7 @@
                         <td onclick="gotorole('${u.username}'))">${u.role}</td>
                         <td onclick="gotorole('${u.username}'))">${u.email}</td>
                         <td onclick="gotorole('${u.username}'))">${u.telephone}</td>
+                        <td>
                             <a href="javascript:void(0)"
                             onclick="showDeleteDialog('${u.username}')">删除</a>
                         <a href="javascript:void(0)"
@@ -729,7 +731,7 @@
                     nav+=`
             <li class="page-item ${pageNum==nums[i]?'active':''}">
                                     <a href="javascript:void(0)" class="page-link"
-                                    onclick="searchPageUtil(${nums[i]})>${nums[i]}</a>
+                                    onclick="searchPageUtil(${nums[i]})">${nums[i]}</a>
                                 </li>
 
             `;

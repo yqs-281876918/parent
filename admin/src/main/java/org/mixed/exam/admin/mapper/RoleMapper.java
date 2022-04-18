@@ -2,14 +2,14 @@ package org.mixed.exam.admin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.mixed.exam.admin.pojo.dto.usersDto;
-import org.mixed.exam.admin.pojo.po.users;
+import org.mixed.exam.auth.api.po.Users;
 
 import java.util.List;
 
 @Mapper
 public interface RoleMapper {
     //查找
-    List<users> findAll();
+    List<Users> findAll();
     //批量删除
     int updateMul(String[] users);
     //单个删除
@@ -19,7 +19,7 @@ public interface RoleMapper {
     //添加
     int Insert(usersDto dto);
     //搜索
-    List<users> Search(usersDto dto);
+    List<Users> Search(usersDto dto);
 
 
 }
