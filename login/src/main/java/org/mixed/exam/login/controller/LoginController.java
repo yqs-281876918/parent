@@ -1,14 +1,15 @@
 package org.mixed.exam.login.controller;
 
 import org.mixed.exam.auth.api.AuthUtil;
+import org.mixed.exam.auth.api.po.Users;
+import org.mixed.exam.login.dao.LoginMapper;
 import org.mixed.exam.login.service.AuthService;
 import org.mixed.exam.login.util.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,20 @@ public class LoginController
 {
     @Autowired
     private AuthService authService;
+    @Autowired
+    private LoginMapper loginMapper;
+    @PostMapping("/reg")
+    public String reg_submit(String username,String password1,String password2){
+        List<Users> users = loginMapper.findUsers(username);
+        if(users!=null&&users.size()>0){
+            return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/login/error/reg_failure.html");
+        }
+        if(!password1.equals(password2)){
+            return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/login/error/reg_failure.html");
+        }
+        loginMapper.insertUser(username,(new BCryptPasswordEncoder()).encode(password1));
+        return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/login/sign_in");
+    }
     @GetMapping("/reg")
     public String reg()
     {
