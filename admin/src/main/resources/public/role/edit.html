@@ -266,8 +266,8 @@
                                 <select id="sle" name="userRole"
                                         class="form-control">
                                     <option name="userRole" value="adm">管理员</option>
-                                    <option name="userRole" value="tea1">高级教师</option>
-                                    <option name="userRole" value="tea2">普通教师</option>
+                                    <option name="userRole" value="tea1">普通教师</option>
+                                    <option name="userRole" value="tea2">高级教师</option>
                                     <option name="userRole" value="stu">学生</option>
                                 </select>
                             </div>
@@ -663,6 +663,10 @@
         jQuery("#searchDialog").modal('show');
     }
     $("#search-btn").on("click",function () {
+        pageNum = 1
+        searchInit()
+    })
+    function searchInit(){
         var data = {
             "username": $("#name").val(),
             "realName": $("#rn").val(),
@@ -670,6 +674,7 @@
             "pageNum":pageNum,
             "pageSize":pageSize,
         }
+        console.log(data)
         jQuery.post("/admin/Role/Search", data, function (rst) {
             pageNums=rst.pages;
             jQuery("#pages").html(pageNums);
@@ -699,6 +704,7 @@
                         <td onclick="gotorole('${u.username}'))">${u.role}</td>
                         <td onclick="gotorole('${u.username}'))">${u.email}</td>
                         <td onclick="gotorole('${u.username}'))">${u.telephone}</td>
+                        <td>
                             <a href="javascript:void(0)"
                             onclick="showDeleteDialog('${u.username}')">删除</a>
                         <a href="javascript:void(0)"
@@ -718,13 +724,14 @@
         <ul class="pagination">
                              <li class="page-item">
                                     <a href="javascript:void(0)" class="page-link"
-                                    onclick="pageUtil(${pageNum-1})">上一页</a>
+                                    onclick="searchPageUtil(${pageNum-1})">上一页</a>
                                 </li>
                                 `;
                 for(var i=0;i<nums.length;i++){
                     nav+=`
             <li class="page-item ${pageNum==nums[i]?'active':''}">
-                                    <a href="javascript:void(0)" class="page-link">${nums[i]}</a>
+                                    <a href="javascript:void(0)" class="page-link"
+                                    onclick="searchPageUtil(${nums[i]})">${nums[i]}</a>
                                 </li>
 
             `;
@@ -733,7 +740,7 @@
                 nav+=`
                                 <li class="page-item">
                                     <a href="javascript:void(0)" class="page-link"
-                                    onclick="pageUtil(${pageNum+1})">下一页</a>
+                                    onclick="searchPageUtil(${pageNum+1})">下一页</a>
                                 </li>
                             </ul>
         `;
@@ -746,7 +753,7 @@
             }
 
         });
-    })
+    }
 </script>
 
 <!--判断页面是否越界-->
@@ -761,6 +768,16 @@
         }
         pageNum=num;
         init();
+    }
+    function searchPageUtil(num) {
+        if(num<=1){
+            num=1;
+        }
+        if(num>=pageNums){
+            num=pageNums;
+        }
+        pageNum=num;
+        searchInit()
     }
 
 </script>
