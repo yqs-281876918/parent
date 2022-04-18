@@ -67,9 +67,9 @@ public class LoginController
                 return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/admin/index.html");
             case "ROLE_tea1":
             case "ROLE_tea2":
-                return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/teacher/personal/"+userName);
+                return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/teacher/index");
             default:
-                return "";
+                return HttpUtil.buildRedirectUrl(HttpUtil.getGatewayHostPort(),"/student/class/index.html");
         }
     }
 }

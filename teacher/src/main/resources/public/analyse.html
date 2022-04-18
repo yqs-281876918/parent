@@ -123,22 +123,24 @@
         </div>
         </br>
         <div class="dhl">
-            <div class="nav2">
-                <a  href="#">饼图</a>
-            </div>
-            <div class="nav2">
-                <a href="paper.html" target="main">总分分数段</a>
-            </div>
-            <div class="nav2">
-                <a href="single.html" target="main">分题型统计</a>
-            </div>
+            <li class="nav2">
+                <a  href="pie.html" target="mainScore">饼图</a>
+            </li>
+            <li class="nav2">
+                <a href="paper.html" target="mainScore">总分分数段</a>
+            </li>
+            <li class="nav2">
+                <a href="single.html" target="mainScore">分题型统计</a>
+            </li>
 
         </div>
 
         <div id="bottom">
             <iframe src="pie.html"
-                    width=700px height=700px frameborder="no"
-                    name="main"></iframe>
+                    width="100%" height="100%"
+                    frameborder="no"
+                    name="mainScore"
+            ></iframe>
         </div>
 
     </div>
@@ -152,7 +154,6 @@
     var personNum;
     function init() {
         var examId = sessionStorage.getItem("id");
-        var classId = sessionStorage.getItem("classId");
         var examName = sessionStorage.getItem("examName");
         var startTime = sessionStorage.getItem("startTime");
         var testTime = sessionStorage.getItem("testTime");
