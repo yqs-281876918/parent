@@ -141,7 +141,7 @@
 
 <script>
     var Barlist=[];
-    var Arr=[];
+    var Arr;
     var BarArr;
     var personNum;
     function init() {
@@ -158,11 +158,11 @@
         jQuery("#examTotalScore").html(totalScore);
         jQuery("#passMark").html(totalScore * 0.6);
 
-
         var param = {
             "examId": examId,
             "totalScore": totalScore
         };
+
         //console.log(param);
 
         var max;
