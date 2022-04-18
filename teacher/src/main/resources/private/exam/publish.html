@@ -165,14 +165,14 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>类型</th>
+                        <th>描述</th>
                         <th>难度</th>
                         <th>分数</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="item,itemStat : ${subjects}">
-                        <td th:text="${item.type}"></td>
+                        <td th:text="${item.introduction}"></td>
                         <td th:text="${item.difficulty}"></td>
                         <td>
                             <input name="scoreList" type="text" class="form-control">
