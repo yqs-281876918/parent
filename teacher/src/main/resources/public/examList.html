@@ -46,78 +46,78 @@
 <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <div class="outer">
-<!-- 批量选择删除的提示框 -->
-<div class="modal" id="delMulDialog" tabindex="-1">
-    <div class="modal-dialog ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">提示</h5>
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="alert alert-warning" role="alert">
-                您确定要删除选中的考试吗？
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        onclick="doDeleteMul()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 删除模态框结束 -->
-<!--搜索模态框开始-->
-<div class="modal fade" id="searchDialog" tabindex="-1" >
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">搜索考试场次</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="search-Form">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">考试名称</span>
-                        </div>
-                        <div class="row-8">
-                            <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
-                        </div>
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </div>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
-                        </div>
-                        <div class="row-8">
-                            <input id="start-Date" name="date" type="date"/>
-                        </div>
-                    </div>
-                    <div id="search">
-                        <button type="button"
-                                class="btn btn-primary"
-                                onclick="doSearch()">搜索考试</button>
-                    </div>
-                </form>
+    <!-- 批量选择删除的提示框 -->
+    <div class="modal" id="delMulDialog" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">提示</h5>
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    您确定要删除选中的考试吗？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="doDeleteMul()">确定</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--搜索模态框结束-->
-
-<div id="test-con">
-    <div class="now-his">
-        <a  class="now select">历史考试</a>
+    <!-- 删除模态框结束 -->
+    <!--搜索模态框开始-->
+    <div class="modal fade" id="searchDialog" tabindex="-1" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">搜索考试场次</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="search-Form">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">考试名称</span>
+                            </div>
+                            <div class="row-8">
+                                <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
+                            </div>
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
+                            </div>
+                            <div class="row-8">
+                                <input id="start-Date" name="date" type="date"/>
+                            </div>
+                        </div>
+                        <div id="search">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onclick="doSearch()">搜索考试</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="clear"></div>
+    <!--搜索模态框结束-->
 
-    <div id="container"></div>
-</div>
+    <div id="test-con">
+        <div class="now-his">
+            <a  class="now select">历史考试</a>
+        </div>
+        <div class="clear"></div>
+
+        <div id="container"></div>
+    </div>
 </div>
 <script>
 
@@ -158,7 +158,7 @@
                         <div class="card-body">
                             <div style="display: inline-block;">
                                 <h4 class="card-title">
-                                    <a href="#" onclick="find('${u.id}')">
+                                    <a href="#" onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">
                                      ${u.examName}</a>
                                 </h4>
                              </div>
@@ -166,15 +166,14 @@
                                 <a href="#" class="btn btn-outline-danger btn-sm"
                                     onclick="showDeleteDialog('${u.id}')">
                                     删除考试</a>
-                                <a href="#" class="btn btn-outline-success btn-sm"
-                                   onclick="find('${u.id}')">查看成绩分析</a>
+
                                 <a href="#" class="btn btn-outline-warning btn-sm"
                                    onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
                             </div>
                         </div>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">开始时间：${Date1}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">测试时间：${u.testTime}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">总分：${u.totalScore}</p>
+                        <p class="card-text" style="padding-left: 10px">开始时间：${Date1}</p>
+                        <p class="card-text" style="padding-left: 10px" >测试时间：${u.testTime}分钟</p>
+                        <p class="card-text" style="padding-left: 10px" >总分：${u.totalScore}分</p>
                         <a href="#" class="btn btn-outline-danger btn-sm" style="padding-left: 10px">批阅进度：${finish}</a>
 
                     </div>
@@ -189,7 +188,7 @@
                         <div class="card-body">
                             <div style="display: inline-block;">
                                 <h4 class="card-title">
-                                    <a href="#" onclick="find('${u.id}')">
+                                    <a href="#" onclick="analyse('${u.id}','${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">
                                      ${u.examName}</a>
                                 </h4>
                              </div>
@@ -198,15 +197,14 @@
                                     onclick="showDeleteDialog('${u.id}')">
                                     删除考试</a>
                                 <a href="#" class="btn btn-outline-success btn-sm"
-                                   onclick="find('${u.id}')">查看成绩分析</a>
+                                   onclick="analyse('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
 
                             </div>
                         </div>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">开始时间：${Date1}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">测试时间：${u.testTime}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">总分：${u.totalScore}</p>
+                        <p class="card-text" style="padding-left: 10px" >开始时间：${Date1}</p>
+                        <p class="card-text" style="padding-left: 10px" >测试时间：${u.testTime} 分钟</p>
+                        <p class="card-text" style="padding-left: 10px" >总分：${u.totalScore} 分</p>
                         <a href="#" class="btn btn-outline-success btn-sm" style="padding-left: 10px">批阅进度：${finish}</a>
-
 
                     </div>
                             `
@@ -226,46 +224,46 @@
 </script>
 <!--find-->
 <script>
-    function find(id){
-        // var param={
-        //     "pageNum":pageNum,
-        //     "pageSize":pageSize,
-        //     "id":id
-        // };
-        console.log(id);
-        jQuery.ajax({
-            type:'post',
-            url:'/teacher/analyse/findAll',
-            async:false,
-            data:{'classId':id},
-            success:function (rst) {
-                console.log(rst);
-                var ar = rst;
-                var uu;
-                for (var i = 0; i < ar.length; i++) {
-                    uu = ar[i];
-                    var param2 = {
-                        "id": uu.id,
-                        "examName": uu.examName,
-                        "startTime": uu.startTime,
-                        "testTime": uu.testTime,
-                        "introduce": uu.introduce,
-                        "totalSCore": uu.totalScore,
-
-                    };
-                    window.sessionStorage.setItem("examName", param2.examName);
-                    window.sessionStorage.setItem("startTime", param2.startTime);
-                    window.sessionStorage.setItem("testTime", param2.testTime);
-                    window.sessionStorage.setItem("introduce", param2.introduce);
-                    window.sessionStorage.setItem("totalScore", param2.totalSCore);
-                    window.location.href="analyse.html";
-
-                }
-            }
-
-        })
-
-    }
+    // function find(id){
+    //     // var param={
+    //     //     "pageNum":pageNum,
+    //     //     "pageSize":pageSize,
+    //     //     "id":id
+    //     // };
+    //     console.log(id);
+    //     jQuery.ajax({
+    //         type:'post',
+    //         url:'/teacher/analyse/findAll',
+    //         async:false,
+    //         data:{'classId':id},
+    //         success:function (rst) {
+    //             console.log(rst);
+    //             var ar = rst;
+    //             var uu;
+    //             for (var i = 0; i < ar.length; i++) {
+    //                 uu = ar[i];
+    //                 var param2 = {
+    //                     "id": uu.id,
+    //                     "examName": uu.examName,
+    //                     "startTime": uu.startTime,
+    //                     "testTime": uu.testTime,
+    //                     "introduce": uu.introduce,
+    //                     "totalSCore": uu.totalScore,
+    //
+    //                 };
+    //                 window.sessionStorage.setItem("examName", param2.examName);
+    //                 window.sessionStorage.setItem("startTime", param2.startTime);
+    //                 window.sessionStorage.setItem("testTime", param2.testTime);
+    //                 window.sessionStorage.setItem("introduce", param2.introduce);
+    //                 window.sessionStorage.setItem("totalScore", param2.totalSCore);
+    //                 window.location.href="analyse.html";
+    //
+    //             }
+    //         }
+    //
+    //     })
+    //
+    // }
 
     function timestampToTime(timestamp) {
         var date = new Date(timestamp);
@@ -280,8 +278,6 @@
         return strDate;
 
     }
-
-
 </script>
 <!--删除-->
 <!--showDeleteMulDialog-->
@@ -432,7 +428,7 @@
     }
 
 </script>
-</div>
+
 </body>
 
 </html>

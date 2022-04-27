@@ -13,7 +13,7 @@
     <meta http-equiv="MSThemeCompatible" content="Yes" />
     <meta name="renderer" content="webkit"  />
     <link href="https://itestres.unipus.cn/itest-saas/static/its/lib/sfront/student/css/stu_css.css?v=202203111833" rel="stylesheet">
-    <script src="js/bootstrap-table-expandable.js"></script>
+<!--    <script src="js/bootstrap-table-expandable.js"></script>-->
 
     <style>
         .clsTest{
@@ -73,7 +73,7 @@
                     </select>
                 </div>
              </div>
-        </br>
+            </br>
         <div class="questionAnalysis">
             <div id="data" style="margin-top: 20px"></div>
             </br>
@@ -95,7 +95,7 @@
     var pageSize=10;
     var pageNums=0;
     var BarArr;
-    var type= 'ALL';
+    var type;
     var index;
 
     $(() => {
@@ -111,6 +111,9 @@
         jQuery("#examName").html(examName);
         var trs = '';
         console.log(type);
+        console.log(examId);
+        console.log(examName);
+        console.log(totalScore);
 
         jQuery.ajax({
             type: 'post',
@@ -118,6 +121,7 @@
             async: false,
             data: {"pageNum":pageNum, "pageSize":pageSize, "examId":examId, "type":type},
             success: function (rst) {
+                console.log(rst);
                 pageNums=rst.pages;
                 jQuery("#pages").html(pageNums);
                 jQuery("#pageNum").html(pageNum);
@@ -181,46 +185,63 @@
                                                 data: {"subjectId": u.subjectId, "examId": examId, "type": u.subjectType},
                                                 success: function (rst4) {
                                                     var arr4=rst4;
+                                                    var per1= Math.round(arr4[0]*100.0/total);
                                                     console.log(rst4);
                                                     if(u.subjectType==="singleChoiceQuestion"){
                                                         console.log(1)
                                                         trs += `
 
-
-
                 <div class="card">
-                    <div class="card-header" id="heading${u.subjectId}">
-                        <div style="display: inline-block">
-                        <h4 class="card-title">${introduction}</h4>
+                    <div class="card-header">
+                            <input type="hidden" value="${u.subjectId}">
+                    </div>
+                    <div class="card-body">
+                        <div style="display: inline-block;">
+                            <h4 class="card-title">${introduction}</h4>
                         </div>
-                        <p class="card-text">题目类型：单选题</p>
-                        <p class="card-text">答题人数：${total}</p>
-                        <p class="card-text">答对人数：${right}</p>
-                        <p class="card-text">得分率：${percentage}%</p>
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
-                                <div>
-                                    查看详情
-                                </div>
-                            </button>
-                        </h2>
-
+                    </div>
+                    <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">题目类型：单选题</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">得分率：${percentage}%</p>
+                            </div>
+                    </div>
+                    <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">答题人数：${total}</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">答对人数：${right}</p>
+                            </div>
                     </div>
 
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                            <div>
+                                    查看详情
+                            </div>
+                        </button>
+                    </h2>
                     <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
                         <div class="card-body" id="${u.subjectId}">
                            <div class="card-text">${description}</div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${per1}%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
                                 <ul>
                                 <li>选择A的人数: ${arr4[0]}</li>
                                 <li>选择B的人数: ${arr4[1]}</li>
                                 <li>选择C的人数: ${arr4[2]}</li>
                                 <li>选择D的人数: ${arr4[3]}</li>
                                 </ul>
-                         </div>
+                           </div>
                         </div>
-                  </div>
-
+                    </div>
                 </div>
+
+
 
                 `;
                                                     }
@@ -230,25 +251,38 @@
 
 
 
-                <div class="card">
-                    <div class="card-header" id="heading${u.subjectId}">
-                        <div style="display: inline-block">
-                        <h7 class="card-title">${introduction}</h7>
-                        </div>
-                        <p class="card-text">题目类型：多选题</p>
-                        <p class="card-text">答题人数：${total}</p>
-                        <p class="card-text">答对人数：${right}</p>
-                        <p class="card-text">得分率：${percentage}%</p>
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
-                                <div>
-                                    查看详情
-                                </div>
-                            </button>
-                        </h2>
-
+               <div class="card">
+                    <div class="card-header">
+                            <input type="hidden" value="${u.subjectId}">
                     </div>
-
+                    <div class="card-body">
+                        <div style="display: inline-block;">
+                            <h4 class="card-title">${introduction}</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">题目类型：多选题</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">得分率：${percentage}%</p>
+                            </div>
+                    </div>
+                    <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">答题人数：${total}</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">答对人数：${right}</p>
+                            </div>
+                    </div>
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
+                            <div>
+                                    查看详情
+                            </div>
+                        </button>
+                    </h2>
                     <div id="collapse${u.subjectId}" class="collapse" aria-labelledby="heading${u.subjectId}" data-parent="#accordionExample">
                         <div class="card-body" id="${u.subjectId}">
                            <div class="card-text">${description}</div>
@@ -258,10 +292,9 @@
                                 <li>选择C的人数: ${arr4[2]}</li>
                                 <li>选择D的人数: ${arr4[3]}</li>
                                 </ul>
-                         </div>
+                           </div>
                         </div>
-                  </div>
-
+                    </div>
                 </div>
 
                 `;
@@ -278,10 +311,22 @@
                         <h7 class="card-title">${introduction}</h7>
                         </div>
 
-                        <p class="card-text">题目类型：判断题</p>
-                        <p class="card-text">答题人数：${total}</p>
-                        <p class="card-text">答对人数：${right}</p>
-                        <p class="card-text">得分率：${percentage}%</p>
+                        <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">题目类型：判断题</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">得分率：${percentage}%</p>
+                            </div>
+                    </div>
+                    <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">答题人数：${total}</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">答对人数：${right}</p>
+                            </div>
+                    </div>
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
                                 <div>
@@ -319,10 +364,22 @@
                         <h7 class="card-title">${introduction}</h7>
                         </div>
 
-                        <p class="card-text">题目类型：${type1}</p>
-                        <p class="card-text">答题人数：${total}</p>
-                        <p class="card-text">答对人数：${right}</p>
-                        <p class="card-text">得分率：${percentage}%</p>
+                        <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">题目类型：${type1}</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">得分率：${percentage}%</p>
+                            </div>
+                    </div>
+                    <div class="col-sm-4">
+                            <div class="form-row">
+                                <p class="card-text">答题人数：${total}</p>
+                            </div>
+                            <div class="form-row">
+                                <p class="card-text">答对人数：${right}</p>
+                            </div>
+                    </div>
                         <h2 class="mb-0">
                             <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse${u.subjectId}" aria-expanded="false" aria-controls="collapse${u.subjectId}">
                                 <div>
