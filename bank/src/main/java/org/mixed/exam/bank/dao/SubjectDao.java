@@ -152,6 +152,17 @@ public class SubjectDao
         return items;
     }
 
+    public List<SubjectItem> getUnVerifySubjectItemsByType(String type){
+        Query query = Query.query(Criteria.where("isExamined").is(false).and("type").is(type));
+        List<Question> questions =  mongoTemplate.find(query,Question.class,DOCUMENT_NAME);
+        List<SubjectItem> items= new ArrayList<>();
+        for(Question q : questions)
+        {
+            items.add(new SubjectItem(q));
+        }
+        return items;
+    }
+
     public void deleteSubject(String id){
         Query query=new Query(Criteria.where("id").is(id));
         mongoTemplate.remove(query,Question.class,DOCUMENT_NAME);

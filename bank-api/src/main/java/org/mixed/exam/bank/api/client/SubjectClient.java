@@ -58,4 +58,8 @@ public interface SubjectClient
     @ResponseBody
     @GetMapping("bank/subject/un-verify")
     List<SubjectItem> getUnVerifySubjectItems();
+
+    @ResponseBody
+    @GetMapping("bank/subject/un-verify-type")
+    List<SubjectItem> getUnVerifySubjectItemsByType(@RequestParam("type") String type);
 }
