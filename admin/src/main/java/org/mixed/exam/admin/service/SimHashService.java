@@ -224,6 +224,7 @@ public class SimHashService {
         String regEx_script = "<script[^>]*?>[\\s\\S]*?<\\/script>"; // script的正则表达式
         String regEx_style = "<style[^>]*?>[\\s\\S]*?<\\/style>"; // style的正则表达式
         String regEx_html = "<[^>]+>"; // HTML标签的正则表达式
+        String regEx_nbsp = "nbsp";
         // 过滤script标签
         Pattern p_script = Pattern.compile(regEx_script, Pattern.CASE_INSENSITIVE);
         Matcher m_script = p_script.matcher(htmlStr);
@@ -236,6 +237,10 @@ public class SimHashService {
         Pattern p_html = Pattern.compile(regEx_html, Pattern.CASE_INSENSITIVE);
         Matcher m_html = p_html.matcher(htmlStr);
         htmlStr = m_html.replaceAll("");
+        //过滤nbsp
+        Pattern p_nbsp = Pattern.compile(regEx_nbsp, Pattern.CASE_INSENSITIVE);
+        Matcher m_nbsp = p_nbsp.matcher(htmlStr);
+        htmlStr = m_nbsp.replaceAll("");
         return htmlStr;
     }
 
