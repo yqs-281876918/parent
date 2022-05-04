@@ -43,6 +43,19 @@
 <body>
 <div class="outer">
     <div class="container">
+        <div id="head">
+            题目类型：
+            <select id="small-question-type" onchange="selectChange()">
+                <option value="null">全部</option>
+                <option value="singleChoiceQuestion">单选题</option>
+                <option value="multipleChoiceQuestion">多选题</option>
+                <option value="completion">填空题</option>
+                <option value="judgment">判断题</option>
+                <option value="comprehensiveQuestion">综合题</option>
+                <option value="programProblem">程序题</option>
+                <option value="combinationChoice">组合选择题</option>
+            </select>
+        </div>
         <div id="middle">
             <form id="Form">
                 <table class="table table-bordered table-hover table-striped">
@@ -203,6 +216,97 @@
         // var m = date.getMinutes() + ':';
         // var s = date.getSeconds();
         return Y+M+D;
+    }
+</script>
+<script>
+    function selectChange() {
+        var typ=$("#small-question-type option:selected").val();
+        if(typ=='null'){
+            init();
+        }else {
+            var param={
+                "pageNum":pageNum,
+                "pageSize":pageSize,
+                'type':typ
+            };
+            jQuery.post("/admin/verify/listByType",param,function (rst) {
+                pageNums=rst.pages;
+                jQuery("#pages").html(pageNums);
+                jQuery("#pageNum").html(pageNum);
+                jQuery("#totals").html(rst.total);
+                //把查询的数据显示的表格tbody位置
+                //1.获取查询的数据
+                var arrs=rst.list;
+                var trs='';
+                for(var i=0;i<arrs.length;i++)
+                {
+                    //获取每一行对应的用户对象
+                    var item=arrs[i];
+                    var itemType = '';
+                    if (item.type=='singleChoiceQuestion'){
+                        itemType = '单选题'
+                    }else if (item.type=='multipleChoiceQuestion'){
+                        itemType = '多选题'
+                    }else if (item.type=='completion'){
+                        itemType = '填空题'
+                    }else if (item.type=='judgment'){
+                        itemType = '判断题'
+                    }else if (item.type=='combinationChoice'){
+                        itemType = '组合选择题'
+                    }else if (item.type=='comprehensiveQuestion'){
+                        itemType = '综合题'
+                    }else {
+                        itemType = '程序题'
+                    }
+                    var itemDate = new Date(item.date)
+                    var subjectDate =timestampToTime(itemDate.getTime());
+                    //循环一次，在页面中产生一行数据
+                    //使用反引号，用于定义模板
+                    trs+=`
+                         <tr>
+                            <td>${itemType}</td>
+                            <td>${item.introduction}</td>
+                            <td>${subjectDate}</td>
+                            <td>${item.difficulty}</td>
+                            <td>
+                                <a href="javascript:void(0)" class="btn btn-primary"
+                                    onclick="showSubjectDetail('${item.id}')">审核</a>
+                            </td>
+                        </tr>
+                    `;
+                }
+                //把根据数据构建的tr添加到表格中
+                jQuery("#data").html(trs);
+                //=======================
+                //设置页码
+                var nums=rst.navigatepageNums;
+                var nav=`
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a href="javascript:void(0)" class="page-link"
+                            onclick="pageUtil(${pageNum-1})">上一页</a>
+                    </li>
+                   `;
+                //循环读取页码
+                for(var i=0;i<nums.length;i++)
+                {
+                    nav+=`
+                        <li class="page-item ${pageNum==nums[i]?'active':''}">
+                            <a href="javascript:void(0)" class="page-link"
+                                onclick="pageUtil(${nums[i]})">${nums[i]}</a>
+                        </li>
+                    `;
+                }
+                nav+=`
+                    <li class="page-item">
+                        <a href="javascript:void(0)" class="page-link"
+                            onclick="pageUtil(${pageNum+1})">下一页</a>
+                    </li>
+                </ul>
+            `;
+                jQuery("#right").html(nav);
+            })
+        }
     }
 </script>
 </body>

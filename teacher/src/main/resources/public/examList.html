@@ -46,78 +46,78 @@
 <!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <div class="outer">
-<!-- 批量选择删除的提示框 -->
-<div class="modal" id="delMulDialog" tabindex="-1">
-    <div class="modal-dialog ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">提示</h5>
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="alert alert-warning" role="alert">
-                您确定要删除选中的考试吗？
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        onclick="doDeleteMul()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 删除模态框结束 -->
-<!--搜索模态框开始-->
-<div class="modal fade" id="searchDialog" tabindex="-1" >
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">搜索考试场次</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="search-Form">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">考试名称</span>
-                        </div>
-                        <div class="row-8">
-                            <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
-                        </div>
-                        <div>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </div>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
-                        </div>
-                        <div class="row-8">
-                            <input id="start-Date" name="date" type="date"/>
-                        </div>
-                    </div>
-                    <div id="search">
-                        <button type="button"
-                                class="btn btn-primary"
-                                onclick="doSearch()">搜索考试</button>
-                    </div>
-                </form>
+    <!-- 批量选择删除的提示框 -->
+    <div class="modal" id="delMulDialog" tabindex="-1">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">提示</h5>
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    您确定要删除选中的考试吗？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="doDeleteMul()">确定</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!--搜索模态框结束-->
-
-<div id="test-con">
-    <div class="now-his">
-        <a  class="now select">历史考试</a>
+    <!-- 删除模态框结束 -->
+    <!--搜索模态框开始-->
+    <div class="modal fade" id="searchDialog" tabindex="-1" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">搜索考试场次</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="search-Form">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">考试名称</span>
+                            </div>
+                            <div class="row-8">
+                                <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
+                            </div>
+                            <div>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
+                            </div>
+                            <div class="row-8">
+                                <input id="start-Date" name="date" type="date"/>
+                            </div>
+                        </div>
+                        <div id="search">
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onclick="doSearch()">搜索考试</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="clear"></div>
+    <!--搜索模态框结束-->
 
-    <div id="container"></div>
-</div>
+    <div id="test-con">
+        <div class="now-his">
+            <a  class="now select">历史考试</a>
+        </div>
+        <div class="clear"></div>
+
+        <div id="container"></div>
+    </div>
 </div>
 <script>
 

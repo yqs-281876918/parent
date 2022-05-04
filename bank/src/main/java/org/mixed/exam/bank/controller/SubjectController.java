@@ -119,6 +119,12 @@ public class SubjectController {
         return subjectDao.getUnVerifySubjectItems();
     }
     @ResponseBody
+    @GetMapping("subject/un-verify-type")
+    public List<SubjectItem> getUnVerifySubjectItemsByType(String type)
+    {
+        return subjectDao.getUnVerifySubjectItemsByType(type);
+    }
+    @ResponseBody
     @PostMapping("subject/delete")
     public String delete(String id){
         subjectDao.deleteSubject(id);
