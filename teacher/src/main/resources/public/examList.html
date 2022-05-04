@@ -158,7 +158,7 @@
                         <div class="card-body">
                             <div style="display: inline-block;">
                                 <h4 class="card-title">
-                                    <a href="#" onclick="find('${u.id}')">
+                                    <a href="#" onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">
                                      ${u.examName}</a>
                                 </h4>
                              </div>
@@ -166,15 +166,14 @@
                                 <a href="#" class="btn btn-outline-danger btn-sm"
                                     onclick="showDeleteDialog('${u.id}')">
                                     删除考试</a>
-                                <a href="#" class="btn btn-outline-success btn-sm"
-                                   onclick="find('${u.id}')">查看成绩分析</a>
+
                                 <a href="#" class="btn btn-outline-warning btn-sm"
                                    onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
                             </div>
                         </div>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">开始时间：${Date1}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">测试时间：${u.testTime}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">总分：${u.totalScore}</p>
+                        <p class="card-text" style="padding-left: 10px">开始时间：${Date1}</p>
+                        <p class="card-text" style="padding-left: 10px" >测试时间：${u.testTime}分钟</p>
+                        <p class="card-text" style="padding-left: 10px" >总分：${u.totalScore}分</p>
                         <a href="#" class="btn btn-outline-danger btn-sm" style="padding-left: 10px">批阅进度：${finish}</a>
 
                     </div>
@@ -189,7 +188,7 @@
                         <div class="card-body">
                             <div style="display: inline-block;">
                                 <h4 class="card-title">
-                                    <a href="#" onclick="find('${u.id}')">
+                                    <a href="#" onclick="analyse('${u.id}','${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">
                                      ${u.examName}</a>
                                 </h4>
                              </div>
@@ -198,15 +197,14 @@
                                     onclick="showDeleteDialog('${u.id}')">
                                     删除考试</a>
                                 <a href="#" class="btn btn-outline-success btn-sm"
-                                   onclick="find('${u.id}')">查看成绩分析</a>
+                                   onclick="analyse('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
 
                             </div>
                         </div>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">开始时间：${Date1}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">测试时间：${u.testTime}</p>
-                        <p class="card-text" style="padding-left: 10px" onclick="find('${u.id}')">总分：${u.totalScore}</p>
+                        <p class="card-text" style="padding-left: 10px" >开始时间：${Date1}</p>
+                        <p class="card-text" style="padding-left: 10px" >测试时间：${u.testTime} 分钟</p>
+                        <p class="card-text" style="padding-left: 10px" >总分：${u.totalScore} 分</p>
                         <a href="#" class="btn btn-outline-success btn-sm" style="padding-left: 10px">批阅进度：${finish}</a>
-
 
                     </div>
                             `
@@ -226,46 +224,46 @@
 </script>
 <!--find-->
 <script>
-    function find(id){
-        // var param={
-        //     "pageNum":pageNum,
-        //     "pageSize":pageSize,
-        //     "id":id
-        // };
-        console.log(id);
-        jQuery.ajax({
-            type:'post',
-            url:'/teacher/analyse/findAll',
-            async:false,
-            data:{'classId':id},
-            success:function (rst) {
-                console.log(rst);
-                var ar = rst;
-                var uu;
-                for (var i = 0; i < ar.length; i++) {
-                    uu = ar[i];
-                    var param2 = {
-                        "id": uu.id,
-                        "examName": uu.examName,
-                        "startTime": uu.startTime,
-                        "testTime": uu.testTime,
-                        "introduce": uu.introduce,
-                        "totalSCore": uu.totalScore,
-
-                    };
-                    window.sessionStorage.setItem("examName", param2.examName);
-                    window.sessionStorage.setItem("startTime", param2.startTime);
-                    window.sessionStorage.setItem("testTime", param2.testTime);
-                    window.sessionStorage.setItem("introduce", param2.introduce);
-                    window.sessionStorage.setItem("totalScore", param2.totalSCore);
-                    window.location.href="analyse.html";
-
-                }
-            }
-
-        })
-
-    }
+    // function find(id){
+    //     // var param={
+    //     //     "pageNum":pageNum,
+    //     //     "pageSize":pageSize,
+    //     //     "id":id
+    //     // };
+    //     console.log(id);
+    //     jQuery.ajax({
+    //         type:'post',
+    //         url:'/teacher/analyse/findAll',
+    //         async:false,
+    //         data:{'classId':id},
+    //         success:function (rst) {
+    //             console.log(rst);
+    //             var ar = rst;
+    //             var uu;
+    //             for (var i = 0; i < ar.length; i++) {
+    //                 uu = ar[i];
+    //                 var param2 = {
+    //                     "id": uu.id,
+    //                     "examName": uu.examName,
+    //                     "startTime": uu.startTime,
+    //                     "testTime": uu.testTime,
+    //                     "introduce": uu.introduce,
+    //                     "totalSCore": uu.totalScore,
+    //
+    //                 };
+    //                 window.sessionStorage.setItem("examName", param2.examName);
+    //                 window.sessionStorage.setItem("startTime", param2.startTime);
+    //                 window.sessionStorage.setItem("testTime", param2.testTime);
+    //                 window.sessionStorage.setItem("introduce", param2.introduce);
+    //                 window.sessionStorage.setItem("totalScore", param2.totalSCore);
+    //                 window.location.href="analyse.html";
+    //
+    //             }
+    //         }
+    //
+    //     })
+    //
+    // }
 
     function timestampToTime(timestamp) {
         var date = new Date(timestamp);
@@ -280,8 +278,6 @@
         return strDate;
 
     }
-
-
 </script>
 <!--删除-->
 <!--showDeleteMulDialog-->
@@ -432,7 +428,7 @@
     }
 
 </script>
-</div>
+
 </body>
 
 </html>
