@@ -2,6 +2,7 @@ package org.mixed.exam.bank.controller;
 
 import org.mixed.exam.bank.dao.SubjectDao;
 import org.mixed.exam.bank.pojo.dto.SubjectJson;
+import org.mixed.exam.bank.pojo.po.Paper;
 import org.mixed.exam.bank.pojo.po.Question;
 import org.mixed.exam.bank.pojo.vo.SubjectItem;
 import org.mixed.exam.bank.service.QuerySubjectService;
@@ -138,4 +139,5 @@ public class SubjectController {
         }
         return "success";
     }
+
 }

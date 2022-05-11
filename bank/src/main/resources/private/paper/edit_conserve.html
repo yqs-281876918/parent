@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷编辑</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        a.hand:hover   {cursor:hand}
+    </style>
+    <style type="text/css">
+        .outer {
+            padding: 40px;
+            box-sizing: border-box;
+            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
+            border-radius: 10px;
+            width:1000px;
+            margin-left: 40px;
+            margin-right: 40px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="outer">
+<div class="container">
+    <form id="paper-form">
+        <div class="form-group">
+            <label>简介:</label>
+            <input id="foreWord" type="text" class="form-control" name="foreWord" th:value="${paper.foreWord}">
+        </div>
+        <div class="form-group">
+            <label>创建时间:</label>
+            <input type="text" class="form-control" name="date" th:value="${paper.date}">
+        </div>
+        <div class="form-group">
+            <label>创建人:</label>
+            <input type="text" class="form-control" name="creator" th:value="${paper.creator}">
+        </div>
+        <div class="form-group">
+            <label>开放:</label>
+            <select class="form-control" name="open">
+                <div th:if="${paper.open} eq true">
+                    <option selected="selected" value="true">是</option>
+                    <option value="false">否</option>
+                </div>
+                <div th:if="${paper.open} eq false">
+                    <option value="true">是</option>
+                    <option selected="selected" value="false">否</option>
+                </div>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>课程:</label>
+            <select class="form-control" id="course" onchange="courseChange()">
+                <option th:each="course, stat : ${courses}"
+                        th:value="${course.id}" th:text="${course.classifyName}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>题目:</label>
+            <div id="questions">
+                <caption>题目列表</caption>
+                <input type="button" class="btn btn-success" value="▼/▲" onclick="hide_show()"/>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>简介</th>
+                        <th>创建时间</th>
+                        <th>难度</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStat : ${subjectItems}">
+                        <td th:text="${item.type}"></td>
+                        <td th:text="${item.introduction}"></td>
+                        <td th:id="${item.id}"></td>
+                        <td th:text="${item.difficulty}"></td>
+                        <td>
+                            <a th:href="@{/subject/detail.html(id=${item.id})}" target="_blank">详情</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>难度:</label>
+            <select name="difficulty" class="form-control" id="difficulty">
+                <option th:each="num, numStat : ${#numbers.sequence(1,5)}" th:text="${num}" th:value="${num}"></option>
+            </select>
+        </div>
+    </form>
+    <button onclick="submit()">更新</button>
+</div>
+</div>
+<script th:inline="javascript">
+    $(function () {
+        $.fn.serializeObject = function () {
+            let o = {};
+            let a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+    })
+    let display=true
+    function hide_show(){
+        if(display===true){
+            $('table.table').hide()
+            display=false
+        } else {
+            $('table.table').show()
+            display=true
+        }
+    }
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = date.getDate() + ' ';
+        // var h = date.getHours() + ':';
+        // var m = date.getMinutes() + ':';
+        // var s = date.getSeconds();
+        return Y+M+D;
+    }
+    jQuery(function (){
+        var subjectList = [[${subjectItems}]]
+        for (var i=0;i<subjectList.length;i++){
+            var loccation = "#"+subjectList[i].id
+            var itemDate = new Date(subjectList[i].date)
+            var subjectDate =timestampToTime(itemDate.getTime());
+            $(loccation).html(subjectDate)
+        }
+    })
+
+</script>
+<script>
+    function submitPaper() {
+        let param={
+            "foreWord":getForeWord(),
+            "subjectIDs":getSubjectList(),
+            "courseID":getCourseID(),
+            "difficulty":getDifficulty()
+        }
+        $.ajax({
+            url: '/bank/paper/add',
+            data: param,
+            method: 'post',
+            traditional: true,
+            success: function (rst) {
+                alert(rst)
+                window.location.reload()
+            }
+        })
+    }
+</script>
+</body>
+</html>

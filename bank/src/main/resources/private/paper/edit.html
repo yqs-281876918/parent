@@ -1,152 +1,314 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>试卷编辑</title>
+    <title>编辑试卷</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <style type="text/css">
-        a.hand:hover   {cursor:hand}
-    </style>
-    <style type="text/css">
-        .outer {
-            padding: 40px;
-            box-sizing: border-box;
-            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
-            border-radius: 10px;
-            width:1000px;
-            margin-left: 40px;
-            margin-right: 40px;
-            margin-top: 40px;
-        }
-    </style>
+    <script src="../js/format.js"></script>
 </head>
 <body>
-<div class="outer">
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">选择题目</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="small-question-type" class="col-form-label">题目类型</label>
+                        <select class="form-control" id="small-question-type" onchange="selectChange()">
+                            <option value="singleChoiceQuestion">单选题</option>
+                            <option value="multipleChoiceQuestion">多选题</option>
+                            <option value="completion">填空题</option>
+                            <option value="judgment">判断题</option>
+                            <option value="comprehensiveQuestion">综合题</option>
+                            <option value="programProblem">程序题</option>
+                            <option value="combinationChoice">组合选择题</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>题目:</label>
+                        <div id="chooseAddQuestion">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">学科</th>
+                                    <th scope="col">简介</th>
+                                    <th scope="col">难度</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="submitAddSmall()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
     <form id="paper-form">
         <div class="form-group">
-            <label>简介:</label>
-            <input type="text" class="form-control" name="foreWord" th:value="${paper.foreWord}">
+            <label for="foreWord">简介:</label>
+            <input type="text" class="form-control" id="foreWord">
         </div>
         <div class="form-group">
-            <label>创建时间:</label>
-            <input type="text" class="form-control" name="date" th:value="${paper.date}">
-        </div>
-        <div class="form-group">
-            <label>创建人:</label>
-            <input type="text" class="form-control" name="creator" th:value="${paper.creator}">
-        </div>
-        <div class="form-group">
-            <label>开放:</label>
-            <select class="form-control" name="open">
-                <div th:if="${paper.open} eq true">
-                    <option selected="selected" value="true">是</option>
-                    <option value="false">否</option>
-                </div>
-                <div th:if="${paper.open} eq false">
-                    <option value="true">是</option>
-                    <option selected="selected" value="false">否</option>
-                </div>
+            <label for="course">课程:</label>
+            <select class="form-control" id="course">
+
             </select>
         </div>
         <div class="form-group">
-            <label>课程:</label>
-            <select class="form-control" id="course" onchange="courseChange()">
-                <option th:each="course, stat : ${courses}"
-                        th:value="${course.id}" th:text="${course.classifyName}">
-                </option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>题目:</label>
-            <div id="questions">
-                <caption>题目列表</caption>
-                <input type="button" class="btn btn-success" value="▼/▲" onclick="hide_show()"/>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>类型</th>
-                        <th>简介</th>
-                        <th>创建时间</th>
-                        <th>难度</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="item,itemStat : ${subjectItems}">
-                        <td th:text="${item.type}"></td>
-                        <td th:text="${item.introduction}"></td>
-                        <td th:id="${item.id}"></td>
-                        <td th:text="${item.difficulty}"></td>
-                        <td>
-                            <a th:href="@{/subject/detail.html(id=${item.id})}" target="_blank">详情</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <label for="question">题目:</label>
+            <div id="question">
+                <div class="accordion" id="accordionExample">
+                </div>
+                <button type="button" class="btn btn-light" onclick="addQuestion()">添加题目
+                </button>
             </div>
         </div>
         <div class="form-group">
-            <label>难度:</label>
-            <select name="difficulty" class="form-control" id="difficulty">
-                <option th:each="num, numStat : ${#numbers.sequence(1,10)}" th:text="${num}" th:value="${num}"></option>
+            <label for="difficulty">难度:</label>
+            <select class="form-control" id="difficulty">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
             </select>
         </div>
     </form>
-    <button onclick="submit()">更新</button>
+    <button type="button" class="btn btn-primary" onclick="submitPaper()">提交</button>
 </div>
-</div>
-<script th:inline="javascript">
-    $(function () {
-        $.fn.serializeObject = function () {
-            let o = {};
-            let a = this.serializeArray();
-            $.each(a, function () {
-                if (o[this.name] !== undefined) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
-
-    })
-    let display=true
-    function hide_show(){
-        if(display===true){
-            $('table.table').hide()
-            display=false
-        } else {
-            $('table.table').show()
-            display=true
-        }
-    }
-    function timestampToTime(timestamp) {
-        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = date.getDate() + ' ';
-        // var h = date.getHours() + ':';
-        // var m = date.getMinutes() + ':';
-        // var s = date.getSeconds();
-        return Y+M+D;
-    }
-    jQuery(function (){
-        var subjectList = [[${subjectItems}]]
-        for (var i=0;i<subjectList.length;i++){
-            var loccation = "#"+subjectList[i].id
-            var itemDate = new Date(subjectList[i].date)
-            var subjectDate =timestampToTime(itemDate.getTime());
-            $(loccation).html(subjectDate)
-        }
-    })
-
-</script>
 </body>
+<script>
+    let typeListENG = ["singleChoiceQuestion", "multipleChoiceQuestion", "completion", "judgment",
+        "comprehensiveQuestion", "programProblem", "combinationChoice"]
+    let typeListCHN = ["单选题", "多选题", "填空题", "判断题", "综合题", "程序题", "组合选择题"]
+    let tempSubjectJsonList = []
+</script>
+<script>
+    $(function () {
+        $.ajax({
+            async: false, url: "/admin/classify/findAllCourse", success: function (rst) {
+                let options = "";
+                for (let i = 0; i < rst.length; i++) {
+                    options += `<option value="${rst[i].id}">${rst[i].classifyName}</option>`;
+                }
+                $("#course").html(options);
+            }, method: 'post'
+        })
+    })
+    $(function () {
+        let accordion = $("#accordionExample")
+        for (let i = 0; i < 7; i++) {
+            let card = `<div class="card" id="${i}">
+                        <div class="card-header" id="heading-${i}">
+                            <h2 class="mb-${i}">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#collapse-${i}" aria-expanded="true" aria-controls="collapse-${i}">
+                                    <div>
+                                        <div id="qtype-${i}">${typeListCHN[i]}</div>
+                                        <span class="badge badge-secondary" id="count-${i}">0</span>
+                                    </div>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapse-${i}" class="collapse in" aria-labelledby="heading-${i}"
+                             data-parent="#accordionExample" aria-expanded="true" style="">
+                            <div class="card-body" id="table-${i}">
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">学科</th>
+                                        <th scope="col">简介</th>
+                                        <th scope="col">难度</th>
+                                        <th scope="col">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>`
+            accordion.append(card)
+        }
+    })
+    var str;
+    $(function () {
+        str=window.location.href;
+        str=str.slice(str.indexOf('=')+1);
+        console.log(str);
+        jQuery.ajax({
+            type:'post',
+            url:'/bank/paper/findPaper',
+            data:{
+                'id':str
+            },
+            success:function (rst) {
+                $("#foreWord").val(rst.foreWord);
+                $("#course").val(rst.courseID).select();
+                $("#difficulty").val(rst.difficulty).select();
+                let pos=0;
+                for(var tmp=0;tmp<rst.subjectIDs.length;tmp++){
+                    $.ajax(
+                        {
+                            type: 'get',
+                            url: '/bank/subject/json',
+                            async:false,
+                            data: {
+                                'id': rst.subjectIDs[tmp]
+                            },
+                            success: function (q) {
+                                // for (var i = 0; i < q.length; i++) {
+                                qq=JSON.parse(q);
+                                    let type = qq.type;
+                                    let typePos = 0
+                                    for (let j = 0; j < 7; j++) {
+                                        if (typeListENG[j] === type) {
+                                            typePos = j
+                                            break
+                                        }
+                                    }
+
+                                    let trs = `<tr>
+                                                    <input type="hidden" class="subject" value="${qq.id}"/>
+                                                    <td>${$("#course option:selected").text()}</td>
+                                                    <td>${qq.introduction}</td>
+                                                    <td id="diff">${qq.difficulty}</td>
+                                                    <td><button type="button" class="btn btn-light" onclick="removeThis(this)">移除</button></td>
+                                               </tr>`;
+                                    jQuery("#table-" + typePos + " table tbody").append(trs);
+                                //}
+                            }
+                        }
+                    )
+
+                }
+            }
+        })
+    })
+</script>
+<script>
+    function addQuestion() {
+        $('#addModal').modal('show');
+    }
+</script>
+<script>
+    function selectChange() {
+        let list = ""
+        $.ajax(
+            {
+                type: 'get',
+                url: '/bank/api/subjects',
+                data: {
+                    'courseID': getCourseID(),
+                    'type': $("#small-question-type option:selected").val()
+                },
+                success: function (q) {
+                    for (let i = 0; i < q.length; i++) {
+                        let obj = JSON.parse(q[i].json)
+                        tempSubjectJsonList[i] = obj
+                        list += `<tr id="${obj.id}">
+                                    <td><input name="subject-checkbox" type="checkbox" value="${obj.id}" /></td>
+                                    <td>${$("#course option:selected").text()}</td>
+                                    <td>${obj.introduction}</td>
+                                    <td>${obj.difficulty}</td>
+                                    <td>
+                                    </td>
+                                </tr>`;
+                    }
+                    jQuery('#chooseAddQuestion table tbody').html(list);
+                }
+            }
+        )
+    }
+</script>
+<script>
+    function submitAddSmall() {
+        let type = $("#small-question-type option:selected").text()
+        let typePos = 0
+        for (let i = 0; i < 7; i++) {
+            if (typeListCHN[i] === type) {
+                typePos = i
+                break
+            }
+        }
+        let pos = 0
+        $('input[name="subject-checkbox"]').each(function () {
+            if(!$(this).is(":checked"))
+            {
+                pos++
+                return
+            }
+            let json = tempSubjectJsonList[pos]
+            let trs = `<tr>
+                            <input type="hidden" class="subject" value="${json.id}"/>
+                            <td>${$("#course option:selected").text()}</td>
+                            <td>${json.introduction}</td>
+                            <td id="diff">${json.difficulty}</td>
+                            <td><button type="button" class="btn btn-light" onclick="removeThis(this)">移除</button></td>
+                       </tr>`;
+            jQuery("#table-" + typePos + " table tbody").append(trs);
+            pos++
+        });
+        $('#addModal').modal('hide');
+    }
+</script>
+<script>
+    function removeThis(obj) {
+        $(obj).parent().parent().remove()
+    }
+</script>
+<script>
+    function getForeWord(){
+        return $('#foreWord').val()
+    }
+    function getCourseID(){
+        return $("#course option:selected").val()
+    }
+    function getSubjectList(){
+        let ids=[]
+        $("input.subject").each(function () {
+            ids.push($(this).val())
+        })
+        return ids
+    }
+    function getDifficulty(){
+        return $("#difficulty option:selected").val()
+    }
+    function submitPaper() {
+        let param={
+            "id":str,
+            "foreWord":getForeWord(),
+            "subjectIDs":getSubjectList(),
+            "courseID":getCourseID(),
+            "difficulty":getDifficulty()
+        }
+        $.ajax({
+            url: '/bank/paper/sub',
+            data: param,
+            method: 'post',
+            traditional: true,
+            success: function (rst) {
+                alert(rst)
+                window.location.reload()
+            }
+        })
+    }
+</script>
 </html>
