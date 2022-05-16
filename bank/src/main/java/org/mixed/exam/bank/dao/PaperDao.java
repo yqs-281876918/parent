@@ -79,4 +79,18 @@ public class PaperDao {
         mongoTemplate.save(p);
         return p;
     }
+
+    public void sub(String id, Paper paper) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        Update update = Update.update("open",true);
+        mongoTemplate.updateFirst(query, update, Paper.class,DOCUMENT_NAME);
+        Update update1 = Update.update("foreWord",paper.getForeWord());
+        mongoTemplate.updateFirst(query, update1, Paper.class,DOCUMENT_NAME);
+        Update update2 = Update.update("subjectIDs",paper.getSubjectIDs());
+        mongoTemplate.updateFirst(query, update2, Paper.class,DOCUMENT_NAME);
+        Update update3 = Update.update("courseID",paper.getCourseID());
+        mongoTemplate.updateFirst(query, update3, Paper.class,DOCUMENT_NAME);
+        Update update4 = Update.update("difficulty",paper.getDifficulty());
+        mongoTemplate.updateFirst(query, update4, Paper.class,DOCUMENT_NAME);
+    }
 }
