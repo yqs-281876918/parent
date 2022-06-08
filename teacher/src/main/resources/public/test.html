@@ -2,631 +2,365 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>MIXED考试平台</title>
-
-    <style>
-        #delete{
-            padding: 10px 20px;
-            text-align: right;
-            float: right;
-        }
-    </style>
-    <style type="text/css">
-        a.hand:hover   {cursor:hand}
-    </style>
-    <style type="text/css">
-        .unselectable {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        .outer {
-            padding: 40px;
-            box-sizing: border-box;
-            box-shadow: 0 15px 25px rgb(0 0 0 /50%);
-            border-radius: 10px;
-            width:1000px;
-            margin-left: 40px;
-            margin-right: 40px;
-            margin-top: 40px;
-        }
-
-    </style>
-
-</head>
-<body onload="init()">
-<!-- 新 Bootstrap4 核心 CSS 文件 -->
-<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-<!-- bootstrap.bundle.min.js 用于弹窗、提示、下拉菜单，包含了 popper.min.js -->
-<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
-<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<div class="outer">
-    <!-- 批量选择删除的提示框 -->
-    <div class="modal" id="delMulDialog" tabindex="-1">
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">提示</h5>
-                    <button type="button" class="close"
-                            data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="alert alert-warning" role="alert">
-                    您确定要删除选中的考试吗？
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary"
-                            onclick="doDeleteMul()">确定</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 删除模态框结束 -->
-    <!--搜索模态框开始-->
-    <div class="modal fade" id="searchDialog" tabindex="-1" >
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">搜索考试场次</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="search-Form">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">考试名称</span>
-                            </div>
-                            <div class="row-8">
-                                <input type="text" id="exam-name" name="userName" class="form-control" placeholder="请输入考试名" aria-label="name" aria-describedby="basic-addon1">
-                            </div>
-                            <div>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon2">请选择考试开始时间</span>
-                            </div>
-                            <div class="row-8">
-                                <input id="start-Date" name="date" type="date"/>
-                            </div>
-                        </div>
-                        <div id="search">
-                            <button type="button"
-                                    class="btn btn-primary"
-                                    onclick="doSearch()">搜索考试</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--搜索模态框结束-->
-
-    <div id="test-con">
-        <div class="now-his">
-            <a  class="now select">历史考试</a>
-        </div>
-        <div class="clear"></div>
-
-        <div id="container"></div>
-    </div>
-</div>
-<script>
-
-    var classId=sessionStorage.getItem("cno");
-    function init() {
-        jQuery.ajax({
-            type: 'post',
-            url: '/teacher/analyse/findAll',
-            async: false,
-            data: {'classId':classId},
-            success: function (rst) {
-                console.log(rst)
-                //alert(rst);
-                //1、查询查询的数据
-                var arrs = rst;
-                var trs = "";
-                for (var i = 0; i < arrs.length; i++) {
-                    //获取每一行对应的用户对象
-                    var u = arrs[i];
-                    //考试id
-                    var Date = u.startTime;
-                    var Date1=timestampToTime(Date);
-                    console.log(Date1);
-                    jQuery.ajax({
-                        type: 'get',
-                        url: '/teacher/analyse/finish',
-                        async: false,
-                        data: {'id': u.id},
-                        success: function (rst1) {
-                            var finish;
-                            if (rst1 === 0) {
-                                finish = "未完成批阅";
-                                trs += `
-                    <div class="card" id="${u.id}">
-                        <div class="card-header">
-                            <input type="hidden" value="${u.examName}">
-                        </div>
-                        <div class="card-body">
-                            <div style="display: inline-block;">
-                                <h4 class="card-title">
-                                    <a href="#" onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">
-                                     ${u.examName}</a>
-                                </h4>
-                             </div>
-                             <div id="delete" style="display: inline-block;">
-                                <a href="#" class="btn btn-outline-danger btn-sm"
-                                    onclick="showDeleteDialog('${u.id}')">
-                                    删除考试</a>
-
-                                <a href="#" class="btn btn-outline-warning btn-sm"
-                                   onclick="review('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">批阅试卷</a>
-                            </div>
-                        </div>
-                        <p class="card-text" style="padding-left: 10px">开始时间：${Date1}</p>
-                        <p class="card-text" style="padding-left: 10px" >测试时间：${u.testTime}分钟</p>
-                        <p class="card-text" style="padding-left: 10px" >总分：${u.totalScore}分</p>
-                        <a href="#" class="btn btn-outline-danger btn-sm" style="padding-left: 10px">批阅进度：${finish}</a>
-
-                    </div>
-                            `
-                            } else if (rst1 === 1) {
-                                finish = "已完成批阅";
-                                trs += `
-                    <div class="card" id="${u.id}">
-                        <div class="card-header">
-                            <input type="hidden" value="${u.examName}">
-                        </div>
-                        <div class="card-body">
-                            <div style="display: inline-block;">
-                                <h4 class="card-title">
-                                    <a href="#" onclick="analyse('${u.id}','${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">
-                                     ${u.examName}</a>
-                                </h4>
-                             </div>
-                             <div id="delete" style="display: inline-block;">
-                                <a href="#" class="btn btn-outline-danger btn-sm"
-                                    onclick="showDeleteDialog('${u.id}')">
-                                    删除考试</a>
-                                <a href="#" class="btn btn-outline-success btn-sm"
-                                   onclick="analyse('${u.id}','${u.examName}','${Date1}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
-
-                            </div>
-                        </div>
-                        <p class="card-text" style="padding-left: 10px" >开始时间：${Date1}</p>
-                        <p class="card-text" style="padding-left: 10px" >测试时间：${u.testTime} 分钟</p>
-                        <p class="card-text" style="padding-left: 10px" >总分：${u.totalScore} 分</p>
-                        <a href="#" class="btn btn-outline-success btn-sm" style="padding-left: 10px">批阅进度：${finish}</a>
-
-                    </div>
-                            `
-                            }
-
-                        }
-                    })
-                }
-                jQuery("#container").html(trs);
-            }
-        })
-    }
-    jQuery(function (){
-        init();
-    })
-
-</script>
-<!--find-->
-<script>
-    // function find(id){
-    //     // var param={
-    //     //     "pageNum":pageNum,
-    //     //     "pageSize":pageSize,
-    //     //     "id":id
-    //     // };
-    //     console.log(id);
-    //     jQuery.ajax({
-    //         type:'post',
-    //         url:'/teacher/analyse/findAll',
-    //         async:false,
-    //         data:{'classId':id},
-    //         success:function (rst) {
-    //             console.log(rst);
-    //             var ar = rst;
-    //             var uu;
-    //             for (var i = 0; i < ar.length; i++) {
-    //                 uu = ar[i];
-    //                 var param2 = {
-    //                     "id": uu.id,
-    //                     "examName": uu.examName,
-    //                     "startTime": uu.startTime,
-    //                     "testTime": uu.testTime,
-    //                     "introduce": uu.introduce,
-    //                     "totalSCore": uu.totalScore,
-    //
-    //                 };
-    //                 window.sessionStorage.setItem("examName", param2.examName);
-    //                 window.sessionStorage.setItem("startTime", param2.startTime);
-    //                 window.sessionStorage.setItem("testTime", param2.testTime);
-    //                 window.sessionStorage.setItem("introduce", param2.introduce);
-    //                 window.sessionStorage.setItem("totalScore", param2.totalSCore);
-    //                 window.location.href="analyse.html";
-    //
-    //             }
-    //         }
-    //
-    //     })
-    //
-    // }
-
-    function timestampToTime(timestamp) {
-        var date = new Date(timestamp);
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
-        var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
-        var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
-        var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
-
-        var strDate = Y+M+D+h+m+s;
-        return strDate;
-
-    }
-</script>
-<!--删除-->
-<!--showDeleteMulDialog-->
-<script>
-    var deleteid;
-    function showDeleteDialog(id) {
-        deleteid=id;
-        jQuery("#delMulDialog").modal('show');
-    }
-
-    function doDeleteMul() {
-        jQuery("#delMulDialog").modal('hide');
-        jQuery.post("/teacher/analyse/delete",{'id':deleteid},function (rst) {
-            console.log(rst);
-            if(rst>0)
-            {
-                alert("删除成功!");
-                init();
-            }else{
-                alert("删除失败!");
-            }
-        })
-    }
-
-</script>
-<!--搜索-->
-<script>
-    function showSearchDialog(){
-        jQuery("#searchDialog").modal('show');
-    }
-    function doSearch() {
-        var data = {
-            "examName": $("#exam-name").val(),
-            "startTime": $("#start-Date").val(),
-            "pageNum": pageNum,
-            "pageSize": pageSize,
-        }
-        console.log(data);
-        jQuery.post("/teacher/analyse/Search", data, function (rst) {
-            alert("yyy");
-            pageNums = rst.pages;
-            jQuery("#pages").html(pageNums);
-            jQuery("#pageNum").html(data.pageNum);
-            jQuery("#totals").html(rst.total);
-            if (rst.list.length > 0) {
-                jQuery("#searchDialog").modal('hide');
-
-                var arrs=rst.list;
-                var trs="";
-                for(var i=0;i<arrs.length;i++) {
-
-                    //获取每一行对应的用户对象
-                    var u=arrs[i];
-
-                    //循环一次一行数据
-                    //使用反引号,用于定义模板
-
-                    trs+=`
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="ids" value="${u.id}">
-                        </td>
-
-                        <td colspan="2" onclick="find('${u.id}')">${u.examName}</td>
-                        <td colspan="1" onclick="find('${u.id}'))">${u.startTime}</td>
-                        <td colspan="6" onclick="find('${u.id}'))">${u.introduce}</td>
-                        <td colspan="2">
-                            <a href="#"
-                                onclick="find('${u.id}','${u.examName}','${u.startTime}','${u.testTime}','${u.totalScore}')">查看成绩分析</a>
-                            <a href="#"
-                                onclick="intoread('${u.id}','${u.totalSCore}')">进入批阅</a>
-                        </td>
-
-                    </tr>
-                    `;
-
-                }
-                //把根据数据构建的行添加到表格
-
-                jQuery("#data").html(trs);
-
-                var nums=rst.navigatepageNums;
-                var nav=`
-        <ul class="pagination">
-                             <li class="page-item">
-                                    <a href="#" class="page-link"
-                                    onclick="pageUtil(${pageNum-1})">上一页</a>
-                                </li>
-                                `;
-                for(var i=0;i<nums.length;i++){
-                    nav+=`
-            <li class="page-item ${pageNum==nums[i]?'active':''}">
-                                    <a href="#" class="page-link">${nums[i]}</a>
-                                </li>
-
-            `;
-                }
-
-                nav+=`
-                                <li class="page-item">
-                                    <a href="#" class="page-link"
-                                    onclick="pageUtil(${pageNum+1})">下一页</a>
-                                </li>
-                            </ul>
-        `;
-                jQuery("#right").html(nav);
-            }
-            else if(rst.list.length == 0) {
-                alert("该考试不存在");
-                jQuery("#searchDialog").modal('hide');
-            }
-        })
-    }
-
-</script>
-<!--搜索结束-->
-<script>
-    function analyse(id,examName,startTime,testTime,totalScore){
-        sessionStorage.setItem("id",id);
-        sessionStorage.setItem("examName",examName);
-        sessionStorage.setItem("startTime",startTime);
-        sessionStorage.setItem("testTime",testTime);
-        sessionStorage.setItem("totalScore",totalScore);
-        window.location.href="analyse.html";
-    }
-    function review(id,examName,startTime,testTime,totalScore){
-        sessionStorage.setItem("id",id);
-        sessionStorage.setItem("examName",examName);
-        sessionStorage.setItem("startTime",startTime);
-        sessionStorage.setItem("testTime",testTime);
-        sessionStorage.setItem("totalScore",totalScore);
-        window.location.href="review/paperList.html";
-    }
-
-</script>
-<!--判断页面是否越界-->
-<script>
-
-    function pageUtil(num) {
-        if(num<=1){
-            num=1;
-        }
-        if(num>=pageNums){
-            num=pageNums;
-        }
-        pageNum=num;
-        init();
-    }
-
-</script>
-
-</body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
+    <title>成绩分析</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>analyse</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
-    <!--  <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.common.min.js"></script>-->
-    <style> /*.outer {
-        padding: 40px;
-        box-sizing: border-box;
-        box-shadow: 0 15px 25px rgb(0 0 0 /50%);
-        border-radius: 3px;
-        width:1000px;
-        margin-left: 40px;
-        margin-right: 40px;
-        margin-top: 40px;
-        background: #f1f1f1;
-    }*/
-    .nav
-    {
-        padding: 5px 14px;
-        font-size: 15px;
-        margin-right: 12px;
-        display: inline-block;
-        box-sizing:border-box;
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid #dedede;
-        float: left;
-    }
-    .dhl{
-        background: #ffffff;
-        border: 0.5px solid #dedede;
+    <link rel="stylesheet" href="assets/css/analyse.css">
+    <script src='assets/js/echarts-liquidfill.min.js'></script>
 
-    }
-    .bar{
-        width: 600px;
-        float: left;
-        margin: 10px;
-    }
-    .pie{
-        width: 600px;
-        float: left;
-        margin: 10px;
-    }
-    </style>
 </head>
 <body onload="init()">
-<div class="outer">
-    <div class="dhl">
-        <div class="nav">
-            <button onclick="showPie()">饼图</button>
-        </div>
-        <div class="nav">
-            <button onclick="showBar()">柱状图</button>
-        </div>
-        <div style="clear: both"></div>
-    </div>
-    <div id="main" hidden="hidden" class="pie" style="height: 400px;width: 600px"></div>
-    <div id="bar" class="bar" style="height: 400px"></div>
-    <div style="clear: both"></div>
+
+<div id="container">
+    <div id="box1" class="pie" style="height:400px"></div>
+    <div id="box2" class="pie" style="height:400px"></div>
+    <div id="box3" class="pie" style="height:400px"></div>
 </div>
 <script>
-
     function init(){
-        var examId = sessionStorage.getItem("examId");
-        var totalScore = sessionStorage.getItem("totalScore");
-        var personNum = sessionStorage.getItem("personNum");
-        var param={
-            "examId":38,
-            "totalScore":totalScore,
-            "personNum":personNum
-        };
-        console.log(param);
-        console.log(personNum);
+        var examId = sessionStorage.getItem("id");
+        var totalScore=sessionStorage.getItem("totalScore");
 
-        // var echarts=require('echarts');
-        // var chartDom = document.getElementById('pie');
-        // var myChart = echarts.init(chartDom);
-        //
-        // // 指定图表的配置项和数据
+        var param1={
+            "examId":38,
+            "totalScore":100
+        };
+        console.log(param1);
+
+        //及格率的图
+        var myChart = echarts.init(document.getElementById('box1'));
+        var option={
+            title:{
+                text:'及格率',
+                textStyle:{
+                    fontWeight:'normal',
+                    fontSize:25,
+                    color: 'rgb(97,142,205)'
+                }
+            },
+            series:[{
+                type:'liquidFill',
+                radius:'45%',
+                center:['50%','50%'],
+                data:[0.6],
+                backgroundStyle:{
+                    borderWidth:1,
+                    color:'rgb(255,0,255,0.1)'
+                },
+                label:{
+                    normal:{
+                        formatter:(0.5*100).toFixed(2)+'%',
+                        textStyle:{
+                            fontSize:50
+                        }
+                    }
+                }
+            }]
+        }
+        // 指定图表的配置项和数据
         // var option = {
-        //     tooltip: {
-        //         trigger: 'item'
+        //     color:['#FD1B40','#eeeeee'],
+        //     title: {
+        //         text: ''
         //     },
-        //     legend: {
-        //         top: '5%',
-        //         left: 'center'
-        //     },
-        //     series: [
-        //         {
-        //             name: '分数段比例',
-        //             type: 'pie',
-        //             radius: ['40%', '70%'],
-        //             avoidLabelOverlap: false,
-        //             itemStyle: {
-        //                 borderRadius: 10,
-        //                 borderColor: '#fff',
-        //                 borderWidth: 2
-        //             },
+        //     series: [{
+        //         name: '比例',
+        //         type: 'pie',
+        //         colorByPoint: true,
+        //         center: ['50%', '50%'], // 饼图的圆心坐标
+        //         radius: ['60%', '70%'],
+        //         avoidLabelOverlap: false,
+        //         hoverAnimation: false,
+        //         label: {
+        //             position: 'center',
+        //             fontSize: '20',
+        //             fontWeight: 'bold',
+        //             formatter: '{b}\n{c}\%'
+        //         },
+        //         emphasis: {
         //             label: {
-        //                 show: false,
-        //                 position: 'center'
-        //             },
-        //             emphasis: {
+        //                 show: true,
+        //                 fontSize: '20',
+        //                 fontWeight: 'bold'
+        //             }
+        //         },
+        //         labelLine: {
+        //             show: false
+        //         },
+        //         data: [
+        //             {
+        //                 name:'及格率',
+        //                 value: '',
         //                 label: {
         //                     show: true,
-        //                     fontSize: '40',
+        //                     fontSize: '20',
         //                     fontWeight: 'bold'
         //                 }
         //             },
-        //             labelLine: {
-        //                 show: false
-        //             },
-        //             data: [
-        //                 { value: '', name: '0-20%' },
-        //                 { value: '', name: '20-40%' },
-        //                 { value: '', name: '40-60%' },
-        //                 { value: '', name: '60-80%' },
-        //                 { value: '', name: '80-100%' }
-        //             ]
+        //             {
+        //                 value: '',
+        //                 name: '',
+        //                 label:{
+        //                     show:false    //默认显示第一块
+        //                 }
+        //             }
+        //
+        //         ]
+        //     }]
+        // };
+        // var option = {
+        //     backgroundColor:'#ffffff',
+        //     title: {
+        //         text: '及格率',
+        //         left: 'center',
+        //         //标题栏的高度，值越大，距离顶部的距离越大
+        //         top: 20,
+        //         //标题栏字体的颜色
+        //         textStyle: {
+        //             color: '#ccc'
         //         }
-        //     ]
+        //     },
+        //     tooltip: {
+        //         trigger: 'item',
+        //         // formatter: '{a} <br/>{b} : {c}'
+        //     },
+        //     legend: {
+        //         orient: 'vertical',
+        //         left: '70%',  //图例距离左的距离
+        //         y: 'center',  //图例上下居中
+        //     },
+        //     color:['rgb(255,250,205)', 'rgb(255,106,106)'],
+        //     series : [
+        //         {
+        //             name: "及格率",
+        //             type:'pie',
+        //             // clockwise:'true',
+        //             startAngle:'0',
+        //             radius : '40%',
+        //             center: ['50%', '50%'],
+        //             data: [
+        //                 {name: '及格率',value: ''},
+        //                 {name: "",value: '' },
+        //             ],
+        //             itemStyle:{
+        //                 normal:{
+        //                     label:{
+        //                         show:true,
+        //                         position:'inner',
+        //                         textStyle: {
+        //                             fontSize:10,
+        //                         }
+        //                     },
+        //                     labelLine:{
+        //                         show:true,
+        //                     }
+        //                 }
+        //             }
+        //
+        //         }
+        //     ],
+        //
         // };
 
-        //条形图
-        var myChart1 = echarts.init(document.getElementById('bar'));
-        // 指定图表的配置项和数据
-        var option1 = {
-            title: {
-                text: '各分数段比例统计'
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"></span>: <b>{series.data:.2f}%</b> of total<br/>'
-            },
-            legend: {
-                data:['比例']
-            },
-            xAxis: {
-                data: ["0%-20%","20%-40%","40%-60%","60%-80%","80%-100%"]
-            },
-            yAxis: {},
-            series: [{
-                name: '比例',
-                type: 'bar',
-                colorByPoint: true,
-                data: [],
-            }]
-        };
-        jQuery.post("/teacher/analyse/percentage",param,function(rst){
-            console.log(rst);
-            BarArr=rst;
-            console.log(BarArr);
-            for(var i=0;i<BarArr.length-1;i++){
-                option.series[0].data.push(BarArr[i]);
-                option1.series[0].data.push(BarArr[i]);
-            }
-            myChart.setOption(option);
-            myChart1.setOption(option1);
-        })
-    }
-</script>
-<script>
-    function showPie() {
-        $("#pie").show()
-        $("#bar").hide()
-    }
-    function showBar() {
-        $("#pie").hide()
-        $("#bar").show()
+        option.series[0].data.push(0.5);
+        myChart.setOption(option);
+
+        // //优良率的图
+        // var myChart2 = echarts.init(document.getElementById('box2'));
+        // // 指定图表的配置项和数据
+        // var option2 = {
+        //     backgroundColor:'#ffffff',
+        //     title: {
+        //         text: '优良率',
+        //         left: 'center',
+        //         //标题栏的高度，值越大，距离顶部的距离越大
+        //         top: 20,
+        //         //标题栏字体的颜色
+        //         textStyle: {
+        //             color: '#ccc'
+        //         }
+        //     },
+        //     tooltip: {
+        //         trigger: 'item',
+        //         // formatter: '{a} <br/>{b} : {c}'
+        //     },
+        //     legend: {
+        //         orient: 'vertical',
+        //         left: '70%',  //图例距离左的距离
+        //         y: 'center',  //图例上下居中
+        //     },
+        //     color:['rgb(173,255,47)', 'rgb(255,136,139)'],
+        //     series : [
+        //         {
+        //             name: "优良率",
+        //             type:'pie',
+        //             // clockwise:'true',
+        //             startAngle:'0',
+        //             radius : '40%',
+        //             center: ['50%', '50%'],
+        //             data: [
+        //                 {name: '优良率',value: ''},
+        //                 {name: "",value: '' },
+        //             ],
+        //             itemStyle:{
+        //                 normal:{
+        //                     label:{
+        //                         show:true,
+        //                         position:'inner',
+        //                         textStyle: {
+        //                             fontSize:10,
+        //                         }
+        //                     },
+        //                     labelLine:{
+        //                         show:true,
+        //                     }
+        //                 }
+        //             }
+        //
+        //         }
+        //     ],
+        //
+        // };
+        // // var option2 = {
+        // //     color:['#5fb878','#eeeeee'],
+        // //     title: {
+        // //         text: ''
+        // //     },
+        // //     series: [{
+        // //         name: '比例',
+        // //         type: 'pie',
+        // //         colorByPoint: true,
+        // //         center: ['50%', '50%'], // 饼图的圆心坐标
+        // //         radius: ['60%', '70%'],
+        // //         avoidLabelOverlap: false,
+        // //         hoverAnimation: false,
+        // //         label: {
+        // //             position: 'center',
+        // //             fontSize: '20',
+        // //             fontWeight: 'bold',
+        // //             // formatter: '{b}\n{c}\%'
+        // //         },
+        // //         emphasis: {
+        // //             label: {
+        // //                 show: true,
+        // //                 fontSize: '20',
+        // //                 fontWeight: 'bold'
+        // //             }
+        // //         },
+        // //         labelLine: {
+        // //             show: false
+        // //         },
+        // //         data: [
+        // //             {
+        // //                 name:'优良率',
+        // //                 value: '',
+        // //                 label:{
+        // //                     show:true,     //默认显示第一块
+        // //                     fontSize: '20',
+        // //                     fontWeight: 'bold',
+        // //                     formatter: '{b}\n{c}\%'
+        // //                 }
+        // //             },
+        // //             {
+        // //                 value: '',
+        // //                 name: '',
+        // //                 label:{
+        // //                     show:false    //默认显示第一块
+        // //                 }
+        // //             }
+        // //
+        // //         ]
+        // //     }]
+        // // };
+        //
+        // jQuery.post("/teacher/analyse/percentage",param1,function(rst){
+        //     console.log(rst);
+        //     BarArr=rst;
+        //     var excellent=BarArr[4];
+        //     personNum=BarArr[5];
+        //     excellent = Math.floor(excellent*100/personNum);
+        //     option2.series[0].data.push(excellent);
+        //     var unexe=100-excellent;
+        //     option2.series[0].data.push(unexe);
+        //     myChart2.setOption(option2);
+        // });
+        //
+        //
+        // //平均分的图
+        // var myChart3 = echarts.init(document.getElementById('box3'));
+        // // 指定图表的配置项和数据
+        // var option3 = {
+        //     backgroundColor:'#ffffff',
+        //     title: {
+        //         text: '平均分',
+        //         left: 'center',
+        //         //标题栏的高度，值越大，距离顶部的距离越大
+        //         top: 20,
+        //         //标题栏字体的颜色
+        //         textStyle: {
+        //             color: '#ccc'
+        //         }
+        //     },
+        //     tooltip: {
+        //         trigger: 'item',
+        //         // formatter: '{a} <br/>{b} : {c}'
+        //     },
+        //     legend: {
+        //         orient: 'vertical',
+        //         left: '70%',  //图例距离左的距离
+        //         y: 'center',  //图例上下居中
+        //     },
+        //     color:['rgb(171,130,255)', 'rgb(238,210,238)'],
+        //     series : [
+        //         {
+        //             name: "平均分",
+        //             type:'pie',
+        //             // clockwise:'true',
+        //             startAngle:'0',
+        //             radius : '40%',
+        //             center: ['50%', '50%'],
+        //             data: [
+        //                 {name: '平均分',value: ''},
+        //                 {name: "",value: '' },
+        //             ],
+        //             itemStyle:{
+        //                 normal:{
+        //                     label:{
+        //                         show:true,
+        //                         position:'inner',
+        //                         textStyle: {
+        //                             fontSize:10,
+        //                         }
+        //                     },
+        //                     labelLine:{
+        //                         show:true,
+        //                     }
+        //                 }
+        //             }
+        //
+        //         }
+        //     ],
+        //
+        // };
+        // var param3={
+        //     "examId":examId
+        // };
+        // jQuery.post("/teacher/analyse/avg",param3,function (avg){
+        //     var avg1=avg;
+        //     console.log(avg1);
+        //     option3.series[0].data.push(avg1);
+        //     var unavg=100-avg1;
+        //     option3.series[0].data.push(unavg);
+        //     myChart3.setOption(option3);
+        // })
+
 
     }
 </script>
 </body>
-
 </html>

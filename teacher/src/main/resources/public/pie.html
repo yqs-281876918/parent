@@ -11,6 +11,7 @@
     <!--    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.min.js"></script>-->
     <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
     <link rel="stylesheet" href="assets/css/analyse.css">
+    <script src='assets/js/echarts-liquidfill.min.js'></script>
 </head>
 <body onload="init()">
 <!-- 新 Bootstrap4 核心 CSS 文件 -->
@@ -41,6 +42,34 @@
 
         //及格率的图
         var myChart = echarts.init(document.getElementById('box1'));
+        var option={
+            title:{
+                text:'及格率',
+                textStyle:{
+                    fontWeight:'normal',
+                    fontSize:25,
+                    color: 'rgb(97,142,205)'
+                }
+            },
+            series:[{
+                type:'liquidFill',
+                radius:'45%',
+                center:['50%','50%'],
+                data:[0.6],
+                backgroundStyle:{
+                    borderWidth:1,
+                    color:'rgb(255,0,255,0.1)'
+                },
+                label:{
+                    normal:{
+                        formatter:(0.5*100).toFixed(2)+'%',
+                        textStyle:{
+                            fontSize:50
+                        }
+                    }
+                }
+            }]
+        }
         // 指定图表的配置项和数据
         // var option = {
         //     color:['#FD1B40','#eeeeee'],
@@ -92,59 +121,59 @@
         //         ]
         //     }]
         // };
-        var option = {
-            backgroundColor:'#ffffff',
-            title: {
-                text: '及格率',
-                left: 'center',
-                //标题栏的高度，值越大，距离顶部的距离越大
-                top: 20,
-                //标题栏字体的颜色
-                textStyle: {
-                    color: '#ccc'
-                }
-            },
-            tooltip: {
-                trigger: 'item',
-                // formatter: '{a} <br/>{b} : {c}'
-            },
-            legend: {
-                orient: 'vertical',
-                left: '70%',  //图例距离左的距离
-                y: 'center',  //图例上下居中
-            },
-            color:['rgb(255,250,205)', 'rgb(255,106,106)'],
-            series : [
-                {
-                    name: "及格率",
-                    type:'pie',
-                    // clockwise:'true',
-                    startAngle:'0',
-                    radius : '40%',
-                    center: ['50%', '50%'],
-                    data: [
-                        {name: '及格率',value: ''},
-                        {name: "",value: '' },
-                    ],
-                    itemStyle:{
-                        normal:{
-                            label:{
-                                show:true,
-                                position:'inner',
-                                textStyle: {
-                                    fontSize:10,
-                                }
-                            },
-                            labelLine:{
-                                show:true,
-                            }
-                        }
-                    }
-
-                }
-            ],
-
-        };
+        // var option = {
+        //     backgroundColor:'#ffffff',
+        //     title: {
+        //         text: '及格率',
+        //         left: 'center',
+        //         //标题栏的高度，值越大，距离顶部的距离越大
+        //         top: 20,
+        //         //标题栏字体的颜色
+        //         textStyle: {
+        //             color: '#ccc'
+        //         }
+        //     },
+        //     tooltip: {
+        //         trigger: 'item',
+        //         // formatter: '{a} <br/>{b} : {c}'
+        //     },
+        //     legend: {
+        //         orient: 'vertical',
+        //         left: '70%',  //图例距离左的距离
+        //         y: 'center',  //图例上下居中
+        //     },
+        //     color:['rgb(255,250,205)', 'rgb(255,106,106)'],
+        //     series : [
+        //         {
+        //             name: "及格率",
+        //             type:'pie',
+        //             // clockwise:'true',
+        //             startAngle:'0',
+        //             radius : '40%',
+        //             center: ['50%', '50%'],
+        //             data: [
+        //                 {name: '及格率',value: ''},
+        //                 {name: "",value: '' },
+        //             ],
+        //             itemStyle:{
+        //                 normal:{
+        //                     label:{
+        //                         show:true,
+        //                         position:'inner',
+        //                         textStyle: {
+        //                             fontSize:10,
+        //                         }
+        //                     },
+        //                     labelLine:{
+        //                         show:true,
+        //                     }
+        //                 }
+        //             }
+        //
+        //         }
+        //     ],
+        //
+        // };
 
         jQuery.post("/teacher/analyse/percentage",param1,function(rst){
             console.log(rst);
@@ -155,10 +184,10 @@
             pass1=Math.floor(pass1*100/personNum);
             console.log(pass1);
             console.log(personNum);
-            option.series[0].data.push(pass1);
-            var unpass1=100-pass1;
-            console.log(unpass1);
-            option.series[0].data.push(unpass1);
+            option.series[0].data.push(0.5);
+            //var unpass1=100-pass1;
+            ///console.log(unpass1);
+            //option.series[0].data.push(unpass1);
             myChart.setOption(option);
         });
 

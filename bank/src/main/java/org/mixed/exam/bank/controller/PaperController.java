@@ -42,6 +42,27 @@ public class PaperController {
         paperDao.add(paper);
         return "添加成功";
     }
+
+
+    @ResponseBody
+    @PostMapping("/paper/sub")
+    public String changePaper(@RequestParam("id") String id,
+                              @RequestParam("foreWord") String foreWord,
+                           @RequestParam("subjectIDs") List<String> subjectIDs,
+                           @RequestParam("courseID") String courseID,
+                           @RequestParam("difficulty") Double difficulty,
+                           @CookieValue("token")String token){
+        Paper paper=new Paper();
+        paper.setForeWord(foreWord);
+        paper.setSubjectIDs(subjectIDs);
+        paper.setCourseID(courseID);
+        paper.setDifficulty(difficulty);
+        paper.setOpen(true);
+        paper.setDate(new Date());
+        paper.setCreator(AuthUtil.parseUsername(token));
+        paperDao.sub(id,paper);
+        return "修改成功";
+    }
     //取出所有试卷
     @ResponseBody
     @PostMapping("/paper/getAll")
@@ -60,6 +81,13 @@ public class PaperController {
         //以Page创建PageInfo
         PageInfo<Paper> pageInfo = new PageInfo<>(page);
         return pageInfo;
+    }
+    //id
+    @ResponseBody
+    @PostMapping("/paper/findPaper")
+    public Paper findPaper(@RequestParam("id") String id){
+        Paper p= paperDao.getOne(id);
+        return p;
     }
     //取自己的试卷
     @ResponseBody
