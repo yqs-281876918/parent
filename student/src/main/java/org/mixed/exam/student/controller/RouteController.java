@@ -1,5 +1,6 @@
 package org.mixed.exam.student.controller;
 
+import com.alibaba.fastjson.JSON;
 import org.mixed.exam.auth.api.AuthUtil;
 import org.mixed.exam.bank.api.client.ExamClient;
 import org.mixed.exam.bank.api.client.PaperClient;
@@ -11,6 +12,7 @@ import org.mixed.exam.bank.api.pojo.po.exam.ExamDetail;
 import org.mixed.exam.student.service.ChooseClassService;
 import org.mixed.exam.student.service.ExamDetailService;
 import org.mixed.exam.student.service.ExamService;
+import org.mixed.exam.student.util.RedisUtil;
 import org.mixed.exam.student.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -96,13 +98,59 @@ public class RouteController
                 model.addAttribute("userName",userName);
             }
         }
-        Exam exam = examClient.getByID(examId);
-        Paper paper = paperClient.getByID(exam.getPaperID());
-        List<String> subjectIDs=paper.getSubjectIDs();
-        List<Map<String,Object>> subjectsMap=new ArrayList<>();
-        for(String id : subjectIDs)
-        {
-            subjectsMap.add(StringUtil.jsonToMap(subjectClient.getSubjectByID(id)));
+        String examIdKey = Integer.toString(examId);
+        Exam exam = null;
+        if(RedisUtil.exists(examIdKey)){
+            String examStr = RedisUtil.get(examIdKey);
+            exam = JSON.parseObject(examStr,Exam.class);
+            System.out.println("从缓存中取出考试信息");
+        }else {
+            exam = examClient.getByID(examId);
+            System.out.println("从数据库中取出考试信息");
+            String examStr = JSON.toJSONString(exam);
+            if (RedisUtil.set(examIdKey,examStr,Long.parseLong("600"))){
+                System.out.println("写入缓存成功");
+            }else {
+                System.out.println("写入缓存失败");
+            }
+        }
+        Paper paper = null;
+        if (RedisUtil.exists(exam.getPaperID())){
+            String paperStr = RedisUtil.get(exam.getPaperID());
+            paper = JSON.parseObject(paperStr,Paper.class);
+            System.out.println("从缓存中取出试卷信息");
+        }else {
+            paper = paperClient.getByID(exam.getPaperID());
+            System.out.println("从数据库中取出试卷信息");
+            String paperStr = JSON.toJSONString(paper);
+            if (RedisUtil.set(exam.getPaperID(),paperStr,Long.parseLong("600"))){
+                System.out.println("试卷信息写入缓存成功");
+            }else {
+                System.out.println("试卷信息写入缓存失败");
+            }
+        }
+        String subjectsKey = exam.getPaperID()+"Subjects";
+        List<Object> subjectsMap= null;
+        if (RedisUtil.exists(subjectsKey)){
+            String subjectsStr = RedisUtil.get(subjectsKey);
+            subjectsMap = JSON.parseArray(subjectsStr);
+            System.out.println("从缓存中取出试题信息");
+        }else {
+            List<String> subjectIDs=paper.getSubjectIDs();
+            subjectsMap = new ArrayList<>();
+            for(String id : subjectIDs)
+            {
+                //System.out.println(subjectClient.getSubjectByID(id));
+                subjectsMap.add(JSON.parseObject(subjectClient.getSubjectByID(id)));
+                //System.out.println(StringUtil.jsonToMap(subjectClient.getSubjectByID(id)));
+            }
+            System.out.println("从数据库中取出试题信息");
+            String subjectsStr = JSON.toJSONString(subjectsMap);
+            if (RedisUtil.set(subjectsKey,subjectsStr,Long.parseLong("600"))){
+                System.out.println("试题信息写入缓存成功");
+            }else {
+                System.out.println("试题信息写入缓存失败");
+            }
         }
         String key = userName + exam.getId().toString();
         int flag = 1;
